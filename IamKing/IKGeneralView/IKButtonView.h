@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 
 
-@protocol IKButtonVieDelegate <NSObject>
+@protocol IKButtonViewDelegate <NSObject>
 
-- (void)buttonViewButtonClick:(UIButton *)button;
+- (void)buttonViewButtonClick:(nullable UIButton *)button;
 
 @end
 
@@ -22,8 +22,14 @@
 
 @interface IKButtonView : UIView
 
-@property (nonatomic, copy)NSString *title;
-@property (nonatomic, weak) id<IKButtonVieDelegate> delegate;
+@property (nonatomic, copy, nullable)NSString *title;
+@property (nonatomic, assign)CGFloat cornerRadius;
+@property (nonatomic, assign)CGFloat borderWidth;
+@property(nullable, nonatomic,copy)UIColor  *borderColor;
+@property(nullable, nonatomic,copy)UIColor  *HighBorderColor;
+@property (nonatomic, assign)BOOL needAnimation;
+
+@property (nonatomic, weak, nullable) id<IKButtonViewDelegate> delegate;
 
 
 @end

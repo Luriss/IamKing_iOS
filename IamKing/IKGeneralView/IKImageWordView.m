@@ -24,20 +24,8 @@
 {
     self = [super init];
     if (self) {
-
-    }
-    return self;
-}
-
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    
-    if (self) {
         [self initSubviews];
     }
-    
     return self;
 }
 

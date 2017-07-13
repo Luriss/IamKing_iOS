@@ -63,11 +63,6 @@ typedef NS_ENUM(NSInteger, IKPageControlAlignment) {
 // 轮播图片ContentMode - defalut is UIViewContentModeScaleToFill
 @property (nonatomic, assign) UIViewContentMode pageViewContentMode;
 
-
-// Init
-- (instancetype)init;
-- (instancetype)initWithFrame:(CGRect)frame;
-
 // 滚动到下一页
 - (void)scrollToNextPage;
 

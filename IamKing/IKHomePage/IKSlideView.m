@@ -143,8 +143,9 @@
 - (void)layoutButtons
 {
     [_searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(4);
+//        make.top.equalTo(self).offset(4);
 //        make.bottom.equalTo(self).offset(-4);
+        make.centerY.equalTo(self);
         make.right.equalTo(self.mas_right).offset(-10);
         make.width.and.height.mas_equalTo(CGRectGetHeight(self.bounds) - 8);
     }];

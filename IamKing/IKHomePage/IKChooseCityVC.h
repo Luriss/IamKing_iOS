@@ -8,14 +8,21 @@
 
 #import "IKViewController.h"
 
-typedef void(^LocationBlock)(NSString *location);
+@protocol IKChooseCityViewControllerDelegate <NSObject>
+
+- (void)locationVcDismissChangeNavButtonTitle:(NSString *)title;
+
+@end
+
 
 @interface IKChooseCityVC : IKViewController
 
-@property (nonatomic,copy)LocationBlock locationBlock;
+@property (nonatomic, weak) id<IKChooseCityViewControllerDelegate> delegate;
+@property (nonatomic,copy)NSArray *provinceData;
+@property (nonatomic,copy)NSArray *cityData;
 
 
 // dismiss self.
-- (void)dismissSelf;
+- (void)dismissSelf:(void(^)(NSString *location))block;
 
 @end

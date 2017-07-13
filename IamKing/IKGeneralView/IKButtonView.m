@@ -11,6 +11,7 @@
 @interface IKButtonView ()
 
 @property (nonatomic, strong)UILabel *label;
+@property (nonatomic, strong)UIButton *exchangeBtn;
 
 @end
 @implementation IKButtonView
@@ -19,8 +20,8 @@
 {
     self = [super init];
     if (self) {
-        [self initButton];
-        [self initLabel];
+        [self addSubview:self.exchangeBtn];
+        [self addSubview:self.label];
     }
     return self;
 }
@@ -30,56 +31,98 @@
     self = [super initWithFrame:frame];
     
     if (self) {
-        [self initButton];
-        [self initLabel];
+
+        [self addSubview:self.exchangeBtn];
+        [self addSubview:self.label];
     }
     
     return self;
 }
 
 
-- (void)initButton
+- (UIButton *)exchangeBtn
 {
-//    self.backgroundColor = [UIColor clearColor];
+    if (_exchangeBtn == nil) {
+        _exchangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        _exchangeBtn.backgroundColor = [UIColor clearColor];
+        //按钮按下为松开时调用.
+        [_exchangeBtn addTarget:self action:@selector(exchangBtnTouchDown:) forControlEvents:UIControlEventTouchDown];
+        
+        [_exchangeBtn addTarget:self action:@selector(exchangBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _exchangeBtn;
+}
 
-    UIButton *exchangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    
-    exchangeBtn.backgroundColor = [UIColor clearColor];
-    exchangeBtn.layer.borderWidth = 1;
-    exchangeBtn.layer.borderColor = [UIColor clearColor].CGColor;
-    exchangeBtn.layer.cornerRadius = 20;
-    
-    //按钮按下为松开时调用.
-    [exchangeBtn addTarget:self action:@selector(exchangBtnTouchDown:) forControlEvents:UIControlEventTouchDown];
-    
-    [exchangeBtn addTarget:self action:@selector(exchangBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:exchangeBtn];
-    
-    [exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+
+- (UILabel *)label
+{
+    if (_label == nil) {
+        _label = [[UILabel alloc] init];
+        _label.textColor = IKRGBColor(94.0, 94.0, 94.0);
+        _label.backgroundColor = [UIColor clearColor];
+        _label.textAlignment = NSTextAlignmentCenter;
+    }
+    return _label;
+}
+
+- (void)layoutSubviews
+{
+    [_exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.and.width.and.height.equalTo(self);
     }];
     
-    self.layer.borderWidth = 1;
-    self.layer.borderColor = IKRGBColor(93.0, 93.0, 93.0).CGColor;
-    self.layer.cornerRadius = 20;
-}
-
-- (void)initLabel
-{
-    UILabel *label = [[UILabel alloc] init];
-//    label.text = @"换一换";
-    label.textColor = IKRGBColor(94.0, 94.0, 94.0);
-    label.backgroundColor = [UIColor clearColor];
-    label.textAlignment = NSTextAlignmentCenter;
-    [self addSubview:label];
-    
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.and.width.and.height.equalTo(self);
     }];
     
-    self.label = label;
+    [super layoutSubviews];
 }
 
+
+- (void)setCornerRadius:(CGFloat)cornerRadius
+{
+    _exchangeBtn.layer.cornerRadius = cornerRadius;
+    self.layer.cornerRadius = cornerRadius;
+
+}
+
+- (void)setBorderWidth:(CGFloat)borderWidth
+{
+    if (!borderWidth || borderWidth < 0) {
+        borderWidth = 1;
+    }
+    _exchangeBtn.layer.borderWidth = borderWidth;
+    self.layer.borderWidth = borderWidth;
+
+}
+
+
+- (void)setBorderColor:(UIColor *)borderColor
+{
+    if (borderColor) {
+        _borderColor = borderColor;
+    }
+    else{
+        _borderColor = IKRGBColor(93.0, 93.0, 93.0);
+    }
+    self.layer.borderColor = borderColor.CGColor;
+
+}
+
+- (void)setHighBorderColor:(UIColor *)HighBorderColor
+{
+    if (HighBorderColor) {
+        _HighBorderColor = HighBorderColor;
+    }
+    else{
+        _HighBorderColor = IKRGBColor(47.0, 181.0, 255.0);
+    }
+}
+
+- (void)setNeedAnimation:(BOOL)needAnimation
+{
+    _needAnimation = needAnimation;
+}
 
 - (void)setTitle:(NSString *)title
 {
@@ -88,7 +131,7 @@
     }
 }
 
-- (void)setDelegate:(id<IKButtonVieDelegate>)delegate
+- (void)setDelegate:(id<IKButtonViewDelegate>)delegate
 {
     _delegate = delegate;
 }
@@ -96,42 +139,39 @@
 
 - (void)exchangBtnTouchDown:(UIButton *)btn
 {
-    btn.layer.borderColor = IKRGBColor(47.0, 181.0, 255.0).CGColor;
-    self.layer.borderColor = [UIColor clearColor].CGColor;
-    self.label.textColor = IKRGBColor(47.0, 181.0, 255.0);
-    
     // X 收缩0.1
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        btn.layer.transform = CATransform3DMakeScale(0.9, 1, 1);
-    } completion:^(BOOL finished) {
+    if (_needAnimation) {
         
-    }];
+        btn.layer.borderColor = _HighBorderColor.CGColor;
+        self.layer.borderColor = [UIColor clearColor].CGColor;
+        self.label.textColor = _HighBorderColor;
+        
+        [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            btn.layer.transform = CATransform3DMakeScale(0.9, 1, 1);
+        } completion:^(BOOL finished) {
+            
+        }];
+    }
 }
 
 - (void)exchangBtnClick:(UIButton *)btn
 {
-    // 按钮点击动画,恢复正常
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            btn.layer.transform = CATransform3DIdentity;
-        } completion:^(BOOL finished) {
-            btn.layer.borderColor = IKRGBColor(93.0, 93.0, 93.0).CGColor;
-            self.label.textColor = IKRGBColor(93.0, 93.0, 93.0);
-        }];
-    });
+    if (_needAnimation) {
+        // 按钮点击动画,恢复正常
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                btn.layer.transform = CATransform3DIdentity;
+            } completion:^(BOOL finished) {
+                btn.layer.borderColor = _borderColor.CGColor;
+                self.label.textColor = _borderColor;
+            }];
+        });
+    }
     
     if ([self.delegate respondsToSelector:@selector(buttonViewButtonClick:)]) {
         [self.delegate buttonViewButtonClick:btn];
     }
-
 }
-
-
-
-
-
-
-
 
 
 /*

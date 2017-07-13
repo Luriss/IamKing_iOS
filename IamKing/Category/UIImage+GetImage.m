@@ -123,4 +123,25 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 }
 
 
+/**
+ *  生成图片
+ *
+ *  @param color  图片颜色
+ *  @param height 图片高度
+ *
+ *  @return 生成的图片
+ */
++ (UIImage*) GetImageWithColor:(UIColor*)color andHeight:(CGFloat)height
+{
+    CGRect r= CGRectMake(0.0f, 0.0f, 1.0f, height);
+    UIGraphicsBeginImageContext(r.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetFillColorWithColor(context, [color CGColor]);
+    CGContextFillRect(context, r);
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return img;
+}
+
+
 @end

@@ -14,10 +14,11 @@
 #import "IKInfoTableView.h"
 #import "IKChooseCityVC.h"
 #import "IKLocationManager.h"
+#import "IKMoreTypeVC.h"
 
 
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKSlideViewDelegate,IKInfoTableViewDelegate,IKButtonVieDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKSlideViewDelegate,IKInfoTableViewDelegate,IKButtonViewDelegate,IKChooseCityViewControllerDelegate>
 {
     BOOL  _navRightBtnHadClick;
 }
@@ -48,7 +49,7 @@
     // Do any additional setup after loading the view.
     
     _navRightBtnHadClick = NO;
-
+    
     // 初始化导航栏内容
     [self initNavigationContent];
     
@@ -64,23 +65,14 @@
     // 国王推荐
     [self initKingRecommendView];
     
-    //
+    // 两个轮播广告
     [self initTwoSmallLoopPlayView];
     
-    //
+    //换一换按钮
     [self initExchangeButton];
     
-    //
+    // 职位列表
     [self initInfoTableView];
-    return;
-
-    
-    
-//    UIButton * btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = CGRectMake(100, 200, 50, 40);
-//    btn.backgroundColor = [UIColor redColor];
-//    [btn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
     
 }
 
@@ -95,17 +87,15 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    NSLog(@"qqq%@",self.navigationController);
     
     [self setNavigationContent];
-
+    
 }
 
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    
     
     // 视图消失,停止轮播
     [self stopLoopPlayView];
@@ -118,15 +108,13 @@
 {
     // logo
     _navView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 20, 144, 44)];
-//    _navView.backgroundColor = [UIColor redColor];
-    NSLog(@"111 %@",self.navigationController.childViewControllers);
     
     // 定位
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(navRightBarBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    button.frame = CGRectMake(0, 0, 50, 44);
+    button.frame = CGRectMake(0, 0, 50, 38);
 //    button.backgroundColor = [UIColor redColor];
-    button.imageEdgeInsets = UIEdgeInsetsMake(12, -4, 12, 34);
+    button.imageEdgeInsets = UIEdgeInsetsMake(9, 0, 9, 30);
     button.titleEdgeInsets = UIEdgeInsetsMake(0, -34, 0, 0);
     [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:11.0f];
@@ -134,7 +122,7 @@
     [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
     _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
     
-    
+    _rightBarBtn.tintColor = [UIColor blueColor];
 }
 
 
@@ -143,22 +131,17 @@
     IKScrollView *scrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 44)];
     scrollView.backgroundColor = IKColorFromRGB(0xf2f2f5);
     // 是否支持滑动最顶端
-    //    scrollView.scrollsToTop = NO;
+    scrollView.scrollsToTop = NO;
     scrollView.delegate = self;
     // 设置内容大小
-//    scrollView.contentSize = CGSizeMake(320, 460*10);
+    //    scrollView.contentSize = CGSizeMake(320, 460*10);
     // 是否反弹
     //    scrollView.bounces = NO;
     // 是否分页
     //    scrollView.pagingEnabled = YES;
-//     是否滚动
-        scrollView.scrollEnabled = YES;
-        scrollView.showsHorizontalScrollIndicator = YES;
-    // 设置indicator风格
-    //    scrollView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
-    // 设置内容的边缘和Indicators边缘
-    //    scrollView.contentInset = UIEdgeInsetsMake(0, 50, 50, 0);
-    //    scrollView.scrollIndicatorInsets = UIEdgeInsetsMake(0, 50, 0, 0);
+    //     是否滚动
+    scrollView.scrollEnabled = YES;
+    scrollView.showsHorizontalScrollIndicator = YES;
     // 提示用户,Indicators flash
     [scrollView flashScrollIndicators];
     // 是否同时运动,lock
@@ -183,7 +166,7 @@
 - (void)inintSlideView
 {
     IKSlideView *slideView = [[IKSlideView alloc] init];
-    slideView.backgroundColor = IKColorFromRGB(0xf2f2f5);
+    slideView.backgroundColor = [UIColor whiteColor];
     slideView.data = @[@"健身教练",@"会籍销售",@"运营管理",@"市场品牌",@"培训导师",@"预售项目"];
     slideView.delegate = self;
     [_containerView addSubview:slideView];
@@ -199,7 +182,7 @@
     
     
     
-
+    
 }
 
 
@@ -215,7 +198,7 @@
                             ];
     _lpView.scrollDirection = IKLPVScrollDirectionHorizontal;
     _lpView.pageControlHidden = NO;
-//    _lpView.isAutoScroll = YES;
+    //    _lpView.isAutoScroll = YES;
     [_containerView addSubview:_lpView];
     
     [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -223,7 +206,7 @@
         make.left.and.right.equalTo(_containerView);
         make.height.mas_equalTo(160);
     }];
-
+    
 }
 
 - (void)initKingRecommendView
@@ -264,12 +247,12 @@
 {
     _slpView = [[IKLoopPlayView alloc]init];
     _slpView.imagesArray = @[
-                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
-                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
-                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
-                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
-                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
-                            ];
+                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
+                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
+                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
+                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
+                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
+                             ];
     _slpView.scrollDirection = IKLPVScrollDirectionVertical;
     _slpView.reverseDirection = YES;
     _slpView.scrollTimeInterval = 2;
@@ -307,7 +290,12 @@
 - (void)initExchangeButton
 {
     IKButtonView *btnView = [[IKButtonView alloc] init];
-    btnView.title = @"换二换";
+    btnView.title = @"换一换";
+    btnView.cornerRadius = 20;
+    btnView.borderColor = IKRGBColor(93.0, 93.0, 93.0);
+    btnView.HighBorderColor = IKRGBColor(47.0, 181.0, 255.0);
+    btnView.borderWidth = 1;
+    btnView.needAnimation = YES;
     btnView.delegate = self;
     [_containerView addSubview:btnView];
     
@@ -322,20 +310,19 @@
 - (void)initInfoTableView
 {
     IKInfoTableView *infoTableView = [[IKInfoTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1200+100)];
-//    infoTableView.backgroundColor = [UIColor redColor];
     infoTableView.delegate = self;
     [_containerView addSubview:infoTableView];
     
     infoTableView.leftHeaderButtonTitle = @"最新职位";
     infoTableView. rightHeaderButtonTitle = @"最热职位";
-
+    
     
     [infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_slpView.mas_bottom).offset(90);
         make.left.and.right.equalTo(_containerView);
         make.height.mas_equalTo(1200+100);
     }];
-        
+    
     [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(infoTableView);
     }];
@@ -380,7 +367,7 @@
 - (void)setNavigationMiddleLogo
 {
     self.tabBarController.navigationItem.titleView = _navView;
-        
+    
     [_navView ajustFrame];
     [_navView startAnimation];
 }
@@ -395,7 +382,7 @@
 
 - (void)slideViewSearchButtonClick:(UIButton *)button
 {
-//    return;
+    //    return;
     IKViewController *searchVC = [[IKViewController alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     searchVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -410,8 +397,8 @@
 
 - (void)slideViewMoreButtonClick:(UIButton *)button
 {
-//    return;
-    IKViewController *moreVC = [[IKViewController alloc] init];
+    //    return;
+    IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     moreVC.view.backgroundColor = [UIColor whiteColor];
@@ -459,37 +446,37 @@
 // 滑动到顶部时调用该方法
 - (void)scrollViewDidScrollToTop:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidScrollToTop");
+//    NSLog(@"scrollViewDidScrollToTop");
 }
 
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidScroll");
+//    NSLog(@"scrollViewDidScroll");
 }
 
 // scrollView 开始拖动
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewWillBeginDragging");
+//    NSLog(@"scrollViewWillBeginDragging");
 }
 
 // scrollView 结束拖动
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    NSLog(@"scrollViewDidEndDragging");
+//    NSLog(@"scrollViewDidEndDragging");
 }
 
 // scrollView 开始减速（以下两个方法注意与以上两个方法加以区别）
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewWillBeginDecelerating");
+//    NSLog(@"scrollViewWillBeginDecelerating");
 }
 
 // scrollview 减速停止
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidEndDecelerating");
+//    NSLog(@"scrollViewDidEndDecelerating");
 }
 
 
@@ -504,7 +491,7 @@
 
 - (void)tableViewHeaderRightButtonClick:(UIButton *)button
 {
-
+    
 }
 
 
@@ -524,6 +511,12 @@
     [_tlpView scrollToNextPage];
 }
 
+- (void)locationVcDismissChangeNavButtonTitle:(NSString *)title
+{
+    UIButton *btn = (UIButton *)_rightBarBtn.customView;
+    [btn setTitle:title forState:UIControlStateNormal];
+    _navRightBtnHadClick = NO;
+}
 
 #pragma mark - ButtonAction
 
@@ -531,17 +524,28 @@
 
 - (void)navRightBarBtnClick:(UIButton *)btn
 {
-    NSLog(@"navRightBarBtnClick");
     
+    UIViewController *vc = [self getPresentedViewController];
+    NSLog(@"navRightBarBtnClick = %@",vc);
+
     if (_navRightBtnHadClick) {
-        
-        if ([self.presentedViewController isKindOfClass:[IKChooseCityVC class]]) {
+        if ([vc isKindOfClass:[IKChooseCityVC class]]) {
             // 取出 present 的 VC, 然后调用自身的 dismiss.
-            IKChooseCityVC *choose = (IKChooseCityVC *)self.presentedViewController;
-            [choose dismissSelf];
-            
-            _navRightBtnHadClick = NO;
+            IKChooseCityVC *choose = (IKChooseCityVC *)vc;
+            [choose dismissSelf:^(NSString *location) {
+                _navRightBtnHadClick = NO;
+                [btn setTitle:location forState:UIControlStateNormal];
+            }];
         }
+        else{
+            // 取出 present 的 VC, 然后调用自身的 dismiss.
+            IKChooseCityVC *choose = (IKChooseCityVC *)vc.presentedViewController;
+            [choose dismissSelf:^(NSString *location) {
+                _navRightBtnHadClick = NO;
+                [btn setTitle:location forState:UIControlStateNormal];
+            }];
+        }
+        
         return;
     }
     
@@ -550,21 +554,24 @@
     IKChooseCityVC *cityVC = [[IKChooseCityVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     cityVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    cityVC.locationBlock = ^(NSString *location) {
-        IKLog(@"location = %@",location);
-    };
+    cityVC.delegate = self;
+    //
     
-    
-
-//    
-    [self presentViewController:cityVC animated:NO completion:^{
+    [vc presentViewController:cityVC animated:NO completion:^{
         
     }];
-    
-    
 }
 
 
+- (UIViewController *)getPresentedViewController
+{
+    UIViewController *topVC = self;
+    if (topVC.presentedViewController) {
+        topVC = topVC.presentedViewController;
+    }
+    
+    return topVC;
+}
 
 
 - (void)didReceiveMemoryWarning {
@@ -573,13 +580,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

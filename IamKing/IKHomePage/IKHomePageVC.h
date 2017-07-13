@@ -12,7 +12,7 @@
 
 @protocol IKHomePageViewControllerDelegate <NSObject>
 
-- (void)navRightBarButtonClickDisMissVC;
+- (void)locationVcDismissChangeNavButtonTitle:(NSString *)title;
 
 @end
 

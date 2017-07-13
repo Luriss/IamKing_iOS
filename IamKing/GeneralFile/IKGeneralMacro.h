@@ -29,6 +29,10 @@
 
 #define IKGeneralBlue (IKRGBColor(47.0, 181.0, 255.0))
 
+#define IKGeneralGray (IKRGBColor(93.0, 93.0, 93.0));
+
+#define IKLineColor (IKRGBColor(233.0, 233.0, 233.0));
+
 /***********************************Color********************************************/
 
 /***********************************Log**********************************************/
@@ -69,6 +73,8 @@
 
 // 判断字符串是否为空
 #define IKStringIsEmpty(str) (([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 )? YES:NO)
+
+#define IKStringIsNotEmpty(str) (!IKStringIsEmpty(str))
 
 // 判断数组是否为空
 #define IKArrayIsEmpty(array) ((array == nil || [array isKindOfClass:[NSNull class]] || array.count == 0)? YES:NO)
