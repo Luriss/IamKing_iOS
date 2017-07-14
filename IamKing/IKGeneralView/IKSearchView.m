@@ -48,9 +48,9 @@
 - (void)layoutSubviews
 {
     [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(8);
+        make.centerY.equalTo(self);
         make.left.equalTo(self).offset(20);
-        make.height.and.width.mas_equalTo(CGRectGetHeight(self.frame)- 16);
+        make.height.and.width.mas_equalTo(CGRectGetHeight(self.frame)- 18);
     }];
     
     [_searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -99,7 +99,9 @@
 - (IKSearchBar *)searchBar
 {
     if (_searchBar == nil) {
-        _searchBar = [[IKSearchBar alloc] init];        
+        _searchBar = [[IKSearchBar alloc] init];
+        _searchBar.placeholder = @"请输入关键字搜索                                      ";
+        _searchBar.contentMode = UIViewContentModeLeft;
         [_searchBar addSubview:self.searchbtn];
     }
     
@@ -141,6 +143,9 @@
 - (void)searchButtonClick:(UIButton *)button
 {
     IKLog(@"searchButtonClick");
+    if ([self.delegate respondsToSelector:@selector(searchViewSearchButtonClick)]) {
+        [self.delegate searchViewSearchButtonClick];
+    }
 }
 
 /*

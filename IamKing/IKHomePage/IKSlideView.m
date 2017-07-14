@@ -86,6 +86,8 @@
         // 搜索按钮
         _searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _searchBtn.tag = 1001;
+//        _searchBtn.backgroundColor = [UIColor blueColor];
+        _searchBtn.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
         [_searchBtn setImage:[UIImage imageNamed:@"IK_search"] forState:UIControlStateNormal];
         [_searchBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -99,6 +101,10 @@
         // 更多按钮
         _moreBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         _moreBtn.tag = 1002;
+//        _moreBtn.backgroundColor = [UIColor redColor];
+        _moreBtn.imageEdgeInsets = UIEdgeInsetsMake(4, 4, 4, 4);
+//        _moreBtn.layer.shadowRadius = 10;
+//        _moreBtn.layer.shadowColor = IKColorFromRGB(0xf2f2f0).CGColor;
         [_moreBtn setImage:[UIImage imageNamed:@"IK_more"] forState:UIControlStateNormal];
         [_moreBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -146,14 +152,14 @@
 //        make.top.equalTo(self).offset(4);
 //        make.bottom.equalTo(self).offset(-4);
         make.centerY.equalTo(self);
-        make.right.equalTo(self.mas_right).offset(-10);
-        make.width.and.height.mas_equalTo(CGRectGetHeight(self.bounds) - 8);
+        make.right.equalTo(self.mas_right).offset(-5);
+        make.width.and.height.mas_equalTo(CGRectGetHeight(self.bounds));
     }];
     
     
     [_moreBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.and.width.and.height.equalTo(_searchBtn);
-        make.right.equalTo(_searchBtn.mas_left).offset(-10);
+        make.right.equalTo(_searchBtn.mas_left).offset(-5);
 //        make.width.mas_equalTo(24);
     }];
     
@@ -187,7 +193,8 @@
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 60, 30)];
     label.text = [self.data objectAtIndex:indexPath.row];
     label.backgroundColor = [UIColor clearColor];
-    label.font = [UIFont systemFontOfSize:12.0f];
+    label.font = [UIFont boldSystemFontOfSize:13.0];
+    label.textColor = IKRGBColor(93, 93, 93);
     [cell.contentView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.and.bottom.right.equalTo(cell.contentView);

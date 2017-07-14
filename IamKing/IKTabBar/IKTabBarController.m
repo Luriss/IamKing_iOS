@@ -18,7 +18,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"aaav%@",self.tabBarController);
 
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
     [UITabBar appearance].translucent = NO;
@@ -97,8 +96,6 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    NSLog(@"vvv %@",viewController);
-    
     if (![NSStringFromClass([viewController class]) isEqualToString:@"IKHomePageVC"]) {
         self.navigationItem.titleView.hidden = YES;
     }
@@ -111,7 +108,7 @@
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
 {
-    NSLog(@"vv111 %@",viewController);
+
 }
 
 

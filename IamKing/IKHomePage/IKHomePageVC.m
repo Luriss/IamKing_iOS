@@ -15,6 +15,7 @@
 #import "IKChooseCityVC.h"
 #import "IKLocationManager.h"
 #import "IKMoreTypeVC.h"
+#import "IKSearchVC.h"
 
 
 
@@ -174,9 +175,9 @@
     _slideView = slideView;
     
     [slideView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(0);
+        make.top.mas_equalTo(4);
         make.right.and.left.equalTo(_containerView);
-        make.height.mas_equalTo(30);
+        make.height.mas_equalTo(36);
     }];
     
     
@@ -378,12 +379,14 @@
 - (void)slideView:(IKSlideView *)slideView didSelectItemAtIndex:(NSUInteger)selectedIndex
 {
     IKLog(@"%@--- %ld",slideView,selectedIndex);
+    
+    
 }
 
 - (void)slideViewSearchButtonClick:(UIButton *)button
 {
     //    return;
-    IKViewController *searchVC = [[IKViewController alloc] init];
+    IKSearchVC *searchVC = [[IKSearchVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     searchVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     searchVC.view.backgroundColor = [UIColor whiteColor];

@@ -71,16 +71,16 @@
 {
     UIImageView *image1 = [self viewWithTag:1001];
     [image1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(0);
-        make.top.equalTo(self).offset(6);
-        make.width.equalTo(self).offset(0);
-        make.bottom.equalTo(self).offset(-6);
+        make.left.equalTo(self).offset(3);
+        make.top.equalTo(self).offset(3);
+        make.right.equalTo(self).offset(-3);
+        make.bottom.equalTo(self).offset(-3);
     }];
     
     UIImageView *image2 = [self viewWithTag:1002];
     
     [image2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(2);
+        make.left.equalTo(self).offset(4.5);
         make.top.equalTo(self).offset(4);
         make.size.mas_equalTo(CGSizeMake(36, 36));
     }];

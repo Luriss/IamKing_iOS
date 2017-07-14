@@ -384,7 +384,7 @@
 
 - (void)dismissSelf:(void(^)(NSString *location))block
 {
-    block?block(self.selectCity):@"";
+    block?block(_selectCity):@"";
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _bottomView.transform = CGAffineTransformMakeTranslation(0, -IKSCREENH_HEIGHT);
@@ -399,6 +399,14 @@
     
 }
 
+- (void)buttonViewButtonClick:(nullable UIButton *)button
+{
+    [self dismissSelf:nil];
+    
+    if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
+        [self.delegate locationVcDismissChangeNavButtonTitle:self.selectCity];
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

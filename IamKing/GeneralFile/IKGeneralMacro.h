@@ -27,11 +27,11 @@
 // rgb颜色转换（16进制->10进制）
 #define IKColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
-#define IKGeneralBlue (IKRGBColor(47.0, 181.0, 255.0))
+#define IKGeneralBlue (IKColorFromRGB(0x40c4ff))
 
-#define IKGeneralGray (IKRGBColor(93.0, 93.0, 93.0));
+#define IKGeneralGray (IKRGBColor(93.0, 93.0, 93.0))
 
-#define IKLineColor (IKRGBColor(233.0, 233.0, 233.0));
+#define IKLineColor (IKRGBColor(233.0, 233.0, 233.0))
 
 /***********************************Color********************************************/
 
