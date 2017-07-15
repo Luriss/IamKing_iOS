@@ -17,13 +17,6 @@
 
 @end
 
-
-
-typedef NS_ENUM(NSInteger, IKTableViewHeaderSelectedButton) {
-    IKTableViewHeaderSelectedButtonLeft = 0,
-    IKTableViewHeaderSelectedButtonRight,
-};
-
 @interface IKInfoTableView : UIView
 
 @property (nonatomic,copy)NSString *leftHeaderButtonTitle;

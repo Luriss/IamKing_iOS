@@ -9,6 +9,7 @@
 #import "IKTagsView.h"
 #import "IKTagsCollectionViewFlowLayout.h"
 #import "IKTagsCollectionViewCell.h"
+#import "IKHeaderReusableView.h"
 
 
 @interface IKTagsView ()<UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
@@ -22,7 +23,7 @@
 @implementation IKTagsView
 
 static NSString * const reuseIdentifier = @"IKTagsCollectionViewCellId";
-static NSString * const headerReuseIdentifier = @"UICollectionViewHeader";
+static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 - (id)initWithFrame:(CGRect)frame
 {
@@ -53,7 +54,6 @@ static NSString * const headerReuseIdentifier = @"UICollectionViewHeader";
 {
     if (_layout == nil) {
         _layout = [[IKTagsCollectionViewFlowLayout alloc] init];
-        _layout.headerReferenceSize = CGSizeMake(CGRectGetWidth(self.bounds), 30);
     }
     
     return _layout;
@@ -69,25 +69,27 @@ static NSString * const headerReuseIdentifier = @"UICollectionViewHeader";
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = IKRGBColor(244.0, 244.0, 248.0);
-        _collectionView.collectionViewLayout = _layout;
         _collectionView.showsVerticalScrollIndicator = YES;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.frame = self.bounds;
 
         [_collectionView registerClass:[IKTagsCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
         
-        [_collectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerReuseIdentifier];
+        [_collectionView registerClass:[IKHeaderReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerReuseIdentifier];
         
-//        _collectionView.contentInset = UIEdgeInsetsMake(50, 0, 0, 0);
-//        
-//        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 224, 50)];
-//        view.backgroundColor = [UIColor redColor];
-//        [_collectionView addSubview:view];
+        _collectionView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, -25, 224, 30)];
+//        label.backgroundColor = [UIColor redColor];
+        label.text = @"职位分类/专业技能";
+        label.textColor = IKRGBColor(163, 163, 163);
+        label.font = [UIFont boldSystemFontOfSize:13.0f];
+        label.textAlignment = NSTextAlignmentLeft;
+        [_collectionView addSubview:label];
     }
     
     return _collectionView;
 }
-
 
 
 
@@ -156,18 +158,30 @@ static NSString * const headerReuseIdentifier = @"UICollectionViewHeader";
 
 -(CGSize)collectionView:(UICollectionView*)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
 {
-    CGSize size = {320, 30};
-    return size;
+    
+    if (section == 0) {
+        CGSize size = {CGRectGetWidth(self.bounds), 30};
+        
+        IKLog(@" ======== size = %@",[NSValue valueWithCGSize:size]);
+        return size;
+    }
+    return CGSizeZero;
 }
 
 //创建头视图
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionReusableView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerReuseIdentifier forIndexPath:indexPath];
-    
-    headView.backgroundColor = [UIColor redColor];
-    
-    return headView;
+    IKLog(@"kind = %@",kind);
+    if (kind == UICollectionElementKindSectionHeader) {
+        IKHeaderReusableView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerReuseIdentifier forIndexPath:indexPath];
+        
+        headView.backgroundColor = [UIColor redColor];
+        return headView;
+    }
+    else{
+        return nil;
+    }
+
 }
 
 - (void)reloadCollectionViewData

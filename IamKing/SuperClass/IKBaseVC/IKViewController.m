@@ -9,6 +9,7 @@
 #import "IKViewController.h"
 
 @interface IKViewController ()
+@property(nonatomic,strong)UIImageView *shadowImage;
 
 @end
 
@@ -18,6 +19,33 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 
+}
+
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self fineNavigationBottomLine:self.tabBarController.navigationController.navigationBar];
+}
+
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.shadowImage.hidden = NO;
+}
+
+- (void)fineNavigationBottomLine:(UIView *)view
+{
+    if ([view isKindOfClass:[UIImageView class]] && (CGRectGetHeight(view.bounds) <= 1.0)) {
+        
+        self.shadowImage.hidden = YES;
+    }
+    
+    for (UIView *subview in view.subviews) {
+        [self fineNavigationBottomLine:subview];
+    }
 }
 
 

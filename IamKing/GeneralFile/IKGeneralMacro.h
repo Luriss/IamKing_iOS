@@ -29,11 +29,19 @@
 
 #define IKGeneralBlue (IKColorFromRGB(0x40c4ff))
 
-#define IKGeneralGray (IKRGBColor(93.0, 93.0, 93.0))
+#define IKGeneralLightGray (IKColorFromRGB(0xf2f2f5))
+#define IKGeneralWhite (IKColorFromRGB(0xfffff))
+#define IKMainTitleColor   (IKColorFromRGB(0x707070))
+#define IKSubHeadTitleColor   (IKColorFromRGB(0xaaaaaa))
 
-#define IKLineColor (IKRGBColor(233.0, 233.0, 233.0))
+#define IKLineColor (IKColorFromRGB(0xf2f2f5))
 
 /***********************************Color********************************************/
+#define IKTitleFont   (14.0f)
+
+/***********************************Font********************************************/
+
+/***********************************Font********************************************/
 
 /***********************************Log**********************************************/
 

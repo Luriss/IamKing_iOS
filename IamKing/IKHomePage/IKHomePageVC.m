@@ -8,34 +8,30 @@
 
 #import "IKNavIconView.h"
 #import "IKHomePageVC.h"
-#import "IKSlideView.h"
 #import "IKLoopPlayView.h"
-#import "IKButtonView.h"
 #import "IKInfoTableView.h"
 #import "IKChooseCityVC.h"
 #import "IKLocationManager.h"
 #import "IKMoreTypeVC.h"
 #import "IKSearchVC.h"
+#import "IKSearchView.h"
+#import "IKJobTypeView.h"
 
 
-
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKSlideViewDelegate,IKInfoTableViewDelegate,IKButtonViewDelegate,IKChooseCityViewControllerDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKInfoTableViewDelegate,IKChooseCityViewControllerDelegate>
 {
     BOOL  _navRightBtnHadClick;
 }
 
 
-@property(nonatomic,strong)IKNavIconView *navView;
+@property(nonatomic,strong)IKNavIconView *navLogoView;
 @property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
+@property(nonatomic,strong)UIBarButtonItem *leftBarBtn;
 @property(nonatomic,strong)IKScrollView *bottomScrollView;
 @property(nonatomic,strong)IKView *containerView;
-@property(nonatomic,strong)IKSlideView *slideView;
 @property(nonatomic,strong)IKLoopPlayView *lpView;
-@property(nonatomic,strong)IKLoopPlayView *slpView;
-@property(nonatomic,strong)IKLoopPlayView *tlpView;
-@property(nonatomic,strong)UILabel *kingReLabel;
-
-
+@property(nonatomic,strong)IKSearchView *searchView;
+@property(nonatomic,strong)IKJobTypeView *jobTypeView;
 
 
 @end
@@ -50,27 +46,21 @@
     // Do any additional setup after loading the view.
     
     _navRightBtnHadClick = NO;
-    
+    self.tabBarController.navigationController.navigationBar.barTintColor = [UIColor blueColor];
     // 初始化导航栏内容
     [self initNavigationContent];
     
     // 初始化底部的scrollview
     [self initBotttmScrollView];
     
-    // 初始化选择slideView
-    [self inintSlideView];
+    // 初始化搜索
+    [self initSearchView];
     
     //初始化轮播视图
     [self initLoopPlayView];
     
-    // 国王推荐
-    [self initKingRecommendView];
-    
-    // 两个轮播广告
-    [self initTwoSmallLoopPlayView];
-    
-    //换一换按钮
-    [self initExchangeButton];
+    //
+    [self initJobTypeView];
     
     // 职位列表
     [self initInfoTableView];
@@ -108,24 +98,44 @@
 - (void)initNavigationContent
 {
     // logo
-    _navView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 20, 144, 44)];
+    _navLogoView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 00, 100, 44)];
     
+    [self createRightBarItem];
+    
+    [self createLeftBarItem];
+}
+
+- (void)createRightBarItem
+{
     // 定位
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(navRightBarBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-    button.frame = CGRectMake(0, 0, 50, 38);
-//    button.backgroundColor = [UIColor redColor];
-    button.imageEdgeInsets = UIEdgeInsetsMake(9, 0, 9, 30);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, -34, 0, 0);
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.frame = CGRectMake(0, 0, 70, 44);
+    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:11.0f];
-    [button setTitle:@"杭州" forState:UIControlStateNormal];
+    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
-    _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
+    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 54);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0, -45, 0, 0);
     
-    _rightBarBtn.tintColor = [UIColor blueColor];
+    
+    _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
 }
 
+- (void)createLeftBarItem
+{
+    // 分类
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self action:@selector(showClaaifyVc) forControlEvents:UIControlEventTouchUpInside];
+    button.frame = CGRectMake(0, 0, 60, 44);
+    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 44);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0, -35, 0, 0);
+    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
+    [button setTitle:@"分类" forState:UIControlStateNormal];
+    [button setImage:[UIImage imageNamed:@"IK_classify"] forState:UIControlStateNormal];
+    _leftBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
+}
 
 - (void)initBotttmScrollView
 {
@@ -164,28 +174,19 @@
 }
 
 
-- (void)inintSlideView
+- (void)initSearchView
 {
-    IKSlideView *slideView = [[IKSlideView alloc] init];
-    slideView.backgroundColor = [UIColor whiteColor];
-    slideView.data = @[@"健身教练",@"会籍销售",@"运营管理",@"市场品牌",@"培训导师",@"预售项目"];
-    slideView.delegate = self;
-    [_containerView addSubview:slideView];
+    _searchView = [[IKSearchView alloc] init];
+//    searchView.delegate = self;
+    _searchView.hiddenColse = YES;
+    [_containerView addSubview:_searchView];
     
-    _slideView = slideView;
-    
-    [slideView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(4);
-        make.right.and.left.equalTo(_containerView);
-        make.height.mas_equalTo(36);
+    [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_containerView).offset(2);
+        make.left.and.right.equalTo(_containerView);
+        make.height.mas_equalTo(44);
     }];
-    
-    
-    
-    
-    
 }
-
 
 - (void)initLoopPlayView
 {
@@ -203,110 +204,28 @@
     [_containerView addSubview:_lpView];
     
     [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(_slideView.mas_bottom).offset(4);
         make.left.and.right.equalTo(_containerView);
-        make.height.mas_equalTo(160);
+        make.top.equalTo(_searchView.mas_bottom).offset(2);
+        make.height.mas_equalTo(175);
     }];
-    
 }
 
-- (void)initKingRecommendView
+- (void)initJobTypeView
 {
-    CGFloat labelW = 4;
+    _jobTypeView = [[IKJobTypeView alloc] init];
+    _jobTypeView.backgroundColor = [UIColor whiteColor];
     
-    UILabel *label = [[UILabel alloc] init];
-    label.backgroundColor = IKRGBColor(47.0, 181.0, 255.0);
-    label.layer.cornerRadius = labelW*0.5;
-    label.clipsToBounds = YES;
-    [_containerView addSubview: label];
+    [_containerView addSubview:_jobTypeView];
     
-    [label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_lpView.mas_bottom).offset(13);
-        make.left.equalTo(_containerView).offset(10);
-        make.width.mas_equalTo(labelW);
-        make.height.mas_equalTo(18);
-    }];
-    
-    _kingReLabel = [[UILabel alloc] init];
-    _kingReLabel.text = @"国王推荐";
-    _kingReLabel.textColor = IKRGBColor(154.0, 154.0, 154.0);
-    _kingReLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0];
-    _kingReLabel.backgroundColor = [UIColor clearColor];
-    [_containerView addSubview:_kingReLabel];
-    
-    [_kingReLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(label).offset(2);
-        make.left.equalTo(label.mas_right).offset(5);
-        make.bottom.equalTo(label.mas_bottom).offset(-2);
-        make.right.equalTo(_containerView);
-    }];
-    
-}
-
-
-- (void)initTwoSmallLoopPlayView
-{
-    _slpView = [[IKLoopPlayView alloc]init];
-    _slpView.imagesArray = @[
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
-                             ];
-    _slpView.scrollDirection = IKLPVScrollDirectionVertical;
-    _slpView.reverseDirection = YES;
-    _slpView.scrollTimeInterval = 2;
-    [_containerView addSubview:_slpView];
-    
-    [_slpView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_kingReLabel.mas_bottom).offset(10);
-        make.left.equalTo(_containerView).offset(10);
-        make.width.mas_equalTo((IKSCREEN_WIDTH- 30)*0.5);
-        make.height.mas_equalTo(100);
-    }];
-    
-    
-    _tlpView = [[IKLoopPlayView alloc]init];
-    _tlpView.imagesArray = @[
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
-                             @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
-                             ];
-    _tlpView.scrollDirection = IKLPVScrollDirectionVertical;
-    _tlpView.reverseDirection = YES;
-    _tlpView.scrollTimeInterval = 3;
-    [_containerView addSubview:_tlpView];
-    
-    [_tlpView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_slpView).offset(0);
-        make.left.equalTo(_slpView.mas_right).offset(10);
-        make.width.and.height.equalTo(_slpView);
+    [_jobTypeView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_lpView.mas_bottom).offset(4);
+        make.left.and.right.equalTo(_containerView);
+        make.height.mas_equalTo(44);
     }];
 }
 
 
-- (void)initExchangeButton
-{
-    IKButtonView *btnView = [[IKButtonView alloc] init];
-    btnView.title = @"换一换";
-    btnView.cornerRadius = 20;
-    btnView.borderColor = IKRGBColor(93.0, 93.0, 93.0);
-    btnView.HighBorderColor = IKRGBColor(47.0, 181.0, 255.0);
-    btnView.borderWidth = 1;
-    btnView.needAnimation = YES;
-    btnView.delegate = self;
-    [_containerView addSubview:btnView];
-    
-    [btnView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(_containerView);
-        make.top.equalTo(_slpView.mas_bottom).offset(20);
-        make.width.mas_equalTo(IKSCREEN_WIDTH*0.5);
-        make.height.mas_equalTo(40);
-    }];
-}
+
 
 - (void)initInfoTableView
 {
@@ -319,7 +238,7 @@
     
     
     [infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_slpView.mas_bottom).offset(90);
+        make.top.equalTo(_jobTypeView.mas_bottom).offset(5);
         make.left.and.right.equalTo(_containerView);
         make.height.mas_equalTo(1200+100);
     }];
@@ -336,16 +255,12 @@
 - (void)startLoopPlayView
 {
     [_lpView startAutoScrollPage];
-    [_slpView startAutoScrollPage];
-    [_tlpView startAutoScrollPage];
 }
 
 
 - (void)stopLoopPlayView
 {
     [_lpView stopAutoScrollPage];
-    [_slpView stopAutoScrollPage];
-    [_tlpView stopAutoScrollPage];
 }
 
 #pragma mark - SetView
@@ -354,34 +269,30 @@
 - (void)setNavigationContent
 {
     [self setNavigationMiddleLogo];
-    [self setNavigationRightBarBtn];
+    [self setNavigationBarItem];
 }
 
-// 右边定位按钮
-- (void)setNavigationRightBarBtn
+
+- (void)setNavigationBarItem
 {
-    self.tabBarController.navigationItem.rightBarButtonItem = _rightBarBtn;
+    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    negativeSpacer.width = -5;
+    self.tabBarController.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,_leftBarBtn, nil];
+    
+    self.tabBarController.navigationItem.leftBarButtonItem = _rightBarBtn;
     
 }
 
 // 导航栏中间logo
 - (void)setNavigationMiddleLogo
 {
-    self.tabBarController.navigationItem.titleView = _navView;
+    self.tabBarController.navigationItem.titleView = _navLogoView;
     
-    [_navView ajustFrame];
-    [_navView startAnimation];
+    [_navLogoView ajustFrame];
 }
 
 
 #pragma mark - IKSlideViewDelegate
-
-- (void)slideView:(IKSlideView *)slideView didSelectItemAtIndex:(NSUInteger)selectedIndex
-{
-    IKLog(@"%@--- %ld",slideView,selectedIndex);
-    
-    
-}
 
 - (void)slideViewSearchButtonClick:(UIButton *)button
 {
@@ -401,6 +312,11 @@
 - (void)slideViewMoreButtonClick:(UIButton *)button
 {
     //    return;
+    
+}
+
+- (void)showClaaifyVc
+{
     IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -410,8 +326,6 @@
         
     }];
 }
-
-
 
 #pragma mark - UIScrollViewDelegate
 /*
@@ -489,6 +403,7 @@
 
 - (void)tableViewHeaderLeftButtonClick:(UIButton *)button
 {
+    
 }
 
 
@@ -510,15 +425,34 @@
 
 - (void)buttonViewButtonClick:(UIButton *)button
 {
-    [_slpView scrollToNextPage];
-    [_tlpView scrollToNextPage];
+//    [_slpView scrollToNextPage];
+//    [_tlpView scrollToNextPage];
 }
 
 - (void)locationVcDismissChangeNavButtonTitle:(NSString *)title
 {
-    UIButton *btn = (UIButton *)_rightBarBtn.customView;
+    IKView *view = (IKView *)_rightBarBtn.customView;
+    UIButton *btn = (UIButton *)view.subviews.firstObject;
+    CGRect oldFrame = btn.frame;
+    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]};
+    CGSize strSize = [NSString getSizeWithString:title size:CGSizeMake(70, 44) attribute:attribute];
+    btn.frame = CGRectMake(CGRectGetWidth(view.frame)-strSize.width-20,oldFrame.origin.y, strSize.width + 20, 44);
+    btn = [self setNavRightButtonImageTitleEdgeInsets:btn size:strSize];
     [btn setTitle:title forState:UIControlStateNormal];
+
     _navRightBtnHadClick = NO;
+}
+
+- (UIButton *)setNavRightButtonImageTitleEdgeInsets:(UIButton *)button size:(CGSize )size
+{
+    IKLog(@"%@",[NSValue valueWithCGSize:size]);
+    // 两个字 30.
+    CGFloat x = (size.width - 30)/5;
+    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, size.width);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0, -(size.width - (5 *x)), 0, 0);
+
+    return button;
+    
 }
 
 #pragma mark - ButtonAction

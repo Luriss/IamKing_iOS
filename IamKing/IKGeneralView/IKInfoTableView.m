@@ -14,7 +14,6 @@
 @property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)UIButton *leftHeaderBtn;
 @property (nonatomic,strong)UIButton *rightHeaderBtn;
-@property (nonatomic,assign)IKTableViewHeaderSelectedButton *headerSelectedBtn;
 @property (nonatomic,strong)IKJobInfoModel *model;
 
 @end
@@ -87,7 +86,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    return 110;
 }
 
 
@@ -107,7 +106,7 @@
 
     }
     cell.backgroundColor = [UIColor whiteColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.selectionStyle = UITableViewCellSelectionStyleGray;
     
     if (indexPath.row == 1) {
         _model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg";
@@ -124,105 +123,6 @@
         [self.delegate infoTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
-
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 50;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 50;
-}
-
-- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    CGFloat btnWidth = tableView.frame.size.width*0.5;
-    
-    UIView *view = [[UIView alloc] init];
-    
-    // 默认选中 Btn1
-    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn1.tag = IKTableViewHeaderSelectedButtonLeft;
-    [btn1 setTitle:_leftHeaderButtonTitle forState:UIControlStateNormal];
-    [btn1 setTitleColor:IKRGBColor(71.0, 190.0, 255.0) forState:UIControlStateNormal];
-    btn1.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
-    [btn1 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    //选中放大效果
-    btn1.transform = CGAffineTransformMakeScale(1.05, 1.05);
-    
-    [view addSubview:btn1];
-    
-    [btn1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(view);
-        make.left.equalTo(view);
-        make.width.mas_equalTo(btnWidth - 10);
-    }];
-    
-    _leftHeaderBtn = btn1;
-    
-    UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.tag = IKTableViewHeaderSelectedButtonRight;
-    [btn2 setTitle:_rightHeaderButtonTitle forState:UIControlStateNormal];
-    [btn2 setTitleColor:IKRGBColor(155.0, 155.0, 155.0) forState:UIControlStateNormal];
-    btn2.titleLabel.font = [UIFont boldSystemFontOfSize:15.0];;
-    [btn2 addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-
-    [view addSubview:btn2];
-    
-    [btn2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(view);
-        make.right.equalTo(view);
-        make.width.equalTo(btn1);
-    }];
-    
-    _rightHeaderBtn = btn2;
-    
-    UIImageView *exImage = [[UIImageView alloc] init];
-    [exImage setImage:[UIImage imageNamed:@"IK_exchange"]];
-    [view addSubview:exImage];
-    
-    [exImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(view);
-        make.right.equalTo(btn2.mas_left);
-        make.left.equalTo(btn1.mas_right);
-        make.width.and.height.mas_equalTo(20);
-    }];
-    
-    return view;
-}
-
-
-- (void)btnClick:(UIButton *)button
-{
-    if (button.tag == IKTableViewHeaderSelectedButtonLeft) {
-        [_leftHeaderBtn setTitleColor:IKRGBColor(71.0, 190.0, 255.0) forState:UIControlStateNormal];
-        [_rightHeaderBtn setTitleColor:IKRGBColor(155.0, 155.0, 155.0) forState:UIControlStateNormal];
-        _leftHeaderBtn.transform = CGAffineTransformMakeScale(1.05, 1.05);
-        _rightHeaderBtn.transform = CGAffineTransformIdentity;
-        
-        if ([self.delegate respondsToSelector:@selector(tableViewHeaderLeftButtonClick:)]) {
-            [self.delegate tableViewHeaderLeftButtonClick:button];
-        }
-    }
-    else{
-        [_leftHeaderBtn setTitleColor:IKRGBColor(155.0, 155.0, 155.0) forState:UIControlStateNormal];
-        [_rightHeaderBtn setTitleColor:IKRGBColor(71.0, 190.0, 255.0) forState:UIControlStateNormal];
-        _rightHeaderBtn.transform = CGAffineTransformMakeScale(1.05, 1.05);
-        _leftHeaderBtn.transform = CGAffineTransformIdentity;
-        
-        if ([self.delegate respondsToSelector:@selector(tableViewHeaderRightButtonClick:)]) {
-            [self.delegate tableViewHeaderRightButtonClick:button];
-        }
-    }
-}
-
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
-//{
-//    
-//}
-
 
 /*
 // Only override drawRect: if you perform custom drawing.

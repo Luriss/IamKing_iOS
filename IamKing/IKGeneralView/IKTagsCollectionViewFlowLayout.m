@@ -33,7 +33,6 @@
         self.minimumInteritemSpacing = 10.0f;
         self.minimumLineSpacing = 10.0f;
         self.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
-        self.headerReferenceSize = CGSizeMake(0, 30);
     }
     
     return self;
@@ -43,6 +42,9 @@
 - (void)prepareLayout
 {
     [super prepareLayout];
+    
+    // 清空缓存中的 itemAttributes 不清空会保留之前的 itemAttributes,存在崩溃风险
+    [self.itemAttributes removeAllObjects];
     
     CGFloat originX = self.sectionInset.left;
     CGFloat originY = self.sectionInset.top;
@@ -113,6 +115,7 @@
 }
 
 // 获取到当前 item 的 size
+
 - (CGSize)itemSizeForIndexPath:(NSIndexPath *)indexPath
 {
     if ([self.delegate respondsToSelector:@selector(collectionView:layout:sizeForItemAtIndexPath:)]) {

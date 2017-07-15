@@ -41,6 +41,7 @@
 {
     _searchView = [[IKSearchView alloc] init];
     _searchView.delegate = self;
+//    _searchView.hiddenColse = NO;
     [self.view addSubview:_searchView];
     
     [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -14,7 +14,7 @@
 {
     CGSize  strSzie = [string boundingRectWithSize:size  options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)  attributes:attribute context:nil].size;
 
-    CGSize reSzie = CGSizeMake(ceilf(strSzie.width) + 16, ceilf(strSzie.height)+16);
+    CGSize reSzie = CGSizeMake(ceilf(strSzie.width) + 8 , ceilf(strSzie.height)+16);
 
     return reSzie;
 }

@@ -16,12 +16,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-//    self.navigationBar.barTintColor = [UIColor whiteColor];
+
+    self.navigationBar.barTintColor = [UIColor whiteColor];
 //    self.navigationBar.alpha = 0.5f;
     // Do any additional setup after loading the view.
 }
+
+
+
 
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated

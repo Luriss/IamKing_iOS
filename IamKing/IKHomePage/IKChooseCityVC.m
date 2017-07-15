@@ -163,7 +163,7 @@
 {
     UILabel *tipLabel = [[UILabel alloc] init];
     tipLabel.text = @"自动定位到您在";
-    tipLabel.textColor = IKGeneralGray;
+    tipLabel.textColor = IKGeneralLightGray;
     tipLabel.font = [UIFont boldSystemFontOfSize:14.0f];
     tipLabel.textAlignment = NSTextAlignmentCenter;
     [_locationInfoView addSubview:tipLabel];

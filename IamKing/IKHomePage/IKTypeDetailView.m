@@ -126,7 +126,14 @@
     }
     cell.backgroundColor = [UIColor clearColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.lineView.hidden = YES;
+    
+    if (indexPath.row == 0) {
+        cell.lineView.hidden = NO;
+        _oldIndexPath = indexPath;
+    }
+    else{
+        cell.lineView.hidden = YES;
+    }
 
 //    NSString *cityStr = [self.cityData objectAtIndex:indexPath.row];
     cell.tLabel.text = [self.detailData objectAtIndex:indexPath.row];
@@ -150,7 +157,7 @@
     }
     
     if (indexPath.row == 1) {
-        self.tagsView.tagsData = @[@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"私教经"];
+        self.tagsView.tagsData = @[@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"私教经",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私",@"销售能手",@"销售",@"私教经理私私私教经理私私私教经理私私"];
     }
     else{
         self.tagsView.tagsData = @[@"私人教练",@"私",@"私教经理私私",@"私教经理私私四十四"];

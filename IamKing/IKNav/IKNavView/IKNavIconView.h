@@ -12,6 +12,5 @@
 
 
 - (void)ajustFrame;
-- (void)startAnimation;
 
 @end

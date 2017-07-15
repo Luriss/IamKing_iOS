@@ -26,23 +26,20 @@
     // 替换原有的背景图.
     [self setBackgroundImage:[UIImage imageNamed:@"IK_bg_white"]];
     // 取消放大镜
-    [self setImage:[UIImage imageNamed:@"IK_bg"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
-    // 设置文字起始输入位置.
-    self.searchTextPositionAdjustment = UIOffsetMake(5, 0);
-
+    [self setImage:[[UIImage imageNamed:@"IK_search"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, -5, -5) resizingMode:UIImageResizingModeStretch] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    
     UITextField *searchField = [self valueForKey:@"searchField"];
     
     if (searchField) {
         [searchField setBackgroundColor:IKRGBColor(239.0, 239.0, 243.0)];
         searchField.layer.cornerRadius = 15.0f;
         searchField.layer.masksToBounds = YES;
-        searchField.leftViewMode = UITextFieldViewModeNever;
-        
-        // 取消掉清除按钮,但预留位置给搜索按钮.
+        searchField.leftViewMode = UITextFieldViewModeAlways;
         searchField.clearButtonMode = UITextFieldViewModeAlways;
-        UIButton *clearButton = [searchField valueForKey:@"clearButton"];
-        [clearButton setImage:[UIImage imageNamed:@"IK_bg"] forState:UIControlStateNormal];
-
+        UIImageView *search = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        
+        [search setImage:[UIImage imageNamed:@"IK_search"]];
+        searchField.leftView = search;
     }
 }
 

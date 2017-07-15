@@ -57,14 +57,7 @@
     fImageView.tag = 1001;
     [fImageView setImage:[UIImage imageNamed:@"IK_logo"]];
     [self addSubview:fImageView];
-    
-    
-    UIImageView *cImageView = [[UIImageView alloc] init];
-    cImageView.backgroundColor = [UIColor clearColor];
-    cImageView.tag = 1002;
-    [cImageView setImage:[UIImage imageNamed:@"IK_cycle"]];
-    
-    [self insertSubview:cImageView aboveSubview:fImageView];
+
 }
 
 - (void)ajustFrame
@@ -76,31 +69,10 @@
         make.right.equalTo(self).offset(-3);
         make.bottom.equalTo(self).offset(-3);
     }];
-    
-    UIImageView *image2 = [self viewWithTag:1002];
-    
-    [image2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(4.5);
-        make.top.equalTo(self).offset(4);
-        make.size.mas_equalTo(CGSizeMake(36, 36));
-    }];
+
     
 }
 
-- (void)startAnimation
-{
-    CABasicAnimation *animation =  [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
-    
-    //默认是顺时针效果，若将fromValue和toValue的值互换，则为逆时针效果
-    animation.fromValue = [NSNumber numberWithFloat:0.f];
-    animation.toValue =  [NSNumber numberWithFloat: M_PI *2];
-    animation.duration  = 10;
-    animation.autoreverses = NO;
-    animation.fillMode =kCAFillModeForwards;
-    animation.repeatCount = MAXFLOAT; //如果这里想设置成一直自旋转，可以设置为MAXFLOAT，否则设置具体的数值则代表执行多少次
-    UIImageView *imageView = [self viewWithTag:1002];
-    [imageView.layer addAnimation:animation forKey:nil];
-}
 
 
 

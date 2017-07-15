@@ -15,7 +15,6 @@
 @property (nonatomic, strong)UIButton *closeBtn;
 @property (nonatomic, strong)IKSearchBar *searchBar;
 @property (nonatomic, strong)UIView *bottomLine;
-@property (nonatomic, strong)UIButton *searchbtn;
 
 
 @end
@@ -28,6 +27,7 @@
 {
     self = [super init];
     if (self) {
+        _hiddenColse = YES;
         [self addSubViews];
     }
     return self;
@@ -39,6 +39,8 @@
     self = [super initWithFrame:frame];
     
     if (self) {
+        
+        _hiddenColse = YES;
         [self addSubViews];
     }
     
@@ -47,29 +49,29 @@
 
 - (void)layoutSubviews
 {
-    [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.equalTo(self).offset(20);
-        make.height.and.width.mas_equalTo(CGRectGetHeight(self.frame)- 18);
-    }];
-    
-    [_searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.bottom.equalTo(self);
-        make.left.equalTo(_closeBtn.mas_right);
-    }];
-    
-    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(self);
-        make.bottom.equalTo(self).offset(1);
-        make.height.mas_equalTo(1);
-    }];
-    
-    [_searchbtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(_searchBar.mas_right).offset(-20);
-        make.top.equalTo(_searchBar).offset(10);
-        make.bottom.equalTo(_searchBar).offset(-10);
-        make.width.mas_equalTo(20);
-    }];
+    if (self.hiddenColse) {
+        [_searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.right.and.bottom.and.left.equalTo(self);
+        }];
+        
+        [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(self);
+            make.bottom.equalTo(self).offset(1);
+            make.height.mas_equalTo(1);
+        }];
+    }
+    else{
+        [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self);
+            make.left.equalTo(self).offset(20);
+            make.height.and.width.mas_equalTo(CGRectGetHeight(self.frame)- 18);
+        }];
+        
+        [_searchBar mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.right.and.bottom.equalTo(self);
+            make.left.equalTo(_closeBtn.mas_right);
+        }];
+    }
     
     [super layoutSubviews];
 }
@@ -77,11 +79,24 @@
 
 - (void)addSubViews
 {
-    [self addSubview:self.closeBtn];
+    if (!self.hiddenColse) {
+        [self addSubview:self.closeBtn];
+    }
     [self addSubview:self.searchBar];
     [self addSubview:self.bottomLine];
 }
 
+- (void)setHiddenColse:(BOOL)hiddenColse
+{
+    self.closeBtn.hidden = hiddenColse;
+    
+    if (!hiddenColse) {
+        //添加关闭按钮.
+        IKLog(@"%@",_closeBtn);
+        
+        [self setNeedsLayout];
+    }
+}
 
 -(UIButton *)closeBtn
 {
@@ -90,6 +105,7 @@
         _closeBtn.backgroundColor = [UIColor clearColor];
         [_closeBtn setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
         [_closeBtn addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        _closeBtn.hidden = YES;
     }
     
     return _closeBtn;
@@ -100,25 +116,13 @@
 {
     if (_searchBar == nil) {
         _searchBar = [[IKSearchBar alloc] init];
-        _searchBar.placeholder = @"请输入关键字搜索                                      ";
+        _searchBar.placeholder = @" 搜索职位/公司/技能";
         _searchBar.contentMode = UIViewContentModeLeft;
-        [_searchBar addSubview:self.searchbtn];
     }
     
     return _searchBar;
 }
 
-
-- (UIButton *)searchbtn
-{
-    if (_searchbtn  == nil) {
-        _searchbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_searchbtn setImage:[UIImage imageNamed:@"IK_search"] forState:UIControlStateNormal];
-        [_searchbtn addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    return _searchbtn;
-}
 
 - (UIView *)bottomLine
 {

@@ -24,4 +24,7 @@
 
 @property (nonatomic, weak, nullable) id<IKSearchViewDelegate> delegate;
 
+// Default is YES.
+@property (nonatomic, assign) BOOL hiddenColse;
+
 @end
