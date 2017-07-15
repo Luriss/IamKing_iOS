@@ -9,6 +9,7 @@
 #ifndef IKGeneralMacro_h
 #define IKGeneralMacro_h
 
+
 /************************************Size********************************************/
 #define IKSCREEN_WIDTH   ([UIScreen mainScreen].bounds.size.width)
 #define IKSCREENH_HEIGHT ([UIScreen mainScreen].bounds.size.height)
@@ -33,14 +34,17 @@
 #define IKGeneralWhite (IKColorFromRGB(0xfffff))
 #define IKMainTitleColor   (IKColorFromRGB(0x707070))
 #define IKSubHeadTitleColor   (IKColorFromRGB(0xaaaaaa))
+#define IKPlaceHolderColor (IKColorFromRGB(0xbabac0))
+#define IKSeachBarBgColor (IKColorFromRGB(0xeeeeee))
 
 #define IKLineColor (IKColorFromRGB(0xf2f2f5))
 
 /***********************************Color********************************************/
-#define IKTitleFont   (14.0f)
+
 
 /***********************************Font********************************************/
-
+#define IKMainTitleFont   (16.0f)
+#define IKSubTitleFont   (13.0f)
 /***********************************Font********************************************/
 
 /***********************************Log**********************************************/
@@ -86,8 +90,14 @@
 
 // 判断数组是否为空
 #define IKArrayIsEmpty(array) ((array == nil || [array isKindOfClass:[NSNull class]] || array.count == 0)? YES:NO)
+
+#define IKArrayIsNotEmpty(array) (!IKArrayIsEmpty(array))
+
+
 // 判断字典是否为空
 #define IKDictIsEmpty(dic) ((dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allKeys == 0)? YES:NO)
+
+#define IKDictIsNotEmpty(dic) (!IKDictIsEmpty(dic))
 
 /***********************************Empty********************************************/
 
@@ -100,6 +110,15 @@
 //NSUserDefaults 实例化
 #define IKUSERDEFAULT [NSUserDefaults standardUserDefaults]
 /***********************************Method*******************************************/
+
+
+/***********************************AnimationTime**********************************/
+
+#define IKLoadImageTime (0.5)
+
+
+
+/***********************************AnimationTime**********************************/
 
 
 

@@ -31,9 +31,11 @@
     searchView.delegate = self;
     [self.view addSubview:searchView];
     
+    __weak typeof (self) weakSelf = self;
+
     [searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(64);
-        make.left.and.right.equalTo(self.view);
+        make.top.equalTo(weakSelf.view).offset(64);
+        make.left.and.right.equalTo(weakSelf.view);
         make.height.mas_equalTo(40);
     }];
 }

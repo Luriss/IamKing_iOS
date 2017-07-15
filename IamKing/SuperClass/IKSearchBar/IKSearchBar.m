@@ -30,13 +30,18 @@
     
     UITextField *searchField = [self valueForKey:@"searchField"];
     
+    // 修改搜索框,样式
     if (searchField) {
-        [searchField setBackgroundColor:IKRGBColor(239.0, 239.0, 243.0)];
-        searchField.layer.cornerRadius = 15.0f;
+        [searchField setBackgroundColor:IKSeachBarBgColor];
+        searchField.layer.cornerRadius = 16.0f;
         searchField.layer.masksToBounds = YES;
+        
+        NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSForegroundColorAttributeName:IKPlaceHolderColor};
+        NSAttributedString *placeHolder = [[NSAttributedString alloc] initWithString:@" 搜索职位/公司/技能" attributes:attribute];
+        searchField.attributedPlaceholder = placeHolder;
         searchField.leftViewMode = UITextFieldViewModeAlways;
         searchField.clearButtonMode = UITextFieldViewModeAlways;
-        UIImageView *search = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+        UIImageView *search = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];
         
         [search setImage:[UIImage imageNamed:@"IK_search"]];
         searchField.leftView = search;

@@ -41,12 +41,14 @@
 {
     _searchView = [[IKSearchView alloc] init];
     _searchView.delegate = self;
-//    _searchView.hiddenColse = NO;
+    _searchView.hiddenColse = NO;
     [self.view addSubview:_searchView];
     
+    __weak typeof (self) weakSelf = self;
+
     [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(64);
-        make.left.and.right.equalTo(self.view);
+        make.top.equalTo(weakSelf.view).offset(64);
+        make.left.and.right.equalTo(weakSelf.view);
         make.height.mas_equalTo(40);
     }];
 }
@@ -58,9 +60,11 @@
     typeTableView.delegate = self;
     [self.view addSubview:typeTableView];
     
+    __weak typeof (self) weakSelf = self;
+
     [typeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_searchView.mas_bottom).offset(1);
-        make.left.and.bottom.and.right.equalTo(self.view);
+        make.left.and.bottom.and.right.equalTo(weakSelf.view);
     }];
 }
 
@@ -73,10 +77,12 @@
     detail.hidden = YES;
     [self.view addSubview:detail];
     
+    __weak typeof (self) weakSelf = self;
+
     [detail mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_searchView.mas_bottom).offset(1);
-        make.bottom.and.right.equalTo(self.view);
-        make.left.equalTo(self.view).offset(55);
+        make.bottom.and.right.equalTo(weakSelf.view);
+        make.left.equalTo(weakSelf.view).offset(55);
     }];
     
     self.detailView = detail;

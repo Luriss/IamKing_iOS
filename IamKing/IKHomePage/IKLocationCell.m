@@ -65,10 +65,12 @@
 
 - (void)layoutCellSubviews
 {
+    __weak typeof (self) weakSelf = self;
+
     [_tLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.contentView);
-        make.width.equalTo(self.contentView);
-        make.height.mas_equalTo(CGRectGetHeight(self.contentView.frame)*0.7);
+        make.center.equalTo(weakSelf.contentView);
+        make.width.equalTo(weakSelf.contentView);
+        make.height.mas_equalTo(CGRectGetHeight(weakSelf.contentView.frame)*0.7);
     }];
     
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {

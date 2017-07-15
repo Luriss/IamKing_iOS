@@ -66,15 +66,17 @@
 
 - (void)layoutSubviews
 {
+    __weak typeof (self) weakSelf = self;
+
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self);
-        make.top.equalTo(self).offset(2);
-        make.bottom.equalTo(self).offset(-2);
-        make.width.mas_equalTo(CGRectGetHeight(self.bounds)-4);
+        make.left.equalTo(weakSelf);
+        make.top.equalTo(weakSelf).offset(2);
+        make.bottom.equalTo(weakSelf).offset(-2);
+        make.width.mas_equalTo(CGRectGetHeight(weakSelf.bounds)-4);
     }];
     
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.bottom.equalTo(self);
+        make.top.and.right.and.bottom.equalTo(weakSelf);
         make.left.equalTo(_imageView.mas_right).offset(4);
     }];
 }

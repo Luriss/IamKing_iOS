@@ -139,8 +139,10 @@
 
 - (void)layoutMaskView
 {
+    __weak typeof (self) weakSelf = self;
+
     [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.bottom.equalTo(self);
+        make.top.and.right.and.bottom.equalTo(weakSelf);
         make.width.mas_equalTo(90);
     }];
 }
@@ -148,12 +150,15 @@
 
 - (void)layoutButtons
 {
+    __weak typeof (self) weakSelf = self;
+
+
     [_searchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.top.equalTo(self).offset(4);
 //        make.bottom.equalTo(self).offset(-4);
-        make.centerY.equalTo(self);
-        make.right.equalTo(self.mas_right).offset(-5);
-        make.width.and.height.mas_equalTo(CGRectGetHeight(self.bounds));
+        make.centerY.equalTo(weakSelf);
+        make.right.equalTo(weakSelf.mas_right).offset(-5);
+        make.width.and.height.mas_equalTo(CGRectGetHeight(weakSelf.bounds));
     }];
     
     

@@ -28,6 +28,7 @@
 		214122251F18638A00062A2F /* IKHeaderReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 214122241F18638A00062A2F /* IKHeaderReusableView.m */; };
 		214122271F18A8F600062A2F /* IK_classify.png in Resources */ = {isa = PBXBuildFile; fileRef = 214122261F18A8F600062A2F /* IK_classify.png */; };
 		2141222B1F18D08F00062A2F /* IKJobTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2141222A1F18D08F00062A2F /* IKJobTypeView.m */; };
+		214122321F19FB4F00062A2F /* IKJobInfoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 214122311F19FB4F00062A2F /* IKJobInfoScrollView.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -137,6 +138,8 @@
 		214122261F18A8F600062A2F /* IK_classify.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_classify.png; sourceTree = "<group>"; };
 		214122291F18D08F00062A2F /* IKJobTypeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobTypeView.h; sourceTree = "<group>"; };
 		2141222A1F18D08F00062A2F /* IKJobTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobTypeView.m; sourceTree = "<group>"; };
+		214122301F19FB4F00062A2F /* IKJobInfoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobInfoScrollView.h; sourceTree = "<group>"; };
+		214122311F19FB4F00062A2F /* IKJobInfoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobInfoScrollView.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -286,6 +289,7 @@
 				210B0DEA1F0E16EF003FD950 /* IKHomePage */,
 				210B0DDA1F0DFE29003FD950 /* IKNav */,
 				210B0DD61F0DFE02003FD950 /* IKTabBar */,
+				21D622D61F0F23350054D980 /* IKGeneralFile */,
 				210B0D921F0DE16D003FD950 /* AppDelegate.h */,
 				210B0D931F0DE16D003FD950 /* AppDelegate.m */,
 				210B0D951F0DE16D003FD950 /* ViewController.h */,
@@ -295,7 +299,6 @@
 				210B0D9D1F0DE16D003FD950 /* LaunchScreen.storyboard */,
 				210B0DA01F0DE16D003FD950 /* Info.plist */,
 				21C3AE081F15D90B008FC124 /* IKProvinceCity.plist */,
-				21D622D61F0F23350054D980 /* IKGeneralFile */,
 				210B0D8F1F0DE16D003FD950 /* Supporting Files */,
 			);
 			path = IamKing;
@@ -409,6 +412,15 @@
 				2141222A1F18D08F00062A2F /* IKJobTypeView.m */,
 			);
 			name = IKJobTypeView;
+			sourceTree = "<group>";
+		};
+		2141222F1F19FB1100062A2F /* IKJobInfoView */ = {
+			isa = PBXGroup;
+			children = (
+				214122301F19FB4F00062A2F /* IKJobInfoScrollView.h */,
+				214122311F19FB4F00062A2F /* IKJobInfoScrollView.m */,
+			);
+			name = IKJobInfoView;
 			sourceTree = "<group>";
 		};
 		21C3ADEF1F1499FF008FC124 /* NetworkManager */ = {
@@ -601,6 +613,7 @@
 		21D622DA1F0F315F0054D980 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2141222F1F19FB1100062A2F /* IKJobInfoView */,
 				214122281F18D06600062A2F /* IKJobTypeView */,
 				21C3AE2E1F173ACE008FC124 /* TypeTableView */,
 				21D622DF1F0F31E30054D980 /* IKSlideView.h */,
@@ -971,6 +984,7 @@
 				21C3AE6A1F17626B008FC124 /* IKTagsCollectionViewFlowLayout.m in Sources */,
 				210B0D941F0DE16D003FD950 /* AppDelegate.m in Sources */,
 				21C3AE581F175615008FC124 /* IKInfoTableView.m in Sources */,
+				214122321F19FB4F00062A2F /* IKJobInfoScrollView.m in Sources */,
 				21C3AE071F15D31D008FC124 /* IKLocationCell.m in Sources */,
 				21C3AE0E1F1616B6008FC124 /* IKMoreTypeVC.m in Sources */,
 				21C3AE5D1F175615008FC124 /* IKSearchView.m in Sources */,

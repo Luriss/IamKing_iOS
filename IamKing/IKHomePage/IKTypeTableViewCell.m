@@ -109,9 +109,11 @@
 
 - (void)layoutCellSubviews
 {
+    __weak typeof (self) weakSelf = self;
+
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(20);
-        make.centerY.equalTo(self.contentView);
+        make.left.equalTo(weakSelf.contentView).offset(20);
+        make.centerY.equalTo(weakSelf.contentView);
         make.width.and.height.mas_equalTo(25);
     }];
     
@@ -119,7 +121,7 @@
     [_arrowView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(_logoImageView);
         make.width.and.height.mas_equalTo(20);
-        make.right.equalTo(self.contentView).offset(-20);
+        make.right.equalTo(weakSelf.contentView).offset(-20);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -135,8 +137,8 @@
     }];
     
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.contentView).offset(1);
-        make.left.and.right.equalTo(self.contentView);
+        make.bottom.equalTo(weakSelf.contentView).offset(1);
+        make.left.and.right.equalTo(weakSelf.contentView);
         make.height.mas_equalTo(0.5);
     }];
 }

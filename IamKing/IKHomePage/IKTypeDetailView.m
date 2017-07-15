@@ -83,13 +83,15 @@
 
 - (void)layoutCustomView
 {
+    __weak typeof (self) weakSelf = self;
+
     [_leftTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.left.bottom.equalTo(self);
-        make.width.equalTo(self).multipliedBy(0.3);
+        make.top.and.left.bottom.equalTo(weakSelf);
+        make.width.equalTo(weakSelf).multipliedBy(0.3);
     }];
     
     [_tagsView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.bottom.equalTo(self);
+        make.top.and.right.and.bottom.equalTo(weakSelf);
         make.left.equalTo(_leftTableView.mas_right);
     }];
 }

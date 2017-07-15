@@ -15,6 +15,7 @@
 @property (nonatomic, strong)UIButton *closeBtn;
 @property (nonatomic, strong)IKSearchBar *searchBar;
 @property (nonatomic, strong)UIView *bottomLine;
+@property (nonatomic, assign)BOOL hadAddCloseBtn;
 
 
 @end
@@ -28,6 +29,7 @@
     self = [super init];
     if (self) {
         _hiddenColse = YES;
+        _hadAddCloseBtn = NO;
         [self addSubViews];
     }
     return self;
@@ -49,26 +51,28 @@
 
 - (void)layoutSubviews
 {
+    __weak typeof (self) weakSelf = self;
+
     if (self.hiddenColse) {
         [_searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.and.right.and.bottom.and.left.equalTo(self);
         }];
         
         [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.and.right.equalTo(self);
-            make.bottom.equalTo(self).offset(1);
+            make.left.and.right.equalTo(weakSelf);
+            make.bottom.equalTo(weakSelf).offset(1);
             make.height.mas_equalTo(1);
         }];
     }
     else{
         [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self);
-            make.left.equalTo(self).offset(20);
-            make.height.and.width.mas_equalTo(CGRectGetHeight(self.frame)- 18);
+            make.centerY.equalTo(weakSelf);
+            make.left.equalTo(weakSelf).offset(20);
+            make.height.and.width.mas_equalTo(CGRectGetHeight(weakSelf.frame)- 18);
         }];
         
         [_searchBar mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.and.right.and.bottom.equalTo(self);
+            make.top.and.right.and.bottom.equalTo(weakSelf);
             make.left.equalTo(_closeBtn.mas_right);
         }];
     }
@@ -79,9 +83,6 @@
 
 - (void)addSubViews
 {
-    if (!self.hiddenColse) {
-        [self addSubview:self.closeBtn];
-    }
     [self addSubview:self.searchBar];
     [self addSubview:self.bottomLine];
 }
@@ -89,15 +90,23 @@
 - (void)setHiddenColse:(BOOL)hiddenColse
 {
     self.closeBtn.hidden = hiddenColse;
-    
+    _hiddenColse = hiddenColse;
     if (!hiddenColse) {
         //添加关闭按钮.
-        IKLog(@"%@",_closeBtn);
+        if (!_hadAddCloseBtn) {
+            [self addSubview:self.closeBtn];
+            [self setHadAddCloseBtn:YES];
+        }
         
         [self setNeedsLayout];
     }
 }
 
+
+- (void)setHadAddCloseBtn:(BOOL)hadAddCloseBtn
+{
+    _hadAddCloseBtn = hadAddCloseBtn;
+}
 -(UIButton *)closeBtn
 {
     if (_closeBtn == nil) {
@@ -116,7 +125,7 @@
 {
     if (_searchBar == nil) {
         _searchBar = [[IKSearchBar alloc] init];
-        _searchBar.placeholder = @" 搜索职位/公司/技能";
+//        _searchBar.placeholder = @" 搜索职位/公司/技能";
         _searchBar.contentMode = UIViewContentModeLeft;
     }
     

@@ -86,7 +86,7 @@
         // 标题
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textAlignment = NSTextAlignmentLeft;
-        _titleLabel.font = [UIFont boldSystemFontOfSize:IKTitleFont];
+        _titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
         _titleLabel.textColor = IKMainTitleColor;
     }
     return _titleLabel;
@@ -211,16 +211,18 @@
 
 - (void)layoutCellSubviews
 {
+    __weak typeof (self) weakSelf = self;
+
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(5);
-        make.left.equalTo(self).offset(10);
+        make.top.equalTo(weakSelf).offset(5);
+        make.left.equalTo(weakSelf).offset(10);
 //        make.bottom.equalTo(self).offset(-5);
-        make.width.and.height.mas_equalTo(self.bounds.size.height - 10);
+        make.width.and.height.mas_equalTo(weakSelf.bounds.size.height - 10);
     }];
     
     [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(8);
-        make.right.equalTo(self);
+        make.top.equalTo(weakSelf).offset(8);
+        make.right.equalTo(weakSelf);
         make.height.mas_equalTo(20);
         make.width.mas_equalTo(70);
     }];
@@ -233,7 +235,7 @@
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self).offset(8);
+        make.top.equalTo(weakSelf).offset(8);
         make.left.equalTo(_logoImageView.mas_right).offset(9);
         make.height.mas_equalTo(20);
         make.right.equalTo(_maskView.mas_left);
@@ -243,13 +245,13 @@
         make.top.equalTo(_skillLabel1.mas_bottom);
         make.left.equalTo(_titleLabel);
         make.bottom.equalTo(_logoImageView.mas_bottom);
-        make.right.equalTo(self.mas_right).offset(-10);
+        make.right.equalTo(weakSelf.mas_right).offset(-10);
     }];
     
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(self);
+        make.left.and.right.equalTo(weakSelf);
         make.height.mas_equalTo(1);
-        make.top.equalTo(self.mas_bottom).offset(-1);
+        make.top.equalTo(weakSelf.mas_bottom).offset(-1);
     }];
 }
 

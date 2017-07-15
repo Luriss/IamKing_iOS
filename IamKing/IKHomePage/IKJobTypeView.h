@@ -22,5 +22,8 @@
 
 @property (nonatomic, weak) id<IKJobTypeViewDelegate> delegate;
 
+// 目前只支持4个及以下.
+@property (nonatomic, strong)NSArray *titleArray;
+
 
 @end

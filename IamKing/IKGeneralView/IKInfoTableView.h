@@ -11,8 +11,6 @@
 
 @protocol IKInfoTableViewDelegate <NSObject>
 
-- (void)tableViewHeaderLeftButtonClick:(UIButton *)button;
-- (void)tableViewHeaderRightButtonClick:(UIButton *)button;
 - (void)infoTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
@@ -22,7 +20,7 @@
 @property (nonatomic,copy)NSString *leftHeaderButtonTitle;
 @property (nonatomic,copy)NSString *rightHeaderButtonTitle;
 @property (nonatomic, weak) id<IKInfoTableViewDelegate> delegate;
-
+@property (nonatomic, assign) BOOL canScrollTableView;
 
 
 @end

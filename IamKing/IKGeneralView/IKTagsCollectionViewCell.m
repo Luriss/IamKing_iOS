@@ -22,8 +22,10 @@
         _titleLabel.font = [UIFont systemFontOfSize:15];
         [self.contentView addSubview:_titleLabel];
         
+        __weak typeof (self) weakSelf = self;
+
         [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.contentView);
+            make.edges.equalTo(weakSelf.contentView);
         }];
     }
     

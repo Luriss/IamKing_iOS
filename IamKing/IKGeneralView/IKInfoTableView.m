@@ -77,6 +77,13 @@
 }
 
 
+- (void)setCanScrollTableView:(BOOL)canScrollTableView
+{
+    self.tableView.scrollEnabled = canScrollTableView;
+    _canScrollTableView = canScrollTableView;
+}
+
+
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

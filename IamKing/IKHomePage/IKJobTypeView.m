@@ -10,11 +10,14 @@
 
 @interface IKJobTypeView ()
 
-@property (nonatomic, strong) UIButton *newJobBtn;
-@property (nonatomic, strong) UIView     *nBottomLine;
-@property (nonatomic, strong) UIButton *hotJobBtn;
-@property (nonatomic, strong) UIView     *hBottomLine;
 
+@property (nonatomic, strong) UIButton  *button;
+@property (nonatomic, strong) UIView     *bottomLine;
+
+@property (nonatomic, assign)BOOL hadAddSubview;
+@property (nonatomic, copy)NSMutableArray<__kindof UIButton *> *buttonArray;
+@property (nonatomic, assign)CGSize buttonSize;
+@property (nonatomic, strong)UIButton *oldButton;
 
 @end
 
@@ -24,7 +27,7 @@
 {
     self = [super init];
     if (self) {
-        [self addSubViews];
+        _hadAddSubview = NO;
     }
     return self;
 }
@@ -35,7 +38,7 @@
     self = [super initWithFrame:frame];
     
     if (self) {
-        [self addSubViews];
+        _hadAddSubview = NO;
     }
     return self;
 }
@@ -43,124 +46,154 @@
 
 - (void)addSubViews
 {
-    [self addSubview:self.newJobBtn];
-    [self addSubview:self.hotJobBtn];
-    [self addSubview:self.nBottomLine];
-    [self addSubview:self.hBottomLine];
-}
-
-
-- (void)layoutSubviews
-{
-    [_newJobBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.left.and.bottom.equalTo(self);
-        make.width.equalTo(self).multipliedBy(0.5);
-    }];
+    for (int i = 0; i < _buttonArray.count; i ++) {
+        
+        UIButton *job = [_buttonArray objectAtIndex:i];
+        if (i == 0) {
+            [job setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
+            _oldButton = job;
+        }
+        [self addSubview:job];
+    }
     
-    [_hotJobBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.bottom.equalTo(self);
-        make.width.equalTo(self).multipliedBy(0.5);
-    }];
+    [self addSubview:self.bottomLine];
     
-    [_nBottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_newJobBtn.mas_centerY).offset(12);
-        make.centerX.equalTo(_newJobBtn);
-        make.width.mas_equalTo(60);
+    __weak typeof (self) weakSelf = self;
+
+    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(weakSelf).offset(-8);
+        make.centerX.equalTo(_oldButton);
         make.height.mas_equalTo(3);
+        make.width.mas_equalTo(55);
     }];
-    
-    [_hBottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_hotJobBtn.mas_centerY).offset(12);
-        make.centerX.equalTo(_hotJobBtn);
-        make.width.mas_equalTo(60);
-        make.height.mas_equalTo(3);
-    }];
-    
-    [super layoutSubviews];
 }
 
-- (UIButton *)newJobBtn
+
+- (UIView *)bottomLine
 {
-    if (_newJobBtn == nil) {
-        // 搜索按钮
-        _newJobBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _newJobBtn.tag = 1001;
-//        _newJobBtn.backgroundColor = [UIColor blueColor];
-        [_newJobBtn setTitle:@"最新职位" forState:UIControlStateNormal];
-        [_newJobBtn setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
-        _newJobBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-        [_newJobBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    if (_bottomLine == nil) {
+        _bottomLine = [[UIView alloc] init];
+        _bottomLine.backgroundColor = IKGeneralBlue;
     }
-    
-    return _newJobBtn;
+    return _bottomLine;
 }
 
-- (UIButton *)hotJobBtn
-{
-    if (_hotJobBtn == nil) {
-        // 更多按钮
-        _hotJobBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _hotJobBtn.tag = 1002;
-//        _hotJobBtn.backgroundColor = [UIColor whiteColor];
-        [_hotJobBtn setTitle:@"最热职位" forState:UIControlStateNormal];
-        [_hotJobBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        _hotJobBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
-        [_hotJobBtn addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    
-    return _hotJobBtn;
-}
-
-- (UIView *)nBottomLine
-{
-    if (_nBottomLine == nil) {
-        _nBottomLine = [[UIView alloc] init];
-        _nBottomLine.backgroundColor = IKGeneralBlue;
-    }
-    return _nBottomLine;
-}
-
-
-- (UIView *)hBottomLine
-{
-    if (_hBottomLine == nil) {
-        _hBottomLine = [[UIView alloc] init];
-        _hBottomLine.backgroundColor = IKGeneralBlue;
-        _hBottomLine.hidden = YES;
-    }
-    return _hBottomLine;
-}
 
 - (void)btnClick:(UIButton *)button
 {
     NSLog(@"%@",button);
-    if (button == _newJobBtn) {
+
+    if (_oldButton != button) {
         
-        [_hotJobBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        _hBottomLine.hidden = YES;
+        [self startBottomLineAnimation:button];
         
-        [_newJobBtn setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
-        _nBottomLine.hidden = NO;
+        [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
+        [_oldButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
         
         if ([self.delegate respondsToSelector:@selector(jobTypeViewNewJobButtonClick:)]) {
             [self.delegate jobTypeViewNewJobButtonClick:button];
         }
     }
-    else{
-        
-        [_newJobBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        _nBottomLine.hidden = YES;
-        
-        [_hotJobBtn setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
-        _hBottomLine.hidden = NO;
-        
-        if ([self.delegate respondsToSelector:@selector(jobTypeViewHotJobButtonClick:)]) {
-            [self.delegate jobTypeViewHotJobButtonClick:button];
-        }
-    }
+    
+    _oldButton = button;
     
 }
 
+
+
+
+- (void)layoutSubviews
+{
+    
+    [super layoutSubviews];
+}
+
+
+- (void)setTitleArray:(NSArray *)titleArray
+{
+    if (IKArrayIsNotEmpty(titleArray)) {
+        _titleArray = titleArray;
+        
+        _buttonSize = CGSizeMake(CGRectGetWidth(self.bounds)/(titleArray.count), CGRectGetHeight(self.bounds));
+
+        [self addButtonWithDataArray];
+        
+        if (!_hadAddSubview) {
+            [self addSubViews];
+            _hadAddSubview = YES;
+        }
+    }
+}
+
+
+- (void)addButtonWithDataArray
+{
+    [self clearButtonArray];
+    
+    NSInteger index = 0;
+    for (NSString *title in _titleArray) {
+        
+        index +=1;
+        
+        if (index > 4) {
+            
+            IKLog(@"title is over.");
+            return ;
+        }
+        
+        UIButton *button = [self createButtonWithTitle:title index:index];
+        [self.buttonArray addObject:button];
+    }
+}
+
+
+- (UIButton *)createButtonWithTitle:(NSString *)title index:(NSInteger )index
+{
+    UIButton *job = [UIButton buttonWithType:UIButtonTypeCustom];
+    [job setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    job.frame = CGRectMake((index -1)*_buttonSize.width, 0, _buttonSize.width, _buttonSize.height);
+    job.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+    [job addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [job setTitle:title forState:UIControlStateNormal];
+    job.tag = 100 + index;
+    return job;
+}
+
+
+- (void)setHadAddSubview:(BOOL)hadAddSubview
+{
+    _hadAddSubview = hadAddSubview;
+}
+
+- (NSMutableArray<UIButton *> *)buttonArray
+{
+    if (_buttonArray == nil) {
+        _buttonArray = [[NSMutableArray alloc] init];
+    }
+    return _buttonArray;
+}
+
+
+- (void)clearButtonArray
+{
+    [_buttonArray removeAllObjects];
+    _buttonArray = nil;
+}
+
+
+- (void)startBottomLineAnimation:(UIButton *)button
+{
+    CABasicAnimation* position = [CABasicAnimation animation];
+    position.duration = 0.1;
+    position.keyPath = @"position.x";
+    position.fromValue = [NSValue valueWithCGPoint:_oldButton.center];
+    position.toValue = [NSValue valueWithCGPoint:button.center];
+    position.removedOnCompletion = NO;
+    position.fillMode = kCAFillModeForwards;
+    [_bottomLine.layer addAnimation:position forKey:nil];
+}
+
+//
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

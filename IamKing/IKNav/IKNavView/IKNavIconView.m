@@ -57,17 +57,21 @@
     fImageView.tag = 1001;
     [fImageView setImage:[UIImage imageNamed:@"IK_logo"]];
     [self addSubview:fImageView];
+    
+    [self ajustFrame];
 
 }
 
 - (void)ajustFrame
 {
     UIImageView *image1 = [self viewWithTag:1001];
+    __weak typeof (self) weakSelf = self;
+
     [image1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self).offset(3);
-        make.top.equalTo(self).offset(3);
-        make.right.equalTo(self).offset(-3);
-        make.bottom.equalTo(self).offset(-3);
+        make.left.equalTo(weakSelf).offset(3);
+        make.top.equalTo(weakSelf).offset(3);
+        make.right.equalTo(weakSelf).offset(-3);
+        make.bottom.equalTo(weakSelf).offset(-3);
     }];
 
     

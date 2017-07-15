@@ -37,6 +37,16 @@
 
 - (void)setupWithUrlString:(NSString*)url placeholderImage:(UIImage*)placeholderImage {
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeholderImage];
+    
+    __weak typeof (self) weakSelf = self;
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:url] placeholderImage:placeholderImage completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        weakSelf.imageView.alpha = 0.0;
+        
+        [UIView transitionWithView:weakSelf.imageView duration:IKLoadImageTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+            [weakSelf.imageView setImage:image];
+            weakSelf.imageView.alpha = 1.0;
+        }completion:NULL];
+    }];
 }
 
 - (void)setupWithImageName:(NSString*)imgName placeholderImage:(UIImage*)placeholderImage {
@@ -214,11 +224,13 @@
         _pageControl.numberOfPages = self.numberOfPages;
         [self insertSubview:self.pageControl aboveSubview:self.collectionView];
         
+        __weak typeof (self) weakSelf = self;
+
         [_pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(width);
             make.height.mas_equalTo(20);
-            make.centerX.equalTo(self);
-            make.bottom.equalTo(self).offset(-10);
+            make.centerX.equalTo(weakSelf);
+            make.bottom.equalTo(weakSelf).offset(-10);
         }];
     }
     
@@ -229,9 +241,11 @@
 {
     _flowLayout.itemSize = self.frame.size;
     
+    __weak typeof (self) weakSelf = self;
+
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self);
-        make.width.and.height.equalTo(self);
+        make.edges.equalTo(weakSelf);
+        make.width.and.height.equalTo(weakSelf);
     }];
 }
 

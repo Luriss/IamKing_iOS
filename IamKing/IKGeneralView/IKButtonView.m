@@ -67,12 +67,13 @@
 
 - (void)layoutSubviews
 {
+    __weak typeof (self) weakSelf = self;
     [_exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.and.width.and.height.equalTo(self);
+        make.edges.and.width.and.height.equalTo(weakSelf);
     }];
     
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.and.width.and.height.equalTo(self);
+        make.edges.and.width.and.height.equalTo(weakSelf);
     }];
     
     [super layoutSubviews];

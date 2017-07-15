@@ -55,7 +55,7 @@ const char kProcessedImage;
             // 从缓存中取出该图片,缓存的图片已做过圆角处理
             if (cacheImage) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    self.image = cacheImage;
+                    [self loadImageWithAnimation:cacheImage];
                 });
             }
             else {
@@ -66,7 +66,7 @@ const char kProcessedImage;
                         UIImage *radiusImage = [UIImage createRoundedRectImage:image size:self.frame.size radius:radius];
                         
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            self.image = radiusImage;
+                            [self loadImageWithAnimation:radiusImage];
                         });
                         //清除原有非圆角图片缓存
                         [[SDImageCache sharedImageCache] removeImageForKey:urlStr withCompletion:^{
@@ -87,6 +87,14 @@ const char kProcessedImage;
 }
 
 
+- (void)loadImageWithAnimation:(UIImage *)image
+{
+    self.alpha = 0;
+    [UIView transitionWithView:self duration:IKLoadImageTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+        [self setImage:image];
+        self.alpha = 1.0;
+    }completion:NULL];
+}
 
 
 @end

@@ -16,24 +16,25 @@
 #import "IKSearchVC.h"
 #import "IKSearchView.h"
 #import "IKJobTypeView.h"
+#import "IKJobInfoScrollView.h"
 
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKInfoTableViewDelegate,IKChooseCityViewControllerDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKInfoTableViewDelegate,IKChooseCityViewControllerDelegate,IKJobInfoScrollViewDelegate>
 {
     BOOL  _navRightBtnHadClick;
 }
 
 
 @property(nonatomic,strong)IKNavIconView *navLogoView;
-@property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
 @property(nonatomic,strong)UIBarButtonItem *leftBarBtn;
+@property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
 @property(nonatomic,strong)IKScrollView *bottomScrollView;
 @property(nonatomic,strong)IKView *containerView;
 @property(nonatomic,strong)IKLoopPlayView *lpView;
 @property(nonatomic,strong)IKSearchView *searchView;
 @property(nonatomic,strong)IKJobTypeView *jobTypeView;
-
-
+@property(nonatomic,strong)IKInfoTableView *infoTableView;
+@property(nonatomic,strong)IKJobInfoScrollView *jobInfoScrollView;
 @end
 
 @implementation IKHomePageVC
@@ -46,7 +47,7 @@
     // Do any additional setup after loading the view.
     
     _navRightBtnHadClick = NO;
-    self.tabBarController.navigationController.navigationBar.barTintColor = [UIColor blueColor];
+
     // 初始化导航栏内容
     [self initNavigationContent];
     
@@ -59,18 +60,19 @@
     //初始化轮播视图
     [self initLoopPlayView];
     
-    //
-    [self initJobTypeView];
+    [self initJobInfoScrollView];
+    // 职位类型
+//    [self initJobTypeView];
     
     // 职位列表
-    [self initInfoTableView];
+//    [self initInfoTableView];
     
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     // 视图显示开始轮播
     [self startLoopPlayView];
 }
@@ -79,7 +81,6 @@
 {
     [super viewDidAppear:animated];
     
-    [self setNavigationContent];
     
 }
 
@@ -103,23 +104,26 @@
     [self createRightBarItem];
     
     [self createLeftBarItem];
+    
+    [self setNavigationContent];
 }
 
 - (void)createRightBarItem
 {
     // 定位
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self action:@selector(navRightBarBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(showLocationVc:) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 0, 70, 44);
-    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:11.0f];
-    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
-    [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 54);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, -45, 0, 0);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0, -110, 0, 0);
+    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
+    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
+
+    [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
     
-    
-    _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
+    _leftBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
 }
 
 - (void)createLeftBarItem
@@ -129,13 +133,25 @@
     [button addTarget:self action:@selector(showClaaifyVc) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 0, 60, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 44);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, -35, 0, 0);
+    button.titleEdgeInsets = UIEdgeInsetsMake(0, -115, 0, 0);
     [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont boldSystemFontOfSize:16.0f];
     [button setTitle:@"分类" forState:UIControlStateNormal];
     [button setImage:[UIImage imageNamed:@"IK_classify"] forState:UIControlStateNormal];
-    _leftBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
+    _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
 }
+
+
+// 设置导航栏内容
+- (void)setNavigationContent
+{
+    self.tabBarController.navigationItem.rightBarButtonItem = _rightBarBtn;
+    self.tabBarController.navigationItem.leftBarButtonItem = _leftBarBtn;
+    
+    // 导航栏中间logo
+    self.tabBarController.navigationItem.titleView = _navLogoView;
+}
+
 
 - (void)initBotttmScrollView
 {
@@ -200,7 +216,6 @@
                             ];
     _lpView.scrollDirection = IKLPVScrollDirectionHorizontal;
     _lpView.pageControlHidden = NO;
-    //    _lpView.isAutoScroll = YES;
     [_containerView addSubview:_lpView];
     
     [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -208,13 +223,38 @@
         make.top.equalTo(_searchView.mas_bottom).offset(2);
         make.height.mas_equalTo(175);
     }];
+    
+    [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(_lpView).offset(1000);
+    }];
 }
+
+
+- (void)initJobInfoScrollView
+{
+     _jobInfoScrollView = [[IKJobInfoScrollView alloc] initWithFrame:CGRectMake(0, 225, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
+    _jobInfoScrollView.backgroundColor = [UIColor blueColor];
+    _jobInfoScrollView.delegate = self;
+    _jobInfoScrollView.infoScrollView.scrollEnabled = NO;
+    [_containerView addSubview:_jobInfoScrollView];
+    
+//    [_jobInfoScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_lpView.mas_bottom);
+//        make.left.and.right.equalTo(_containerView);
+//        make.height.mas_equalTo(IKSCREENH_HEIGHT - 64);
+//    }];
+    
+
+    
+}
+
+
 
 - (void)initJobTypeView
 {
-    _jobTypeView = [[IKJobTypeView alloc] init];
+    _jobTypeView = [[IKJobTypeView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 44)];
     _jobTypeView.backgroundColor = [UIColor whiteColor];
-    
+    _jobTypeView.titleArray = @[@"最新职位",@"最热职位",@"推荐职位"];
     [_containerView addSubview:_jobTypeView];
     
     [_jobTypeView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -224,23 +264,22 @@
     }];
 }
 
-
-
-
 - (void)initInfoTableView
 {
-    IKInfoTableView *infoTableView = [[IKInfoTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1200+100)];
+    IKInfoTableView *infoTableView = [[IKInfoTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 700)];
     infoTableView.delegate = self;
+    infoTableView.canScrollTableView = NO;
     [_containerView addSubview:infoTableView];
     
     infoTableView.leftHeaderButtonTitle = @"最新职位";
     infoTableView. rightHeaderButtonTitle = @"最热职位";
     
+    self.infoTableView = infoTableView;
     
     [infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_jobTypeView.mas_bottom).offset(5);
         make.left.and.right.equalTo(_containerView);
-        make.height.mas_equalTo(1200+100);
+        make.height.mas_equalTo(700);
     }];
     
     [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -261,70 +300,6 @@
 - (void)stopLoopPlayView
 {
     [_lpView stopAutoScrollPage];
-}
-
-#pragma mark - SetView
-
-// 设置导航栏内容
-- (void)setNavigationContent
-{
-    [self setNavigationMiddleLogo];
-    [self setNavigationBarItem];
-}
-
-
-- (void)setNavigationBarItem
-{
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -5;
-    self.tabBarController.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:negativeSpacer,_leftBarBtn, nil];
-    
-    self.tabBarController.navigationItem.leftBarButtonItem = _rightBarBtn;
-    
-}
-
-// 导航栏中间logo
-- (void)setNavigationMiddleLogo
-{
-    self.tabBarController.navigationItem.titleView = _navLogoView;
-    
-    [_navLogoView ajustFrame];
-}
-
-
-#pragma mark - IKSlideViewDelegate
-
-- (void)slideViewSearchButtonClick:(UIButton *)button
-{
-    //    return;
-    IKSearchVC *searchVC = [[IKSearchVC alloc] init];
-    //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
-    searchVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    searchVC.view.backgroundColor = [UIColor whiteColor];
-    
-    [self presentViewController:searchVC animated:YES completion:^{
-        
-    }];
-    
-    
-}
-
-- (void)slideViewMoreButtonClick:(UIButton *)button
-{
-    //    return;
-    
-}
-
-- (void)showClaaifyVc
-{
-    IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
-    //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
-    moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
-    moreVC.view.backgroundColor = [UIColor whiteColor];
-    
-    [self presentViewController:moreVC animated:YES completion:^{
-        
-    }];
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -369,7 +344,29 @@
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-//    NSLog(@"scrollViewDidScroll");
+    NSLog(@"scrollView = %@scrollViewDidScroll = %.0f",scrollView,scrollView.contentOffset.y);
+    
+    if (scrollView.contentOffset.y > 160) {
+        [_jobInfoScrollView removeFromSuperview];
+//        IKLog(@"%@",[NSValue valueWithCGRect:_jobInfoScrollView.frame]);
+//        CGRect oldFrame = _jobInfoScrollView.frame;
+//        oldFrame.origin.y = 64;
+//        _jobInfoScrollView.frame = oldFrame;
+////        _jobInfoScrollView.backgroundColor = [UIColor blueColor];
+        _jobInfoScrollView.infoScrollView.scrollEnabled = YES;
+        [self.view addSubview:_jobInfoScrollView];
+        scrollView.scrollEnabled = NO;
+        
+        IKLog(@"%@ddddd",self.view.subviews);
+        [_jobInfoScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.view).offset(64);
+            make.left.and.right.equalTo(self.view);
+            make.height.mas_equalTo(IKSCREENH_HEIGHT - 64);
+        }];
+    }
+    else{
+
+    }
 }
 
 // scrollView 开始拖动
@@ -387,31 +384,32 @@
 // scrollView 开始减速（以下两个方法注意与以上两个方法加以区别）
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-//    NSLog(@"scrollViewWillBeginDecelerating");
+    NSLog(@"scrollViewWillBeginDecelerating");
 }
 
 // scrollview 减速停止
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-//    NSLog(@"scrollViewDidEndDecelerating");
+    NSLog(@"scrollViewDidEndDecelerating");
 }
 
+- (void)jobInfoScrollViewVerticalScroll
+{
+    [_jobInfoScrollView removeFromSuperview];
+    [_containerView addSubview:_jobInfoScrollView];
+    
+    _bottomScrollView.scrollEnabled = YES;
+    
+    [_jobInfoScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_lpView.mas_bottom);
+        make.left.and.right.equalTo(self.view);
+        make.height.mas_equalTo(IKSCREENH_HEIGHT - 64);
+    }];
+}
 
 
 
 #pragma mark - IKInfoTableViewDelegate
-
-- (void)tableViewHeaderLeftButtonClick:(UIButton *)button
-{
-    
-}
-
-
-- (void)tableViewHeaderRightButtonClick:(UIButton *)button
-{
-    
-}
-
 
 - (void)infoTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -421,49 +419,39 @@
 }
 
 
-#pragma mark - IKButtonVieDelegate
-
-- (void)buttonViewButtonClick:(UIButton *)button
-{
-//    [_slpView scrollToNextPage];
-//    [_tlpView scrollToNextPage];
-}
+#pragma mark - IKChooseCityViewControllerDelegate
 
 - (void)locationVcDismissChangeNavButtonTitle:(NSString *)title
 {
-    IKView *view = (IKView *)_rightBarBtn.customView;
-    UIButton *btn = (UIButton *)view.subviews.firstObject;
-    CGRect oldFrame = btn.frame;
-    NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:11.0f]};
-    CGSize strSize = [NSString getSizeWithString:title size:CGSizeMake(70, 44) attribute:attribute];
-    btn.frame = CGRectMake(CGRectGetWidth(view.frame)-strSize.width-20,oldFrame.origin.y, strSize.width + 20, 44);
-    btn = [self setNavRightButtonImageTitleEdgeInsets:btn size:strSize];
+    UIButton *btn = (UIButton *)_leftBarBtn.customView;
     [btn setTitle:title forState:UIControlStateNormal];
-
     _navRightBtnHadClick = NO;
-}
-
-- (UIButton *)setNavRightButtonImageTitleEdgeInsets:(UIButton *)button size:(CGSize )size
-{
-    IKLog(@"%@",[NSValue valueWithCGSize:size]);
-    // 两个字 30.
-    CGFloat x = (size.width - 30)/5;
-    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, size.width);
-    button.titleEdgeInsets = UIEdgeInsetsMake(0, -(size.width - (5 *x)), 0, 0);
-
-    return button;
-    
 }
 
 #pragma mark - ButtonAction
 
-
-
-- (void)navRightBarBtnClick:(UIButton *)btn
+- (void)showClaaifyVc
 {
+    if ([self.presentedViewController isKindOfClass:[IKMoreTypeVC class]]) {
+        
+        IKLog(@"IKMoreTypeVC had been present,not need present.return.");
+        return;
+    }
     
+    IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
+    //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
+    moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    moreVC.view.backgroundColor = [UIColor whiteColor];
+    
+    [self presentViewController:moreVC animated:YES completion:^{
+        
+    }];
+}
+
+
+- (void)showLocationVc:(UIButton *)btn
+{
     UIViewController *vc = [self getPresentedViewController];
-    NSLog(@"navRightBarBtnClick = %@",vc);
 
     if (_navRightBtnHadClick) {
         if ([vc isKindOfClass:[IKChooseCityVC class]]) {
@@ -492,7 +480,6 @@
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     cityVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     cityVC.delegate = self;
-    //
     
     [vc presentViewController:cityVC animated:NO completion:^{
         

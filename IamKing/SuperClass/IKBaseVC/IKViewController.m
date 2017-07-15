@@ -39,8 +39,9 @@
 - (void)fineNavigationBottomLine:(UIView *)view
 {
     if ([view isKindOfClass:[UIImageView class]] && (CGRectGetHeight(view.bounds) <= 1.0)) {
-        
+        self.shadowImage = (UIImageView *)view;
         self.shadowImage.hidden = YES;
+        return;
     }
     
     for (UIView *subview in view.subviews) {

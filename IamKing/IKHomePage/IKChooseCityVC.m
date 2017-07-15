@@ -224,21 +224,23 @@
 
 - (void)layoutCustomView
 {
+    __weak typeof (self) weakSelf = self;
+
     [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(64);
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(weakSelf.view).offset(64);
         make.height.mas_equalTo(150);
     }];
     
     [_provinceTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_locationInfoView.mas_bottom);
-        make.left.and.bottom.equalTo(self.view);
+        make.left.and.bottom.equalTo(weakSelf.view);
         make.width.mas_equalTo(IKSCREEN_WIDTH *0.4);
     }];
     
     [_cityTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.and.bottom.equalTo(_provinceTableView);
-        make.right.equalTo(self.view);
+        make.right.equalTo(weakSelf.view);
         make.left.equalTo(_provinceTableView.mas_right);
     }];
 }
