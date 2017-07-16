@@ -19,9 +19,13 @@
 #import "IKJobInfoScrollView.h"
 
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKInfoTableViewDelegate,IKChooseCityViewControllerDelegate,IKJobInfoScrollViewDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKInfoTableViewDelegate,IKChooseCityViewControllerDelegate,IKJobInfoScrollViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate>
 {
     BOOL  _navRightBtnHadClick;
+    //用于判断上滑下滑
+    CGPoint beginPoint;
+    
+    BOOL _hadAddViewInSelf;
 }
 
 
@@ -35,6 +39,10 @@
 @property(nonatomic,strong)IKJobTypeView *jobTypeView;
 @property(nonatomic,strong)IKInfoTableView *infoTableView;
 @property(nonatomic,strong)IKJobInfoScrollView *jobInfoScrollView;
+@property(nonatomic,strong)IKScrollView *infoScrollView;
+@property (nonatomic, strong) UICollectionView *jobCollectionView;
+@property (nonatomic, weak) UICollectionViewFlowLayout *jobFlowLayout;
+
 @end
 
 @implementation IKHomePageVC
@@ -47,7 +55,11 @@
     // Do any additional setup after loading the view.
     
     _navRightBtnHadClick = NO;
-
+    _hadAddViewInSelf = NO;
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    beginPoint = CGPointZero;
+    
     // 初始化导航栏内容
     [self initNavigationContent];
     
@@ -60,12 +72,12 @@
     //初始化轮播视图
     [self initLoopPlayView];
     
-    [self initJobInfoScrollView];
+//    [self initJobInfoScrollView];
     // 职位类型
-//    [self initJobTypeView];
+    [self initJobTypeView];
     
     // 职位列表
-//    [self initInfoTableView];
+    [self initInfoTableView];
     
 }
 
@@ -224,9 +236,9 @@
         make.height.mas_equalTo(175);
     }];
     
-    [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(_lpView).offset(1000);
-    }];
+//    [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(_lpView).offset(1000);
+//    }];
 }
 
 
@@ -243,7 +255,7 @@
 //        make.left.and.right.equalTo(_containerView);
 //        make.height.mas_equalTo(IKSCREENH_HEIGHT - 64);
 //    }];
-    
+//    
 
     
 }
@@ -266,25 +278,73 @@
 
 - (void)initInfoTableView
 {
-    IKInfoTableView *infoTableView = [[IKInfoTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 700)];
-    infoTableView.delegate = self;
-    infoTableView.canScrollTableView = NO;
-    [_containerView addSubview:infoTableView];
+//    IKInfoTableView *infoTableView = [[IKInfoTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 700)];
+//    infoTableView.delegate = self;
+//    infoTableView.canScrollTableView = NO;
+//    [_containerView addSubview:infoTableView];
+//    
+//    infoTableView.leftHeaderButtonTitle = @"最新职位";
+//    infoTableView. rightHeaderButtonTitle = @"最热职位";
+//    
+//    self.infoTableView = infoTableView;
+//    
+//    [infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_jobTypeView.mas_bottom).offset(5);
+//        make.left.and.right.equalTo(_containerView);
+//        make.height.mas_equalTo(700);
+//    }];
     
-    infoTableView.leftHeaderButtonTitle = @"最新职位";
-    infoTableView. rightHeaderButtonTitle = @"最热职位";
     
-    self.infoTableView = infoTableView;
     
-    [infoTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_jobTypeView.mas_bottom).offset(5);
+//    _infoScrollView = [[IKScrollView alloc] init];
+//    _infoScrollView.tag = 10001;
+//    _infoScrollView.backgroundColor = [UIColor cyanColor];
+//    _infoScrollView.delegate = self;
+//    // 设置内容大小
+//    _infoScrollView.contentSize = CGSizeMake(IKSCREEN_WIDTH * 3, IKSCREENH_HEIGHT- 64 - 60);
+//    // 是否反弹
+//    //    scrollView.bounces = NO;
+//    // 是否分页
+//    //    scrollView.pagingEnabled = YES;
+//    //     是否滚动
+//    _infoScrollView.scrollEnabled = YES;
+//    _infoScrollView.showsHorizontalScrollIndicator = YES;
+//    [_containerView addSubview:_infoScrollView];
+    
+    
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    flowLayout.minimumLineSpacing = 0;
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    flowLayout.itemSize = CGSizeMake(IKSCREEN_WIDTH, IKSCREENH_HEIGHT- 64 - 60);
+    
+    _jobFlowLayout = flowLayout;
+    
+    _jobCollectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:_jobFlowLayout];
+    _jobCollectionView.pagingEnabled = YES;
+    _jobCollectionView.scrollsToTop = NO;
+    _jobCollectionView.showsHorizontalScrollIndicator = NO;
+    _jobCollectionView.showsVerticalScrollIndicator = NO;
+    _jobInfoScrollView.backgroundColor = [UIColor whiteColor];
+    [_jobCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"jobCollectionView"];
+    [_jobCollectionView registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"headerReuseIdentifier"];
+    
+    _jobCollectionView.dataSource = self;
+    _jobCollectionView.delegate = self;
+
+    [_containerView addSubview:_jobCollectionView];
+    
+    [_jobCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_jobTypeView.mas_bottom).offset(4);
         make.left.and.right.equalTo(_containerView);
-        make.height.mas_equalTo(700);
+        make.height.mas_equalTo(IKSCREENH_HEIGHT- 64 - 60);
     }];
     
     [_containerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(infoTableView);
+        make.bottom.equalTo(_jobCollectionView.mas_bottom);
     }];
+    
+//    _jobCollectionView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
+
 }
 
 
@@ -301,6 +361,71 @@
 {
     [_lpView stopAutoScrollPage];
 }
+
+#pragma mark - UICollectionViewDataSource, UICollectionViewDelegate
+
+
+-(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 3;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"jobCollectionView" forIndexPath:indexPath];
+    cell.contentMode = UIViewContentModeScaleToFill;
+    
+    if (indexPath.row == 0) {
+        [cell setBackgroundColor:[UIColor redColor]];
+    }
+    else{
+        cell.backgroundColor = [UIColor blueColor];
+    }
+//    if (self.imagesArray.count) {
+//        NSInteger index = indexPath.row % self.imagesArray.count;
+//        id object = [self.imagesArray objectAtIndex:index];
+//        if ([object isKindOfClass:[NSString class]]) {
+//            if ([(NSString*)object hasPrefix:@"http"]) {
+//                [cell setupWithUrlString:(NSString*)object placeholderImage:self.placeholderImage];
+//            }
+//            else {
+//                [cell setupWithImageName:(NSString*)object placeholderImage:self.placeholderImage];
+//            }
+//        }
+//        else if ([object isKindOfClass:[UIImage class]]) {
+//            [cell setupWithImage:(UIImage*)object placeholderImage:self.placeholderImage];
+//        }
+//    }
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    //    if ([self.delegate respondsToSelector:@selector(infiniteScrollView:didSelectItemAtIndex:)]) {
+    //        [self.delegate infiniteScrollView:self didSelectItemAtIndex:self.currentPageIndex];
+    //    }
+    //
+    //    if (self.scrollViewDidSelectBlock) {
+    //        self.scrollViewDidSelectBlock(self,self.currentPageIndex);
+    //    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+    //    if (!_firstShow) {
+    //        [self scrollToMiddlePosition];
+    //        _firstShow = YES;
+    //    }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+    
+}
+
 
 #pragma mark - UIScrollViewDelegate
 /*
@@ -344,35 +469,82 @@
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollView = %@scrollViewDidScroll = %.0f",scrollView,scrollView.contentOffset.y);
+    NSLog(@"_jobTypeView = %@ scrollViewDidScroll = %.0f",[NSValue valueWithCGRect:_jobTypeView.frame],scrollView.contentOffset.y);
     
-    if (scrollView.contentOffset.y > 160) {
-        [_jobInfoScrollView removeFromSuperview];
-//        IKLog(@"%@",[NSValue valueWithCGRect:_jobInfoScrollView.frame]);
-//        CGRect oldFrame = _jobInfoScrollView.frame;
-//        oldFrame.origin.y = 64;
-//        _jobInfoScrollView.frame = oldFrame;
-////        _jobInfoScrollView.backgroundColor = [UIColor blueColor];
-        _jobInfoScrollView.infoScrollView.scrollEnabled = YES;
-        [self.view addSubview:_jobInfoScrollView];
-        scrollView.scrollEnabled = NO;
-        
-        IKLog(@"%@ddddd",self.view.subviews);
-        [_jobInfoScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.view).offset(64);
-            make.left.and.right.equalTo(self.view);
-            make.height.mas_equalTo(IKSCREENH_HEIGHT - 64);
-        }];
-    }
-    else{
-
-    }
+//    CGFloat offsetY = scrollView.contentOffset.y;
+//    
+//    CGFloat jobY = _jobTypeView.frame.origin.y;
+//    if (jobY > 0) {
+//        CGPoint point = [scrollView.panGestureRecognizer translationInView:scrollView];
+//        
+//        CGFloat jx = jobY - 32 - 36 - offsetY;
+//        
+//        NSLog(@"x = %.0f,y = %.0f jx = %.0f",point.x,point.y,jx);
+//        if (scrollView == _bottomScrollView && jx <= 0) {
+//            NSLog(@"1 _hadAddViewInSelf = %d",_hadAddViewInSelf);
+//            if (!_hadAddViewInSelf) {
+//                
+//                beginPoint = scrollView.contentOffset;
+//                [self.view addSubview:_jobTypeView];
+//
+//                [_jobTypeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.equalTo(self.view).offset(64);
+//                    make.left.and.right.equalTo(self.view);
+//                    make.height.mas_equalTo(44);
+//                }];
+////                _infoScrollView.scrollEnabled = YES;
+////                _bottomScrollView.scrollEnabled = NO;
+//                [self.view addSubview:_infoScrollView];
+//                
+//                [_infoScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.equalTo(_jobTypeView.mas_bottom);
+//                    make.left.and.right.equalTo(_containerView);
+//                    make.bottom.equalTo(self.view);
+//                }];
+//                
+//                _hadAddViewInSelf = YES;
+//            }
+//        }
+//        else if (scrollView == _infoScrollView && offsetY < 0){
+//            NSLog(@"_infoScrollView = %.0f",scrollView.contentOffset.y);
+////
+//            if (_hadAddViewInSelf) {
+//                
+////                _infoScrollView.scrollEnabled = NO;
+////                _bottomScrollView.scrollEnabled = YES;
+//
+////                [_bottomScrollView setContentOffset:beginPoint];
+//                [_containerView addSubview:_jobTypeView];
+//                
+//                [_jobTypeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.equalTo(_lpView.mas_bottom);
+//                    make.left.and.right.equalTo(self.view);
+//                    make.height.mas_equalTo(44);
+//                }];
+//                
+//                [_containerView addSubview:_infoScrollView];
+//                
+//                [_infoScrollView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.top.equalTo(_jobTypeView.mas_bottom).offset(5);
+//                    make.left.and.right.equalTo(_containerView);
+//                    make.height.mas_equalTo(IKSCREENH_HEIGHT- 64 - 60);
+//                }];
+//                
+//                [_containerView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//                    make.bottom.equalTo(_infoScrollView);
+//                }];
+//                
+//                _hadAddViewInSelf = NO;
+//            }
+//        }
+//    }
+    
 }
 
 // scrollView 开始拖动
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-//    NSLog(@"scrollViewWillBeginDragging");
+    NSLog(@"scrollViewWillBeginDragging");
 }
 
 // scrollView 结束拖动

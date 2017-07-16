@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IKScrollView : UIScrollView
+@interface IKScrollView : UIScrollView<UIGestureRecognizerDelegate>
 
 @end

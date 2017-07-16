@@ -22,7 +22,7 @@
 @interface IKJobInfoScrollView : IKView
 
 
-@property(nonatomic,strong)UIScrollView *infoScrollView;
+@property(nonatomic,strong)IKScrollView *infoScrollView;
 
 @property (nonatomic, weak) id<IKJobInfoScrollViewDelegate> delegate;
 

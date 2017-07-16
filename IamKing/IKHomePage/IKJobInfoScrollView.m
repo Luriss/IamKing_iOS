@@ -8,7 +8,7 @@
 
 #import "IKJobInfoScrollView.h"
 
-@interface IKJobInfoScrollView ()<UIScrollViewDelegate>
+@interface IKJobInfoScrollView ()<UIScrollViewDelegate,UIGestureRecognizerDelegate>
 
 @end
 
@@ -54,10 +54,10 @@
     [self addSubview:self.infoScrollView];
 }
 
-- (UIScrollView *)infoScrollView
+- (IKScrollView *)infoScrollView
 {
     if (_infoScrollView == nil) {
-        _infoScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 44, IKSCREEN_WIDTH, CGRectGetHeight(self.bounds))];
+        _infoScrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 44, IKSCREEN_WIDTH, CGRectGetHeight(self.bounds))];
         _infoScrollView.delegate = self;
         _infoScrollView.scrollEnabled = YES;
         _infoScrollView.showsHorizontalScrollIndicator = NO;
@@ -72,9 +72,9 @@
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidScroll x = %.0f",scrollView.contentOffset.x);
-
-    NSLog(@"scrollViewDidScroll y = %.0f",scrollView.contentOffset.y);
+//    NSLog(@"scrollViewDidScroll x = %.0f",scrollView.contentOffset.x);
+//
+//    NSLog(@"scrollViewDidScroll y = %.0f",scrollView.contentOffset.y);
     
     if (scrollView.contentOffset.y <= 0) {
         scrollView.scrollEnabled = NO;
@@ -97,6 +97,10 @@
 }
 
 
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
 
 /*
 // Only override drawRect: if you perform custom drawing.
