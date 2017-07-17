@@ -23,7 +23,7 @@
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
     [UITabBar appearance].translucent = NO;
 //
-//    [self.tabBar setSelectionIndicatorImage:[UIImage imageNamed:@"IK_tabbarSelectImage"]];
+    [self.tabBar setSelectionIndicatorImage:[UIImage imageNamed:@"IK_tabbarSelectImage"]];
     
 //    [self.tabBar setUnselectedItemTintColor:IKGeneralLightGray];
     self.delegate = self;
