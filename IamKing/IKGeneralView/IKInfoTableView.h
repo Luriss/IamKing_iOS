@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IKTableView.h"
 
 
 @protocol IKInfoTableViewDelegate <NSObject>
@@ -17,10 +18,12 @@
 
 @interface IKInfoTableView : UIView
 
+@property (nonatomic,strong)IKTableView *tableView;
 @property (nonatomic,copy)NSString *leftHeaderButtonTitle;
 @property (nonatomic,copy)NSString *rightHeaderButtonTitle;
 @property (nonatomic, weak) id<IKInfoTableViewDelegate> delegate;
 @property (nonatomic, assign) BOOL canScrollTableView;
+@property(nonatomic,assign)IKTableViewScrollState scrollState;
 
 
 @end

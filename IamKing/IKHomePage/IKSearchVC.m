@@ -18,7 +18,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self initSearchView];
     // Do any additional setup after loading the view.
@@ -29,12 +29,13 @@
 {
     IKSearchView *searchView = [[IKSearchView alloc] init];
     searchView.delegate = self;
+    searchView.hiddenColse = NO;
     [self.view addSubview:searchView];
     
     __weak typeof (self) weakSelf = self;
 
     [searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.view).offset(64);
+        make.top.equalTo(weakSelf.view).offset(20);
         make.left.and.right.equalTo(weakSelf.view);
         make.height.mas_equalTo(40);
     }];

@@ -9,9 +9,8 @@
 #import "IKInfoTableView.h"
 #import "IKInfoTableViewCell.h"
 
-@interface IKInfoTableView ()<UITableViewDelegate,UITableViewDataSource>
+@interface IKInfoTableView ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
-@property (nonatomic,strong)UITableView *tableView;
 @property (nonatomic,strong)UIButton *leftHeaderBtn;
 @property (nonatomic,strong)UIButton *rightHeaderBtn;
 @property (nonatomic,strong)IKJobInfoModel *model;
@@ -49,10 +48,11 @@
 
 - (void)initTableView
 {
-    UITableView *tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
+    IKTableView *tableView = [[IKTableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
     tableView.backgroundColor = [UIColor clearColor];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.scrollEnabled = NO;
+    tableView.scrollState = IKTableViewScrollStateNormal;
     tableView.delegate = self;
     tableView.dataSource = self;
     [self addSubview:tableView];
@@ -130,6 +130,12 @@
         [self.delegate infoTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
 }
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

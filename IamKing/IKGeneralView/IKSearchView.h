@@ -16,7 +16,7 @@
 @protocol IKSearchViewDelegate <NSObject>
 
 - (void)searchViewCloseButtonClick;
-- (void)searchViewSearchButtonClick;
+- (void)searchViewStartSearch;
 
 @end
 

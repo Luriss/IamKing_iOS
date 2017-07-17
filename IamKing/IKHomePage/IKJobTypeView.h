@@ -11,8 +11,7 @@
 
 @protocol IKJobTypeViewDelegate <NSObject>
 
-- (void)jobTypeViewNewJobButtonClick:(UIButton *)button;
-- (void)jobTypeViewHotJobButtonClick:(UIButton *)button;
+- (void)jobTypeViewButtonClick:(UIButton *)button;
 
 @end
 
@@ -24,6 +23,8 @@
 
 // 目前只支持4个及以下.
 @property (nonatomic, strong)NSArray *titleArray;
+@property (nonatomic, assign)CGSize buttonSize;
 
+- (void)adjustBottomLine:(NSInteger )index;
 
 @end

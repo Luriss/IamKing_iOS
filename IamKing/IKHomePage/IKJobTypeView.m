@@ -13,10 +13,10 @@
 
 @property (nonatomic, strong) UIButton  *button;
 @property (nonatomic, strong) UIView     *bottomLine;
+@property (nonatomic, strong) UIView     *lineView;
 
 @property (nonatomic, assign)BOOL hadAddSubview;
 @property (nonatomic, copy)NSMutableArray<__kindof UIButton *> *buttonArray;
-@property (nonatomic, assign)CGSize buttonSize;
 @property (nonatomic, strong)UIButton *oldButton;
 
 @end
@@ -28,6 +28,7 @@
     self = [super init];
     if (self) {
         _hadAddSubview = NO;
+        [self addLine];
     }
     return self;
 }
@@ -39,8 +40,22 @@
     
     if (self) {
         _hadAddSubview = NO;
+        
+        [self addLine];
     }
     return self;
+}
+
+- (void)addLine
+{
+    [self addSubview:self.lineView];
+    __weak typeof (self) weakSelf = self;
+    
+    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(weakSelf);
+        make.left.and.right.equalTo(weakSelf);
+        make.height.mas_equalTo(4);
+    }];
 }
 
 
@@ -61,13 +76,17 @@
     __weak typeof (self) weakSelf = self;
 
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf).offset(-8);
+        make.bottom.equalTo(weakSelf).offset(-12);
         make.centerX.equalTo(_oldButton);
         make.height.mas_equalTo(3);
         make.width.mas_equalTo(55);
     }];
 }
 
+-(void)setButtonSize:(CGSize)buttonSize
+{
+    _buttonSize = buttonSize;
+}
 
 - (UIView *)bottomLine
 {
@@ -78,6 +97,20 @@
     return _bottomLine;
 }
 
+- (UIView *)lineView
+{
+    if (_lineView == nil) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = IKGeneralLightGray;
+    }
+    return _lineView;
+}
+
+
+- (void)adjustBottomLine:(NSInteger )index
+{
+    [self btnClick:[self.buttonArray objectAtIndex:index]];
+}
 
 - (void)btnClick:(UIButton *)button
 {
@@ -90,8 +123,8 @@
         [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
         [_oldButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
         
-        if ([self.delegate respondsToSelector:@selector(jobTypeViewNewJobButtonClick:)]) {
-            [self.delegate jobTypeViewNewJobButtonClick:button];
+        if ([self.delegate respondsToSelector:@selector(jobTypeViewButtonClick:)]) {
+            [self.delegate jobTypeViewButtonClick:button];
         }
     }
     
@@ -114,7 +147,7 @@
     if (IKArrayIsNotEmpty(titleArray)) {
         _titleArray = titleArray;
         
-        _buttonSize = CGSizeMake(CGRectGetWidth(self.bounds)/(titleArray.count), CGRectGetHeight(self.bounds));
+        self.buttonSize = CGSizeMake(CGRectGetWidth(self.bounds)/(titleArray.count), CGRectGetHeight(self.bounds));
 
         [self addButtonWithDataArray];
         

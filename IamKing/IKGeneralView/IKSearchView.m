@@ -10,7 +10,7 @@
 #import "IKSearchBar.h"
 #import "UIImage+GetImage.h"
 
-@interface IKSearchView ()
+@interface IKSearchView ()<UISearchBarDelegate>
 
 @property (nonatomic, strong)UIButton *closeBtn;
 @property (nonatomic, strong)IKSearchBar *searchBar;
@@ -127,6 +127,7 @@
         _searchBar = [[IKSearchBar alloc] init];
 //        _searchBar.placeholder = @" 搜索职位/公司/技能";
         _searchBar.contentMode = UIViewContentModeLeft;
+        _searchBar.delegate = self;
     }
     
     return _searchBar;
@@ -156,11 +157,19 @@
 - (void)searchButtonClick:(UIButton *)button
 {
     IKLog(@"searchButtonClick");
-    if ([self.delegate respondsToSelector:@selector(searchViewSearchButtonClick)]) {
-        [self.delegate searchViewSearchButtonClick];
+    if ([self.delegate respondsToSelector:@selector(searchViewStartSearch)]) {
+        [self.delegate searchViewStartSearch];
     }
 }
 
+
+- (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    NSLog(@"searchBarTextDidBeginEditing");
+    if ([self.delegate respondsToSelector:@selector(searchViewStartSearch)]) {
+        [self.delegate searchViewStartSearch];
+    }
+}
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.
