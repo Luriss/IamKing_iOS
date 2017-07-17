@@ -22,7 +22,7 @@
 #import "IKJobInfoModel.h"
 #import "IKInfoTableViewCell.h"
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKBottomTableViewCellDelegate,IKSearchViewDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKBottomTableViewCellDelegate,IKSearchViewDelegate,IKSearchViewControllerDelegate>
 {
     BOOL  _navRightBtnHadClick;
     //用于判断上滑下滑
@@ -30,7 +30,6 @@
     
     BOOL _hadAddViewInSelf;
 }
-
 @property(nonatomic,strong)IKNavIconView *navLogoView;
 @property(nonatomic,strong)UIBarButtonItem *leftBarBtn;
 @property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
@@ -64,8 +63,8 @@
     
     _navRightBtnHadClick = NO;
     _hadAddViewInSelf = NO;
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.view.backgroundColor = [UIColor redColor];
+//    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.view.backgroundColor = [UIColor redColor];
     beginPoint = CGPointZero;
     _infoTableViewArray = [[NSMutableArray alloc] init];
     
@@ -81,7 +80,6 @@
     _model.skill3 = @"形象好";
     _model.introduce = @"时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.";
     
-    
     // 初始化导航栏内容
     [self initNavigationContent];
     
@@ -94,11 +92,13 @@
     
     [self initSearchVC];
     
+    IKLog(@"self.navigationController = %@",self.navigationController);
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
 
     // 视图显示开始轮播
 //    [self startLoopPlayView];
@@ -126,13 +126,13 @@
 - (void)initNavigationContent
 {
     // logo
-    _navLogoView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 00, 100, 44)];
+    _navLogoView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 0, 100, 44)];
     
     [self createRightBarItem];
     
     [self createLeftBarItem];
-    
     [self setNavigationContent];
+
 }
 
 - (void)createRightBarItem
@@ -140,12 +140,12 @@
     // 定位
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(showLocationVc:) forControlEvents:UIControlEventTouchUpInside];
-    button.frame = CGRectMake(0, 0, 70, 44);
+    button.frame = CGRectMake(10, 20, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 54);
     button.titleEdgeInsets = UIEdgeInsetsMake(0, -110, 0, 0);
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont systemFontOfSize:12.0f];
+    button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
     [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
 
     [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
@@ -172,11 +172,13 @@
 // 设置导航栏内容
 - (void)setNavigationContent
 {
-    self.tabBarController.navigationItem.rightBarButtonItem = _rightBarBtn;
-    self.tabBarController.navigationItem.leftBarButtonItem = _leftBarBtn;
+    IKLog(@"self.navigationController = %@",self.navigationController);
+
+    self.navigationItem.rightBarButtonItem = _rightBarBtn;
+    self.navigationItem.leftBarButtonItem = _leftBarBtn;
     
     // 导航栏中间logo
-    self.tabBarController.navigationItem.titleView = _navLogoView;
+    self.navigationItem.titleView = _navLogoView;
 }
 
 
@@ -184,7 +186,7 @@
 
 - (void)initBottomTableView
 {
-    _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 44) style:UITableViewStylePlain];
+    _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStylePlain];
     _bottomTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _bottomTableView.backgroundColor = IKGeneralLightGray;
     _bottomTableView.delegate = self;
@@ -302,7 +304,7 @@
 {
     if (tableView == _bottomTableView) {
         if (section == 1) {
-            return 48;
+            return 45;
         }
     }
     
@@ -337,7 +339,7 @@
         cell.backgroundColor = IKGeneralLightGray;
         if (indexPath.section == 0){
             if (indexPath.row == 0) {
-                cell.isShowSearchView = YES;
+//                cell.isShowSearchView = YES;
                 [cell.contentView addSubview:_searchView];
                 [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.top.equalTo(cell.contentView).offset(1);
@@ -389,7 +391,7 @@
     if (tableView == _bottomTableView) {
         _jobTypeView = [[IKJobTypeView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 44)];
         _jobTypeView.backgroundColor = [UIColor whiteColor];
-        _jobTypeView.titleArray = @[@"最新职位",@"最热职位",@"推荐职位"];
+        _jobTypeView.titleArray = @[@"最新职位",@"热门职位",@"推荐职位"];
         _jobTypeView.delegate = self;
         
         return _jobTypeView;
@@ -400,7 +402,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor whiteColor];
     
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -448,15 +454,14 @@
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollView = %@ scrollViewDidScroll = %.0f",scrollView,scrollView.contentOffset.y);
+    NSLog(@"scrollViewDidScroll = %@",scrollView);
     
     
     if (scrollView == _bottomTableView) {
         
-        NSLog(@"scrollView = %ld",self.selectedTableView);
+        NSLog(@"scrollViewDidScroll = %@",scrollView);
 
         UICollectionViewCell *cell = [_jobCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(self.selectedTableView - 1) inSection:0]];
-        NSLog(@"scrollView = %@",cell.subviews);
 
         IKTableView *tableview = (IKTableView *)cell.contentView.subviews.firstObject;
 
@@ -532,15 +537,11 @@
         
         beginPoint = point;
     }
-    
-    
-    
-    CGFloat index = scrollView.contentOffset.x/IKSCREEN_WIDTH;
-    if (scrollView == _jobCollectionView ) {
-        [_jobTypeView adjustBottomLine:index];
-        self.selectedTableView = index;
-    }
-    
+}
+
+
+- (void)scrollToNext:(NSInteger )index
+{
     
 }
 
@@ -553,7 +554,7 @@
 // scrollView 结束拖动
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-//    NSLog(@"scrollViewDidEndDragging");
+    NSLog(@"scrollViewDidEndDragging");
 }
 
 // scrollView 开始减速（以下两个方法注意与以上两个方法加以区别）
@@ -566,6 +567,16 @@
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     NSLog(@"scrollViewDidEndDecelerating");
+    
+    CGFloat index = (scrollView.contentOffset.x)/IKSCREEN_WIDTH;
+    IKLog(@"index = %.0f",index);
+    if (scrollView == _jobCollectionView ) {
+        IKLog(@"index 2 = %.0f",index);
+        
+        [_jobTypeView adjustBottomLine:index];
+        self.selectedTableView = index;
+    }
+    
 }
 
 #pragma mark - IKJobTypeViewDelegate
@@ -573,6 +584,8 @@
 {
     IKLog(@"button = %@",button);
     [_jobCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:(button.tag-101) inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+    self.selectedTableView = button.tag-100;
+
 }
 
 - (void)searchViewStartSearch
@@ -580,24 +593,31 @@
     NSLog(@"searchViewStartSearch");
     
     IKSearchVC *searchvc = [IKSearchVC alloc];
-    
-    [searchvc.view addSubview:_searchView];
-    
+    searchvc.delegate = self;
+//    [_searchView removeFromSuperview];
+//    [searchvc.view addSubview:_searchView];
+//    [_searchView.searchBar resignFirstResponder];
+    searchvc.modalPresentationStyle = UIModalPresentationPopover;
     [self presentViewController:searchvc animated:NO completion:^{
         
     }];
     
 }
 
-
-
-#pragma mark - IKInfoTableViewDelegate
-
-- (void)infoTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)searchViewControllerDismiss
 {
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view.backgroundColor = [UIColor whiteColor];
-    [self.navigationController pushViewController:vc animated:YES];
+    IKLog(@"searchViewControllerDismiss");
+    [_searchView.searchBar resignFirstResponder];
+//
+//    UITableViewCell *cell = [_bottomTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+//    
+//    [cell.contentView addSubview:_searchView];
+//    [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(cell.contentView).offset(1);
+//        make.left.and.right.equalTo(cell.contentView);
+//        make.height.mas_equalTo(44);
+//    }];
+
 }
 
 
@@ -622,10 +642,11 @@
     
     IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
-    moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+//    moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     moreVC.view.backgroundColor = [UIColor whiteColor];
     
-    [self presentViewController:moreVC animated:YES completion:^{
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:moreVC];
+    [self presentViewController:nav animated:YES completion:^{
         
     }];
 }
@@ -633,50 +654,13 @@
 
 - (void)showLocationVc:(UIButton *)btn
 {
-    UIViewController *vc = [self getPresentedViewController];
-
-    if (_navRightBtnHadClick) {
-        if ([vc isKindOfClass:[IKChooseCityVC class]]) {
-            // 取出 present 的 VC, 然后调用自身的 dismiss.
-            IKChooseCityVC *choose = (IKChooseCityVC *)vc;
-            [choose dismissSelf:^(NSString *location) {
-                _navRightBtnHadClick = NO;
-                [btn setTitle:location forState:UIControlStateNormal];
-            }];
-        }
-        else{
-            // 取出 present 的 VC, 然后调用自身的 dismiss.
-            IKChooseCityVC *choose = (IKChooseCityVC *)vc.presentedViewController;
-            [choose dismissSelf:^(NSString *location) {
-                _navRightBtnHadClick = NO;
-                [btn setTitle:location forState:UIControlStateNormal];
-            }];
-        }
-        
-        return;
-    }
-    
-    _navRightBtnHadClick  = YES;
-    
     IKChooseCityVC *cityVC = [[IKChooseCityVC alloc] init];
-    //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
-    cityVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     cityVC.delegate = self;
     
-    [vc presentViewController:cityVC animated:NO completion:^{
+    IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:cityVC];
+    [self presentViewController:nav animated:NO completion:^{
         
     }];
-}
-
-
-- (UIViewController *)getPresentedViewController
-{
-    UIViewController *topVC = self;
-    if (topVC.presentedViewController) {
-        topVC = topVC.presentedViewController;
-    }
-    
-    return topVC;
 }
 
 

@@ -23,6 +23,6 @@
 
 
 // dismiss self.
-- (void)dismissSelf:(void(^)(NSString *location))block;
+- (void)dismissSelf;
 
 @end

@@ -38,7 +38,7 @@
  */
 //- (void)lwb_roundRectImageWithSize:(CGSize)size fillColor:(UIColor *)fillColor opaque:(BOOL)opaque radius:(CGFloat)radius completion:(void (^)(UIImage *cornerImage))completion;
 
-+ (UIImage*) GetImageWithColor:(UIColor*)color andHeight:(CGFloat)height;
++ (UIImage*) GetImageWithColor:(UIColor*)color size:(CGSize )size;
 
 
 @end

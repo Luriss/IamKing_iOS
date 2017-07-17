@@ -10,5 +10,6 @@
 
 @interface IKTagsCollectionViewFlowLayout : UICollectionViewFlowLayout
 
+- (CGSize)collectionViewContentSize;
 
 @end

@@ -54,7 +54,7 @@
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(weakSelf);
         make.left.and.right.equalTo(weakSelf);
-        make.height.mas_equalTo(4);
+        make.height.mas_equalTo(1);
     }];
 }
 
@@ -107,9 +107,13 @@
 }
 
 
-- (void)adjustBottomLine:(NSInteger )index
+- (void)adjustBottomLine:(CGFloat )index
 {
-    [self btnClick:[self.buttonArray objectAtIndex:index]];
+    
+//    CGPoint point = CGPointMake(_oldButton.center.x + index, _oldButton.center.y);
+    
+    
+    [self btnClick:[self.buttonArray objectAtIndex:(index)]];
 }
 
 - (void)btnClick:(UIButton *)button
@@ -118,7 +122,8 @@
 
     if (_oldButton != button) {
         
-        [self startBottomLineAnimation:button];
+        
+        [self startBottomLineAnimation:button.center];
         
         [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
         [_oldButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
@@ -214,13 +219,16 @@
 }
 
 
-- (void)startBottomLineAnimation:(UIButton *)button
+- (void)startBottomLineAnimation:(CGPoint )point
 {
+    NSLog(@"_oldButton.center = %@",[NSValue valueWithCGPoint:point]);
+    NSLog(@"button.center = %@",[NSValue valueWithCGPoint:point]);
+
     CABasicAnimation* position = [CABasicAnimation animation];
     position.duration = 0.1;
     position.keyPath = @"position.x";
     position.fromValue = [NSValue valueWithCGPoint:_oldButton.center];
-    position.toValue = [NSValue valueWithCGPoint:button.center];
+    position.toValue = [NSValue valueWithCGPoint:point];
     position.removedOnCompletion = NO;
     position.fillMode = kCAFillModeForwards;
     [_bottomLine.layer addAnimation:position forKey:nil];

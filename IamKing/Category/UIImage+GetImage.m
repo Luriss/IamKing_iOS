@@ -131,16 +131,40 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
  *
  *  @return 生成的图片
  */
-+ (UIImage*) GetImageWithColor:(UIColor*)color size:(CGSize )size
++ (UIImage *) GetImageWithColor:(UIColor*)color size:(CGSize )size
 {
-    CGRect rect= CGRectMake(0.0f, 0.0f, size.width, size.height);
+    //获得图形上下文
+    
+//    CGContextRef ctx = UIGraphicsGetCurrentContext();
+//    
+//    CGContextSetFillColorWithColor(ctx, color.CGColor);
+//    
+//    CGContextFillRect(ctx,CGRectMake(0,0,size.width,size.height));
+//    
+//    CGRect rect = CGRectMake(0,0,size.width,size.height);
+//    
+//    CGContextAddEllipseInRect(ctx, rect);
+//    
+//    CGContextClip(ctx);
+//    
+//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+//    
+//    IKLog(@"ddddd= %@",image);
+//    [image drawInRect:rect];
+//    
+//    UIGraphicsEndImageContext();
+    CGRect rect = CGRectMake(0.0f,0.0f,1.0f,size.height);
     UIGraphicsBeginImageContext(rect.size);
+    
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [color CGColor]);
+    
     CGContextFillRect(context, rect);
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return img;
+    
+    UIImage*theImage=UIGraphicsGetImageFromCurrentImageContext();UIGraphicsEndImageContext();
+    return theImage;
+  
+//    return ;
 }
 
 

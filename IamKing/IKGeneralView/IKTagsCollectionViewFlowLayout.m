@@ -29,10 +29,7 @@
     if (self) {
         self.scrollDirection = UICollectionViewScrollDirectionVertical;
         // 
-        self.itemSize = CGSizeMake(80.0f, 34.0f);
-        self.minimumInteritemSpacing = 10.0f;
-        self.minimumLineSpacing = 10.0f;
-        self.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
+        
     }
     
     return self;
@@ -93,6 +90,7 @@
 // 返回内容总高度.
 - (CGSize)collectionViewContentSize
 {
+    IKLog(@"self.contentHeight = %.0f",self.contentHeight);
     return CGSizeMake(self.collectionView.frame.size.width, self.contentHeight);
 
 }

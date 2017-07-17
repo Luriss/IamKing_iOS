@@ -25,6 +25,6 @@
 @property (nonatomic, strong)NSArray *titleArray;
 @property (nonatomic, assign)CGSize buttonSize;
 
-- (void)adjustBottomLine:(NSInteger )index;
+- (void)adjustBottomLine:(CGFloat )index;
 
 @end

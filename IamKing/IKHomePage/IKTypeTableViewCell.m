@@ -65,8 +65,8 @@
         // 标题
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textAlignment = NSTextAlignmentLeft;
-        _titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
-        _titleLabel.textColor = IKRGBColor(154.0, 154.0, 154.0);
+        _titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
+        _titleLabel.textColor = IKMainTitleColor;
 //        _titleLabel.backgroundColor = [UIColor blueColor];
     }
     return _titleLabel;
@@ -78,8 +78,8 @@
         //介绍
         _introduceLabel = [[UILabel alloc] init];
         _introduceLabel.textAlignment = NSTextAlignmentLeft;
-        _introduceLabel.font = [UIFont boldSystemFontOfSize:13.0f];
-        _introduceLabel.textColor = IKRGBColor(213.0, 213.0, 213.0);
+        _introduceLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
+        _introduceLabel.textColor = IKSubHeadTitleColor;
 //        _introduceLabel.backgroundColor = [UIColor greenColor];
         _introduceLabel.numberOfLines = 0;
     }

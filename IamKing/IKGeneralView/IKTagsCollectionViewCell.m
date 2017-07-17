@@ -15,11 +15,11 @@
     if (self = [super initWithFrame:frame]) {
         _titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.layer.cornerRadius = 5;
-        _titleLabel.layer.borderColor = IKRGBColor(213, 213, 213).CGColor;
+        _titleLabel.layer.cornerRadius = 12;
+        _titleLabel.layer.borderColor = IKSubHeadTitleColor.CGColor;
         _titleLabel.layer.borderWidth = 1;
-        _titleLabel.textColor = IKRGBColor(58, 58, 58);
-        _titleLabel.font = [UIFont systemFontOfSize:15];
+        _titleLabel.textColor = IKSubHeadTitleColor;
+        _titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
         [self.contentView addSubview:_titleLabel];
         
         __weak typeof (self) weakSelf = self;

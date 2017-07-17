@@ -28,6 +28,10 @@
 		214122271F18A8F600062A2F /* IK_classify.png in Resources */ = {isa = PBXBuildFile; fileRef = 214122261F18A8F600062A2F /* IK_classify.png */; };
 		2141222B1F18D08F00062A2F /* IKJobTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2141222A1F18D08F00062A2F /* IKJobTypeView.m */; };
 		214122321F19FB4F00062A2F /* IKJobInfoScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 214122311F19FB4F00062A2F /* IKJobInfoScrollView.m */; };
+		2197CB7D1F1C7F2700F61562 /* IK_Message@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CB7B1F1C7F2700F61562 /* IK_Message@3x.png */; };
+		2197CB7E1F1C7F2700F61562 /* IK_MessageSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CB7C1F1C7F2700F61562 /* IK_MessageSelected@3x.png */; };
+		2197CB801F1C88A700F61562 /* IK_back.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CB7F1F1C88A700F61562 /* IK_back.png */; };
+		2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CB821F1C8D5200F61562 /* IKJobTypeDetailVC.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -144,6 +148,11 @@
 		2141222A1F18D08F00062A2F /* IKJobTypeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobTypeView.m; sourceTree = "<group>"; };
 		214122301F19FB4F00062A2F /* IKJobInfoScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobInfoScrollView.h; sourceTree = "<group>"; };
 		214122311F19FB4F00062A2F /* IKJobInfoScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobInfoScrollView.m; sourceTree = "<group>"; };
+		2197CB7B1F1C7F2700F61562 /* IK_Message@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_Message@3x.png"; sourceTree = "<group>"; };
+		2197CB7C1F1C7F2700F61562 /* IK_MessageSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_MessageSelected@3x.png"; sourceTree = "<group>"; };
+		2197CB7F1F1C88A700F61562 /* IK_back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_back.png; sourceTree = "<group>"; };
+		2197CB811F1C8D5200F61562 /* IKJobTypeDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobTypeDetailVC.h; sourceTree = "<group>"; };
+		2197CB821F1C8D5200F61562 /* IKJobTypeDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobTypeDetailVC.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -358,6 +367,8 @@
 		210B0DCF1F0DF1A9003FD950 /* TabBarImage */ = {
 			isa = PBXGroup;
 			children = (
+				2197CB7B1F1C7F2700F61562 /* IK_Message@3x.png */,
+				2197CB7C1F1C7F2700F61562 /* IK_MessageSelected@3x.png */,
 				21E2B5A21F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png */,
 				21E2B5A01F1BAC2B00F9EC14 /* IK_meSelected@3x.png */,
 				21E2B59C1F1BA6BF00F9EC14 /* IK_homePage@3x.png */,
@@ -413,6 +424,7 @@
 			isa = PBXGroup;
 			children = (
 				21D622CD1F0E5C6E0054D980 /* IK_Address.png */,
+				2197CB7F1F1C88A700F61562 /* IK_back.png */,
 				214122261F18A8F600062A2F /* IK_classify.png */,
 				210B0DF61F0E3253003FD950 /* IK_cycle.png */,
 				210B0DF71F0E3253003FD950 /* IK_logo.png */,
@@ -492,6 +504,8 @@
 			children = (
 				21C3AE0C1F1616B6008FC124 /* IKMoreTypeVC.h */,
 				21C3AE0D1F1616B6008FC124 /* IKMoreTypeVC.m */,
+				2197CB811F1C8D5200F61562 /* IKJobTypeDetailVC.h */,
+				2197CB821F1C8D5200F61562 /* IKJobTypeDetailVC.m */,
 			);
 			name = MoreTypeVC;
 			sourceTree = "<group>";
@@ -892,6 +906,7 @@
 			files = (
 				21E2B5A11F1BAC2B00F9EC14 /* IK_meSelected@3x.png in Resources */,
 				21C3AE1C1F171F2F008FC124 /* IK_bg_white.png in Resources */,
+				2197CB7E1F1C7F2700F61562 /* IK_MessageSelected@3x.png in Resources */,
 				21D623231F1360F80054D980 /* IK_education.png in Resources */,
 				21C3AE091F15D90B008FC124 /* IKProvinceCity.plist in Resources */,
 				21C3AE391F174650008FC124 /* IK_operationManage.png in Resources */,
@@ -899,6 +914,8 @@
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
 				21D622FF1F112DA50054D980 /* IK_tabbarSelectImage.png in Resources */,
 				21D623221F1360F80054D980 /* IK_applyJobAddress.png in Resources */,
+				2197CB801F1C88A700F61562 /* IK_back.png in Resources */,
+				2197CB7D1F1C7F2700F61562 /* IK_Message@3x.png in Resources */,
 				210B0D9F1F0DE16D003FD950 /* LaunchScreen.storyboard in Resources */,
 				214122271F18A8F600062A2F /* IK_classify.png in Resources */,
 				21C3AE381F174650008FC124 /* IK_cocah.png in Resources */,
@@ -998,6 +1015,7 @@
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
 				21C3AE671F175740008FC124 /* IKTagsView.m in Sources */,
 				210B0DDD1F0DFE4D003FD950 /* IKNavigationController.m in Sources */,
+				2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */,
 				21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */,
 				21C3AE021F14D760008FC124 /* IKLocationManager.m in Sources */,
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,

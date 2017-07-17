@@ -7,6 +7,7 @@
 //
 
 #import "IKView.h"
+#import "IKSearchBar.h"
 
 /**
  适合本 App 使用的搜索框样式的 view.
@@ -26,5 +27,6 @@
 
 // Default is YES.
 @property (nonatomic, assign) BOOL hiddenColse;
+@property (nonatomic, strong)IKSearchBar *searchBar;
 
 @end

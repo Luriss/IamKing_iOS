@@ -11,6 +11,7 @@
 
 
 @interface IKSearchVC ()<IKSearchViewDelegate>
+@property(nonatomic,strong)IKSearchView *searchView;
 
 @end
 
@@ -25,19 +26,47 @@
 }
 
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    [self startSearchViewAnimation];
+
+}
+
 - (void)initSearchView
 {
-    IKSearchView *searchView = [[IKSearchView alloc] init];
-    searchView.delegate = self;
-    searchView.hiddenColse = NO;
-    [self.view addSubview:searchView];
+    _searchView = [[IKSearchView alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 44)];
+    _searchView.delegate = self;
+    _searchView.hiddenColse = NO;
+    _searchView.hidden = YES;
+    _searchView.backgroundColor = [UIColor whiteColor];
+    [_searchView.searchBar becomeFirstResponder];
+    [self.view addSubview:_searchView];
     
-    __weak typeof (self) weakSelf = self;
+//    __weak typeof (self) weakSelf = self;
 
-    [searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.view).offset(20);
-        make.left.and.right.equalTo(weakSelf.view);
-        make.height.mas_equalTo(40);
+//    [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(weakSelf.view).offset(65);
+//        make.left.and.right.equalTo(weakSelf.view);
+//        make.height.mas_equalTo(40);
+//    }];
+}
+
+
+- (void)startSearchViewAnimation
+{
+    _searchView.hidden = NO;
+    
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        _searchView.frame = CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 44);
+    } completion:^(BOOL finished) {
+        
     }];
 }
 
@@ -46,8 +75,11 @@
 
 - (void)searchViewCloseButtonClick
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
+    __weak typeof (self) weakSelf = self;
+    [self dismissViewControllerAnimated:NO completion:^{
+        if ([weakSelf.delegate respondsToSelector:@selector(searchViewControllerDismiss)]) {
+            [weakSelf.delegate searchViewControllerDismiss];
+        }
     }];
 }
 

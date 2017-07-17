@@ -7,13 +7,11 @@
 //
 
 #import "IKSearchView.h"
-#import "IKSearchBar.h"
 #import "UIImage+GetImage.h"
 
 @interface IKSearchView ()<UISearchBarDelegate>
 
 @property (nonatomic, strong)UIButton *closeBtn;
-@property (nonatomic, strong)IKSearchBar *searchBar;
 @property (nonatomic, strong)UIView *bottomLine;
 @property (nonatomic, assign)BOOL hadAddCloseBtn;
 
@@ -65,15 +63,23 @@
         }];
     }
     else{
-        [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(weakSelf);
-            make.left.equalTo(weakSelf).offset(20);
-            make.height.and.width.mas_equalTo(CGRectGetHeight(weakSelf.frame)- 18);
-        }];
         
         [_searchBar mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.and.right.and.bottom.equalTo(weakSelf);
-            make.left.equalTo(_closeBtn.mas_right);
+            make.top.and.left.and.bottom.equalTo(weakSelf);
+            make.right.equalTo(weakSelf).offset(-40);
+        }];
+        
+        [_closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(weakSelf);
+            make.right.equalTo(weakSelf);
+            make.height.mas_equalTo(CGRectGetHeight(weakSelf.frame));
+            make.width.mas_equalTo(40);
+        }];
+        
+        [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(weakSelf);
+            make.bottom.equalTo(weakSelf).offset(1);
+            make.height.mas_equalTo(1);
         }];
     }
     
@@ -111,8 +117,11 @@
 {
     if (_closeBtn == nil) {
         _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        _closeBtn.backgroundColor = [UIColor clearColor];
-        [_closeBtn setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
+//        _closeBtn.backgroundColor = [UIColor clearColor];
+//        [_closeBtn setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
+        [_closeBtn setTitle:@"取消 " forState:UIControlStateNormal];
+        [_closeBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+        _closeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
         [_closeBtn addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         _closeBtn.hidden = YES;
     }
@@ -162,6 +171,10 @@
     }
 }
 
+- (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
+{
+    return YES;
+}
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {

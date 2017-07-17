@@ -8,6 +8,16 @@
 
 #import "IKViewController.h"
 
+
+@protocol IKSearchViewControllerDelegate <NSObject>
+
+- (void)searchViewControllerDismiss;
+
+@end
+
 @interface IKSearchVC : IKViewController
+
+@property (nonatomic, weak) id<IKSearchViewControllerDelegate> delegate;
+
 
 @end

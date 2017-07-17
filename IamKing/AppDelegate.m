@@ -27,9 +27,9 @@
     // Override point for customization after application launch.
     IKTabBarController *tbc = [[IKTabBarController alloc]init];
 
-    IKNavigationController *nav = [[IKNavigationController alloc]initWithRootViewController:tbc];
+//    IKNavigationController *nav = [[IKNavigationController alloc]initWithRootViewController:tbc];
     
-    self.window.rootViewController = nav;
+    self.window.rootViewController = tbc;
     [self.window makeKeyAndVisible];
     
     return YES;

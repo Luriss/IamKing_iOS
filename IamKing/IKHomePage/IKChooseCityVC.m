@@ -9,15 +9,24 @@
 #import "IKChooseCityVC.h"
 #import "IKLocationCell.h"
 #import "IKButtonView.h"
+#import "IKTagsView.h"
+#import "IKTagsCollectionViewFlowLayout.h"
+#import "IKTagsCollectionViewCell.h"
 
-@interface IKChooseCityVC ()<UITableViewDelegate,UITableViewDataSource,IKButtonViewDelegate>
+
+static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
+static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
+
+@interface IKChooseCityVC ()<UITableViewDelegate,UITableViewDataSource,IKTagsViewDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 {
     NSIndexPath  *_oldProvinceIndexPath;
     NSIndexPath  *_oldCityIndexPath;
 }
-@property (nonatomic, strong)IKView *bottomView;
+
 @property (nonatomic, strong)IKView *locationInfoView;
-@property (nonatomic, strong)IKButtonView *confirmView;
+@property (nonatomic,strong) UICollectionView *collectionView;
+@property (nonatomic,strong) IKTagsCollectionViewFlowLayout *layout;//布局layout
+
 @property (nonatomic, strong)UITableView *provinceTableView;
 @property (nonatomic, strong)UITableView *cityTableView;
 @property (nonatomic,   copy)NSDictionary *baseDict;
@@ -30,12 +39,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [self configBaseData];
     
     [self plistData];
 
+    [self initNavView];
+    [self initHotCityView];
     [self addSubViews];
     
     // Do any additional setup after loading the view.
@@ -46,9 +57,8 @@
 {
     [super viewWillAppear:animated];
     
-    [self showBottomView];
     [self layoutCustomView];
-    
+
 }
 
 
@@ -88,33 +98,88 @@
 }
 
 
+- (void)initNavView
+{
+    // 分类
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
+    button.frame = CGRectMake(0, 0, 60, 44);
+    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 44);
+    [button setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
+    
+    
+    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
+    //    title.backgroundColor = [UIColor redColor];
+    title.text = @"城市切换";
+    title.textColor = IKMainTitleColor;
+    title.textAlignment = NSTextAlignmentCenter;
+    title.font = [UIFont systemFontOfSize:IKMainTitleFont];
+    
+    self.navigationItem.titleView = title;
+}
+
+
+- (void)initHotCityView
+{
+    
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200) collectionViewLayout:self.layout];
+    
+    _collectionView.delegate = self;
+    _collectionView.dataSource = self;
+    _collectionView.backgroundColor = [UIColor whiteColor];
+    _collectionView.showsVerticalScrollIndicator = NO;
+    _collectionView.showsHorizontalScrollIndicator = NO;
+    
+    [_collectionView registerClass:[IKTagsCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
+    
+    _collectionView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_collectionView.center.x - 100, -25, 200, 30)];
+    //        label.backgroundColor = [UIColor redColor];
+    label.text = @"热门城市";
+    label.textColor = IKSubHeadTitleColor;
+    label.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
+    label.textAlignment = NSTextAlignmentCenter;
+    [_collectionView addSubview:label];
+    
+    
+    [self.view addSubview:_collectionView];
+}
 
 - (void)addSubViews
 {
-    // 底部 view 主要是实现切换动画 (取巧)
-    [self.view addSubview:self.bottomView];
-    [self hideBottomView]; //初始化后隐藏
-    
     // 所有的 子 view 都建议添加在bottomView上避免影响动画.
     
     // 定位信息 view.
-    [_bottomView addSubview:self.locationInfoView];
+    [self.view addSubview:self.locationInfoView];
     
-    [_bottomView addSubview:self.provinceTableView];
+    [self.view addSubview:self.provinceTableView];
     
-    [_bottomView addSubview:self.cityTableView];
+    [self.view addSubview:self.cityTableView];
+    
+    __weak typeof (self) weakSelf = self;
+    
+    [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(weakSelf.view);
+        make.height.mas_equalTo(80);
+    }];
     
 }
 #pragma mark - Property Get
 
-- (IKView *)bottomView
+- (IKTagsCollectionViewFlowLayout *)layout
 {
-    if (_bottomView == nil) {
-        _bottomView = [[IKView alloc] initWithFrame:self.view.frame];
-        _bottomView.backgroundColor = [UIColor clearColor];
+    if (_layout == nil) {
+        _layout = [[IKTagsCollectionViewFlowLayout alloc] init];
+        _layout.itemSize = CGSizeMake(80.0f, 24.0f);
+        _layout.minimumInteritemSpacing = 25.0f;
+        _layout.minimumLineSpacing = 20.0f;
+        _layout.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
     }
     
-    return _bottomView;
+    return _layout;
 }
 
 
@@ -163,59 +228,43 @@
 {
     UILabel *tipLabel = [[UILabel alloc] init];
     tipLabel.text = @"自动定位到您在";
-    tipLabel.textColor = IKGeneralLightGray;
-    tipLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+    tipLabel.textColor = IKSubHeadTitleColor;
+    tipLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
     tipLabel.textAlignment = NSTextAlignmentCenter;
     [_locationInfoView addSubview:tipLabel];
     
-    UILabel *addressLabel = [[UILabel alloc] init];
-    addressLabel.text = @"杭州";
-    addressLabel.textColor = IKGeneralBlue;
-    addressLabel.font = [UIFont boldSystemFontOfSize:18.0f];
-    addressLabel.textAlignment = NSTextAlignmentCenter;
-    [_locationInfoView addSubview:addressLabel];
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
+    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+    [button setTitle:@"杭州" forState:UIControlStateNormal];
+    button.layer.cornerRadius = 15;
+    button.layer.borderColor = IKGeneralBlue.CGColor;
+    button.layer.borderWidth = 1;
+    [_locationInfoView addSubview:button];
     
-    UILabel *pinyinLabel = [[UILabel alloc] init];
-    pinyinLabel.text = @"Hangzhou";
-    pinyinLabel.textColor = IKGeneralBlue;
-    pinyinLabel.font = [UIFont boldSystemFontOfSize:17.0f];
-    pinyinLabel.textAlignment = NSTextAlignmentCenter;
-    [_locationInfoView addSubview:pinyinLabel];
-    
-    IKButtonView *confirmView = [[IKButtonView alloc] init];
-    confirmView.title = @"确定";
-    confirmView.cornerRadius = 18;
-    confirmView.borderColor = IKRGBColor(93.0, 93.0, 93.0);
-    confirmView.HighBorderColor = IKRGBColor(47.0, 181.0, 255.0);
-    confirmView.borderWidth = 1;
-    confirmView.needAnimation = YES;
-    confirmView.delegate = self;
-    [_locationInfoView addSubview:confirmView];
-    
+    UIView *view = [[UIView alloc] init];
+    view.backgroundColor = IKLineColor;
+    [_locationInfoView addSubview:view];
     
     [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_locationInfoView).offset(3);
+        make.top.equalTo(_locationInfoView).offset(8);
         make.left.and.right.equalTo(_locationInfoView);
         make.height.mas_equalTo(30);
     }];
     
-    [confirmView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_locationInfoView);
-        make.bottom.equalTo(_locationInfoView).offset(-15);
-        make.height.mas_equalTo(36);
-        make.width.mas_offset(200);
-    }];
-    
-    [addressLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(tipLabel.mas_bottom);
-        make.left.and.right.equalTo(_locationInfoView);
-        make.height.mas_equalTo(40);
-    }];
-    
-    [pinyinLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(addressLabel.mas_bottom).offset(-10);
-        make.left.and.right.equalTo(_locationInfoView);
+        make.bottom.equalTo(_locationInfoView).offset(-10);
         make.height.mas_equalTo(30);
+        make.width.mas_offset(80);
+    }];
+    
+    
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(_locationInfoView);
+        make.bottom.equalTo(_locationInfoView).offset(1);
+        make.height.mas_equalTo(1);
     }];
 }
 
@@ -225,15 +274,18 @@
 - (void)layoutCustomView
 {
     __weak typeof (self) weakSelf = self;
+    
+    CGSize size = [self.layout collectionViewContentSize];
 
-    [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
+
+    [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
-        make.top.equalTo(weakSelf.view).offset(64);
-        make.height.mas_equalTo(150);
+        make.top.equalTo(_locationInfoView.mas_bottom);
+        make.height.mas_equalTo(210);
     }];
     
     [_provinceTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_locationInfoView.mas_bottom);
+        make.top.equalTo(_collectionView.mas_bottom);
         make.left.and.bottom.equalTo(weakSelf.view);
         make.width.mas_equalTo(IKSCREEN_WIDTH *0.4);
     }];
@@ -355,7 +407,7 @@
         _oldCityIndexPath = indexPath;
         self.selectCity = [self.cityData objectAtIndex:indexPath.row];
         
-        [self dismissSelf:nil];
+        [self dismissSelf];
         
         if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
             [self.delegate locationVcDismissChangeNavButtonTitle:self.selectCity];
@@ -367,43 +419,85 @@
 }
 
 
+
+#pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    return self.cityData.count;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    IKTagsCollectionViewFlowLayout *layout = (IKTagsCollectionViewFlowLayout *)collectionView.collectionViewLayout;
+    
+    // item 能显示的最大宽度 ,collectionView的宽度 - section 的偏移 left right.
+    CGSize maxSize = CGSizeMake(collectionView.frame.size.width - layout.sectionInset.left - layout.sectionInset.right, layout.itemSize.height);
+    
+    // 根据文字计算尺寸.
+    CGRect frame = [self.cityData[indexPath.item] boundingRectWithSize:maxSize options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:IKSubTitleFont]} context:nil];
+    
+    // item 默认的最小宽度为 80;
+    CGFloat width = frame.size.width + 20;
+    if (width < 70) {
+        width = 70;
+    }
+    
+    // 超过最大宽度显示为最大宽度
+    if (width > maxSize.width) {
+        width = maxSize.width;
+    }
+    
+    return CGSizeMake(width, layout.itemSize.height);
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    IKTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    cell.titleLabel.textColor = [UIColor blackColor];
+    
+    NSString *title = self.self.cityData[indexPath.item];
+    cell.titleLabel.text = title;
+    
+//    if (indexPath.row == 1) {
+//        cell.highlightLabel = YES;
+//    }
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
+    
+    IKTagsCollectionViewCell *cell = (IKTagsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    
+    NSString *title = cell.titleLabel.text;
+    [self dismissSelf];
+    
+    if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
+        [self.delegate locationVcDismissChangeNavButtonTitle:title];
+    }
+}
+
+
 #pragma mark - BottomView
 
-- (void)hideBottomView
+- (void)dismissSelf
 {
-    _bottomView.transform = CGAffineTransformMakeTranslation(0, -IKSCREENH_HEIGHT);
-}
-
-- (void)showBottomView
-{
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _bottomView.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
+    [self dismissViewControllerAnimated:YES completion:^{
         
-    }];
-
-}
-
-- (void)dismissSelf:(void(^)(NSString *location))block
-{
-    block?block(_selectCity):@"";
-    
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _bottomView.transform = CGAffineTransformMakeTranslation(0, -IKSCREENH_HEIGHT);
-    } completion:^(BOOL finished) {
-        [_bottomView removeFromSuperview];
-        _bottomView = nil;
-        
-        [self dismissViewControllerAnimated:NO completion:^{
-            
-        }];
     }];
     
 }
 
 - (void)buttonViewButtonClick:(nullable UIButton *)button
 {
-    [self dismissSelf:nil];
+    [self dismissSelf];
     
     if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
         [self.delegate locationVcDismissChangeNavButtonTitle:self.selectCity];

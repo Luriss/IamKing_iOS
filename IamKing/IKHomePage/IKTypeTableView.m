@@ -99,6 +99,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    IKLog(@"self.delegate = %@",self.delegate);
     if ([self.delegate respondsToSelector:@selector(typeTableView:didSelectRowAtIndexPath:)]) {
         [self.delegate typeTableView:tableView didSelectRowAtIndexPath:indexPath];
     }
