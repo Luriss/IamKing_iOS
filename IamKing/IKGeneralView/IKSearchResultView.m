@@ -10,6 +10,8 @@
 #import "IKTableView.h"
 #import "IKInfoTableViewCell.h"
 #import "IKCompanyTableViewCell.h"
+#import "IKChooseCityView.h"
+#import "IKSelectView.h"
 
 
 typedef NS_ENUM(NSInteger, IKSelectedType) {
@@ -18,7 +20,7 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 };
 
 
-@interface IKSearchResultView ()<UITableViewDelegate,UITableViewDataSource>
+@interface IKSearchResultView ()<UITableViewDelegate,UITableViewDataSource,IKChooseCityViewDelegate>
 
 @property(nonatomic,strong)IKView *topView;
 @property(nonatomic,strong)IKView *jcView;
@@ -73,7 +75,7 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     self.selectedType = IKSelectedTypeJob;
     
     
-    [self addSubview:self.topView];
+    [self insertSubview:self.topView atIndex:3];
     
     // 顶部的底图
     [_topView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -158,7 +160,7 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     }];
     
     // 底部结果 tableView
-    [self addSubview:self.tableView];
+    [self insertSubview:self.tableView belowSubview:_topView];
     [_tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_topView.mas_bottom);
         make.left.and.bottom.and.right.equalTo(self);
@@ -397,10 +399,10 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 {
     if (self.selectedType == IKSelectedTypeJob) {
         if (button == _button1) {
-            
+            [self showOrHideCityChooseView];
         }
         else if (button == _button2){
-            
+            [self showOrHideSelectCompanyTypeView];
         }
         else if (button == _button3){
             
@@ -426,9 +428,76 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 }
 
 
-- (void)showCityChooseView
+- (void)showOrHideCityChooseView
 {
+    UIView *view = [self viewWithTag:10001];
     
+    if ( view != nil) {
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            view.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(view.frame));
+        } completion:^(BOOL finished) {
+            [view removeFromSuperview];
+        }];
+        
+        return;
+    }
+    
+    IKChooseCityView *choose = [[IKChooseCityView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
+    choose.tag = 10001;
+    choose.delegate = self;
+    choose.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(choose.frame));
+    [self insertSubview:choose belowSubview:_topView];
+    
+    
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        choose.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        UIView *view2 = [self viewWithTag:10002];
+        if (view2) {
+            [view2 removeFromSuperview];
+        }
+    }];
+    
+}
+
+- (void)chooseCityViewSelectedCity:(NSString *)city
+{
+    NSLog(@"city = %@",city);
+    
+    [self showOrHideCityChooseView];
+    
+}
+
+- (void)showOrHideSelectCompanyTypeView
+{
+    UIView *view = [self viewWithTag:10002];
+    
+    if ( view != nil) {
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            view.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(view.frame));
+        } completion:^(BOOL finished) {
+            [view removeFromSuperview];
+        }];
+        
+        return;
+    }
+    
+    IKSelectView *select = [[IKSelectView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
+    select.tag = 10002;
+    select.backgroundColor = IKSeachBarBgColor;
+    select.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(select.frame));
+    
+    [self insertSubview:select belowSubview:_topView];
+    
+    
+    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        select.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        UIView *view2 = [self viewWithTag:10001];
+        if (view2) {
+            [view2 removeFromSuperview];
+        }
+    }];
 }
 
 - (void)jcButtonClick:(UIButton *)button

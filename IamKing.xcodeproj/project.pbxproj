@@ -46,6 +46,7 @@
 		2197CBB81F1E0C5F00F61562 /* IK_store.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBB21F1E0C5F00F61562 /* IK_store.png */; };
 		2197CBB91F1E0C5F00F61562 /* IK_time_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBB31F1E0C5F00F61562 /* IK_time_blue.png */; };
 		2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CBBC1F1E2A2600F61562 /* IKChooseCityView.m */; };
+		2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CBBF1F1E3F1000F61562 /* IKSelectView.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -186,6 +187,8 @@
 		2197CBB31F1E0C5F00F61562 /* IK_time_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_time_blue.png; sourceTree = "<group>"; };
 		2197CBBB1F1E2A2600F61562 /* IKChooseCityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKChooseCityView.h; sourceTree = "<group>"; };
 		2197CBBC1F1E2A2600F61562 /* IKChooseCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKChooseCityView.m; sourceTree = "<group>"; };
+		2197CBBE1F1E3F1000F61562 /* IKSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSelectView.h; sourceTree = "<group>"; };
+		2197CBBF1F1E3F1000F61562 /* IKSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSelectView.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -645,6 +648,8 @@
 				21C3AE531F175615008FC124 /* IKSearchView.m */,
 				2197CBA31F1DE63A00F61562 /* IKSearchResultView.h */,
 				2197CBA41F1DE63A00F61562 /* IKSearchResultView.m */,
+				2197CBBE1F1E3F1000F61562 /* IKSelectView.h */,
+				2197CBBF1F1E3F1000F61562 /* IKSelectView.m */,
 			);
 			name = IKSearchView;
 			sourceTree = "<group>";
@@ -1101,6 +1106,7 @@
 				2197CBAA1F1E058100F61562 /* IKCompanyTableViewCell.m in Sources */,
 				21C3AE701F176602008FC124 /* IKTagsCollectionViewCell.m in Sources */,
 				2197CBAD1F1E06E500F61562 /* IKCompanyInfoModel.m in Sources */,
+				2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */,
 				214122251F18638A00062A2F /* IKHeaderReusableView.m in Sources */,
 				21C3AE2D1F173727008FC124 /* IKTypeTableView.m in Sources */,
 				21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */,
