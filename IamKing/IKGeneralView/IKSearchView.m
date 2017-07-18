@@ -12,7 +12,6 @@
 @interface IKSearchView ()<UISearchBarDelegate>
 
 @property (nonatomic, strong)UIButton *closeBtn;
-@property (nonatomic, strong)UIView *bottomLine;
 @property (nonatomic, assign)BOOL hadAddCloseBtn;
 
 
@@ -77,7 +76,8 @@
         }];
         
         [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.and.right.equalTo(weakSelf);
+            make.left.equalTo(weakSelf).offset(-10);
+            make.right.equalTo(weakSelf).offset(10);
             make.bottom.equalTo(weakSelf).offset(1);
             make.height.mas_equalTo(1);
         }];
@@ -137,6 +137,10 @@
 //        _searchBar.placeholder = @" 搜索职位/公司/技能";
         _searchBar.contentMode = UIViewContentModeLeft;
         _searchBar.delegate = self;
+        UITextField *searchField = [_searchBar valueForKey:@"searchField"];
+        if (searchField) {
+            searchField.textColor= IKMainTitleColor;
+        }
     }
     
     return _searchBar;
@@ -146,7 +150,7 @@
 - (UIView *)bottomLine
 {
     if (_bottomLine == nil) {
-        _bottomLine = [[UIView alloc] init];
+        _bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), 1)];
         _bottomLine.backgroundColor = IKLineColor;
     }
     return _bottomLine;
@@ -183,6 +187,16 @@
         [self.delegate searchViewStartSearch];
     }
 }
+
+- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+    if ([self.delegate respondsToSelector:@selector(searchViewSearchBarSearchButtonClicked:)]) {
+        [self.delegate searchViewSearchBarSearchButtonClicked:searchBar];
+    }
+}
+
+
+
 /*
 // Only override drawRect: if you perform custom drawing.
 // An empty implementation adversely affects performance during animation.

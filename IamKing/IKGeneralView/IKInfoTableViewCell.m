@@ -283,12 +283,15 @@
 
     self.titleLabel.text = model.title;
     self.salaryLabel.text = model.salary;
-    self.addressView.imageName = @"IK_applyJobAddress";
-    self.addressView.word = model.address;
-    self.educationView.imageName = @"IK_education";
-    self.educationView.word = model.education;
-    self.experienceView.imageName = @"IK_experience";
-    self.experienceView.word = model.experience;
+    
+    [self.addressView.imageView setImage:[UIImage imageNamed:@"IK_applyJobAddress"]];
+    self.addressView.label.text = model.address;
+    
+    [self.educationView.imageView setImage:[UIImage imageNamed:@"IK_education"]];
+    self.educationView.label.text = model.education;
+    
+    [self.experienceView.imageView setImage:[UIImage imageNamed:@"IK_experience"]];
+    self.experienceView.label.text = model.experience;
     self.skillLabel1.text = model.skill1;
     self.skillLabel2.text = model.skill2;
     self.skillLabel3.text = model.skill3;

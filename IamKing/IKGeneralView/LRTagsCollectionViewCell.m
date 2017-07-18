@@ -22,12 +22,6 @@
         _titleLabel.textColor = IKSubHeadTitleColor;
         _titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
         [self.contentView addSubview:_titleLabel];
-        
-        __weak typeof (self) weakSelf = self;
-        
-        [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(weakSelf.contentView);
-        }];
     }
     
     return self;

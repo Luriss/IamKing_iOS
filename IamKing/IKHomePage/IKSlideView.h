@@ -11,8 +11,6 @@
 
 @protocol IKSlideViewDelegate <NSObject>
 
-- (void)slideViewSearchButtonClick:(UIButton *)button;
-- (void)slideViewMoreButtonClick:(UIButton *)button;
 - (void)slideView:(IKSlideView *)slideView didSelectItemAtIndex:(NSUInteger )selectedIndex;
 
 @end
@@ -24,13 +22,9 @@
 
 @property(nonatomic,strong)NSArray *data;
 @property (nonatomic, weak) id<IKSlideViewDelegate> delegate;
-@property (nonatomic, assign, readonly) NSInteger currentIndex;
+@property (nonatomic, assign, readwrite) NSInteger currentIndex;
 
 
-
-
-
-
-
+- (void)reloadData;
 
 @end

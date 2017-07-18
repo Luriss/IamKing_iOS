@@ -40,8 +40,8 @@
 
 - (void)addSubViews
 {
-    [self.contentView addSubview:self.searchView];
-    [self.contentView addSubview:self.lpView];
+//    [self.contentView addSubview:self.searchView];
+//    [self.contentView addSubview:self.lpView];
     [self.contentView addSubview:self.bottomLine];
 }
 

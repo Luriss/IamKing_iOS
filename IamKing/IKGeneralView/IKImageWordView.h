@@ -15,8 +15,8 @@
  */
 @interface IKImageWordView : UIView
 
-@property (nonatomic,copy)NSString *imageName;
-@property (nonatomic,copy)NSString *word;
+@property (nonatomic,strong)UIImageView *imageView;
+@property (nonatomic,strong)UILabel *label;
 
 
 

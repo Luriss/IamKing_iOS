@@ -18,7 +18,7 @@
 
 - (void)searchViewCloseButtonClick;
 - (void)searchViewStartSearch;
-
+- (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar;
 @end
 
 @interface IKSearchView : IKView
@@ -27,6 +27,7 @@
 
 // Default is YES.
 @property (nonatomic, assign) BOOL hiddenColse;
-@property (nonatomic, strong)IKSearchBar *searchBar;
+@property (nonatomic, strong, nullable)IKSearchBar *searchBar;
+@property (nonatomic, strong, nullable)UIView *bottomLine;
 
 @end

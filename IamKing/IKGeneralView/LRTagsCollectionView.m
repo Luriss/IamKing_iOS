@@ -1,30 +1,27 @@
 //
-//  LRTagsView.m
+//  LRTagsCollectionView.m
 //  IamKing
 //
-//  Created by Luris on 2017/7/17.
+//  Created by Luris on 2017/7/18.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "LRTagsView.h"
+#import "LRTagsCollectionView.h"
 #import "LRTagsCollectionViewFlowLayout.h"
 #import "LRTagsCollectionViewCell.h"
-#import "IKImageWordView.h"
 
 
 static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
 
 
-@interface LRTagsView ()<UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
+@interface LRTagsCollectionView ()<UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic,strong) UICollectionView *collectionView;
-@property (nonatomic,strong)UIImageView *imageView;
-@property (nonatomic,strong)UILabel *label;
-@property (nonatomic,strong)UIView *bottomLine;
+@property (nonatomic,strong) LRTagsCollectionViewFlowLayout *layout;//布局layout
 
 @end
 
-@implementation LRTagsView
+@implementation LRTagsCollectionView
 
 
 - (id)initWithFrame:(CGRect)frame
@@ -49,56 +46,21 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
 - (void)addSubviews
 {
     [self addSubview:self.collectionView];
-    [self addSubview:self.imageView];
-    [self addSubview:self.label];
-    [self addSubview:self.bottomLine];
-
-}
-
-- (UIImageView *)imageView
-{
-    if (_imageView == nil) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 3, 20, 20)];
-    }
-    return _imageView;
 }
 
 
-- (UILabel *)label
+
+- (LRTagsCollectionViewFlowLayout *)layout
 {
-    if (_label == nil) {
-        _label = [[UILabel alloc] initWithFrame:CGRectMake(45, 0, 200, 30)];
-        _label.font = [UIFont boldSystemFontOfSize:14];
-        _label.textAlignment = NSTextAlignmentLeft;
-        _label.textColor = IKSubHeadTitleColor;
+    if (_layout == nil) {
+        _layout = [[LRTagsCollectionViewFlowLayout alloc] init];
+        _layout.minimumInteritemSpacing = 5.0f;
+        _layout.minimumLineSpacing = 5.0f;
+        _layout.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
+        _layout.itemSize = CGSizeMake(50, 24);
     }
     
-    return _label;
-}
-
-- (UIView *)bottomLine
-{
-    if (_bottomLine == nil) {
-        _bottomLine = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.bounds) - 1, CGRectGetWidth(self.bounds), 1)];
-        _bottomLine.backgroundColor = IKLineColor;
-    }
-    return _bottomLine;
-}
-
-- (void)setTitleImageName:(NSString *)titleImageName
-{
-    if (IKStringIsNotEmpty(titleImageName)) {
-        _titleImageName = titleImageName;
-        [_imageView setImage:[UIImage imageNamed:titleImageName]];
-    }
-}
-
-- (void)setTitle:(NSString *)title
-{
-    if (IKStringIsNotEmpty(title)) {
-        _title = title;
-        _label.text = title;
-    }
+    return _layout;
 }
 
 
@@ -106,14 +68,7 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
     
     if (_collectionView == nil) {
         
-        UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-
-        flowLayout.minimumInteritemSpacing = 5.0f;
-        flowLayout.minimumLineSpacing = 5.0f;
-        flowLayout.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
-        flowLayout.itemSize = CGSizeMake(50, 24);
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(5, 32, CGRectGetWidth(self.bounds) - 5,CGRectGetHeight(self.bounds) - 40) collectionViewLayout:flowLayout];
-        _collectionView.contentInset = UIEdgeInsetsMake(-30, 0, 0, 0);
+        _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:self.layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor whiteColor];
@@ -134,19 +89,16 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
 {
-    return 1;
+    IKLog(@"_tagsData.count = %ld",_tagsData.count);
+    return 3;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return _tagsData.count;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    // 根据文字计算尺寸.
-    CGFloat w = [self widthForLabel:_tagsData[indexPath.row] fontSize:15];
-    return CGSizeMake(w, 24);
+    NSArray *arr = _tagsData[section];
+    IKLog(@"itemsCount = %ld",arr.count);
+    
+    return 12;
 }
 
 
@@ -167,18 +119,16 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
     if (width > maxWidth){
         width = maxWidth;
     }
-   
+    
     return width;
-//    CGSize size = [text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:font], NSFontAttributeName, nil]];
-//    return size.width;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LRTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     
-
-    cell.titleLabel.text = _tagsData[indexPath.row];
+    
+    cell.titleLabel.text = _tagsData[indexPath.section][indexPath.row];
     
     return cell;
 }
@@ -187,10 +137,6 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
 {
     IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
     
-    LRTagsCollectionViewCell *cell = (LRTagsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    if ([self.delegate respondsToSelector:@selector(tagsCollectionViewDidSelectItemWithTitle:)]) {
-        [self.delegate tagsCollectionViewDidSelectItemWithTitle:cell.titleLabel.text];
-    }
     
 }
 
@@ -212,7 +158,6 @@ static NSString * const reuseIdentifier = @"LRTagsCollectionViewCellId";
 {
     [self.collectionView reloadData];
 }
-
 
 
 

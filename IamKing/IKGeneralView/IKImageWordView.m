@@ -11,8 +11,7 @@
 
 @interface IKImageWordView ()
 
-@property (nonatomic,strong)UIImageView *imageView;
-@property (nonatomic,strong)UILabel *label;
+
 
 
 @end
@@ -37,30 +36,13 @@
     UILabel *label = [[UILabel alloc] init];
     label.font = [UIFont boldSystemFontOfSize:12.0];
     label.textAlignment = NSTextAlignmentLeft;
-    label.textColor = IKRGBColor(164.0, 164.0, 164.0);
+    label.textColor = IKSubHeadTitleColor;
 
     [self addSubview:imageV];
     [self addSubview:label];
     
     _imageView = imageV;
     _label = label;
-}
-
-
-- (void)setImageName:(NSString *)imageName
-{
-    if (!IKStringIsEmpty(imageName)) {
-        _imageName = imageName;
-        [_imageView setImage:[UIImage imageNamed:imageName]];
-    }
-}
-
-- (void)setWord:(NSString *)word
-{
-    if (!IKStringIsEmpty(word)) {
-        _word = word;
-        _label.text = word;
-    }
 }
 
 

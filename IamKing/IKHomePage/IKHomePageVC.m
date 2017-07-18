@@ -43,6 +43,7 @@
 @property(nonatomic,strong)NSMutableArray *infoTableViewArray;
 @property(nonatomic,strong)IKJobTypeView *jobTypeView;
 @property(nonatomic,strong)UISearchController *searchVc;
+@property(nonatomic,strong)IKLoopPlayView *lpView;
 
 ////////////
 
@@ -85,6 +86,8 @@
     
     [self initJobCollectionView];
     
+    [self initLoopPlayView];
+    
     [self initBottomTableView];
     
 //    // 职位列表
@@ -101,7 +104,7 @@
 
 
     // 视图显示开始轮播
-//    [self startLoopPlayView];
+    [self startLoopPlayView];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -117,8 +120,9 @@
     [super viewDidDisappear:animated];
     
     // 视图消失,停止轮播
-//    [self stopLoopPlayView];
+    [self stopLoopPlayView];
 }
+
 
 
 #pragma mark - InitView
@@ -200,6 +204,20 @@
     }];
 }
 
+- (void)initLoopPlayView
+{
+    _lpView = [[IKLoopPlayView alloc]init];
+    _lpView.imagesArray = @[
+                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
+                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
+                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
+                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
+                            @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
+                            ];
+    _lpView.scrollDirection = IKLPVScrollDirectionHorizontal;
+    _lpView.pageControlHidden = NO;
+
+}
 
 - (void)initJobCollectionView
 {
@@ -251,18 +269,18 @@
 
 #pragma mark - Stop & Start LoopPlayView
 
-//- (void)startLoopPlayView
-//{
-//    [_lpView startAutoScrollPage];
-//}
-//
-//
-//- (void)stopLoopPlayView
-//{
-//    [_lpView stopAutoScrollPage];
-//}
-//
-//
+- (void)startLoopPlayView
+{
+    [_lpView startAutoScrollPage];
+}
+
+
+- (void)stopLoopPlayView
+{
+    [_lpView stopAutoScrollPage];
+}
+
+
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 
@@ -348,7 +366,12 @@
                 }];
             }
             else if (indexPath.row == 1){
-                cell.isShowLooPalyView = YES;
+                [cell.contentView addSubview:_lpView];
+                [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(cell.contentView).offset(1);
+                    make.left.and.right.equalTo(cell.contentView);
+                    make.height.mas_equalTo(175);
+                }];
             }
         }
         else{
@@ -402,11 +425,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view.backgroundColor = [UIColor whiteColor];
-    
-    [self.navigationController pushViewController:vc animated:YES];
+//    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+//    UIViewController *vc = [[UIViewController alloc] init];
+//    vc.view.backgroundColor = [UIColor whiteColor];
+//    
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -598,7 +621,9 @@
 //    [searchvc.view addSubview:_searchView];
 //    [_searchView.searchBar resignFirstResponder];
     searchvc.modalPresentationStyle = UIModalPresentationPopover;
-    [self presentViewController:searchvc animated:NO completion:^{
+    searchvc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:searchvc];
+    [self presentViewController:nav animated:NO completion:^{
         
     }];
     
@@ -642,7 +667,7 @@
     
     IKMoreTypeVC *moreVC = [[IKMoreTypeVC alloc] init];
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
-//    moreVC.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+//    moreVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     moreVC.view.backgroundColor = [UIColor whiteColor];
     
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:moreVC];

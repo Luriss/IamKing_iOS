@@ -18,6 +18,6 @@
 @interface IKSearchVC : IKViewController
 
 @property (nonatomic, weak) id<IKSearchViewControllerDelegate> delegate;
-
+@property (nonatomic, strong)UIView *bottomLine;
 
 @end

@@ -21,13 +21,15 @@
     self.navigationBar.barTintColor = [UIColor whiteColor];
     [self.navigationBar setBackgroundImage:[UIImage GetImageWithColor:[UIColor whiteColor] size:CGSizeMake(1, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationBar.alpha = 0.5f;
+    [self fineNavigationBottomLine:self.navigationBar];
+
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self fineNavigationBottomLine:self.tabBarController.navigationController.navigationBar];
+    self.shadowImage.hidden = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -39,6 +41,8 @@
 - (void)fineNavigationBottomLine:(UIView *)view
 {
     if ([view isKindOfClass:[UIImageView class]] && (CGRectGetHeight(view.bounds) <= 1.0)) {
+        IKLog(@"======= %@",view);
+        view.hidden = YES;
         self.shadowImage = (UIImageView *)view;
         self.shadowImage.hidden = YES;
         return;

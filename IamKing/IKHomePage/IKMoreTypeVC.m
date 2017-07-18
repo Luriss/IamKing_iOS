@@ -10,15 +10,13 @@
 #import "IKSearchView.h"
 #import "IKSearchResultVC.h"
 #import "IKTypeTableView.h"
-#import "IKTypeDetailView.h"
 #import "IKJobTypeDetailVC.h"
 
-@interface IKMoreTypeVC ()<IKTypeTableViewDelegate,IKTypeDetailViewDelegate>
+@interface IKMoreTypeVC ()<IKTypeTableViewDelegate>
 {
     IKJobTypeDetailVC *_jobDeatil;
 }
 @property(nonatomic, strong)IKSearchView *searchView;
-@property(nonatomic, strong)IKTypeDetailView *detailView;
 @property(nonatomic, strong)NSIndexPath *selectIndexPath;
 
 
@@ -94,24 +92,6 @@
 - (void)initJobTypeDetailVc
 {
     _jobDeatil = [[IKJobTypeDetailVC alloc] init];
-}
-- (void)initTypeDetailView
-{
-    IKTypeDetailView *detail = [[IKTypeDetailView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH - 55, IKSCREENH_HEIGHT - 64 - 41)];
-    detail.delegate = self;
-    detail.transform = CGAffineTransformMakeTranslation(CGRectGetWidth(detail.frame), 0);
-    detail.hidden = YES;
-    [self.view addSubview:detail];
-    
-    __weak typeof (self) weakSelf = self;
-
-    [detail mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_searchView.mas_bottom).offset(1);
-        make.bottom.and.right.equalTo(weakSelf.view);
-        make.left.equalTo(weakSelf.view).offset(55);
-    }];
-    
-    self.detailView = detail;
 }
 
 #pragma mark -  IKSearchViewDelegate

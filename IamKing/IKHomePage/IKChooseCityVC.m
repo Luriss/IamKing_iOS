@@ -7,31 +7,23 @@
 //
 
 #import "IKChooseCityVC.h"
-#import "IKLocationCell.h"
-#import "IKButtonView.h"
 #import "IKTagsView.h"
 #import "IKTagsCollectionViewFlowLayout.h"
 #import "IKTagsCollectionViewCell.h"
-
+#import "IKChooseCityView.h"
 
 static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
 static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
-@interface IKChooseCityVC ()<UITableViewDelegate,UITableViewDataSource,IKTagsViewDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
-{
-    NSIndexPath  *_oldProvinceIndexPath;
-    NSIndexPath  *_oldCityIndexPath;
-}
+@interface IKChooseCityVC ()<IKTagsViewDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,IKChooseCityViewDelegate>
 
 @property (nonatomic, strong)IKView *locationInfoView;
 @property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,strong) IKTagsCollectionViewFlowLayout *layout;//布局layout
+@property (nonatomic,strong) IKChooseCityView *chooseCity;
 
-@property (nonatomic, strong)UITableView *provinceTableView;
-@property (nonatomic, strong)UITableView *cityTableView;
 @property (nonatomic,   copy)NSDictionary *baseDict;
-@property (nonatomic,   copy)NSString    *selectProvince;
-@property (nonatomic,   copy)NSString    *selectCity;
+
 
 @end
 
@@ -40,15 +32,10 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    [self configBaseData];
-    
-    [self plistData];
-
     [self initNavView];
     [self initHotCityView];
     [self addSubViews];
-    
+    [self plistData];
     // Do any additional setup after loading the view.
 }
 
@@ -68,16 +55,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 }
 
 
-- (void)configBaseData
-{
-    _oldProvinceIndexPath = nil;
-    _oldCityIndexPath = nil;
-    
-    self.selectCity = [IKUSERDEFAULT objectForKey:@"selectedCity"];
-    self.selectProvince = [IKUSERDEFAULT objectForKey:@"selectedProvince"];
-    IKLog(@"self.selectProvince = %@,self.selectCity = %@",self.selectProvince,self.selectCity);
-}
-
 - (void)plistData
 {
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
@@ -86,17 +63,8 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     self.baseDict = [data objectForKey:@"provinceCity"];
     self.provinceData = [data objectForKey:@"province"];
     
-    if (IKStringIsNotEmpty(self.selectProvince)) {
-        self.cityData = [self.baseDict objectForKey:self.selectProvince];
-        // 默认选中的行.
-        NSInteger row = [self.provinceData indexOfObject:self.selectProvince];
-        _oldProvinceIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
-    }
-    else{
-        self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
-    }
+    self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
 }
-
 
 - (void)initNavView
 {
@@ -117,6 +85,11 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     title.font = [UIFont systemFontOfSize:IKMainTitleFont];
     
     self.navigationItem.titleView = title;
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 1)];
+    lineView.backgroundColor = IKLineColor;
+    
+    [self.view addSubview:lineView];
 }
 
 
@@ -138,8 +111,8 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_collectionView.center.x - 100, -25, 200, 30)];
     //        label.backgroundColor = [UIColor redColor];
     label.text = @"热门城市";
-    label.textColor = IKSubHeadTitleColor;
-    label.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
+    label.textColor = IKMainTitleColor;
+    label.font = [UIFont systemFontOfSize:IKSubTitleFont];
     label.textAlignment = NSTextAlignmentCenter;
     [_collectionView addSubview:label];
     
@@ -147,22 +120,25 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [self.view addSubview:_collectionView];
 }
 
+
+- (void)initChooseCityView
+{
+}
+
 - (void)addSubViews
 {
-    // 所有的 子 view 都建议添加在bottomView上避免影响动画.
-    
     // 定位信息 view.
     [self.view addSubview:self.locationInfoView];
     
-    [self.view addSubview:self.provinceTableView];
-    
-    [self.view addSubview:self.cityTableView];
+    _chooseCity = [[IKChooseCityView alloc] init];
+    _chooseCity.delegate = self;
+    [self.view addSubview:_chooseCity];
     
     __weak typeof (self) weakSelf = self;
     
     [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
-        make.top.equalTo(weakSelf.view);
+        make.top.equalTo(weakSelf.view).offset(1);
         make.height.mas_equalTo(80);
     }];
     
@@ -195,46 +171,18 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 }
 
 
-- (UITableView *)provinceTableView
-{
-    if (_provinceTableView == nil) {
-        _provinceTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        _provinceTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _provinceTableView.backgroundColor = IKRGBColor(240, 240, 243);
-        _provinceTableView.bounces = NO;
-        _provinceTableView.delegate = self;
-        _provinceTableView.dataSource = self;
-    }
-    
-    return _provinceTableView;
-}
-
-
-- (UITableView *)cityTableView
-{
-    if (_cityTableView == nil) {
-        _cityTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        _cityTableView.backgroundColor = IKRGBColor(243, 243, 248);
-        _cityTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _cityTableView.bounces = NO;
-        _cityTableView.delegate = self;
-        _cityTableView.dataSource = self;
-    }
-    return _cityTableView;
-}
-
 
 - (void)initLocationInfoView
 {
     UILabel *tipLabel = [[UILabel alloc] init];
-    tipLabel.text = @"自动定位到您在";
-    tipLabel.textColor = IKSubHeadTitleColor;
-    tipLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
+    tipLabel.text = @"自动定位";
+    tipLabel.textColor = IKMainTitleColor;
+    tipLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
     tipLabel.textAlignment = NSTextAlignmentCenter;
     [_locationInfoView addSubview:tipLabel];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:self action:@selector(locationButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
     [button setTitle:@"杭州" forState:UIControlStateNormal];
@@ -274,9 +222,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 - (void)layoutCustomView
 {
     __weak typeof (self) weakSelf = self;
-    
-    CGSize size = [self.layout collectionViewContentSize];
-
 
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
@@ -284,140 +229,19 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
         make.height.mas_equalTo(210);
     }];
     
-    [_provinceTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_chooseCity mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_collectionView.mas_bottom);
-        make.left.and.bottom.equalTo(weakSelf.view);
-        make.width.mas_equalTo(IKSCREEN_WIDTH *0.4);
-    }];
-    
-    [_cityTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_provinceTableView);
-        make.right.equalTo(weakSelf.view);
-        make.left.equalTo(_provinceTableView.mas_right);
+        make.left.and.right.and.bottom.equalTo(weakSelf.view);
     }];
 }
 
 
-#pragma mark - UITableViewDelegate,UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (void)chooseCityViewSelectedCity:(NSString *)city
 {
-    return 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (tableView == _provinceTableView) {
-        return 50;
-    }
-    else{
-        return 60;
-    }
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    if (tableView == _provinceTableView) {
-        return self.provinceData.count;
-    }
-    else{
-        return self.cityData.count;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (tableView == self.provinceTableView) {
-        static  NSString *cellId=@"provinceID";
-        IKLocationCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell==nil){
-            cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        }
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
-        NSString *provinceStr = [self.provinceData objectAtIndex:indexPath.row];
-        cell.tLabel.text = provinceStr;
-        
-        if ([provinceStr isEqualToString:self.selectProvince]) {
-            cell.tLabel.textColor = IKGeneralBlue;
-        }
-        else{
-            cell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
-        }        
-        return cell;
-    }
-    else{
-        static  NSString *cellId=@"cityId";
-        IKLocationCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell==nil){
-            cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        }
-        cell.backgroundColor = [UIColor clearColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        NSString *cityStr = [self.cityData objectAtIndex:indexPath.row];
-        cell.tLabel.text = cityStr;
-        
-        if ([cityStr isEqualToString:self.selectCity]) {
-            cell.tLabel.textColor = IKGeneralBlue;
-            IKLog(@"lineView = %@",cell.lineView);
-            cell.lineView.hidden = NO;
-        }
-        else{
-            cell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
-            cell.lineView.hidden = YES;
-
-        }
-        
-        return cell;
-
-    }
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    IKLog(@"chooseCityViewSelectedCity");
     
-    IKLog(@"didSelectRowAtIndexPath  = %@",indexPath);
-    if (tableView == self.provinceTableView) {
-        
-        IKLocationCell *cell = (IKLocationCell *)[tableView cellForRowAtIndexPath:indexPath];
-        cell.tLabel.textColor = IKGeneralBlue;
-        
-        if (_oldProvinceIndexPath != indexPath) {
-            IKLocationCell *oldCell = (IKLocationCell *)[tableView cellForRowAtIndexPath:_oldProvinceIndexPath];
-            oldCell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
-       
-            NSString *province = [self.provinceData objectAtIndex:indexPath.row];
-            self.cityData = [self.baseDict objectForKey:province];
-            [self.cityTableView reloadData];
-        }
-        
-        _oldProvinceIndexPath = indexPath;
-        
-        [IKUSERDEFAULT setObject:cell.tLabel.text forKey:@"selectedProvince"];
-        [IKUSERDEFAULT synchronize];
-    }
-    else{
-        
-        _oldCityIndexPath = indexPath;
-        self.selectCity = [self.cityData objectAtIndex:indexPath.row];
-        
-        [self dismissSelf];
-        
-        if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
-            [self.delegate locationVcDismissChangeNavButtonTitle:self.selectCity];
-        }
-        
-        [IKUSERDEFAULT setObject:self.selectCity forKey:@"selectedCity"];
-        [IKUSERDEFAULT synchronize];
-    }
+    [self dismissSelfWithCity:city];
 }
-
 
 
 #pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
@@ -461,7 +285,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     IKTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
     cell.titleLabel.textColor = [UIColor blackColor];
     
-    NSString *title = self.self.cityData[indexPath.item];
+    NSString *title = self.cityData[indexPath.item];
     cell.titleLabel.text = title;
     
 //    if (indexPath.row == 1) {
@@ -489,19 +313,29 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 - (void)dismissSelf
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    });
 }
 
-- (void)buttonViewButtonClick:(nullable UIButton *)button
+- (void)dismissSelfWithCity:(NSString *)city
 {
+    IKLog(@"dismissSelfWithCity");
     [self dismissSelf];
     
     if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
-        [self.delegate locationVcDismissChangeNavButtonTitle:self.selectCity];
+        [self.delegate locationVcDismissChangeNavButtonTitle:city];
     }
+    
+}
+
+- (void)locationButtonClick:(UIButton *)button
+{
+    [self dismissSelfWithCity:button.titleLabel.text];
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {

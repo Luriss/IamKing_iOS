@@ -9,8 +9,14 @@
 #import "IKSearchVC.h"
 #import "IKSearchView.h"
 #import "LRTagsView.h"
+#import "IKSearchResultView.h"
+#import "IKJobInfoModel.h"
 
-@interface IKSearchVC ()<IKSearchViewDelegate>
+
+@interface IKSearchVC ()<IKSearchViewDelegate,LRTagsViewDelegate>
+{
+    IKSearchResultView    *_searchResultView;
+}
 @property(nonatomic,strong)IKSearchView *searchView;
 @property(nonatomic,strong)IKScrollView *bottomScrollView;
 
@@ -21,11 +27,31 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    
     [self initSearchView];
-    
     [self initBottomScrollView];
     [self initTagsView];
+//
+    _bottomScrollView.hidden = YES;
+    _bottomScrollView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+    
+    _searchResultView = [[IKSearchResultView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
+    _searchResultView.backgroundColor = [UIColor whiteColor];
+    
+    IKJobInfoModel  *model = [[IKJobInfoModel alloc] init];
+    model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg";
+    model.title = @"高级营销总监";
+    model.salary = @"13~18k";
+    model.address = @"杭州";
+    model.experience = @"6~8年";
+    model.education = @"本科";
+    model.skill1 = @"销售能手好";
+    model.skill2 = @"NAFC";
+    model.skill3 = @"形象好";
+    model.introduce = @"时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.";
+    
+    _searchResultView.jobModel = model;
+    _searchResultView.hidden = YES;
+    [self.view addSubview:_searchResultView];
     // Do any additional setup after loading the view.
 }
 
@@ -33,36 +59,45 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    [self startSearchViewAnimation];
+//    [self startSearchViewAnimation];
+    
+    _bottomScrollView.hidden = NO;
+
+    
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        _bottomScrollView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+    
+    }];
 
 }
 
 - (void)initSearchView
 {
-    _searchView = [[IKSearchView alloc] initWithFrame:CGRectMake(0, 65, CGRectGetWidth(self.view.bounds), 44)];
+    _searchView = [[IKSearchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
     _searchView.delegate = self;
     _searchView.hiddenColse = NO;
-    _searchView.hidden = YES;
     _searchView.backgroundColor = [UIColor whiteColor];
     [_searchView.searchBar becomeFirstResponder];
-    [self.view addSubview:_searchView];
+    self.navigationItem.titleView = _searchView;
 
 }
 
 
 - (void)initBottomScrollView
 {
-    IKScrollView *scrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 65, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 44 - 230)];
+    IKScrollView *scrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 44 - 230)];
     scrollView.backgroundColor = [UIColor whiteColor];
     scrollView.scrollEnabled = YES;
     [self.view addSubview:scrollView];
-    
     _bottomScrollView = scrollView;
 }
 
@@ -74,7 +109,7 @@
     tags.title = @"热门职位";
     tags.titleImageName = @"IK_hot";
     tags.tagsData = arr;
-
+    tags.delegate = self;
     [_bottomScrollView addSubview:tags];
     
     NSArray *arr2 = @[@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",];
@@ -83,7 +118,8 @@
     tags2.title = @"热门技能";
     tags2.titleImageName = @"IK_hot";
     tags2.tagsData = arr2;
-    
+    tags2.delegate = self;
+
     [_bottomScrollView addSubview:tags2];
 
     NSArray *arr3 = @[@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身"];
@@ -92,7 +128,8 @@
     tags3.title = @"热门职位";
     tags3.titleImageName = @"IK_hot";
     tags3.tagsData = arr3;
-    
+    tags3.delegate = self;
+
     [_bottomScrollView addSubview:tags3];
     
     
@@ -106,8 +143,8 @@
 {
     _searchView.hidden = NO;
     
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _searchView.frame = CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 44);
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        _searchView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44);
     } completion:^(BOOL finished) {
         
     }];
@@ -127,11 +164,32 @@
 }
 
 
-- (void)searchViewSearchButtonClick
+- (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar
 {
+    IKLog(@"searchViewSearchBarSearchButtonClicked");
     
+    [self showSearchResultView];
 }
 
+
+- (void)tagsCollectionViewDidSelectItemWithTitle:(nullable NSString *)title
+{
+    _searchView.searchBar.text = title;
+    
+    [self showSearchResultView];
+}
+
+- (void)showSearchResultView
+{
+    if (_searchResultView.hidden) {
+        _searchResultView.hidden = NO;
+    }
+    else{
+        [_searchResultView reloadData];
+    }
+    [_searchView.searchBar resignFirstResponder];
+
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
