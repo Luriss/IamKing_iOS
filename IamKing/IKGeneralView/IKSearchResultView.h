@@ -15,6 +15,6 @@
 @property (nonatomic,strong)IKCompanyInfoModel *companyModel;
 
 - (void)reloadData;
-
+- (void)resetOldSelectedView:(UIView *)newView;
 
 @end

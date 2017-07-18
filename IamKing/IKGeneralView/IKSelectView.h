@@ -8,6 +8,16 @@
 
 #import "IKView.h"
 
+@protocol IKSelectViewDelegate <NSObject>
+
+- (void)selectViewDidSelect:(NSString *)select;
+
+@end
+
 @interface IKSelectView : IKView
+
+@property (nonatomic, weak) id<IKSelectViewDelegate> delegate;
+@property (nonatomic,copy)NSArray *selectData;
+
 
 @end

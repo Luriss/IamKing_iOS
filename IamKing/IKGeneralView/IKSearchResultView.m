@@ -19,8 +19,21 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     IKSelectedTypeCompany,                  /** 公司 */
 };
 
+typedef NS_ENUM(NSInteger, IKSelectedSubType) {
+    IKSelectedSubTypeNone = 0,
+    IKSelectedSubTypeJobAddress,                  /** 工作地点 */
+    IKSelectedSubTypeJobCompanyType,                  /** 公司类型 */
+    IKSelectedSubTypeJobSalary,                        // 薪资待遇
+    IKSelectedSubTypeJobExperience,                     //工作经验
+    IKSelectedSubTypeCompanyType,                       //公司类型
+    IKSelectedSubTypeCompanyNumberOfStore,              // 店铺数量
+    IKSelectedSubTypeCompanyDirectlyToJoin,             // 直营加盟
+    IKSelectedSubTypeCompanyEvaluation                  // 公司评价
+};
 
-@interface IKSearchResultView ()<UITableViewDelegate,UITableViewDataSource,IKChooseCityViewDelegate>
+
+
+@interface IKSearchResultView ()<UITableViewDelegate,UITableViewDataSource,IKChooseCityViewDelegate,IKSelectViewDelegate>
 
 @property(nonatomic,strong)IKView *topView;
 @property(nonatomic,strong)IKView *jcView;
@@ -40,7 +53,9 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 
 @property(nonatomic,strong)IKTableView *tableView;
 @property(nonatomic,assign)IKSelectedType selectedType;
+@property(nonatomic,assign)IKSelectedSubType selectedSubType;
 
+@property(nonatomic,strong)UIView *oldSelectView;
 
 @end
 
@@ -73,7 +88,7 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 - (void)addSubviews
 {
     self.selectedType = IKSelectedTypeJob;
-    
+    self.selectedSubType = IKSelectedSubTypeNone;
     
     [self insertSubview:self.topView atIndex:3];
     
@@ -397,112 +412,173 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 
 - (void)subTypeButtonClick:(UIButton *)button
 {
+    NSLog(@"%ld,,,,,",(long)self.selectedSubType);
     if (self.selectedType == IKSelectedTypeJob) {
         if (button == _button1) {
-            [self showOrHideCityChooseView];
+            if (self.selectedSubType != IKSelectedSubTypeJobAddress) {
+                [self showCityChooseView];
+                self.selectedSubType = IKSelectedSubTypeJobAddress;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else if (button == _button2){
-            [self showOrHideSelectCompanyTypeView];
+
+            if (self.selectedSubType != IKSelectedSubTypeJobCompanyType) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeJobCompanyType;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else if (button == _button3){
-            
+            if (self.selectedSubType != IKSelectedSubTypeJobSalary) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeJobSalary;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else{
-            
+            if (self.selectedSubType != IKSelectedSubTypeJobExperience) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeJobExperience;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
     }
     else{
         if (button == _button1) {
-            
+            if (self.selectedSubType != IKSelectedSubTypeCompanyType) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeCompanyType;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else if (button == _button2){
-            
+            if (self.selectedSubType != IKSelectedSubTypeCompanyNumberOfStore) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeCompanyNumberOfStore;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else if (button == _button3){
-            
+            if (self.selectedSubType != IKSelectedSubTypeCompanyDirectlyToJoin) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeCompanyDirectlyToJoin;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
         else{
-            
+            if (self.selectedSubType != IKSelectedSubTypeCompanyEvaluation) {
+                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+
+                [self showSelectViewWithData:data];
+                self.selectedSubType = IKSelectedSubTypeCompanyEvaluation;
+            }
+            else{
+                [self resetOldSelectedView:nil];
+            }
         }
     }
 }
 
 
-- (void)showOrHideCityChooseView
+- (void)showCityChooseView
 {
-    UIView *view = [self viewWithTag:10001];
-    
-    if ( view != nil) {
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            view.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(view.frame));
-        } completion:^(BOOL finished) {
-            [view removeFromSuperview];
-        }];
-        
-        return;
-    }
-    
     IKChooseCityView *choose = [[IKChooseCityView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
     choose.tag = 10001;
     choose.delegate = self;
     choose.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(choose.frame));
     [self insertSubview:choose belowSubview:_topView];
     
-    
+
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         choose.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
-        UIView *view2 = [self viewWithTag:10002];
-        if (view2) {
-            [view2 removeFromSuperview];
-        }
+        [self resetOldSelectedView:choose];
     }];
     
+}
+
+- (void)resetOldSelectedView:(UIView *)newView
+{
+    if (self.oldSelectView) {
+        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            self.oldSelectView.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(self.oldSelectView.frame));
+        } completion:^(BOOL finished) {
+            [self.oldSelectView removeFromSuperview];
+            self.oldSelectView = nil;
+            if (newView == nil) {
+                self.selectedSubType = IKSelectedSubTypeNone;
+            }
+            else{
+                self.oldSelectView = newView;
+            }
+        }];
+        return;
+    }
+    if (newView == nil) {
+        self.selectedSubType = IKSelectedSubTypeNone;
+    }
+    else{
+        self.oldSelectView = newView;
+    }
 }
 
 - (void)chooseCityViewSelectedCity:(NSString *)city
 {
     NSLog(@"city = %@",city);
     
-    [self showOrHideCityChooseView];
+    [self resetOldSelectedView:nil];
     
 }
 
-- (void)showOrHideSelectCompanyTypeView
+- (void)showSelectViewWithData:(NSArray *)data
 {
-    UIView *view = [self viewWithTag:10002];
-    
-    if ( view != nil) {
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-            view.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(view.frame));
-        } completion:^(BOOL finished) {
-            [view removeFromSuperview];
-        }];
-        
-        return;
-    }
-    
     IKSelectView *select = [[IKSelectView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
     select.tag = 10002;
     select.backgroundColor = IKSeachBarBgColor;
+    select.selectData = data;
+    select.delegate = self;
     select.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(select.frame));
     
     [self insertSubview:select belowSubview:_topView];
     
-    
     [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         select.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
-        UIView *view2 = [self viewWithTag:10001];
-        if (view2) {
-            [view2 removeFromSuperview];
-        }
+        [self resetOldSelectedView:select];
     }];
 }
+
 
 - (void)jcButtonClick:(UIButton *)button
 {
     NSLog(@"button  = %@",button);
+    [self resetOldSelectedView:nil];
+    
     if (button == _companyButton) {
         [self setCompanyTypeSelectedChangeTitle];
         [self startSelectedViewAnimation:_jobButton.center endPoint:_companyButton.center];
@@ -576,7 +652,11 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     [self.tableView reloadData];
 }
 
-
+- (void)selectViewDidSelect:(NSString *)select
+{
+    NSLog(@"select = %@",select);
+    [self resetOldSelectedView:nil];
+}
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 

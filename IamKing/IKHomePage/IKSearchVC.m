@@ -164,6 +164,13 @@
 }
 
 
+- (void)searchViewStartSearch
+{
+    [_searchResultView resetOldSelectedView:nil];
+    
+}
+
+
 - (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar
 {
     IKLog(@"searchViewSearchBarSearchButtonClicked");
