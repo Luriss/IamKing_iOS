@@ -24,7 +24,6 @@
 @property(nonatomic,strong)UILabel     *skillLabel2;
 @property(nonatomic,strong)UILabel     *skillLabel3;
 @property(nonatomic,strong)UILabel     *introduceLabel;
-@property(nonatomic,strong)UIView      *maskView;
 @property(nonatomic,strong)UIView      *bottomLine;
 
 
@@ -54,7 +53,6 @@
     [self.contentView addSubview:self.logoImageView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.salaryLabel];
-    [self.contentView insertSubview:self.maskView belowSubview:self.salaryLabel];
     [self.contentView addSubview:self.addressView];
     [self.contentView addSubview:self.experienceView];
     [self.contentView addSubview:self.educationView];
@@ -97,23 +95,13 @@
     if (_salaryLabel == nil) {
         // 薪水
         _salaryLabel = [[UILabel alloc] init];
-        _salaryLabel.textAlignment = NSTextAlignmentLeft;
-        _salaryLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+        _salaryLabel.textAlignment = NSTextAlignmentCenter;
+        _salaryLabel.layer.cornerRadius = 10;
+        _salaryLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
         _salaryLabel.layer.backgroundColor = IKRGBColor(246.0, 101.0, 101.0).CGColor;
         _salaryLabel.textColor = [UIColor whiteColor];
     }
     return _salaryLabel;
-}
-
-- (UIView *)maskView
-{
-    if (_maskView == nil) {
-        //遮盖 薪水左边的圆角
-        _maskView = [[UIView alloc] init];
-        _maskView.layer.backgroundColor = IKRGBColor(246.0, 101.0, 101.0).CGColor;
-        _maskView.layer.cornerRadius = 10;
-    }
-    return _maskView;
 }
 
 - (IKImageWordView *)addressView
@@ -222,23 +210,16 @@
     
     [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(8);
-        make.right.equalTo(weakSelf);
+        make.right.equalTo(weakSelf).offset(10);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(70);
-    }];
-    
-    [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_salaryLabel);
-        make.left.equalTo(_salaryLabel.mas_left).offset(-10);
-        make.width.mas_equalTo(30);
-        make.height.equalTo(_salaryLabel);
+        make.width.mas_equalTo(90);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(8);
         make.left.equalTo(_logoImageView.mas_right).offset(9);
         make.height.mas_equalTo(20);
-        make.right.equalTo(_maskView.mas_left);
+        make.right.equalTo(_salaryLabel.mas_left);
     }];
     
     [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {

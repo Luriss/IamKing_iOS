@@ -15,6 +15,7 @@
 
 @end
 
+
 @interface LRTagsView : UIView
 
 @property (nonatomic,strong,nullable) NSArray *tagsData;//传入的标签数组 字符串数组

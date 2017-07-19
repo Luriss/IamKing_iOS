@@ -118,6 +118,7 @@
         _provinceTableView.bounces = NO;
         _provinceTableView.delegate = self;
         _provinceTableView.dataSource = self;
+        _provinceTableView.rowHeight = 50;
     }
     
     return _provinceTableView;
@@ -133,6 +134,7 @@
         _cityTableView.bounces = NO;
         _cityTableView.delegate = self;
         _cityTableView.dataSource = self;
+        _cityTableView.rowHeight = 60;
     }
     return _cityTableView;
 }
@@ -150,16 +152,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (tableView == _provinceTableView) {
-        return 50;
-    }
-    else{
-        return 60;
-    }
 }
 
 
@@ -182,7 +174,6 @@
         if(cell==nil){
             cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
-        cell.backgroundColor = [UIColor clearColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *provinceStr = [self.provinceData objectAtIndex:indexPath.row];
@@ -203,7 +194,6 @@
         if(cell==nil){
             cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
-        cell.backgroundColor = [UIColor clearColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         NSString *cityStr = [self.cityData objectAtIndex:indexPath.row];

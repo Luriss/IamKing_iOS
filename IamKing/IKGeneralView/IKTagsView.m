@@ -168,21 +168,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     return CGSizeZero;
 }
 
-//创建头视图
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    IKLog(@"kind = %@",kind);
-    if (kind == UICollectionElementKindSectionHeader) {
-        IKHeaderReusableView *headView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:headerReuseIdentifier forIndexPath:indexPath];
-        
-        headView.backgroundColor = [UIColor redColor];
-        return headView;
-    }
-    else{
-        return nil;
-    }
-
-}
 
 - (void)reloadCollectionViewData
 {

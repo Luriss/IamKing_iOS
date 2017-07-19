@@ -10,9 +10,9 @@
 #import "IKSlideView.h"
 #import "IKTagsCollectionViewCell.h"
 #import "IKTagsCollectionViewFlowLayout.h"
+#import "IKSearchVC.h"
 
-
-@interface IKJobTypeDetailVC ()<IKSlideViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
+@interface IKJobTypeDetailVC ()<IKSlideViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,IKSearchViewControllerDelegate>
 @property(nonatomic, strong)IKSlideView *slideView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 
@@ -71,6 +71,12 @@
     self.navigationItem.titleView = title;
 }
 
+- (void)setDelegate:(id<IKJobTypeDetailVCDelegate>)delegate
+{
+    if (delegate) {
+        _delegate = delegate;
+    }
+}
 
 - (void)dismissSelf
 {
@@ -105,7 +111,7 @@
     _collectionView.pagingEnabled = NO;
     _collectionView.delegate = self;
     _collectionView.dataSource = self;
-    _collectionView.backgroundColor = [UIColor clearColor];
+    _collectionView.backgroundColor = [UIColor whiteColor];
     [_collectionView registerClass:[IKTagsCollectionViewCell class] forCellWithReuseIdentifier:@"IKTagsCollectionViewCell"];
     
     [self.view addSubview:_collectionView];
@@ -168,9 +174,27 @@
 {
     IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
     
+    IKTagsCollectionViewCell *cell = (IKTagsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
+    IKSearchVC *searchVc = [[IKSearchVC alloc] init];
+    searchVc.delegate = self;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        searchVc.modalPresentationStyle = UIModalPresentationPopover;
+        searchVc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:searchVc];
+        [self presentViewController:nav animated:NO completion:^{
+            [searchVc showSearchResultViewWithSearchText:cell.titleLabel.text];
+        }];
+    });
 }
 
+- (void)searchViewControllerDismiss
+{
+    if ([self.delegate respondsToSelector:@selector(dismissViewController)]) {
+        [self.delegate dismissViewController];
+    }
+}
 
 
 - (void)slideView:(IKSlideView *)slideView didSelectItemAtIndex:(NSUInteger )selectedIndex

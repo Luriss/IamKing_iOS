@@ -53,7 +53,6 @@
     _angle = 0;
     
     UIImageView *fImageView = [[UIImageView alloc] init];
-    fImageView.backgroundColor = [UIColor clearColor];
     fImageView.tag = 1001;
     [fImageView setImage:[UIImage imageNamed:@"IK_logo"]];
     [self addSubview:fImageView];

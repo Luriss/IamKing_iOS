@@ -52,6 +52,7 @@
     tableView.scrollEnabled = NO;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.rowHeight = 80;
     [self addSubview:tableView];
     self.tableView = tableView;
 }
@@ -69,12 +70,6 @@
 {
     return 1;
 }
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 80;
-}
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

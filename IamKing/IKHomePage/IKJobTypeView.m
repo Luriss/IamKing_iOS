@@ -16,7 +16,7 @@
 @property (nonatomic, strong) UIView     *lineView;
 
 @property (nonatomic, assign)BOOL hadAddSubview;
-@property (nonatomic, copy)NSMutableArray<__kindof UIButton *> *buttonArray;
+@property (nonatomic, strong)NSMutableArray< UIButton *> *buttonArray;
 @property (nonatomic, strong)UIButton *oldButton;
 
 @end
@@ -118,10 +118,7 @@
 
 - (void)btnClick:(UIButton *)button
 {
-    NSLog(@"%@",button);
-
     if (_oldButton != button) {
-        
         
         [self startBottomLineAnimation:button.center];
         
@@ -221,9 +218,6 @@
 
 - (void)startBottomLineAnimation:(CGPoint )point
 {
-    NSLog(@"_oldButton.center = %@",[NSValue valueWithCGPoint:point]);
-    NSLog(@"button.center = %@",[NSValue valueWithCGPoint:point]);
-
     CABasicAnimation* position = [CABasicAnimation animation];
     position.duration = 0.1;
     position.keyPath = @"position.x";

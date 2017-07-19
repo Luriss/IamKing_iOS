@@ -7,6 +7,7 @@
 //
 
 #import "IKViewController.h"
+#import "IKSearchView.h"
 
 
 @protocol IKSearchViewControllerDelegate <NSObject>
@@ -19,5 +20,11 @@
 
 @property (nonatomic, weak) id<IKSearchViewControllerDelegate> delegate;
 @property (nonatomic, strong)UIView *bottomLine;
+@property (nonatomic, strong)NSString *searchText;
+@property (nonatomic, assign)BOOL *hideBottomView;
+
+
+- (void)showSearchResultViewWithSearchText:(NSString *)searchText;
+
 
 @end

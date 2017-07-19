@@ -149,7 +149,6 @@
 
 - (void)searchViewStartSearch
 {
-    NSLog(@"searchViewStartSearch");
     if ([self.delegate respondsToSelector:@selector(searchViewCellStartSearch)]) {
         [self.delegate searchViewCellStartSearch];
     }

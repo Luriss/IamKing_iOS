@@ -23,7 +23,6 @@
 @property (nonatomic,copy)NSString *rightHeaderButtonTitle;
 @property (nonatomic, weak) id<IKInfoTableViewDelegate> delegate;
 @property (nonatomic, assign) BOOL canScrollTableView;
-@property(nonatomic,assign)IKTableViewScrollState scrollState;
 
 
 @end

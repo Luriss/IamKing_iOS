@@ -7,7 +7,6 @@
 //
 
 #import "IKSearchVC.h"
-#import "IKSearchView.h"
 #import "LRTagsView.h"
 #import "IKSearchResultView.h"
 #import "IKJobInfoModel.h"
@@ -17,8 +16,8 @@
 {
     IKSearchResultView    *_searchResultView;
 }
-@property(nonatomic,strong)IKSearchView *searchView;
 @property(nonatomic,strong)IKScrollView *bottomScrollView;
+@property(nonatomic,strong)IKSearchView *searchView;
 
 @end
 
@@ -79,6 +78,15 @@
     }];
 
 }
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+}
+
+
+
 
 - (void)initSearchView
 {
@@ -181,7 +189,12 @@
 
 - (void)tagsCollectionViewDidSelectItemWithTitle:(nullable NSString *)title
 {
-    _searchView.searchBar.text = title;
+    [self showSearchResultViewWithSearchText:title];
+}
+
+- (void)showSearchResultViewWithSearchText:(NSString *)searchText
+{
+    _searchView.searchBar.text = searchText;
     
     [self showSearchResultView];
 }
@@ -190,6 +203,8 @@
 {
     if (_searchResultView.hidden) {
         _searchResultView.hidden = NO;
+        [_bottomScrollView removeFromSuperview];
+        _bottomScrollView = nil;
     }
     else{
         [_searchResultView reloadData];

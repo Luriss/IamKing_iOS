@@ -106,7 +106,6 @@
 - (UIView *)maskView
 {
     if (_maskView == nil) {
-        //遮盖 薪水左边的圆角
         _maskView = [[UIView alloc] init];
         _maskView.layer.backgroundColor = IKRGBColor(246.0, 101.0, 101.0).CGColor;
         _maskView.layer.cornerRadius = 10;
@@ -281,7 +280,6 @@
 {
     for (NSInteger i = 0; i < 5; i++) {
         UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5 + 14 * i, 3, 14, 14)];
-        image.backgroundColor = [UIColor clearColor];
         if (i < evaluate) {
             [image setImage:[UIImage imageNamed:@"IK_star_solid"]];
         }

@@ -22,17 +22,17 @@
 #import "IKJobInfoModel.h"
 #import "IKInfoTableViewCell.h"
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKBottomTableViewCellDelegate,IKSearchViewDelegate,IKSearchViewControllerDelegate>
+
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKSearchViewDelegate,IKSearchViewControllerDelegate,IKBottomTableViewCellDelegate,UIGestureRecognizerDelegate>
 {
     BOOL  _navRightBtnHadClick;
-    //用于判断上滑下滑
-    CGPoint beginPoint;
-    
+    BOOL isScrollToTop;
     BOOL _hadAddViewInSelf;
 }
 @property(nonatomic,strong)IKNavIconView *navLogoView;
 @property(nonatomic,strong)UIBarButtonItem *leftBarBtn;
 @property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
+@property(nonatomic,strong)IKScrollView *bottomScrollView;
 
 @property(nonatomic,strong)IKTableView *bottomTableView;
 @property (nonatomic,strong)IKTableView *jobTableView;
@@ -40,16 +40,10 @@
 @property(nonatomic,strong)IKSearchView *searchView;
 
 @property(nonatomic,assign)NSUInteger   selectedTableView;
-@property(nonatomic,strong)NSMutableArray *infoTableViewArray;
+@property(nonatomic,strong)NSMutableArray<IKTableView *> *infoTableViewArray;
 @property(nonatomic,strong)IKJobTypeView *jobTypeView;
 @property(nonatomic,strong)UISearchController *searchVc;
 @property(nonatomic,strong)IKLoopPlayView *lpView;
-
-////////////
-
-@property(nonatomic,strong)IKInfoTableView *infoTableView;
-@property (nonatomic, strong) UICollectionView *jobCollectionView;
-@property (nonatomic, weak) UICollectionViewFlowLayout *jobFlowLayout;
 
 @end
 
@@ -64,9 +58,8 @@
     
     _navRightBtnHadClick = NO;
     _hadAddViewInSelf = NO;
-//    self.automaticallyAdjustsScrollViewInsets = NO;
-//    self.view.backgroundColor = [UIColor redColor];
-    beginPoint = CGPointZero;
+    isScrollToTop = NO;
+ 
     _infoTableViewArray = [[NSMutableArray alloc] init];
     
     _model = [[IKJobInfoModel alloc] init];
@@ -84,12 +77,11 @@
     // 初始化导航栏内容
     [self initNavigationContent];
     
-    [self initJobCollectionView];
-    
     [self initLoopPlayView];
     
     [self initBottomTableView];
     
+    [self initBottomScrollView];
 //    // 职位列表
     [self initInfoTableView];
     
@@ -190,19 +182,35 @@
 
 - (void)initBottomTableView
 {
-    _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStylePlain];
+    _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64 - 49) style:UITableViewStylePlain];
     _bottomTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _bottomTableView.backgroundColor = IKGeneralLightGray;
     _bottomTableView.delegate = self;
     _bottomTableView.dataSource = self;
-    _bottomTableView.bounces = NO;
-    _bottomTableView.scrollState = IKTableViewScrollStateNormal;
+    _bottomTableView.bounces = YES;
     [self.view addSubview:_bottomTableView];
     
     [_bottomTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         
     }];
 }
+
+
+- (void)initBottomScrollView
+{
+    IKScrollView *scrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT- 64 - 50)];
+//    scrollView.backgroundColor = [UIColor redColor];
+    scrollView.pagingEnabled = YES;
+    scrollView.scrollEnabled = YES;
+    scrollView.bounces = NO;
+    scrollView.delegate = self;
+    scrollView.delaysContentTouches = NO;
+    [self.view addSubview:scrollView];
+    _bottomScrollView = scrollView;
+}
+
+
+
 
 - (void)initLoopPlayView
 {
@@ -219,43 +227,29 @@
 
 }
 
-- (void)initJobCollectionView
-{
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.minimumLineSpacing = 0;
-    flowLayout.minimumInteritemSpacing = 0;
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    flowLayout.itemSize = CGSizeMake(IKSCREEN_WIDTH, IKSCREENH_HEIGHT- 64 - 48);
-    
-    _jobFlowLayout = flowLayout;
-    
-    _jobCollectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:_jobFlowLayout];
-    _jobCollectionView.pagingEnabled = YES;
-    _jobCollectionView.scrollsToTop = NO;
-    _jobCollectionView.bounces = NO;
-    _jobCollectionView.showsHorizontalScrollIndicator = NO;
-    _jobCollectionView.showsVerticalScrollIndicator = NO;
-    [_jobCollectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"jobCollectionView"];
-    
-    _jobCollectionView.dataSource = self;
-    _jobCollectionView.delegate = self;
-}
 
 - (void)initInfoTableView
 {
+    
+    _bottomScrollView.contentSize = CGSizeMake(IKSCREEN_WIDTH * 3, IKSCREENH_HEIGHT- 64 - 80);
+    
     for (int i = 0; i < 3; i ++) {
         
-        IKTableView *tableView = [[IKTableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-        tableView.backgroundColor = [UIColor clearColor];
+        IKTableView *tableView = [[IKTableView alloc] initWithFrame:CGRectMake(i *IKSCREEN_WIDTH, 0, IKSCREEN_WIDTH, CGRectGetHeight(_bottomScrollView.frame)) style:UITableViewStylePlain];
+        tableView.tag = 1000 + i;
         tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         tableView.scrollEnabled = YES;
-        tableView.scrollState = IKTableViewScrollStateNormal;
         tableView.delegate = self;
         tableView.bounces = NO;
         tableView.dataSource = self;
         
+        [_bottomScrollView addSubview:tableView];
         [_infoTableViewArray addObject:tableView];
     }
+    
+    self.jobTableView = (IKTableView *)_infoTableViewArray.firstObject;
+    self.jobTableView.showsVerticalScrollIndicator = NO;
+
 }
 
 
@@ -309,7 +303,7 @@
             }
         }
         else{
-            return IKSCREENH_HEIGHT- 64 - 48;
+            return IKSCREENH_HEIGHT- 64 - 80;
         }
     }
     else{
@@ -326,6 +320,14 @@
         }
     }
     
+    return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (tableView != _bottomTableView) {
+        return 45;
+    }
     return 0;
 }
 
@@ -375,12 +377,11 @@
             }
         }
         else{
-            [cell addSubview:_jobCollectionView];
-            //        _jobCollectionView.frame = CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT- 64 - 48);
-            [_jobCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            [cell addSubview:_bottomScrollView];
+
+            [_bottomScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(cell);
                 make.left.and.right.and.bottom.equalTo(cell);
-                
             }];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -425,46 +426,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-//    UIViewController *vc = [[UIViewController alloc] init];
-//    vc.view.backgroundColor = [UIColor whiteColor];
-//    
-//    [self.navigationController pushViewController:vc animated:YES];
-}
-
-
-
-
-
-#pragma mark - UICollectionViewDataSource, UICollectionViewDelegate
-
-
--(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    return 1;
-}
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"jobCollectionView" forIndexPath:indexPath];
-//    cell.contentMode = UIViewContentModeScaleToFill;
-    
-    cell.contentView.backgroundColor = [UIColor whiteColor];
-
-    IKTableView *table = (IKTableView *)[self.infoTableViewArray objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:table];
-    [table mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.right.and.left.and.bottom.equalTo(cell.contentView);
-    }];
-    
-    if (indexPath.row == 0) {
-        self.selectedTableView = 1;
+    if (tableView != _bottomTableView) {
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        UIViewController *vc = [[UIViewController alloc] init];
+        vc.view.backgroundColor = [UIColor whiteColor];
+        
+        [self.navigationController pushViewController:vc animated:YES];
     }
-  
-    return cell;
+
 }
+
 
 #pragma mark - UIScrollViewDelegate
 
@@ -477,127 +448,70 @@
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidScroll = %@",scrollView);
+    // 判断是上下滑还是左右滑.
+    CGPoint point = [scrollView.panGestureRecognizer translationInView:scrollView];
+    if (fabs(point.x)<fabs(point.y)) {
+        NSLog(@"上滑");
+        // 上下滑时,禁止 scrollview 滑动.
+        _bottomScrollView.scrollEnabled = NO;
+    }
+
     
-    
-    if (scrollView == _bottomTableView) {
-        
-        NSLog(@"scrollViewDidScroll = %@",scrollView);
-
-        UICollectionViewCell *cell = [_jobCollectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:(self.selectedTableView - 1) inSection:0]];
-
-        IKTableView *tableview = (IKTableView *)cell.contentView.subviews.firstObject;
-
-        //记录手指在屏幕拖动的位置，如果是滑动手指离开屏幕之后值不会改变
-        CGPoint point = [scrollView.panGestureRecognizer translationInView:scrollView];
-        
-        if (point.y > beginPoint.y) {
-            
-            //下滑
-            if (tableview.scrollState == IKTableViewScrollStateNormal && _bottomTableView.scrollState == IKTableViewScrollStateNormal) {
-            
-            }
-            
-            
-            if (tableview.scrollState == IKTableViewScrollStateNormal && _bottomTableView.scrollState == IKTableViewScrollStateUpglide) {
-                
-                [tableview setContentOffset:CGPointZero];
-                
-                if (_bottomTableView.contentOffset.y <= 0) {
-                    _bottomTableView.scrollState = IKTableViewScrollStateNormal;
-                }
-            }
-            
-            if (tableview.scrollState == 0 && _bottomTableView.scrollState == 2) {
-                
-                [tableview setContentOffset:CGPointZero];
-                _bottomTableView.scrollState = 1;
-            }
-            
-            if (tableview.scrollState == 1 && _bottomTableView.scrollState == 2) {
-                
-                [_bottomTableView setContentOffset:CGPointMake(0, 225)];
-                
-                if (tableview.contentOffset.y <= 0) {
-                    tableview.scrollState = 0;
-                }
-                
-            }
-            
-            if (tableview.scrollState == 2 && _bottomTableView.scrollState == 2) {
-            }
-            
-        } else if (point.y < beginPoint.y){
-            //上滑
-            if (tableview.scrollState == 0 && _bottomTableView.scrollState == 0) {
-                [tableview setContentOffset:CGPointZero];
-                _bottomTableView.scrollState = 1;
-            }
-            
-            
-            if (tableview.scrollState == 0 && _bottomTableView.scrollState == 1) {
-                [tableview setContentOffset:CGPointZero];
-                
-                if (_bottomTableView.contentOffset.y >= 225) {
-                    _bottomTableView.scrollState = 2;
-                    [_bottomTableView setContentOffset:CGPointMake(0, 225)];
-                }
-            }
-            
-            if (tableview.scrollState == 0 && _bottomTableView.scrollState == 2) {
-                [_bottomTableView setContentOffset:CGPointMake(0, 225)];
-                tableview.scrollState = 1;
-            }
-            
-            if (tableview.scrollState == 1 && _bottomTableView.scrollState == 2) {
-                [_bottomTableView setContentOffset:CGPointMake(0, 225)];
-            }
-            
-            if (tableview.scrollState == 2 && _bottomTableView.scrollState == 2) {
-            }
-            
+    if (scrollView == _bottomTableView && !isScrollToTop) {
+        if (scrollView.contentOffset.y >= 222) {
+            [_bottomTableView setContentOffset:CGPointMake(0, 222)];
+            self.jobTableView.showsVerticalScrollIndicator = YES;
+            _bottomTableView.showsVerticalScrollIndicator = NO;
+            isScrollToTop = YES;
         }
-        
-        beginPoint = point;
+        else{
+            isScrollToTop = NO;
+            [self.jobTableView setContentOffset:CGPointZero];
+        }
+    }
+    
+    if (isScrollToTop && _jobTableView.contentOffset.y > 0) {
+        [_bottomTableView setContentOffset:CGPointMake(0, 225)];
+    }
+    else{
+        isScrollToTop = NO;
+        _bottomTableView.showsVerticalScrollIndicator = YES;
+        self.jobTableView.showsVerticalScrollIndicator = NO;
     }
 }
 
 
-- (void)scrollToNext:(NSInteger )index
-{
-    
-}
-
 // scrollView 开始拖动
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewWillBeginDragging");
+//    NSLog(@"scrollViewWillBeginDragging");
+    
 }
 
 // scrollView 结束拖动
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    NSLog(@"scrollViewDidEndDragging");
+//    NSLog(@"scrollViewDidEndDragging");
+
 }
 
 // scrollView 开始减速（以下两个方法注意与以上两个方法加以区别）
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewWillBeginDecelerating");
+//    NSLog(@"scrollViewWillBeginDecelerating");
 }
 
 // scrollview 减速停止
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    NSLog(@"scrollViewDidEndDecelerating");
+    _bottomScrollView.scrollEnabled = YES;
     
+    // 更改选择项
     CGFloat index = (scrollView.contentOffset.x)/IKSCREEN_WIDTH;
-    IKLog(@"index = %.0f",index);
-    if (scrollView == _jobCollectionView ) {
-        IKLog(@"index 2 = %.0f",index);
-        
+    if (scrollView == _bottomScrollView ) {
         [_jobTypeView adjustBottomLine:index];
         self.selectedTableView = index;
+        self.jobTableView = [_infoTableViewArray objectAtIndex:index];
     }
     
 }
@@ -606,27 +520,24 @@
 -(void)jobTypeViewButtonClick:(UIButton *)button
 {
     IKLog(@"button = %@",button);
-    [_jobCollectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:(button.tag-101) inSection:0] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
+
     self.selectedTableView = button.tag-100;
+    [_bottomScrollView setContentOffset:CGPointMake((self.selectedTableView-1)*IKSCREEN_WIDTH, 0) animated:YES];
 
 }
 
 - (void)searchViewStartSearch
-{
-    NSLog(@"searchViewStartSearch");
-    
-    IKSearchVC *searchvc = [IKSearchVC alloc];
-    searchvc.delegate = self;
-//    [_searchView removeFromSuperview];
-//    [searchvc.view addSubview:_searchView];
-//    [_searchView.searchBar resignFirstResponder];
-    searchvc.modalPresentationStyle = UIModalPresentationPopover;
-    searchvc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:searchvc];
-    [self presentViewController:nav animated:NO completion:^{
-        
-    }];
-    
+{    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        IKSearchVC *searchvc = [IKSearchVC alloc];
+        searchvc.delegate = self;
+        searchvc.modalPresentationStyle = UIModalPresentationPopover;
+        searchvc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:searchvc];
+        [self presentViewController:nav animated:NO completion:^{
+            
+        }];
+    });
 }
 
 - (void)searchViewControllerDismiss

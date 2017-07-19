@@ -47,6 +47,11 @@
 		2197CBB91F1E0C5F00F61562 /* IK_time_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBB31F1E0C5F00F61562 /* IK_time_blue.png */; };
 		2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CBBC1F1E2A2600F61562 /* IKChooseCityView.m */; };
 		2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CBBF1F1E3F1000F61562 /* IKSelectView.m */; };
+		2197CBC51F1EF73B00F61562 /* IK_star_hollow_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBC11F1EF73B00F61562 /* IK_star_hollow_blue.png */; };
+		2197CBC61F1EF73B00F61562 /* IK_star_hollow_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBC21F1EF73B00F61562 /* IK_star_hollow_grey.png */; };
+		2197CBC71F1EF73B00F61562 /* IK_star_solid_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBC31F1EF73B00F61562 /* IK_star_solid_blue.png */; };
+		2197CBC81F1EF73B00F61562 /* IK_star_solid_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 2197CBC41F1EF73B00F61562 /* IK_star_solid_grey.png */; };
+		2197CBCB1F1EFDDA00F61562 /* IKSelectModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2197CBCA1F1EFDDA00F61562 /* IKSelectModel.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -189,6 +194,12 @@
 		2197CBBC1F1E2A2600F61562 /* IKChooseCityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKChooseCityView.m; sourceTree = "<group>"; };
 		2197CBBE1F1E3F1000F61562 /* IKSelectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSelectView.h; sourceTree = "<group>"; };
 		2197CBBF1F1E3F1000F61562 /* IKSelectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSelectView.m; sourceTree = "<group>"; };
+		2197CBC11F1EF73B00F61562 /* IK_star_hollow_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_hollow_blue.png; sourceTree = "<group>"; };
+		2197CBC21F1EF73B00F61562 /* IK_star_hollow_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_hollow_grey.png; sourceTree = "<group>"; };
+		2197CBC31F1EF73B00F61562 /* IK_star_solid_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_solid_blue.png; sourceTree = "<group>"; };
+		2197CBC41F1EF73B00F61562 /* IK_star_solid_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_solid_grey.png; sourceTree = "<group>"; };
+		2197CBC91F1EFDDA00F61562 /* IKSelectModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSelectModel.h; sourceTree = "<group>"; };
+		2197CBCA1F1EFDDA00F61562 /* IKSelectModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSelectModel.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -650,6 +661,8 @@
 				2197CBA41F1DE63A00F61562 /* IKSearchResultView.m */,
 				2197CBBE1F1E3F1000F61562 /* IKSelectView.h */,
 				2197CBBF1F1E3F1000F61562 /* IKSelectView.m */,
+				2197CBC91F1EFDDA00F61562 /* IKSelectModel.h */,
+				2197CBCA1F1EFDDA00F61562 /* IKSelectModel.m */,
 			);
 			name = IKSearchView;
 			sourceTree = "<group>";
@@ -803,6 +816,10 @@
 		21D6231E1F1360F80054D980 /* TableViewImage */ = {
 			isa = PBXGroup;
 			children = (
+				2197CBC11F1EF73B00F61562 /* IK_star_hollow_blue.png */,
+				2197CBC21F1EF73B00F61562 /* IK_star_hollow_grey.png */,
+				2197CBC31F1EF73B00F61562 /* IK_star_solid_blue.png */,
+				2197CBC41F1EF73B00F61562 /* IK_star_solid_grey.png */,
 				21D6231F1F1360F80054D980 /* IK_applyJobAddress.png */,
 				21D623201F1360F80054D980 /* IK_education.png */,
 				21D623211F1360F80054D980 /* IK_experience.png */,
@@ -922,6 +939,7 @@
 				TargetAttributes = {
 					210B0D8B1F0DE16D003FD950 = {
 						CreatedOnToolsVersion = 8.3.2;
+						DevelopmentTeam = UP864XFV38;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -972,6 +990,7 @@
 				2197CB7E1F1C7F2700F61562 /* IK_MessageSelected@3x.png in Resources */,
 				21D623231F1360F80054D980 /* IK_education.png in Resources */,
 				21C3AE091F15D90B008FC124 /* IKProvinceCity.plist in Resources */,
+				2197CBC81F1EF73B00F61562 /* IK_star_solid_grey.png in Resources */,
 				21C3AE391F174650008FC124 /* IK_operationManage.png in Resources */,
 				21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */,
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
@@ -985,6 +1004,7 @@
 				214122271F18A8F600062A2F /* IK_classify.png in Resources */,
 				21C3AE381F174650008FC124 /* IK_cocah.png in Resources */,
 				21D623101F132B660054D980 /* IK_exchange.png in Resources */,
+				2197CBC61F1EF73B00F61562 /* IK_star_hollow_grey.png in Resources */,
 				21C3AE3B1F174650008FC124 /* IK_trainTeacher.png in Resources */,
 				21C3AE371F174650008FC124 /* IK_bulb.png in Resources */,
 				2197CBB81F1E0C5F00F61562 /* IK_store.png in Resources */,
@@ -995,11 +1015,13 @@
 				210B0DE51F0E0B56003FD950 /* IK_me@3x.png in Resources */,
 				21C3AE3F1F1746AA008FC124 /* IK_sellPerformance.png in Resources */,
 				21C3AE141F162024008FC124 /* IK_close.png in Resources */,
+				2197CBC71F1EF73B00F61562 /* IK_star_solid_blue.png in Resources */,
 				21C3AE3A1F174650008FC124 /* IK_presellProject.png in Resources */,
 				2197CBB61F1E0C5F00F61562 /* IK_star_solid.png in Resources */,
 				21C3AE1A1F171EC0008FC124 /* IK_bg.png in Resources */,
 				2197CBB71F1E0C5F00F61562 /* IK_star_hollow.png in Resources */,
 				21D623241F1360F80054D980 /* IK_experience.png in Resources */,
+				2197CBC51F1EF73B00F61562 /* IK_star_hollow_blue.png in Resources */,
 				21C3AE3E1F1746AA008FC124 /* IK_arrow.png in Resources */,
 				210B0D9C1F0DE16D003FD950 /* Assets.xcassets in Resources */,
 				2197CBA71F1DF43B00F61562 /* IK_showMore.png in Resources */,
@@ -1084,6 +1106,7 @@
 			files = (
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
 				21C3AE671F175740008FC124 /* IKTagsView.m in Sources */,
+				2197CBCB1F1EFDDA00F61562 /* IKSelectModel.m in Sources */,
 				210B0DDD1F0DFE4D003FD950 /* IKNavigationController.m in Sources */,
 				2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */,
 				21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */,
@@ -1228,7 +1251,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -1272,7 +1295,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1285,6 +1308,9 @@
 			baseConfigurationReference = 15ED64AE5718B4390C64D9A3 /* Pods-IamKing.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yujun Gu (8KMCRNEU28)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = UP864XFV38;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/IamKing/Iamking.pch";
 				HEADER_SEARCH_PATHS = (
@@ -1294,8 +1320,9 @@
 				INFOPLIST_FILE = IamKing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.luris.IamKing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.kb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -1304,6 +1331,9 @@
 			baseConfigurationReference = E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Yujun Gu (8KMCRNEU28)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEVELOPMENT_TEAM = UP864XFV38;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/IamKing/Iamking.pch";
 				HEADER_SEARCH_PATHS = (
@@ -1313,8 +1343,9 @@
 				INFOPLIST_FILE = IamKing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.luris.IamKing;
+				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.kb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

@@ -11,7 +11,7 @@
 #import "IKInfoTableViewCell.h"
 #import "IKCompanyTableViewCell.h"
 #import "IKChooseCityView.h"
-#import "IKSelectView.h"
+#import "IKSelectModel.h"
 
 
 typedef NS_ENUM(NSInteger, IKSelectedType) {
@@ -19,17 +19,6 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     IKSelectedTypeCompany,                  /** 公司 */
 };
 
-typedef NS_ENUM(NSInteger, IKSelectedSubType) {
-    IKSelectedSubTypeNone = 0,
-    IKSelectedSubTypeJobAddress,                  /** 工作地点 */
-    IKSelectedSubTypeJobCompanyType,                  /** 公司类型 */
-    IKSelectedSubTypeJobSalary,                        // 薪资待遇
-    IKSelectedSubTypeJobExperience,                     //工作经验
-    IKSelectedSubTypeCompanyType,                       //公司类型
-    IKSelectedSubTypeCompanyNumberOfStore,              // 店铺数量
-    IKSelectedSubTypeCompanyDirectlyToJoin,             // 直营加盟
-    IKSelectedSubTypeCompanyEvaluation                  // 公司评价
-};
 
 
 
@@ -54,6 +43,7 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 @property(nonatomic,strong)IKTableView *tableView;
 @property(nonatomic,assign)IKSelectedType selectedType;
 @property(nonatomic,assign)IKSelectedSubType selectedSubType;
+@property(nonatomic,strong)IKSelectModel *selectedModel;
 
 @property(nonatomic,strong)UIView *oldSelectView;
 
@@ -199,13 +189,12 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 {
     if (_tableView == nil) {
         _tableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)- 80) style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.scrollEnabled = YES;
-        _tableView.scrollState = IKTableViewScrollStateNormal;
         _tableView.delegate = self;
         _tableView.bounces = NO;
         _tableView.dataSource = self;
+        _tableView.rowHeight = 110;
     }
     return _tableView;
 }
@@ -236,7 +225,6 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 {
     if (_jobButton == nil) {
         _jobButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _jobButton.backgroundColor = [UIColor clearColor];
         [_jobButton setTitle:@"职位" forState:UIControlStateNormal];
         [_jobButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _jobButton.titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
@@ -251,7 +239,6 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 {
     if (_companyButton == nil) {
         _companyButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _companyButton.backgroundColor = [UIColor clearColor];
         [_companyButton setTitle:@"公司" forState:UIControlStateNormal];
         [_companyButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
         _companyButton.titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
@@ -392,13 +379,20 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
     return _button4;
 }
 
+-(IKSelectModel *)selectedModel
+{
+    if (_selectedModel == nil) {
+        _selectedModel = [[IKSelectModel alloc] init];
+    }
+    
+    return _selectedModel;
+}
+
 - (IKView *)createStView
 {
     IKView *stView = [[IKView alloc] init];
-    stView.backgroundColor = [UIColor clearColor];
     
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
-    imageView.backgroundColor = [UIColor clearColor];
     [imageView setImage:[UIImage imageNamed:@"IK_showMore"]];
     [stView addSubview:imageView];
     
@@ -412,7 +406,6 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 
 - (void)subTypeButtonClick:(UIButton *)button
 {
-    NSLog(@"%ld,,,,,",(long)self.selectedSubType);
     if (self.selectedType == IKSelectedTypeJob) {
         if (button == _button1) {
             if (self.selectedSubType != IKSelectedSubTypeJobAddress) {
@@ -426,8 +419,8 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         else if (button == _button2){
 
             if (self.selectedSubType != IKSelectedSubTypeJobCompanyType) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
-                [self showSelectViewWithData:data];
+//                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+                [self showSelectViewWithType:IKSelectedSubTypeJobCompanyType selectIndex:self.selectedModel.jobCompanyTypeIP];
                 self.selectedSubType = IKSelectedSubTypeJobCompanyType;
             }
             else{
@@ -436,8 +429,8 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         }
         else if (button == _button3){
             if (self.selectedSubType != IKSelectedSubTypeJobSalary) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
-                [self showSelectViewWithData:data];
+//                NSArray *data = @[@"不限",@"3~5k",@"6~8k",@"9~12k",@"13~18k",@"19~25k",@"26~30k",@"31~40k",@"41~50k",@"如果职位薪资与实际面试薪资不一致,可举报!"];
+                [self showSelectViewWithType:IKSelectedSubTypeJobSalary selectIndex:self.selectedModel.salaryIP];
                 self.selectedSubType = IKSelectedSubTypeJobSalary;
             }
             else{
@@ -446,9 +439,9 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         }
         else{
             if (self.selectedSubType != IKSelectedSubTypeJobExperience) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//                NSArray *data = @[@"不限",@"1年以下",@"1~2年",@"3~5年",@"6~8年",@"8~10年",@"10年以上"];
 
-                [self showSelectViewWithData:data];
+                [self showSelectViewWithType:IKSelectedSubTypeJobExperience selectIndex:self.selectedModel.experienceIP];
                 self.selectedSubType = IKSelectedSubTypeJobExperience;
             }
             else{
@@ -459,9 +452,9 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
     else{
         if (button == _button1) {
             if (self.selectedSubType != IKSelectedSubTypeCompanyType) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
 
-                [self showSelectViewWithData:data];
+                [self showSelectViewWithType:IKSelectedSubTypeCompanyType selectIndex:self.selectedModel.companyTypeIP];
                 self.selectedSubType = IKSelectedSubTypeCompanyType;
             }
             else{
@@ -470,9 +463,9 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         }
         else if (button == _button2){
             if (self.selectedSubType != IKSelectedSubTypeCompanyNumberOfStore) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//                NSArray *data = @[@"不限",@"1家",@"2~5家",@"6~10家",@"11~20家",@"21~35家",@"36~50家",@"51~80家",@"81~100家",@"100家以上"];
 
-                [self showSelectViewWithData:data];
+                [self showSelectViewWithType:IKSelectedSubTypeCompanyNumberOfStore selectIndex:self.selectedModel.numberOfStoreIP];
                 self.selectedSubType = IKSelectedSubTypeCompanyNumberOfStore;
             }
             else{
@@ -481,9 +474,9 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         }
         else if (button == _button3){
             if (self.selectedSubType != IKSelectedSubTypeCompanyDirectlyToJoin) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//                NSArray *data = @[@"不限",@"直营",@"加盟",@"直营+加盟"];
 
-                [self showSelectViewWithData:data];
+                [self showSelectViewWithType:IKSelectedSubTypeCompanyDirectlyToJoin selectIndex:self.selectedModel.directlyToJoinIP];
                 self.selectedSubType = IKSelectedSubTypeCompanyDirectlyToJoin;
             }
             else{
@@ -492,9 +485,9 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
         }
         else{
             if (self.selectedSubType != IKSelectedSubTypeCompanyEvaluation) {
-                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//                NSArray *data = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
 
-                [self showSelectViewWithData:data];
+                [self showSelectViewWithType:IKSelectedSubTypeCompanyEvaluation selectIndex:self.selectedModel.evaluationIP];
                 self.selectedSubType = IKSelectedSubTypeCompanyEvaluation;
             }
             else{
@@ -549,18 +542,17 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 
 - (void)chooseCityViewSelectedCity:(NSString *)city
 {
-    NSLog(@"city = %@",city);
-    
     [self resetOldSelectedView:nil];
     
 }
 
-- (void)showSelectViewWithData:(NSArray *)data
+- (void)showSelectViewWithType:(IKSelectedSubType )type selectIndex:(NSIndexPath *)indexPath
 {
     IKSelectView *select = [[IKSelectView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
     select.tag = 10002;
     select.backgroundColor = IKSeachBarBgColor;
-    select.selectData = data;
+    select.type = type;
+    select.selectedIndexPath = indexPath;
     select.delegate = self;
     select.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(select.frame));
     
@@ -576,7 +568,7 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 
 - (void)jcButtonClick:(UIButton *)button
 {
-    NSLog(@"button  = %@",button);
+
     [self resetOldSelectedView:nil];
     
     if (button == _companyButton) {
@@ -652,9 +644,44 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
     [self.tableView reloadData];
 }
 
-- (void)selectViewDidSelect:(NSString *)select
+- (void)selectViewDidSelectIndexPath:(NSIndexPath *)indexPath selectContent:(NSString *)select
 {
-    NSLog(@"select = %@",select);
+    switch (self.selectedSubType) {
+        case IKSelectedSubTypeJobAddress:
+            break;
+            
+        case IKSelectedSubTypeJobCompanyType:
+            self.selectedModel.jobCompanyTypeIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeJobSalary:
+            self.selectedModel.salaryIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeJobExperience:
+            self.selectedModel.experienceIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeCompanyType:
+            self.selectedModel.companyTypeIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeCompanyNumberOfStore:
+            self.selectedModel.numberOfStoreIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeCompanyDirectlyToJoin:
+            self.selectedModel.directlyToJoinIP = indexPath;
+            break;
+            
+        case IKSelectedSubTypeCompanyEvaluation:
+            self.selectedModel.evaluationIP = indexPath;
+            break;
+            
+        default:
+            break;
+    }
+    
     [self resetOldSelectedView:nil];
 }
 
@@ -664,12 +691,6 @@ typedef NS_ENUM(NSInteger, IKSelectedSubType) {
 {
     return 1;
 }
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 110;
-}
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

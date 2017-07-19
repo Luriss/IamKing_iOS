@@ -49,12 +49,11 @@
 - (void)initTableView
 {
     IKTableView *tableView = [[IKTableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
-    tableView.backgroundColor = [UIColor clearColor];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.scrollEnabled = NO;
-    tableView.scrollState = IKTableViewScrollStateNormal;
     tableView.delegate = self;
     tableView.dataSource = self;
+    tableView.rowHeight = 110;
     [self addSubview:tableView];
     self.tableView = tableView;
     
@@ -89,11 +88,6 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 110;
 }
 
 

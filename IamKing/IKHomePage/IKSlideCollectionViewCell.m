@@ -46,7 +46,6 @@
     if (_titleLabel == nil) {
         _titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.backgroundColor = [UIColor clearColor];
         _titleLabel.textColor = IKSubHeadTitleColor;
         _titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
     }

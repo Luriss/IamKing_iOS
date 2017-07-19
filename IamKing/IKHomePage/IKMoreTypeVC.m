@@ -12,7 +12,7 @@
 #import "IKTypeTableView.h"
 #import "IKJobTypeDetailVC.h"
 
-@interface IKMoreTypeVC ()<IKTypeTableViewDelegate>
+@interface IKMoreTypeVC ()<IKTypeTableViewDelegate,IKJobTypeDetailVCDelegate>
 {
     IKJobTypeDetailVC *_jobDeatil;
 }
@@ -92,25 +92,40 @@
 - (void)initJobTypeDetailVc
 {
     _jobDeatil = [[IKJobTypeDetailVC alloc] init];
+    _jobDeatil.delegate = self;
+}
+
+
+- (void)dismissViewController
+{
+    [self dismissSelf];
+}
+
+
+- (void)dismissSelf
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    });
 }
 
 #pragma mark -  IKSearchViewDelegate
 
 - (void)searchViewCloseButtonClick
 {
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissSelf];
 }
 
 
 - (void)searchViewSearchButtonClick
 {
-    IKSearchResultVC *searchResult = [[IKSearchResultVC alloc] init];
-    
-    [self presentViewController:searchResult animated:YES completion:^{
-        
-    }];
+//    IKSearchResultVC *searchResult = [[IKSearchResultVC alloc] init];
+//    
+//    [self presentViewController:searchResult animated:YES completion:^{
+//        
+//    }];
     
 }
 
@@ -127,9 +142,7 @@
 - (void)typeDetailViewDidSelectItemWithTitle:(NSString *)title
 {
     IKLog(@"typeDetailViewDidSelectItemWithTitle = %@",title);
-    [self dismissViewControllerAnimated:YES completion:^{
-        
-    }];
+    [self dismissSelf];
 }
 
 

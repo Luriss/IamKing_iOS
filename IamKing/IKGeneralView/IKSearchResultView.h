@@ -10,6 +10,10 @@
 #import "IKJobInfoModel.h"
 #import "IKCompanyInfoModel.h"
 
+#import "IKSelectView.h"
+
+
+
 @interface IKSearchResultView : UIView
 @property (nonatomic,strong)IKJobInfoModel *jobModel;
 @property (nonatomic,strong)IKCompanyInfoModel *companyModel;

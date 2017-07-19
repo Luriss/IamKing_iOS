@@ -82,17 +82,159 @@
 @end
 
 
+@interface IKEvaluationTableViewCell : UITableViewCell
+
+@property (nonatomic, strong)UILabel *label;
+@property (nonatomic, strong)UIView *lineView;
+@property (nonatomic, strong)UIView *maskView;
+
+- (void)setStarViewWithStarNumber:(NSInteger )starNumber highlight:(BOOL )isHighlight;
+
+
+@end
+
+@implementation IKEvaluationTableViewCell
+
+
+- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self){
+        [self initSubViews];
+    }
+    return self;
+}
+
+
+- (void)initSubViews
+{
+    [self.contentView addSubview:self.label];
+    [self.contentView addSubview:self.lineView];
+    [self.contentView addSubview:self.maskView];
+}
+
+
+
+- (UILabel *)label
+{
+    if (_label == nil) {
+        _label = [[UILabel alloc] init];
+        _label.font = [UIFont systemFontOfSize:IKMainTitleFont];
+        _label.textColor = IKSubHeadTitleColor;
+        _label.textAlignment = NSTextAlignmentLeft;
+    }
+    return _label;
+}
+
+
+- (UIView *)lineView
+{
+    if (_lineView == nil) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = IKGeneralBlue;
+        _lineView.hidden = YES;
+    }
+    return _lineView;
+}
+
+- (UIView *)maskView
+{
+    if (_maskView == nil) {
+        //遮盖 薪水左边的圆角
+        _maskView = [[UIView alloc] init];
+    }
+    return _maskView;
+}
+
+- (void)setStarViewWithStarNumber:(NSInteger )starNumber highlight:(BOOL )isHighlight
+{
+    NSArray *arr = @[@"很差",@"较差",@"一般",@"较好",@"很棒"];
+    _label.text = [arr objectAtIndex:starNumber-1];
+    
+    UIImage *solidImage = nil;
+    UIImage *hollowImage = nil;
+    if (isHighlight) {
+        solidImage = [UIImage imageNamed:@"IK_star_solid_blue"];
+        hollowImage = [UIImage imageNamed:@"IK_star_hollow_blue"];
+    }
+    else{
+        solidImage = [UIImage imageNamed:@"IK_star_solid_grey"];
+        hollowImage = [UIImage imageNamed:@"IK_star_hollow_grey"];
+    }
+    
+    [self addStarToMaskView:solidImage hollowImage:hollowImage solidImageNumber:starNumber];
+}
+
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(self.contentView);
+        make.centerX.equalTo(self.contentView).offset(0);
+        make.width.mas_equalTo(120);
+    }];
+    
+    
+    [_label mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_maskView.mas_right);
+        make.top.and.bottom.and.right.equalTo(self.contentView);
+    }];
+    
+    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.contentView).offset(-2);
+        make.centerX.equalTo(self.contentView);
+        make.height.mas_equalTo(2);
+        make.width.equalTo(self.contentView).multipliedBy(0.7);
+    }];
+}
+
+
+- (void)addStarToMaskView:(UIImage *)solidImage
+              hollowImage:(UIImage *)hollowImage
+         solidImageNumber:(NSInteger )number
+{
+    for (NSInteger i = 0; i < 5; i++) {
+        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(5 + 18 * i, 16, 18, 18)];
+
+        if (i < number) {
+            [image setImage:solidImage];
+        }
+        else{
+            [image setImage:hollowImage];
+        }
+        [_maskView addSubview:image];
+    }
+}
+
+
+
+@end
+
 
 @interface IKSelectView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong)UITableView *tableView;
-@property (nonatomic, strong)NSIndexPath *oldIndexPath;
+@property (nonatomic,copy)NSArray *selectData;
 
 
 @end
 
 @implementation IKSelectView
 
+
+- (instancetype)initWithFrame:(CGRect)frame Type:(IKSelectedSubType)type
+{
+    self = [super initWithFrame:frame];
+    
+    if (self) {
+        self.type = type;
+        [self addSubViews];
+    }
+    
+    return self;
+}
 
 - (instancetype)init
 {
@@ -119,7 +261,7 @@
 
 - (void)addSubViews
 {
-    self.oldIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+    self.selectedIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
     [self addSubview:self.tableView];
 }
 
@@ -127,11 +269,11 @@
 {
     if (_tableView == nil) {
         _tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
-        _tableView.backgroundColor = [UIColor clearColor];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.scrollEnabled = NO;
         _tableView.delegate = self;
         _tableView.dataSource = self;
+        _tableView.rowHeight = 50;
         [self addSubview:_tableView];
     }
     
@@ -146,16 +288,61 @@
 }
 
 
+- (void)setType:(IKSelectedSubType)type
+{
+    self.selectData  = nil;
+    _type = type;
+    switch (type) {
+        case IKSelectedSubTypeJobAddress:
+            break;
+            
+        case IKSelectedSubTypeJobCompanyType:
+            self.selectData = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+            break;
+            
+        case IKSelectedSubTypeJobSalary:
+            self.selectData = @[@"不限",@"3~5k",@"6~8k",@"9~12k",@"13~18k",@"19~25k",@"26~30k",@"31~40k",@"41~50k",@"如果职位薪资与实际面试薪资不一致,可举报!"];
+            break;
+            
+        case IKSelectedSubTypeJobExperience:
+            self.selectData = @[@"不限",@"1年以下",@"1~2年",@"3~5年",@"6~8年",@"8~10年",@"10年以上"];
+            break;
+            
+        case IKSelectedSubTypeCompanyType:
+            self.selectData = @[@"不限",@"俱乐部",@"工作室",@"瑜伽馆",@"教育培训",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+            break;
+            
+        case IKSelectedSubTypeCompanyNumberOfStore:
+            self.selectData = @[@"不限",@"1家",@"2~5家",@"6~10家",@"11~20家",@"21~35家",@"36~50家",@"51~80家",@"81~100家",@"100家以上"];
+            break;
+            
+        case IKSelectedSubTypeCompanyDirectlyToJoin:
+            self.selectData = @[@"不限",@"直营",@"加盟",@"直营+加盟"];
+            break;
+            
+        case IKSelectedSubTypeCompanyEvaluation:
+            self.selectData = @[@"不限",@"5",@"4",@"3",@"2",@"1"];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+- (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath
+{
+    if (selectedIndexPath) {
+        _selectedIndexPath = selectedIndexPath;
+    }
+}
+
+
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 50;
 }
 
 
@@ -166,43 +353,57 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static  NSString *cellId = @"IKSelectTableViewCellId";
-    IKSelectTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-    
-    if(cell == nil){
-        cell = [[IKSelectTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+
+    if (self.type == IKSelectedSubTypeCompanyEvaluation && indexPath.row != 0) {
+        static  NSString *cellId = @"IKSelectTableViewCellId";
+        IKEvaluationTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
+        if(cell == nil){
+            cell = [[IKEvaluationTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        }
+        
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        
+        if (indexPath == self.selectedIndexPath) {
+            cell.label.textColor = IKGeneralBlue;
+            [cell setStarViewWithStarNumber:[self.selectData[indexPath.row] integerValue] highlight:YES];
+            cell.lineView.hidden = NO;
+        }
+        else{
+            [cell setStarViewWithStarNumber:[self.selectData[indexPath.row] integerValue] highlight:NO];
+        }
+        
+        return cell;
     }
-    cell.backgroundColor = [UIColor clearColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleGray;
-    
-    cell.label.text = self.selectData[indexPath.row];
-    if (indexPath.row == 0) {
-        cell.label.textColor = IKGeneralBlue;
-        cell.lineView.hidden = NO;
+    else{
+        static  NSString *cellId = @"IKSelectTableViewCellId";
+        IKSelectTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        
+        if(cell == nil){
+            cell = [[IKSelectTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            
+        }
+        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        
+        cell.label.text = self.selectData[indexPath.row];
+        if (indexPath == self.selectedIndexPath) {
+            cell.label.textColor = IKGeneralBlue;
+            cell.lineView.hidden = NO;
+        }
+        return cell;   
     }
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    NSString *select = nil;
-    if (indexPath != self.oldIndexPath) {
-        IKSelectTableViewCell *cell = (IKSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
-        cell.label.textColor = IKGeneralBlue;
-        cell.lineView.hidden = NO;
-        select = cell.label.text;
-        
-        IKSelectTableViewCell *oldCell = (IKSelectTableViewCell *)[tableView cellForRowAtIndexPath:self.oldIndexPath];
-        oldCell.label.textColor = IKSubHeadTitleColor;
-        oldCell.lineView.hidden = YES;
-        self.oldIndexPath = indexPath;
-    }
+    IKSelectTableViewCell *cell = (IKSelectTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
+
+    NSString *select = cell.label.text;
     
-    if ([self.delegate respondsToSelector:@selector(selectViewDidSelect:)]) {
-        [self.delegate selectViewDidSelect:select];
+    if ([self.delegate respondsToSelector:@selector(selectViewDidSelectIndexPath:selectContent:)]) {
+        [self.delegate selectViewDidSelectIndexPath:indexPath selectContent:select];
     }
 }
 
