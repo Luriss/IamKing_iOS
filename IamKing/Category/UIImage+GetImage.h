@@ -12,7 +12,7 @@
 
 + (UIImage *)getImageFromFileWithImageName:(NSString *)imageName;
 
-
++ (UIImage *)imageByApplyingAlpha:(CGFloat )alpha  image:(UIImage*)image;
 
 /**
  设置圆角

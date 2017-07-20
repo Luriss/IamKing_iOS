@@ -9,7 +9,6 @@
 #import "IKJobTypeDetailVC.h"
 #import "IKSlideView.h"
 #import "IKTagsCollectionViewCell.h"
-#import "IKTagsCollectionViewFlowLayout.h"
 #import "IKSearchVC.h"
 
 @interface IKJobTypeDetailVC ()<IKSlideViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,IKSearchViewControllerDelegate>

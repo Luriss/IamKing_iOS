@@ -37,6 +37,9 @@
     
     [self initTypeTableView];
     
+    IKView *view = [[IKView alloc] initWithFrame:CGRectMake(15, 0, IKSCREEN_WIDTH - 30, 1)];
+    view.backgroundColor = IKLineColor;
+    [self.view addSubview:view];
     
 //    [self initTypeDetailView];
     
@@ -57,7 +60,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(searchViewCloseButtonClick) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
-    button.imageEdgeInsets = UIEdgeInsetsMake(12, 10, 12, 40);
+    button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
     [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
@@ -70,7 +73,7 @@
     title.text = @"职位分类";
     title.textColor = IKMainTitleColor;
     title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont systemFontOfSize:IKMainTitleFont];
+    title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     self.navigationItem.titleView = title;
 }
 

@@ -7,17 +7,21 @@
 //
 
 #import "IKSearchVC.h"
-#import "LRTagsView.h"
 #import "IKSearchResultView.h"
 #import "IKJobInfoModel.h"
+#import "IKTagsView.h"
+#import "IKImageWordView.h"
 
 
-@interface IKSearchVC ()<IKSearchViewDelegate,LRTagsViewDelegate>
+@interface IKSearchVC ()<IKSearchViewDelegate,IKTagsViewDelegate>
 {
     IKSearchResultView    *_searchResultView;
 }
-@property(nonatomic,strong)IKScrollView *bottomScrollView;
+
 @property(nonatomic,strong)IKSearchView *searchView;
+@property (nonatomic,strong)IKTagsView *tag1;
+@property (nonatomic,strong)IKTagsView *tag2;
+@property (nonatomic,strong)IKTagsView *tag3;
 
 @end
 
@@ -27,11 +31,14 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initSearchView];
-    [self initBottomScrollView];
     [self initTagsView];
-//
-    _bottomScrollView.hidden = YES;
-    _bottomScrollView.transform = CGAffineTransformMakeScale(0.1, 0.1);
+    
+    
+    UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
+
+    [self.view addGestureRecognizer:pan];
+    
+    
     
     _searchResultView = [[IKSearchResultView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
     _searchResultView.backgroundColor = [UIColor whiteColor];
@@ -55,28 +62,28 @@
 }
 
 
+- (void)pan:(UIPanGestureRecognizer *)pan
+{
+    if (_searchView.searchBar.isFirstResponder) {
+        [_searchView.searchBar resignFirstResponder];
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-
+    [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        _searchView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-//    [self startSearchViewAnimation];
-    
-    _bottomScrollView.hidden = NO;
-
-    
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _bottomScrollView.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
-    
-    }];
-
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -94,55 +101,123 @@
     _searchView.delegate = self;
     _searchView.hiddenColse = NO;
     _searchView.backgroundColor = [UIColor whiteColor];
+    _searchView.transform = CGAffineTransformMakeTranslation(0, 44);
     [_searchView.searchBar becomeFirstResponder];
     self.navigationItem.titleView = _searchView;
 
 }
 
-
-- (void)initBottomScrollView
-{
-    IKScrollView *scrollView = [[IKScrollView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 44 - 230)];
-    scrollView.backgroundColor = [UIColor whiteColor];
-    scrollView.scrollEnabled = YES;
-    [self.view addSubview:scrollView];
-    _bottomScrollView = scrollView;
-}
-
 - (void)initTagsView
 {
-    NSArray *arr = @[@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练"];
-    CGFloat x = arr.count/3;
-    LRTagsView *tags = [[LRTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 35*x)];
-    tags.title = @"热门职位";
-    tags.titleImageName = @"IK_hot";
-    tags.tagsData = arr;
-    tags.delegate = self;
-    [_bottomScrollView addSubview:tags];
-    
-    NSArray *arr2 = @[@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",];
-    CGFloat x2 = arr.count/3;
-    LRTagsView *tags2 = [[LRTagsView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(tags.frame) + 5, CGRectGetWidth(self.view.bounds), 35*x2)];
-    tags2.title = @"热门技能";
-    tags2.titleImageName = @"IK_hot";
-    tags2.tagsData = arr2;
-    tags2.delegate = self;
+    __weak typeof (self) weakSelf = self;
 
-    [_bottomScrollView addSubview:tags2];
+    
+    _tag1 = [[IKTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200)];
+    [self.view addSubview:_tag1 ];
+        
+    [_tag1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(weakSelf.view);
+        make.height.mas_equalTo(CGRectGetHeight(_tag1.frame));
+    }];
+    
+    _tag1.delegate = self;
+    _tag1.data = @[@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练",@"私人教练"];
+    _tag1.lineSpacing = 10.0;
+    _tag1.verticalSpacing = 15.0;
+    _tag1.tagHeight = 26;
+    _tag1.tagBorderWidth = 1;
+    _tag1.tagBorderColor = IKSubHeadTitleColor;
+    _tag1.tagCornerRadius = _tag1.tagHeight *0.5;
+    _tag1.tagTitleColor = IKSubHeadTitleColor;
+    _tag1.tagFont = IKSubTitleFont;
+    
+    IKImageWordView *view1 = [[IKImageWordView alloc] init];
+    view1.imageView.image = [UIImage imageNamed:@"IK_hot"];
+    view1.label.text = @"热门职位";
+    _tag1.titleView = view1;
+    
+    [_tag1 createViewAdjustViewFrame:^(CGRect newFrame) {
+        NSLog(@"newFrame = %@",[NSValue valueWithCGRect:newFrame]);
+        CGFloat height = CGRectGetHeight(newFrame);
+        [_tag1 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(weakSelf.view);
+            make.top.equalTo(weakSelf.view);
+            make.height.mas_equalTo(height);
+        }];
+    }];
+    
+    _tag2 = [[IKTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200)];
+    [self.view addSubview:_tag2 ];
+    
+    [_tag2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(_tag1.mas_bottom);
+        make.height.mas_equalTo(CGRectGetHeight(_tag2.frame));
+    }];
+    
+    //    tag.backgroundColor = [UIColor cyanColor];
+    _tag2.delegate = self;
+    _tag2.data = @[@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",@"lesmills",@"SPINNNG",];
+    _tag2.lineSpacing = 10.0;
+    _tag2.verticalSpacing = 15.0;
+    _tag2.tagHeight = 26;
+    _tag2.tagBorderWidth = 1;
+    _tag2.tagBorderColor = IKSubHeadTitleColor;
+    _tag2.tagCornerRadius = _tag2.tagHeight *0.5;
+    _tag2.tagTitleColor = IKSubHeadTitleColor;
+    _tag2.tagFont = IKSubTitleFont;
+    
+    IKImageWordView *view2 = [[IKImageWordView alloc] init];
+    view2.imageView.image = [UIImage imageNamed:@"IK_hot"];
+    view2.label.text = @"热门技能";
+    _tag2.titleView = view2;
+    
+    [_tag2 createViewAdjustViewFrame:^(CGRect newFrame) {
+        NSLog(@"newFrame = %@",[NSValue valueWithCGRect:newFrame]);
+        CGFloat height = CGRectGetHeight(newFrame);
+        [_tag2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(weakSelf.view);
+            make.top.equalTo(_tag1.mas_bottom);
+            make.height.mas_equalTo(height);
+        }];
+    }];
 
-    NSArray *arr3 = @[@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身"];
-    CGFloat x3 = arr.count/3;
-    LRTagsView *tags3 = [[LRTagsView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(tags.frame) + 10 + CGRectGetHeight(tags2.frame), CGRectGetWidth(self.view.bounds), 35*x3)];
-    tags3.title = @"热门职位";
-    tags3.titleImageName = @"IK_hot";
-    tags3.tagsData = arr3;
-    tags3.delegate = self;
-
-    [_bottomScrollView addSubview:tags3];
+    _tag3 = [[IKTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200)];
+    [self.view addSubview:_tag3 ];
     
+    [_tag3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(_tag2.mas_bottom);
+        make.height.mas_equalTo(CGRectGetHeight(_tag3.frame));
+    }];
     
-    _bottomScrollView.contentSize = CGSizeMake(IKSCREEN_WIDTH, tags3.frame.origin.y + CGRectGetHeight(tags3.frame));
+    //    tag.backgroundColor = [UIColor cyanColor];
+    _tag3.delegate = self;
+    _tag3.data = @[@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身",@"威尔士健身"];
+    _tag3.lineSpacing = 10.0;
+    _tag3.verticalSpacing = 15.0;
+    _tag3.tagHeight = 26;
+    _tag3.tagBorderWidth = 1;
+    _tag3.tagBorderColor = IKSubHeadTitleColor;
+    _tag3.tagCornerRadius = _tag3.tagHeight *0.5;
+    _tag3.tagTitleColor = IKSubHeadTitleColor;
+    _tag3.tagFont = IKSubTitleFont;
     
+    IKImageWordView *view3 = [[IKImageWordView alloc] init];
+    view3.imageView.image = [UIImage imageNamed:@"IK_hot"];
+    view3.label.text = @"热门公司";
+    _tag3.titleView = view3;
+    
+    [_tag3 createViewAdjustViewFrame:^(CGRect newFrame) {
+        NSLog(@"newFrame = %@",[NSValue valueWithCGRect:newFrame]);
+        CGFloat height = CGRectGetHeight(newFrame);
+        [_tag3 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(weakSelf.view);
+            make.top.equalTo(_tag2.mas_bottom);
+            make.height.mas_equalTo(height);
+        }];
+    }];
     
 }
 
@@ -151,15 +226,13 @@
 {
     _searchView.hidden = NO;
     
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        _searchView.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44);
-    } completion:^(BOOL finished) {
-        
-    }];
+    
 }
 
 
 #pragma mark -  IKSearchViewDelegate
+
+
 
 - (void)searchViewCloseButtonClick
 {
@@ -187,7 +260,7 @@
 }
 
 
-- (void)tagsCollectionViewDidSelectItemWithTitle:(nullable NSString *)title
+- (void)tagViewDidSelectedTagWithTitle:(NSString *)title
 {
     [self showSearchResultViewWithSearchText:title];
 }
@@ -203,8 +276,6 @@
 {
     if (_searchResultView.hidden) {
         _searchResultView.hidden = NO;
-        [_bottomScrollView removeFromSuperview];
-        _bottomScrollView = nil;
     }
     else{
         [_searchResultView reloadData];

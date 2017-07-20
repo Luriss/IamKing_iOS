@@ -20,5 +20,6 @@
 @property(nonatomic,copy)NSString     *skill2;
 @property(nonatomic,copy)NSString     *skill3;
 @property(nonatomic,copy)NSString     *introduce;
+@property(nonatomic,assign)BOOL        isAuthen;
 
 @end

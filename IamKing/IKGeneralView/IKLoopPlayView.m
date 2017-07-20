@@ -8,6 +8,8 @@
 
 #import "IKLoopPlayView.h"
 #import "UIImageView+WebCache.h"
+#import "LRPageControl.h"
+
 
 #define IKCollectionViewCellIdentifier (@"IKCollectionViewCellIdentifier")
 #define Multiple (10000)
@@ -101,7 +103,7 @@
 
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, weak) UICollectionViewFlowLayout *flowLayout;
-@property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) LRPageControl *pageControl;
 @property (nonatomic, assign) NSInteger numberOfPages;
 @property (nonatomic, weak) NSTimer *timer;
 
@@ -216,12 +218,13 @@
     return _collectionView;
 }
 
-- (UIPageControl *)pageControl
+- (LRPageControl *)pageControl
 {
     if (_pageControl == nil) {
         CGFloat width = 15 * self.numberOfPages;
-        _pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0, 0, width, 20)];
+        _pageControl = [[LRPageControl alloc]initWithFrame:CGRectMake(0, 0, width, 20)];
         _pageControl.numberOfPages = self.numberOfPages;
+        
         [self insertSubview:self.pageControl aboveSubview:self.collectionView];
         
         __weak typeof (self) weakSelf = self;
@@ -230,7 +233,7 @@
             make.width.mas_equalTo(width);
             make.height.mas_equalTo(20);
             make.centerX.equalTo(weakSelf);
-            make.bottom.equalTo(weakSelf).offset(-10);
+            make.bottom.equalTo(weakSelf);
         }];
     }
     
@@ -409,13 +412,12 @@
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     
-//    if (!_firstShow) {
-//        [self scrollToMiddlePosition];
-//        _firstShow = YES;
-//    }
+    _pageControl.currentPage = (indexPath.row % 5);
+    [self setupTimer];
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
+- (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
     
 }
 

@@ -19,6 +19,8 @@
 - (void)searchViewCloseButtonClick;
 - (void)searchViewStartSearch;
 - (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar;
+
+
 @end
 
 @interface IKSearchView : IKView

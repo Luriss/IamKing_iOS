@@ -15,6 +15,7 @@
 @interface IKInfoTableViewCell ()
 
 @property(nonatomic,strong)UIImageView *logoImageView;
+@property(nonatomic,strong)UIImageView *authImageView;
 @property(nonatomic,strong)UILabel     *titleLabel;
 @property(nonatomic,strong)UILabel     *salaryLabel;
 @property(nonatomic,strong)IKImageWordView     *addressView;
@@ -51,6 +52,7 @@
 - (void)initSubViews
 {
     [self.contentView addSubview:self.logoImageView];
+    [self.contentView insertSubview:self.authImageView aboveSubview:self.logoImageView];
     [self.contentView addSubview:self.titleLabel];
     [self.contentView addSubview:self.salaryLabel];
     [self.contentView addSubview:self.addressView];
@@ -77,6 +79,18 @@
     return _logoImageView;
 }
 
+
+- (UIImageView *)authImageView
+{
+    if (_authImageView == nil) {
+        _authImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 36, 36)];
+        _authImageView.contentMode = UIViewContentModeScaleToFill;
+        _authImageView.hidden = YES;
+        _authImageView.image = [UIImage imageNamed:@"IK_authen"];
+    }
+    
+    return _authImageView;
+}
 
 - (UILabel *)titleLabel
 {
@@ -109,6 +123,7 @@
     if (_addressView == nil) {
         // 地点
         _addressView = [[IKImageWordView alloc] init];
+        [_addressView.imageView setImage:[UIImage imageNamed:@"IK_applyJobAddress"]];
     }
     return _addressView;
 }
@@ -118,6 +133,7 @@
     if (_experienceView == nil) {
         // 工作经验
         _experienceView = [[IKImageWordView alloc] init];
+        [_experienceView.imageView setImage:[UIImage imageNamed:@"IK_experience"]];
     }
     return _experienceView;
 }
@@ -128,6 +144,7 @@
     if (_educationView == nil) {
         // 学历
         _educationView = [[IKImageWordView alloc] init];
+        [_educationView.imageView setImage:[UIImage imageNamed:@"IK_education"]];
     }
     return _educationView;
 }
@@ -193,6 +210,7 @@
     label.layer.borderColor = IKGeneralBlue.CGColor;
     label.layer.borderWidth = 0.5;
     label.layer.cornerRadius = 10;
+    label.hidden = YES;
     return label;
 }
 
@@ -208,6 +226,12 @@
         make.width.and.height.mas_equalTo(weakSelf.bounds.size.height - 10);
     }];
     
+    
+    [_authImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.left.equalTo(_logoImageView);
+        make.width.and.height.mas_equalTo(36);
+    }];
+    
     [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(8);
         make.right.equalTo(weakSelf).offset(10);
@@ -220,6 +244,46 @@
         make.left.equalTo(_logoImageView.mas_right).offset(9);
         make.height.mas_equalTo(20);
         make.right.equalTo(_salaryLabel.mas_left);
+    }];
+    
+    
+    [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_titleLabel.mas_bottom).offset(1);
+        make.left.equalTo(_titleLabel);
+//        make.width.mas_equalTo(70);
+        make.height.mas_equalTo(20);
+    }];
+    
+    
+    [_experienceView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_addressView);
+//        make.width.mas_equalTo(70);
+        make.left.equalTo(_addressView.mas_right).offset(2);
+    }];
+    
+    [_educationView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_addressView);
+//        make.width.mas_equalTo(70);
+        make.left.equalTo(_experienceView.mas_right).offset(2);
+    }];
+    
+    [_skillLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_addressView.mas_bottom).offset(1);
+        make.left.and.height.equalTo(_addressView);
+//        make.width.mas_equalTo(70);
+    }];
+    
+    
+    [_skillLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_skillLabel1);
+        make.left.equalTo(_skillLabel1.mas_right).offset(5);
+//        make.width.mas_equalTo(70);
+    }];
+    
+    [_skillLabel3 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_skillLabel1);
+        make.left.equalTo(_skillLabel2.mas_right).offset(5);
+//        make.width.mas_equalTo(70);
     }];
     
     [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -262,77 +326,84 @@
 {
     [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:5.0];
 
+    self.authImageView.hidden = !model.isAuthen;
+    
     self.titleLabel.text = model.title;
     self.salaryLabel.text = model.salary;
     
-    [self.addressView.imageView setImage:[UIImage imageNamed:@"IK_applyJobAddress"]];
     self.addressView.label.text = model.address;
     
-    [self.educationView.imageView setImage:[UIImage imageNamed:@"IK_education"]];
-    self.educationView.label.text = model.education;
+    CGFloat addressWidth = [self getStringWdith:_addressView.label.text fontSize:IKSubTitleFont];
     
-    [self.experienceView.imageView setImage:[UIImage imageNamed:@"IK_experience"]];
-    self.experienceView.label.text = model.experience;
-    self.skillLabel1.text = model.skill1;
-    self.skillLabel2.text = model.skill2;
-    self.skillLabel3.text = model.skill3;
-    self.introduceLabel.text = model.introduce;
-    
-    [self updateSkillLabelFrame];
-
-}
-
-
-- (void)updateSkillLabelFrame
-{
-//    CGFloat addresswidth = [self getSkillLabelWdith:self.skillLabel1.text size:CGSizeMake(MAXFLOAT, 20)];
-
-    [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_addressView mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_titleLabel.mas_bottom).offset(1);
         make.left.equalTo(_titleLabel);
-        make.width.mas_equalTo(70);
+        make.width.mas_equalTo(addressWidth + 20);
         make.height.mas_equalTo(20);
     }];
     
-    [_experienceView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.width.and.height.equalTo(_addressView);
+    
+    
+    self.experienceView.label.text = model.experience;
+    CGFloat experienceWidth = [self getStringWdith:_experienceView.label.text fontSize:IKSubTitleFont];
+    
+    [_experienceView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_addressView);
+        make.width.mas_equalTo(experienceWidth + 20);
         make.left.equalTo(_addressView.mas_right).offset(2);
     }];
     
-    [_educationView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.width.and.height.equalTo(_addressView);
+    self.educationView.label.text = model.education;
+
+    CGFloat educationWidth = [self getStringWdith:_educationView.label.text fontSize:IKSubTitleFont];
+    
+    [_educationView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.height.equalTo(_addressView);
+        make.width.mas_equalTo(educationWidth + 20);
         make.left.equalTo(_experienceView.mas_right).offset(2);
     }];
     
-    CGFloat width1 = [self getSkillLabelWdith:self.skillLabel1.text size:CGSizeMake(MAXFLOAT, 20)];
+    if (IKStringIsNotEmpty(model.skill1)) {
+        self.skillLabel1.hidden = NO;
+        self.skillLabel1.text = model.skill1;
+        
+        CGFloat width1 = [self getStringWdith:self.skillLabel1.text fontSize:12.0f];
+        [_skillLabel1 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_addressView.mas_bottom).offset(1);
+            make.left.and.height.equalTo(_addressView);
+            make.width.mas_equalTo(width1);
+        }];
+    }
     
-    [_skillLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_addressView.mas_bottom).offset(1);
-        make.left.and.height.equalTo(_addressView);
-        make.width.mas_equalTo(width1);
-    }];
+    if (IKStringIsNotEmpty(model.skill2)) {
+        self.skillLabel2.hidden = NO;
+        _skillLabel2.text = model.skill2;
+        CGFloat width2 = [self getStringWdith:self.skillLabel2.text fontSize:12.0f];
+        [_skillLabel2 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.height.equalTo(_skillLabel1);
+            make.left.equalTo(_skillLabel1.mas_right).offset(5);
+            make.width.mas_equalTo(width2);
+        }];
+    }
     
-    CGFloat width2 = [self getSkillLabelWdith:self.skillLabel2.text size:CGSizeMake(MAXFLOAT, 20)];
-
-    [_skillLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.height.equalTo(_skillLabel1);
-        make.left.equalTo(_skillLabel1.mas_right).offset(5);
-        make.width.mas_equalTo(width2);
-    }];
-    
-    CGFloat width3 = [self getSkillLabelWdith:self.skillLabel3.text size:CGSizeMake(MAXFLOAT, 20)];
-
-    [_skillLabel3 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.height.equalTo(_skillLabel1);
-        make.left.equalTo(_skillLabel2.mas_right).offset(5);
-        make.width.mas_equalTo(width3);
-    }];
+    if (IKStringIsNotEmpty(model.skill3)) {
+        self.skillLabel3.hidden = NO;
+        self.skillLabel3.text = model.skill3;
+        CGFloat width3 = [self getStringWdith:self.skillLabel3.text fontSize:12.0f];
+        [_skillLabel3 mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.top.and.height.equalTo(_skillLabel1);
+            make.left.equalTo(_skillLabel2.mas_right).offset(5);
+            make.width.mas_equalTo(width3);
+        }];
+    }
+    self.introduceLabel.text = model.introduce;
 }
 
-- (CGFloat )getSkillLabelWdith:(NSString *)string size:(CGSize )inSize
+
+- (CGFloat )getStringWdith:(NSString *)string fontSize:(CGFloat )fontSize
 {
-    NSDictionary *attribute = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:12.0f]};
-    CGSize size = [NSString getSizeWithString:string size:inSize attribute:attribute];
+    NSDictionary *attribute = @{NSFontAttributeName : [UIFont boldSystemFontOfSize:fontSize]};
+    CGSize size = [NSString getSizeWithString:string size:CGSizeMake(MAXFLOAT, 20) attribute:attribute];
     
     if (size.width > IKSikllLabelWidth) {
         return IKSikllLabelWidth;

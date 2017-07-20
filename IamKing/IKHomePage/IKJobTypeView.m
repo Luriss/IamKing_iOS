@@ -76,10 +76,10 @@
     __weak typeof (self) weakSelf = self;
 
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf).offset(-12);
+        make.bottom.equalTo(weakSelf).offset(-9);
         make.centerX.equalTo(_oldButton);
         make.height.mas_equalTo(3);
-        make.width.mas_equalTo(55);
+        make.width.mas_equalTo(51);
     }];
 }
 
@@ -92,6 +92,7 @@
 {
     if (_bottomLine == nil) {
         _bottomLine = [[UIView alloc] init];
+        _bottomLine.layer.cornerRadius = 1.5;
         _bottomLine.backgroundColor = IKGeneralBlue;
     }
     return _bottomLine;

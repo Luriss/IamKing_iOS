@@ -93,6 +93,7 @@
         // 头像
         _arrowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         _arrowView.contentMode = UIViewContentModeScaleToFill;
+//        _arrowView.transform = 
 //        _arrowView.backgroundColor = [UIColor redColor];
     }
     return _arrowView;
@@ -138,8 +139,9 @@
     
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(weakSelf.contentView).offset(1);
-        make.left.and.right.equalTo(weakSelf.contentView);
-        make.height.mas_equalTo(0.5);
+        make.left.equalTo(weakSelf.contentView).offset(15);
+        make.right.equalTo(weakSelf.contentView).offset(-15);
+        make.height.mas_equalTo(1);
     }];
 }
 

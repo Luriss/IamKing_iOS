@@ -7,20 +7,19 @@
 //
 
 #import "IKChooseCityVC.h"
-#import "IKTagsView.h"
-#import "IKTagsCollectionViewFlowLayout.h"
 #import "IKTagsCollectionViewCell.h"
 #import "IKChooseCityView.h"
+#import "IKTagsView.h"
+
 
 static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
 static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
-@interface IKChooseCityVC ()<IKTagsViewDelegate,UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,IKChooseCityViewDelegate>
+@interface IKChooseCityVC ()<IKChooseCityViewDelegate,IKTagsViewDelegate>
 
 @property (nonatomic, strong)IKView *locationInfoView;
-@property (nonatomic,strong) UICollectionView *collectionView;
-@property (nonatomic,strong) IKTagsCollectionViewFlowLayout *layout;//布局layout
 @property (nonatomic,strong) IKChooseCityView *chooseCity;
+@property (nonatomic,strong) IKTagsView *tag;
 
 @property (nonatomic,   copy)NSDictionary *baseDict;
 
@@ -33,9 +32,11 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initNavView];
-    [self initHotCityView];
-    [self addSubViews];
     [self plistData];
+
+//    [self initHotCityView];
+    [self addSubViews];
+
     // Do any additional setup after loading the view.
 }
 
@@ -53,6 +54,44 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 {
     [super viewWillDisappear:animated];
 }
+
+- (void)initTagsView
+{
+    _tag = [[IKTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200)];
+    [self.view addSubview:_tag ];
+
+    __weak typeof (self) weakSelf = self;
+
+    [_tag mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(weakSelf.view);
+        make.top.equalTo(_locationInfoView.mas_bottom);
+        make.height.mas_equalTo(CGRectGetHeight(_tag.frame));
+    }];
+    
+//    tag.backgroundColor = [UIColor cyanColor];
+    _tag.delegate = self;
+    _tag.data = @[@"杭州",@"上海"];
+    _tag.lineSpacing = 20.0;
+    _tag.verticalSpacing = 15.0;
+    _tag.tagHeight = 26;
+    _tag.title = @"热门城市";
+    _tag.titleColor = IKMainTitleColor;
+    _tag.tagBorderWidth = 1;
+    _tag.tagBorderColor = IKSubHeadTitleColor;
+    _tag.tagCornerRadius = _tag.tagHeight *0.5;
+    _tag.tagTitleColor = IKSubHeadTitleColor;
+    _tag.tagFont = IKSubTitleFont;
+
+    [_tag createViewAdjustViewFrame:^(CGRect newFrame) {
+        NSLog(@"newFrame = %@",[NSValue valueWithCGRect:newFrame]);
+        [_tag mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.and.right.equalTo(weakSelf.view);
+            make.top.equalTo(_locationInfoView.mas_bottom);
+            make.height.mas_equalTo(CGRectGetHeight(newFrame));
+        }];
+    }];
+}
+
 
 
 - (void)plistData
@@ -93,43 +132,13 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 }
 
 
-- (void)initHotCityView
-{
-    
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200) collectionViewLayout:self.layout];
-    
-    _collectionView.delegate = self;
-    _collectionView.dataSource = self;
-    _collectionView.backgroundColor = [UIColor whiteColor];
-    _collectionView.showsVerticalScrollIndicator = NO;
-    _collectionView.showsHorizontalScrollIndicator = NO;
-    
-    [_collectionView registerClass:[IKTagsCollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    _collectionView.contentInset = UIEdgeInsetsMake(30, 0, 0, 0);
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(_collectionView.center.x - 100, -25, 200, 30)];
-    //        label.backgroundColor = [UIColor redColor];
-    label.text = @"热门城市";
-    label.textColor = IKMainTitleColor;
-    label.font = [UIFont systemFontOfSize:IKSubTitleFont];
-    label.textAlignment = NSTextAlignmentCenter;
-    [_collectionView addSubview:label];
-    
-    
-    [self.view addSubview:_collectionView];
-}
-
-
-- (void)initChooseCityView
-{
-}
-
 - (void)addSubViews
 {
     // 定位信息 view.
     [self.view addSubview:self.locationInfoView];
     
+    [self initTagsView];
+
     _chooseCity = [[IKChooseCityView alloc] init];
     _chooseCity.delegate = self;
     [self.view addSubview:_chooseCity];
@@ -142,20 +151,12 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
         make.height.mas_equalTo(80);
     }];
     
-}
-#pragma mark - Property Get
-
-- (IKTagsCollectionViewFlowLayout *)layout
-{
-    if (_layout == nil) {
-        _layout = [[IKTagsCollectionViewFlowLayout alloc] init];
-        _layout.itemSize = CGSizeMake(80.0f, 24.0f);
-        _layout.minimumInteritemSpacing = 25.0f;
-        _layout.minimumLineSpacing = 20.0f;
-        _layout.sectionInset = UIEdgeInsetsMake(10.0f, 10.0f, 10.0f, 10.0f);
-    }
+    [_chooseCity mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_tag.mas_bottom);
+        make.left.and.right.and.bottom.equalTo(weakSelf.view);
+    }];
     
-    return _layout;
+
 }
 
 
@@ -183,12 +184,13 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(locationButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
     [button setTitle:@"杭州" forState:UIControlStateNormal];
     button.layer.cornerRadius = 15;
     button.layer.borderColor = IKGeneralBlue.CGColor;
     button.layer.borderWidth = 1;
+    [button setBackgroundImage:[UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 30)] forState:UIControlStateHighlighted];
     [_locationInfoView addSubview:button];
     
     UIView *view = [[UIView alloc] init];
@@ -221,16 +223,21 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 - (void)layoutCustomView
 {
-    __weak typeof (self) weakSelf = self;
 
-    [_collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+}
+
+- (void)relayoutCustomView
+{
+    __weak typeof (self) weakSelf = self;
+    
+    [_tag mas_remakeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
         make.top.equalTo(_locationInfoView.mas_bottom);
-        make.height.mas_equalTo(210);
+        make.height.mas_equalTo(CGRectGetHeight(_tag.frame));
     }];
     
-    [_chooseCity mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_collectionView.mas_bottom);
+    [_chooseCity mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_tag.mas_bottom);
         make.left.and.right.and.bottom.equalTo(weakSelf.view);
     }];
 }
@@ -243,71 +250,11 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [self dismissSelfWithCity:city];
 }
 
-
-#pragma mark - UICollectionViewDelegate, UICollectionViewDataSource
-
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+- (void)tagViewDidSelectedTagWithTitle:(NSString *)title
 {
-    return 1;
+    NSLog(@"tagViewDidSelectedTagWithTitle = %@",title);
+    [self dismissSelfWithCity:title];
 }
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    return self.cityData.count;
-}
-
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    IKTagsCollectionViewFlowLayout *layout = (IKTagsCollectionViewFlowLayout *)collectionView.collectionViewLayout;
-    
-    // item 能显示的最大宽度 ,collectionView的宽度 - section 的偏移 left right.
-    CGSize maxSize = CGSizeMake(collectionView.frame.size.width - layout.sectionInset.left - layout.sectionInset.right, layout.itemSize.height);
-    
-    // 根据文字计算尺寸.
-    CGRect frame = [self.cityData[indexPath.item] boundingRectWithSize:maxSize options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:IKSubTitleFont]} context:nil];
-    
-    // item 默认的最小宽度为 80;
-    CGFloat width = frame.size.width + 20;
-    if (width < 70) {
-        width = 70;
-    }
-    
-    // 超过最大宽度显示为最大宽度
-    if (width > maxSize.width) {
-        width = maxSize.width;
-    }
-    
-    return CGSizeMake(width, layout.itemSize.height);
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    IKTagsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
-    cell.titleLabel.textColor = [UIColor blackColor];
-    
-    NSString *title = self.cityData[indexPath.item];
-    cell.titleLabel.text = title;
-    
-//    if (indexPath.row == 1) {
-//        cell.highlightLabel = YES;
-//    }
-    return cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
-    
-    IKTagsCollectionViewCell *cell = (IKTagsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
-    
-    NSString *title = cell.titleLabel.text;
-    [self dismissSelf];
-    
-    if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
-        [self.delegate locationVcDismissChangeNavButtonTitle:title];
-    }
-}
-
 
 #pragma mark - BottomView
 

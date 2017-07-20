@@ -27,7 +27,7 @@
     [self setBackgroundImage:[UIImage imageNamed:@"IK_bg_white"]];
     // 取消放大镜
     [self setImage:[[UIImage imageNamed:@"IK_search"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, -5, -5) resizingMode:UIImageResizingModeStretch] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
-    
+ 
     UITextField *searchField = [self valueForKey:@"searchField"];
     
     // 修改搜索框,样式
@@ -35,7 +35,8 @@
         [searchField setBackgroundColor:IKSeachBarBgColor];
         searchField.layer.cornerRadius = 16.0f;
         searchField.layer.masksToBounds = YES;
-        
+        searchField.textColor= IKMainTitleColor;
+
         NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSForegroundColorAttributeName:IKPlaceHolderColor};
         NSAttributedString *placeHolder = [[NSAttributedString alloc] initWithString:@" 搜索职位/公司/技能" attributes:attribute];
         searchField.attributedPlaceholder = placeHolder;

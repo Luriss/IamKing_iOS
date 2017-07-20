@@ -18,8 +18,7 @@
 @property (nonatomic, strong)UITableView *provinceTableView;
 @property (nonatomic, strong)UITableView *cityTableView;
 
-@property (nonatomic,copy)NSArray *provinceData;
-@property (nonatomic,copy)NSArray *cityData;
+
 @property (nonatomic,   copy)NSDictionary *baseDict;
 @property (nonatomic,   copy)NSString    *selectProvince;
 @property (nonatomic,   copy)NSString    *selectCity;
@@ -175,15 +174,20 @@
             cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.backgroundColor = [UIColor clearColor];
         
         NSString *provinceStr = [self.provinceData objectAtIndex:indexPath.row];
         cell.tLabel.text = provinceStr;
         
         if ([provinceStr isEqualToString:self.selectProvince]) {
             cell.tLabel.textColor = IKGeneralBlue;
+            cell.lineView.hidden = NO;
+
         }
         else{
             cell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
+            cell.lineView.hidden = YES;
+
         }
         return cell;
     }
@@ -195,7 +199,7 @@
             cell=[[IKLocationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        cell.backgroundColor = [UIColor clearColor];
         NSString *cityStr = [self.cityData objectAtIndex:indexPath.row];
         cell.tLabel.text = cityStr;
         

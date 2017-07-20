@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong)UIButton *closeBtn;
 @property (nonatomic, assign)BOOL hadAddCloseBtn;
+@property (nonatomic, strong)UITextField *textfield;
 
 
 @end
