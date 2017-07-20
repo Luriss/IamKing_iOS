@@ -108,7 +108,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         else{
             model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg";
             model.isAuthen = NO;
-            model.title = @"高级营销总监";
+            model.title = @"高级营销总监高级营销总监高级营销总监高级营销总监";
             model.salary = @"13~18k";
             model.address = @"杭州";
             model.experience = @"6~8年";

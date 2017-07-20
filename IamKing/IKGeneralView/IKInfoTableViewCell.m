@@ -98,7 +98,7 @@
         // 标题
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.textAlignment = NSTextAlignmentLeft;
-        _titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
+        _titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _titleLabel.textColor = IKMainTitleColor;
     }
     return _titleLabel;
@@ -184,8 +184,8 @@
         //介绍
         _introduceLabel = [[UILabel alloc] init];
         _introduceLabel.textAlignment = NSTextAlignmentCenter;
-        _introduceLabel.font = [UIFont boldSystemFontOfSize:11.0f];
-        _introduceLabel.textColor = IKRGBColor(164.0, 164.0, 164.0);
+        _introduceLabel.font = [UIFont systemFontOfSize:11.0f];
+        _introduceLabel.textColor = IKSubHeadTitleColor;
         _introduceLabel.numberOfLines = 0;
     }
     return _introduceLabel;
@@ -205,7 +205,7 @@
     // 技能1
     UILabel *label = [[UILabel alloc] init];
     label.textAlignment = NSTextAlignmentCenter;
-    label.font = [UIFont boldSystemFontOfSize:12.0f];
+    label.font = [UIFont systemFontOfSize:10.0f];
     label.textColor = IKGeneralBlue;
     label.layer.borderColor = IKGeneralBlue.CGColor;
     label.layer.borderWidth = 0.5;
@@ -268,7 +268,7 @@
     }];
     
     [_skillLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_addressView.mas_bottom).offset(1);
+        make.top.equalTo(_addressView.mas_bottom).offset(3);
         make.left.and.height.equalTo(_addressView);
 //        make.width.mas_equalTo(70);
     }];

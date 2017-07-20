@@ -34,7 +34,7 @@
     UIImageView *imageV = [[UIImageView alloc] init];
     
     UILabel *label = [[UILabel alloc] init];
-    label.font = [UIFont boldSystemFontOfSize:12.0];
+    label.font = [UIFont systemFontOfSize:12.0];
     label.textAlignment = NSTextAlignmentLeft;
     label.textColor = IKSubHeadTitleColor;
 
@@ -52,14 +52,14 @@
 
     [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(weakSelf);
-        make.top.equalTo(weakSelf).offset(2);
-        make.bottom.equalTo(weakSelf).offset(-2);
-        make.width.mas_equalTo(CGRectGetHeight(weakSelf.bounds)-4);
+        make.top.equalTo(weakSelf).offset(4);
+        make.bottom.equalTo(weakSelf).offset(-4);
+        make.width.mas_equalTo(CGRectGetHeight(weakSelf.bounds)-8);
     }];
     
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.and.right.and.bottom.equalTo(weakSelf);
-        make.left.equalTo(_imageView.mas_right).offset(4);
+        make.left.equalTo(_imageView.mas_right).offset(3);
     }];
 }
 
