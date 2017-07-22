@@ -70,10 +70,10 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     
 //    tag.backgroundColor = [UIColor cyanColor];
     _tag.delegate = self;
-    _tag.data = @[@"杭州",@"上海"];
-    _tag.lineSpacing = 20.0;
-    _tag.verticalSpacing = 15.0;
-    _tag.tagHeight = 26;
+    _tag.data = @[@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海"];
+    _tag.lineSpacing = 23.0;
+    _tag.verticalSpacing = 20;
+    _tag.tagHeight = 25;
     _tag.title = @"热门城市";
     _tag.titleColor = IKMainTitleColor;
     _tag.tagBorderWidth = 1;
@@ -107,12 +107,14 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 - (void)initNavView
 {
-    // 分类
+    // 返回
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 0, 60, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 44);
     [button setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_close"] forState:UIControlStateHighlighted];
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
     
     
@@ -121,7 +123,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     title.text = @"城市切换";
     title.textColor = IKMainTitleColor;
     title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont systemFontOfSize:IKMainTitleFont];
+    title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     
     self.navigationItem.titleView = title;
     
@@ -148,7 +150,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
         make.top.equalTo(weakSelf.view).offset(1);
-        make.height.mas_equalTo(80);
+        make.height.mas_equalTo(0.137*IKSCREENH_HEIGHT);
     }];
     
     [_chooseCity mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -186,11 +188,13 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [button addTarget:self action:@selector(locationButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    [button setTitle:@"杭州" forState:UIControlStateNormal];
-    button.layer.cornerRadius = 15;
+    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
+
+    button.layer.cornerRadius = 0.038*IKSCREENH_HEIGHT*0.5;
+    button.layer.masksToBounds = YES;
     button.layer.borderColor = IKGeneralBlue.CGColor;
     button.layer.borderWidth = 1;
-    [button setBackgroundImage:[UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 30)] forState:UIControlStateHighlighted];
+    [button setBackgroundImage:IKButtonClickBgImage forState:UIControlStateHighlighted];
     [_locationInfoView addSubview:button];
     
     UIView *view = [[UIView alloc] init];
@@ -198,16 +202,18 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [_locationInfoView addSubview:view];
     
     [tipLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_locationInfoView).offset(8);
+        make.top.equalTo(_locationInfoView).offset(0.024*IKSCREENH_HEIGHT);
         make.left.and.right.equalTo(_locationInfoView);
-        make.height.mas_equalTo(30);
+        make.height.mas_equalTo(0.023*IKSCREENH_HEIGHT);
     }];
     
+    CGSize stringSize = [NSString getSizeWithString:@"乌鲁木齐" size:CGSizeMake(IKSCREEN_WIDTH,0.038*IKSCREENH_HEIGHT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0f]}];
+
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_locationInfoView);
-        make.bottom.equalTo(_locationInfoView).offset(-10);
-        make.height.mas_equalTo(30);
-        make.width.mas_offset(80);
+        make.bottom.equalTo(_locationInfoView).offset(-20);
+        make.height.mas_equalTo(0.038*IKSCREENH_HEIGHT);
+        make.width.mas_offset(stringSize.width + 30);
     }];
     
     

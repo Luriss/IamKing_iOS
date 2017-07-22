@@ -62,6 +62,8 @@
     button.frame = CGRectMake(0, 00, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
     [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 

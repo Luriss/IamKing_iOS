@@ -8,10 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
+// 请求数据接口
+typedef void(^IKRequestDictData)(NSDictionary *dict,BOOL success);
+
+typedef void(^IKRequestArrayData)(NSArray *dataArray,BOOL success);
 
 
+//
+typedef void(^IKGetCacheData)(NSDictionary *data,BOOL success);
 
-
+typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 
 @interface IKNetworkManager : NSObject
@@ -19,5 +25,8 @@
 +(instancetype)shareInstance;
 
 
+- (void)getHomePageLoopPlayImageData:(IKRequestDictData)requestData;
+
+- (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData;
 
 @end

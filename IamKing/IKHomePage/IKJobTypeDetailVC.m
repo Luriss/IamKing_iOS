@@ -53,8 +53,10 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
-    button.imageEdgeInsets = UIEdgeInsetsMake(12, 10, 12, 40);
+    button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
     [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
 }
 
@@ -66,7 +68,7 @@
     title.text = @"健身教练";
     title.textColor = IKMainTitleColor;
     title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont systemFontOfSize:IKMainTitleFont];
+    title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     self.navigationItem.titleView = title;
 }
 
@@ -85,7 +87,7 @@
 
 - (void)initTypeClassify
 {
-    _slideView = [[IKSlideView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), 50)];
+    _slideView = [[IKSlideView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 50)];
     _slideView.backgroundColor = IKGeneralLightGray;
     _slideView.data = @[@"私人教练",@"团课教练"];
     _slideView.delegate = self;
@@ -103,7 +105,7 @@
     layout.minimumLineSpacing = 20.0f; //行间距
     layout.sectionInset = UIEdgeInsetsMake(20.0f, 20.0f, 20.0f, 20.0f);
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 115, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-115) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-115) collectionViewLayout:layout];
     _collectionView.tag = 101;
     _collectionView.bounces = YES;
     _collectionView.showsHorizontalScrollIndicator = NO;

@@ -122,6 +122,8 @@
 //        [_closeBtn setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
         [_closeBtn setTitle:@"取消 " forState:UIControlStateNormal];
         [_closeBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+        [_closeBtn setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:IKDefaultAlpha] forState:UIControlStateHighlighted];
+
         _closeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
         [_closeBtn addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
         _closeBtn.hidden = YES;

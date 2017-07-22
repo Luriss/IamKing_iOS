@@ -31,14 +31,18 @@
 #define IKGeneralBlue (IKColorFromRGB(0x40c4ff))
 
 #define IKGeneralLightGray (IKColorFromRGB(0xf2f2f5))
-#define IKGeneralWhite (IKColorFromRGB(0xfffff))
+#define IKGeneralWhite (IKColorFromRGB(0xffffff))
+#define IKGeneralRed (IKColorFromRGB(0xff0000))
+
 #define IKMainTitleColor   (IKColorFromRGB(0x707070))
 #define IKSubHeadTitleColor   (IKColorFromRGB(0xaaaaaa))
 #define IKPlaceHolderColor (IKColorFromRGB(0xbabac0))
 #define IKSeachBarBgColor (IKColorFromRGB(0xeeeeee))
 
 #define IKLineColor (IKColorFromRGB(0xf2f2f5))
+#define IKDefaultAlpha (0.8f)
 
+#define IKButtonClickBgImage ([UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 30)])
 /***********************************Color********************************************/
 
 

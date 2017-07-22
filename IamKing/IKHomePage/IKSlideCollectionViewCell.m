@@ -59,6 +59,7 @@
     if (_lineView == nil) {
         _lineView = [[UIView alloc] init];
         _lineView.backgroundColor = IKGeneralBlue;
+        _lineView.layer.cornerRadius = 1.5;
         _lineView.hidden = YES;
     }
     return _lineView;

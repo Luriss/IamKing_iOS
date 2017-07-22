@@ -45,6 +45,8 @@
     [self.contentView addSubview:self.introduceLabel];
     [self.contentView addSubview:self.arrowView];
     [self.contentView addSubview:self.bottomLine];
+    
+    self.arrowView.transform = CGAffineTransformMakeRotation(M_PI);
 }
 
 
@@ -94,7 +96,7 @@
         _arrowView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
         _arrowView.contentMode = UIViewContentModeScaleToFill;
 //        _arrowView.transform = 
-//        _arrowView.backgroundColor = [UIColor redColor];
+        [_arrowView setImage:[UIImage imageNamed:@"IK_back"]];
     }
     return _arrowView;
 }
@@ -113,7 +115,7 @@
     __weak typeof (self) weakSelf = self;
 
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.contentView).offset(20);
+        make.left.equalTo(weakSelf.contentView).offset(23);
         make.centerY.equalTo(weakSelf.contentView);
         make.width.and.height.mas_equalTo(25);
     }];
@@ -126,14 +128,14 @@
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_logoImageView).offset(-5);
-        make.left.equalTo(_logoImageView.mas_right).offset(10);
+        make.top.equalTo(weakSelf.contentView).offset(20);
+        make.left.equalTo(_logoImageView.mas_right).offset(13);
         make.height.mas_equalTo(20);
         make.right.equalTo(_arrowView.mas_left).offset(-5);
     }];
     
     [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_titleLabel.mas_bottom);
+        make.bottom.equalTo(weakSelf.contentView).offset(-20);
         make.left.and.right.and.height.equalTo(_titleLabel);
     }];
     
@@ -157,8 +159,6 @@
 - (void)addCellData
 {
     [self.logoImageView setImage:[UIImage imageNamed:@"IK_cocah"]];
-    [self.arrowView setImage:[UIImage imageNamed:@"IK_arrow"]];
-
     
     self.titleLabel.text = @"健身教练";
     self.introduceLabel.text = @"私人教练 团课教练 国职国专 ACE AASFP";

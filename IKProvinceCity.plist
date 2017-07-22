@@ -70,6 +70,10 @@
 			<string>温州</string>
 			<string>舟山</string>
 		</array>
+		<key>广东</key>
+		<array>
+			<string>佛山</string>
+		</array>
 	</dict>
 	<key>province</key>
 	<array>

@@ -14,6 +14,8 @@
 
 + (UIImage *)imageByApplyingAlpha:(CGFloat )alpha  image:(UIImage*)image;
 
++ (UIImage *)getImageApplyingAlpha:(CGFloat )alpha  imageName:(NSString *)imageName;
+
 /**
  设置圆角
 

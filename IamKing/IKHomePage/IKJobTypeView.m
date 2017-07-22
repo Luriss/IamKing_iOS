@@ -191,6 +191,7 @@
     job.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
     [job addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [job setTitle:title forState:UIControlStateNormal];
+    job.backgroundColor = [UIColor clearColor];
     job.tag = 100 + index;
     return job;
 }

@@ -257,21 +257,26 @@
 
 - (void)setImagesArray:(NSArray *)imagesArray
 {
+    NSLog(@"imagesArray = %@,",imagesArray);
+
     if (!IKArrayIsEmpty(imagesArray)) {
-        _imagesArray = imagesArray;
+        _imagesArray = [imagesArray copy];
         
         // 因为默认是无线循环所以此处可以直接设置一个较大的数
         _infiniteCount = imagesArray.count * Multiple * 2;
         _totalPageCount = _infiniteCount;
         _numberOfPages = imagesArray.count;
-        
+        self.pageControl.numberOfPages = _numberOfPages;
         self.collectionView.scrollEnabled = YES;
 
         [self setIsAutoScroll:_isAutoScroll];
-        [self.collectionView reloadData];
     }
 }
 
+- (void)reloadImageData
+{
+    [self.collectionView reloadData];
+}
 
 - (void)setTitlesArray:(NSArray *)titlesArray
 {
@@ -378,7 +383,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     IKLPCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:IKCollectionViewCellIdentifier forIndexPath:indexPath];
     cell.contentMode = self.pageViewContentMode;
-   
+    cell.backgroundColor = IKGeneralLightGray;
     if (self.imagesArray.count) {
         NSInteger index = indexPath.row % self.imagesArray.count;
         id object = [self.imagesArray objectAtIndex:index];

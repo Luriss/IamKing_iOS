@@ -75,7 +75,7 @@ typedef NS_ENUM(NSInteger, IKPageControlAlignment) {
 // 停止自动滚动
 - (void)stopAutoScrollPage;
 
-
+- (void)reloadImageData;
 
 
 

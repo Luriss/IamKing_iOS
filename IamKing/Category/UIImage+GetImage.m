@@ -178,35 +178,28 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     UIGraphicsBeginImageContextWithOptions(image.size, NO, 0.0f);
     
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    
     CGRect area = CGRectMake(0, 0, image.size.width, image.size.height);
-    
     CGContextScaleCTM(ctx, 1, -1);
-    
     CGContextTranslateCTM(ctx, 0, -area.size.height);
-    
     CGContextSetBlendMode(ctx, kCGBlendModeMultiply);
-    
-    
     CGContextSetAlpha(ctx, alpha);
-    
-    
-    
     CGContextDrawImage(ctx, area, image.CGImage);
     
-    
-    
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    
-    
-    
-    
     UIGraphicsEndImageContext();
-    
-    
     
     return newImage;
     
+}
+
+
++ (UIImage *)getImageApplyingAlpha:(CGFloat )alpha  imageName:(NSString *)imageName
+{
+    UIImage *image = [UIImage imageNamed:imageName];
+    
+    UIImage *newImage = [[self class] imageByApplyingAlpha:alpha image:image];
+    
+    return newImage;
 }
 
 @end

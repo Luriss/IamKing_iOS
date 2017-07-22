@@ -111,8 +111,9 @@
         _salaryLabel = [[UILabel alloc] init];
         _salaryLabel.textAlignment = NSTextAlignmentCenter;
         _salaryLabel.layer.cornerRadius = 10;
+        _salaryLabel.layer.masksToBounds = YES;
         _salaryLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
-        _salaryLabel.layer.backgroundColor = IKRGBColor(246.0, 101.0, 101.0).CGColor;
+        _salaryLabel.backgroundColor = [IKGeneralRed colorWithAlphaComponent:0.7];
         _salaryLabel.textColor = [UIColor whiteColor];
     }
     return _salaryLabel;
@@ -186,7 +187,7 @@
         _introduceLabel.textAlignment = NSTextAlignmentCenter;
         _introduceLabel.font = [UIFont systemFontOfSize:11.0f];
         _introduceLabel.textColor = IKSubHeadTitleColor;
-        _introduceLabel.numberOfLines = 0;
+        _introduceLabel.numberOfLines = 2;
     }
     return _introduceLabel;
 }
@@ -342,8 +343,6 @@
         make.height.mas_equalTo(20);
     }];
     
-    
-    
     self.experienceView.label.text = model.experience;
     CGFloat experienceWidth = [self getStringWdith:_experienceView.label.text fontSize:IKSubTitleFont];
     
@@ -363,19 +362,24 @@
         make.left.equalTo(_experienceView.mas_right).offset(2);
     }];
     
+    
+    BOOL noSkill = YES;
+    
     if (IKStringIsNotEmpty(model.skill1)) {
+        noSkill = NO;
         self.skillLabel1.hidden = NO;
         self.skillLabel1.text = model.skill1;
         
         CGFloat width1 = [self getStringWdith:self.skillLabel1.text fontSize:12.0f];
         [_skillLabel1 mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(_addressView.mas_bottom).offset(1);
+            make.top.equalTo(_addressView.mas_bottom).offset(3);
             make.left.and.height.equalTo(_addressView);
             make.width.mas_equalTo(width1);
         }];
     }
     
     if (IKStringIsNotEmpty(model.skill2)) {
+        noSkill = NO;
         self.skillLabel2.hidden = NO;
         _skillLabel2.text = model.skill2;
         CGFloat width2 = [self getStringWdith:self.skillLabel2.text fontSize:12.0f];
@@ -387,6 +391,7 @@
     }
     
     if (IKStringIsNotEmpty(model.skill3)) {
+        noSkill = NO;
         self.skillLabel3.hidden = NO;
         self.skillLabel3.text = model.skill3;
         CGFloat width3 = [self getStringWdith:self.skillLabel3.text fontSize:12.0f];
@@ -396,7 +401,25 @@
             make.width.mas_equalTo(width3);
         }];
     }
+    
     self.introduceLabel.text = model.introduce;
+
+//    if (noSkill) {
+//        [_introduceLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(_titleLabel.mas_bottom).offset(26);
+//            make.left.equalTo(_titleLabel);
+//            make.bottom.equalTo(_logoImageView.mas_bottom);
+//            make.right.equalTo(self).offset(-10);
+//        }];
+//    }
+//    else{
+//        [_introduceLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+//            make.top.equalTo(_skillLabel1.mas_bottom);
+//            make.left.equalTo(_titleLabel);
+//            make.bottom.equalTo(_logoImageView.mas_bottom);
+//            make.right.equalTo(self).offset(-10);
+//        }];
+//    }
 }
 
 

@@ -10,6 +10,7 @@
 
 @interface IKJobInfoModel : NSObject
 
+@property(nonatomic,copy)NSString     *jobID;
 @property(nonatomic,copy)NSString     *logoImageUrl;
 @property(nonatomic,copy)NSString     *title;
 @property(nonatomic,copy)NSString     *salary;
@@ -21,5 +22,9 @@
 @property(nonatomic,copy)NSString     *skill3;
 @property(nonatomic,copy)NSString     *introduce;
 @property(nonatomic,assign)BOOL        isAuthen;
+
+
+- (NSString *)description;
+
 
 @end

@@ -57,8 +57,11 @@
     [self plistData];
     
     [self addSubview:self.provinceTableView];
+    [self.provinceTableView scrollToRowAtIndexPath:_oldProvinceIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
     
     [self addSubview:self.cityTableView];
+    [self.cityTableView scrollToRowAtIndexPath:_oldCityIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+
 }
 
 - (void)layoutSubviews
@@ -69,7 +72,7 @@
 
     [_provinceTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.and.left.and.bottom.equalTo(weakSelf);
-        make.width.equalTo(weakSelf).multipliedBy(0.4);
+        make.width.equalTo(weakSelf).multipliedBy(0.432);
     }];
     
     [_cityTableView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -102,6 +105,10 @@
         // 默认选中的行.
         NSInteger row = [self.provinceData indexOfObject:self.selectProvince];
         _oldProvinceIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        
+        NSInteger cRow = [self.cityData indexOfObject:self.selectCity];
+        _oldCityIndexPath = [NSIndexPath indexPathForRow:cRow inSection:0];
+
     }
     else{
         self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
@@ -117,7 +124,7 @@
         _provinceTableView.bounces = NO;
         _provinceTableView.delegate = self;
         _provinceTableView.dataSource = self;
-        _provinceTableView.rowHeight = 50;
+        _provinceTableView.rowHeight = 0.069*IKSCREENH_HEIGHT;
     }
     
     return _provinceTableView;
@@ -133,7 +140,7 @@
         _cityTableView.bounces = NO;
         _cityTableView.delegate = self;
         _cityTableView.dataSource = self;
-        _cityTableView.rowHeight = 60;
+        _cityTableView.rowHeight = 0.069*IKSCREENH_HEIGHT;
     }
     return _cityTableView;
 }

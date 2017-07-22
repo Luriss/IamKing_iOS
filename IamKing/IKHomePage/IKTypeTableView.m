@@ -52,7 +52,7 @@
     tableView.scrollEnabled = NO;
     tableView.delegate = self;
     tableView.dataSource = self;
-    tableView.rowHeight = 80;
+    tableView.rowHeight = 0.213*IKSCREEN_WIDTH;
     [self addSubview:tableView];
     self.tableView = tableView;
 }

@@ -139,7 +139,7 @@
 - (UILabel *)titleLabel
 {
     if (_titleLabel == nil && _titleView == nil) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 8, CGRectGetWidth(self.bounds), IKDefaultHeight - 8)];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, CGRectGetWidth(self.bounds), IKDefaultHeight - 15)];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.textColor = [UIColor blackColor];
         [_titleLabel setFont:[UIFont systemFontOfSize:14.0f]];
@@ -249,6 +249,8 @@
         button.layer.cornerRadius = self.tagCornerRadius;
         button.layer.borderColor = self.tagBorderColor.CGColor;
         button.layer.borderWidth = self.tagBorderWidth;
+        button.layer.masksToBounds = YES;
+        [button setBackgroundImage:IKButtonClickBgImage forState:UIControlStateHighlighted];
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         if ((totalWidth + self.lineSpacing*2 + width) > maxWidth) {
             totalWidth = 0;
