@@ -27,6 +27,10 @@
 
 #define IKWorkListUrl (@"https://www.iamking.com.cn/index.php/Work/getWorkList")
 
+#define IKGetCityIdUrl (@"https://www.iamking.com.cn/index.php/Region/getCityIdByCityName?")
+
+
+
 
 @implementation IKNetworkManager
 
@@ -62,6 +66,18 @@ static IKNetworkManager *_shareInstance;
     return _shareInstance;
 }
 
+- (void)getHomePageLoopPlayImageDataWithoutCache:(IKRequestDictData)requestData
+{
+    [IKNetworkHelper GET:IKGetLoopPlayUrl parameters:nil responseCache:nil success:^(id responseObject) {
+        NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseObject];
+        BOOL success = [self requestDataSuccess:responseObject];
+        if (requestData) {
+            requestData(dict,success);
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 - (void)getHomePageLoopPlayImageData:(IKRequestDictData)requestData
 {
@@ -110,6 +126,22 @@ static IKNetworkManager *_shareInstance;
     return dict;
 }
 
+
+- (void)getHomePageJobInfoDataWithoutCacheParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData
+{
+    NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@",IKRecommendListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"]];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (requestData) {
+            requestData(arr,success);
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 - (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData
 {
@@ -300,7 +332,7 @@ static IKNetworkManager *_shareInstance;
     __block id dataResult = nil;
 
     [IKNetworkHelper GET:IKWorkListUrl parameters:nil responseCache:^(id responseCache) {
-                NSLog(@"responseCache = %@",responseCache);
+//                NSLog(@"responseCache = %@",responseCache);
         dataResult = responseCache;
         NSArray *arr = [self dealWorkListData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
@@ -308,7 +340,7 @@ static IKNetworkManager *_shareInstance;
             requestData(arr,success);
         }
     } success:^(id responseObject) {
-                NSLog(@"responseObject = %@",responseObject);
+//                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
             NSArray *arr = [self dealWorkListData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
@@ -345,7 +377,24 @@ static IKNetworkManager *_shareInstance;
     return reArray;
 }
 
+- (void)getHomePageCityIDWithCityName:(NSString *)cityName backData:(void(^)(NSString *cityId))block
+{
+    NSString *url = [NSString stringWithFormat:@"%@cityName=%@",IKGetCityIdUrl,cityName];
+    NSLog(@"url = %@",url);
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
 
+        NSString *str = [[responseObject objectForKey:@"data"] objectForKey:@"region_id"];
+        [IKUSERDEFAULT setObject:str forKey:@"locationCityId"];
+        
+        if (block) {
+            block(str);
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 // 判断请求的数据是否正确,0 代表正确
 - (BOOL)requestDataSuccess:(id)data

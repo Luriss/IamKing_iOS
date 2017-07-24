@@ -141,13 +141,15 @@
         NSInteger row = [_provinceData indexOfObject:self.selectProvince];
         _oldProvinceIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
         
-        NSInteger cRow = [_cityData indexOfObject:self.selectCity];
-        _oldCityIndexPath = [NSIndexPath indexPathForRow:cRow inSection:0];
-        
-        
-        [self.provinceTableView scrollToRowAtIndexPath:_oldProvinceIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        
-        [self.cityTableView scrollToRowAtIndexPath:_oldCityIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        if (_oldProvinceIndexPath) {
+            NSInteger cRow = [_cityData indexOfObject:self.selectCity];
+            _oldCityIndexPath = [NSIndexPath indexPathForRow:cRow inSection:0];
+            
+            
+            [self.provinceTableView scrollToRowAtIndexPath:_oldProvinceIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+            
+            [self.cityTableView scrollToRowAtIndexPath:_oldCityIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        }
     }
 }
 
@@ -167,23 +169,6 @@
     return data;
 }
 
-
-- (void)plistData
-{
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
-    
-    self.baseDict = [data objectForKey:@"provinceCity"];
-    self.provinceData = [data objectForKey:@"province"];
-    
-    if (IKStringIsNotEmpty(self.selectProvince)) {
-        
-
-    }
-    else{
-        self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
-    }
-}
 
 - (UITableView *)provinceTableView
 {
@@ -331,7 +316,11 @@
             [self.delegate chooseCityViewSelectedCity:self.selectCity];
         }
         
+        NSString *cityId = [self.cityIdDict objectForKey:self.selectCity];
+        NSLog(@"cityId = %@",cityId);
         [IKUSERDEFAULT setObject:self.selectCity forKey:@"selectedCity"];
+        [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
+
         [IKUSERDEFAULT synchronize];
     }
 }

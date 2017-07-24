@@ -299,9 +299,9 @@
 
 - (void)buttonClick:(UIButton *)button
 {
-    NSLog(@"buttonClick");
-    if ([self.delegate respondsToSelector:@selector(tagViewDidSelectedTagWithTitle:)]) {
-        [self.delegate tagViewDidSelectedTagWithTitle:button.titleLabel.text];
+    NSLog(@"buttonClick tag = %ld",button.tag - 1000);
+    if ([self.delegate respondsToSelector:@selector(tagViewDidSelectedTagWithTitle: selectedIndex:)]) {
+        [self.delegate tagViewDidSelectedTagWithTitle:button.titleLabel.text selectedIndex:button.tag - 1000];
     }
 }
 

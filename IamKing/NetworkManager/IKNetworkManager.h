@@ -25,7 +25,11 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 +(instancetype)shareInstance;
 
 
+- (void)getHomePageLoopPlayImageDataWithoutCache:(IKRequestDictData)requestData;
+
 - (void)getHomePageLoopPlayImageData:(IKRequestDictData)requestData;
+
+- (void)getHomePageJobInfoDataWithoutCacheParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData;
 
 - (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData;
 
@@ -36,5 +40,7 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 
 - (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)requestData;
+
+- (void)getHomePageCityIDWithCityName:(NSString *)cityName backData:(void(^)(NSString *cityId))block;
 
 @end

@@ -38,7 +38,7 @@
  @param completion  block 回调
  
  */
-//- (void)lwb_roundRectImageWithSize:(CGSize)size fillColor:(UIColor *)fillColor opaque:(BOOL)opaque radius:(CGFloat)radius completion:(void (^)(UIImage *cornerImage))completion;
+- (void)lwb_roundRectImageWithSize:(CGSize)size fillColor:(UIColor *)fillColor opaque:(BOOL)opaque radius:(CGFloat)radius completion:(void (^)(UIImage *cornerImage))completion;
 
 + (UIImage*) GetImageWithColor:(UIColor*)color size:(CGSize )size;
 

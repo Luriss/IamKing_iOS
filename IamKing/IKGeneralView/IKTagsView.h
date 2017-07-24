@@ -20,7 +20,7 @@ typedef void(^AdjustFrame)(CGRect newFrame);
 
 @protocol IKTagsViewDelegate <NSObject>
 
-- (void)tagViewDidSelectedTagWithTitle:(nullable NSString *)title;
+- (void)tagViewDidSelectedTagWithTitle:(nullable NSString *)title selectedIndex:(NSUInteger)index;
 
 @end
 

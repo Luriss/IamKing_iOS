@@ -118,7 +118,7 @@
 
 /***********************************AnimationTime**********************************/
 
-#define IKLoadImageTime (0.5)
+#define IKLoadImageTime (0.1)
 
 
 

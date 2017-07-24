@@ -28,24 +28,36 @@
     size = CGSizeMake(size.width*2, size.height*2);
     radius = radius*2;
     
-    UIImage *img = image;
+    CGImageRef imageRef = image.CGImage;
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(NULL, size.width, size.height, 8, 4 * size.width, colorSpace, kCGImageAlphaPremultipliedFirst);
+    
+#if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
+    
+    int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
+    
+#else
+    
+    int bitmapInfo = kCGImageAlphaPremultipliedLast;
+    
+#endif
+    
+    CGContextRef context = CGBitmapContextCreate(NULL, size.width, size.height, 8, ceilf(4 * size.width), colorSpace, 1);
+    
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     
     CGContextBeginPath(context);
     addRoundedRectToPath(context, rect, radius, radius);
     CGContextClosePath(context);
     CGContextClip(context);
-    CGContextDrawImage(context, CGRectMake(0, 0, size.width, size.height), img.CGImage);
+    CGContextDrawImage(context, CGRectMake(0, 0, size.width, size.height), imageRef);
     CGImageRef imageMasked = CGBitmapContextCreateImage(context);
-    img = [UIImage imageWithCGImage:imageMasked];
+    UIImage *reImage = [UIImage imageWithCGImage:imageMasked];
     
     CGContextRelease(context);
     CGColorSpaceRelease(colorSpace);
     CGImageRelease(imageMasked);
     
-    return img;
+    return reImage;
 }
 
 static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWidth,

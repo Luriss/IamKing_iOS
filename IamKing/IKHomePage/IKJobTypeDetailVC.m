@@ -16,7 +16,10 @@
 @interface IKJobTypeDetailVC ()<IKSlideViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,IKSearchViewControllerDelegate>
 @property(nonatomic, strong)IKSlideView *slideView;
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) IKSearchVC *searchVc;
+
 @property (nonatomic,strong,nullable) NSMutableArray *tagsData;//传入的标签数组 字符串数组
+@property (nonatomic,strong,nullable) NSMutableDictionary *tagsIdDict;//传入的标签数组 字符串数组
 
 @end
 
@@ -57,12 +60,29 @@
     }
 }
 
+- (IKSearchVC *)searchVc
+{
+    if (_searchVc == nil) {
+        _searchVc = [[IKSearchVC alloc] init];
+        _searchVc.delegate = self;
+    }
+    return _searchVc;
+}
+
 - (NSMutableArray *)tagsData
 {
     if (_tagsData == nil) {
         _tagsData = [[NSMutableArray alloc] init];
     }
     return _tagsData;
+}
+
+- (NSMutableDictionary *)tagsIdDict
+{
+    if (_tagsIdDict == nil) {
+        _tagsIdDict = [[NSMutableDictionary alloc] init];
+    }
+    return _tagsIdDict;
 }
 
 - (void)setChildJobTypeData:(NSArray *)childJobTypeData
@@ -78,13 +98,20 @@
 - (void)setTagsDataWithModel:(IKChildJobTypeModel *)model
 {
     [self.tagsData removeAllObjects];
+    [self.tagsIdDict removeAllObjects];
+    
     for (NSDictionary *dic in model.workList) {
-        [self.tagsData addObject:[dic objectForKey:@"name"]];
+        NSString *name = [dic objectForKey:@"name"];
+        [self.tagsData addObject:name];
+        [self.tagsIdDict setObject:[NSString stringWithFormat:@"%@",[dic objectForKey:@"id"]] forKey:name];
     }
     
     
     for (NSDictionary *dict in model.skillList) {
-        [self.tagsData addObject:[dict objectForKey:@"name"]];
+        NSString *name = [dict objectForKey:@"name"];
+
+        [self.tagsData addObject:name];
+        [self.tagsIdDict setObject:[NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]] forKey:name];
     }
     
     [_collectionView reloadData];
@@ -222,15 +249,14 @@
     
     IKTagsCollectionViewCell *cell = (IKTagsCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
     
-    IKSearchVC *searchVc = [[IKSearchVC alloc] init];
-    searchVc.delegate = self;
-    
     dispatch_async(dispatch_get_main_queue(), ^{
-        searchVc.modalPresentationStyle = UIModalPresentationPopover;
-        searchVc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:searchVc];
+        self.searchVc.modalPresentationStyle = UIModalPresentationPopover;
+        self.searchVc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:self.searchVc];
         [self presentViewController:nav animated:NO completion:^{
-            [searchVc showSearchResultViewWithSearchText:cell.titleLabel.text];
+            NSString*str = cell.titleLabel.text;
+            NSString *textID = [self.tagsIdDict objectForKey:str];
+            [self.searchVc showSearchResultViewWithSearchText:str withID:textID];
         }];
     });
 }

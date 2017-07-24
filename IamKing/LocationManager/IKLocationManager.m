@@ -15,6 +15,8 @@ static IKLocationManager *_shareInstance;
 
 @property (nonatomic,strong)CLLocationManager *laManager;
 @property (nonatomic,strong)CLGeocoder *geocoder;
+@property (nonatomic,strong)NSString *locationCity;
+@property (nonatomic,strong)NSString *locationCityId;
 
 @end
 @implementation IKLocationManager
@@ -94,9 +96,14 @@ static IKLocationManager *_shareInstance;
 
 
 
-- (NSString *)getCity
+- (NSString *)getLocationCity
 {
-    return nil;
+    return _locationCity;
+}
+
+- (NSString *)getLocationCityId
+{
+    return _locationCityId;
 }
 
 - (NSString *)getCountry
@@ -128,7 +135,29 @@ static IKLocationManager *_shareInstance;
             [_laManager stopUpdatingLocation];
             for (CLPlacemark *placemark in placemarks) {
                 IKLog(@"addressDictionary = %@",placemark.addressDictionary);
+                IKLog(@"addressDictionary = %@",placemark.locality);
+                
+                NSString *city = placemark.locality;
+                
+                if ([city hasSuffix:@"市"]) {
+                    city = [city substringToIndex:city.length - 1];
+                    IKLog(@"addressDictionary = %@",city);
+                }
+                _locationCity = city;
+
+                NSString *saveCity = [IKUSERDEFAULT objectForKey:@"locationCity"];
+                if (![saveCity isEqualToString:city]) {
+                    [IKUSERDEFAULT setObject:city forKey:@"locationCity"];
+                    [IKUSERDEFAULT synchronize];
+                }
+                
+                [[IKNetworkManager shareInstance] getHomePageCityIDWithCityName:city backData:^(NSString *cityId) {
+                    _locationCityId = cityId;
+                }];
+
             }
+
+            [self.laManager stopUpdatingLocation];
         }
         
     }];

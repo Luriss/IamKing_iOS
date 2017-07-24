@@ -20,7 +20,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    //[[IKLocationManager shareInstance] startLocation];
+    [[IKLocationManager shareInstance] startLocation];
 
     
     

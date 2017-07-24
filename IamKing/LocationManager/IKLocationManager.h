@@ -15,7 +15,8 @@
 - (void)startLocation;
 
 
-- (NSString *)getCity;
+- (NSString *)getLocationCity;
+- (NSString *)getLocationCityId;
 
 - (NSString *)getCountry;
 

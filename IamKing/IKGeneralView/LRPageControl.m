@@ -56,7 +56,7 @@
     for (int i = 0; i < _numberOfPages; i ++) {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(firstOneX + i * (6+5), (CGRectGetHeight(self.bounds) - 5)*0.5, 5, 5)];
         view.layer.cornerRadius = 2.5;
-        view.backgroundColor = IKGeneralLightGray;
+        view.backgroundColor = [IKGeneralLightGray colorWithAlphaComponent:0.6];
         [self addSubview:view];
         
         [self.viewArray addObject:view];
@@ -87,7 +87,7 @@
     _currentPage = currentPage;
 
     if (self.oldView) {
-        self.oldView.backgroundColor = IKGeneralLightGray;
+        self.oldView.backgroundColor = [IKGeneralLightGray colorWithAlphaComponent:0.6];
         self.oldView.frame = CGRectMake(self.oldView.frame.origin.x+2, self.oldView.frame.origin.y, 5, 5);
     }
     

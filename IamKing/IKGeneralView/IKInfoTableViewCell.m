@@ -75,6 +75,7 @@
         // 头像
         _logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height - 10, self.bounds.size.height - 10)];
         _logoImageView.contentMode = UIViewContentModeScaleToFill;
+        _logoImageView.backgroundColor = IKGeneralLightGray;
     }
     return _logoImageView;
 }
@@ -100,6 +101,7 @@
         _titleLabel.textAlignment = NSTextAlignmentLeft;
         _titleLabel.font = [UIFont boldSystemFontOfSize:15.0];
         _titleLabel.textColor = IKMainTitleColor;
+        _titleLabel.backgroundColor = IKGeneralLightGray;
     }
     return _titleLabel;
 }
@@ -188,7 +190,7 @@
         _introduceLabel.font = [UIFont systemFontOfSize:11.0f];
         _introduceLabel.textColor = IKSubHeadTitleColor;
         _introduceLabel.numberOfLines = 2;
-//        _introduceLabel.backgroundColor = [UIColor redColor];
+        _introduceLabel.backgroundColor = IKGeneralLightGray;
     }
     return _introduceLabel;
 }
@@ -213,6 +215,7 @@
     label.layer.borderWidth = 0.5;
     label.layer.cornerRadius = 10;
     label.hidden = YES;
+    label.backgroundColor = IKGeneralLightGray;
     return label;
 }
 
@@ -248,52 +251,6 @@
         make.right.equalTo(_salaryLabel.mas_left);
     }];
     
-    
-//    [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(_titleLabel.mas_bottom).offset(1);
-//        make.left.equalTo(_titleLabel);
-////        make.width.mas_equalTo(70);
-//        make.height.mas_equalTo(20);
-//    }];
-//    
-//    
-//    [_experienceView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.and.height.equalTo(_addressView);
-//        make.left.equalTo(_addressView.mas_right).offset(2);
-//    }];
-//    
-//    [_educationView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.and.height.equalTo(_addressView);
-////        make.width.mas_equalTo(70);
-//        make.left.equalTo(_experienceView.mas_right).offset(2);
-//    }];
-//    
-//    [_skillLabel1 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(_addressView.mas_bottom).offset(3);
-//        make.left.and.height.equalTo(_addressView);
-////        make.width.mas_equalTo(70);
-//    }];
-//    
-//    
-//    [_skillLabel2 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.and.height.equalTo(_skillLabel1);
-//        make.left.equalTo(_skillLabel1.mas_right).offset(5);
-////        make.width.mas_equalTo(70);
-//    }];
-//    
-//    [_skillLabel3 mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.and.height.equalTo(_skillLabel1);
-//        make.left.equalTo(_skillLabel2.mas_right).offset(5);
-////        make.width.mas_equalTo(70);
-//    }];
-//    
-//    [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(_skillLabel1.mas_bottom);
-//        make.left.equalTo(_titleLabel);
-//        make.bottom.equalTo(_logoImageView.mas_bottom);
-//        make.right.equalTo(weakSelf.mas_right).offset(-10);
-//    }];
-    
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf);
         make.height.mas_equalTo(1);
@@ -325,11 +282,13 @@
 
 - (void)addCellData:(IKJobInfoModel *)model
 {
+    NSLog(@"logoImageUrl = %@",model.logoImageUrl);
     [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:5.0];
-
+    self.logoImageView.backgroundColor = [UIColor whiteColor];
     self.authImageView.hidden = !model.isAuthen;
     
     self.titleLabel.text = model.title;
+    self.titleLabel.backgroundColor = [UIColor whiteColor];
     self.salaryLabel.text = model.salary;
     
     self.addressView.label.text = model.address;
@@ -363,6 +322,7 @@
     }];
     
     self.introduceLabel.text = model.introduce;
+    self.introduceLabel.backgroundColor = [UIColor whiteColor];
 
     
     if (IKStringIsEmpty(model.skill1) && IKStringIsEmpty(model.skill2) && IKStringIsEmpty(model.skill3)) {
@@ -381,7 +341,8 @@
         if (IKStringIsNotEmpty(model.skill1)) {
             self.skillLabel1.hidden = NO;
             self.skillLabel1.text = model.skill1;
-            
+            self.skillLabel1.backgroundColor = [UIColor whiteColor];
+
             CGFloat width1 = [self getStringWdith:self.skillLabel1.text fontSize:12.0f];
             [_skillLabel1 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(_addressView.mas_bottom).offset(3);
@@ -396,6 +357,8 @@
         if (IKStringIsNotEmpty(model.skill2)) {
             self.skillLabel2.hidden = NO;
             _skillLabel2.text = model.skill2;
+            self.skillLabel2.backgroundColor = [UIColor whiteColor];
+
             CGFloat width2 = [self getStringWdith:self.skillLabel2.text fontSize:12.0f];
             [_skillLabel2 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);
@@ -410,6 +373,8 @@
         if (IKStringIsNotEmpty(model.skill3)) {
             self.skillLabel3.hidden = NO;
             self.skillLabel3.text = model.skill3;
+            self.skillLabel3.backgroundColor = [UIColor whiteColor];
+
             CGFloat width3 = [self getStringWdith:self.skillLabel3.text fontSize:12.0f];
             [_skillLabel3 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);

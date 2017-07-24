@@ -262,10 +262,10 @@
 
 - (void)tagViewDidSelectedTagWithTitle:(NSString *)title
 {
-    [self showSearchResultViewWithSearchText:title];
+    [self showSearchResultViewWithSearchText:title withID:nil];
 }
 
-- (void)showSearchResultViewWithSearchText:(NSString *)searchText
+- (void)showSearchResultViewWithSearchText:(NSString *)searchText withID:(NSString *)textID
 {
     _searchView.searchBar.text = searchText;
     

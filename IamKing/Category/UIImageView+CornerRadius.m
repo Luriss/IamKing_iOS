@@ -63,19 +63,21 @@ const char kProcessedImage;
                 [self sd_setImageWithURL:url placeholderImage:[UIImage imageNamed:placeHolderStr] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
                     if (!error) {
                         
-                        UIImage *radiusImage = [UIImage createRoundedRectImage:image size:self.frame.size radius:radius];
                         
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [self loadImageWithAnimation:radiusImage];
-                        });
-                        //清除原有非圆角图片缓存
-                        [[SDImageCache sharedImageCache] removeImageForKey:urlStr withCompletion:^{
-                        }];
-                        
-                        // 保存设置后的圆角图片
-                        [[SDImageCache sharedImageCache] storeImage:radiusImage forKey:cacheurlStr completion:^{
+                        [image lwb_roundRectImageWithSize:self.frame.size  fillColor:nil opaque:NO radius:radius completion:^(UIImage *cornerImage) {
                             
-                        }];
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self loadImageWithAnimation:cornerImage];
+                            });
+                            //清除原有非圆角图片缓存
+                            [[SDImageCache sharedImageCache] removeImageForKey:urlStr withCompletion:^{
+                            }];
+                            
+                            // 保存设置后的圆角图片
+                            [[SDImageCache sharedImageCache] storeImage:cornerImage forKey:cacheurlStr completion:^{
+                                
+                            }];
+                        }];//createRoundedRectImage:image size:radius:radius];
                     }
                 }];
             }

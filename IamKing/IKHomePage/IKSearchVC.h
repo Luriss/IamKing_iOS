@@ -24,7 +24,6 @@
 @property (nonatomic, assign)BOOL *hideBottomView;
 
 
-- (void)showSearchResultViewWithSearchText:(NSString *)searchText;
-
+- (void)showSearchResultViewWithSearchText:(NSString *)searchText withID:(NSString *)textID;
 
 @end

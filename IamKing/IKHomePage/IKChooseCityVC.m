@@ -12,6 +12,7 @@
 #import "IKTagsView.h"
 #import "IKHotCityModel.h"
 #import "IKProvinceModel.h"
+#import "IKLocationManager.h"
 
 
 static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
@@ -47,9 +48,13 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    NSString *city = [[IKLocationManager shareInstance] getLocationCity];
     
-    [self layoutCustomView];
-
+    if (IKStringIsNotEmpty(city)) {
+        UIButton *button = (UIButton *)[_locationInfoView viewWithTag:10010];
+        [button setTitle:city forState:UIControlStateNormal];
+    }
+    
 }
 
 
@@ -117,19 +122,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
         }];
     }];
 }
-
-
-
-//- (void)plistData
-//{
-//    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
-//    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
-//    
-//    self.baseDict = [data objectForKey:@"provinceCity"];
-//    self.provinceData = [data objectForKey:@"province"];
-//    
-//    self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
-//}
 
 - (void)initNavView
 {
@@ -215,8 +207,8 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [button addTarget:self action:@selector(locationButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    [button setTitle:@"杭州" forState:UIControlStateNormal];
-
+    [button setTitle:@"全国" forState:UIControlStateNormal];
+    button.tag = 10010;
     button.layer.cornerRadius = 0.038*IKSCREENH_HEIGHT*0.5;
     button.layer.masksToBounds = YES;
     button.layer.borderColor = IKGeneralBlue.CGColor;
@@ -254,10 +246,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 #pragma mark - Layout View
 
-- (void)layoutCustomView
-{
-
-}
 
 - (void)relayoutCustomView
 {
@@ -280,16 +268,21 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 {
     IKLog(@"chooseCityViewSelectedCity");
     
-    
-    
     [self dismissSelfWithCity:city];
 }
 
-- (void)tagViewDidSelectedTagWithTitle:(NSString *)title
+- (void)tagViewDidSelectedTagWithTitle:(NSString *)title selectedIndex:(NSUInteger)index
 {
-    NSLog(@"tagViewDidSelectedTagWithTitle = %@",title);
+    NSLog(@"tagViewDidSelectedTagWithTitle = %@ index = %ld",title,index);
     [IKUSERDEFAULT removeObjectForKey:@"selectedProvince"];
-    [IKUSERDEFAULT removeObjectForKey:@"selectedCity"];
+    [IKUSERDEFAULT setObject:title forKey:@"selectedCity"];
+    
+    IKHotCityModel *model = [_hotCity objectAtIndex:index];
+    NSLog(@"cityName = %@",model.cityName);
+    if ([model.cityName isEqualToString:title]) {
+        [IKUSERDEFAULT setObject:model.regionID forKey:@"selectedCityId"];
+    }
+    
     [IKUSERDEFAULT synchronize];
     
     
@@ -322,9 +315,12 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 - (void)locationButtonClick:(UIButton *)button
 {
+    NSString * cityId = [[IKLocationManager shareInstance] getLocationCityId];
+    [IKUSERDEFAULT setObject:button.titleLabel.text forKey:@"selectedCity"];
+    [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
+    [IKUSERDEFAULT synchronize];
+    
     [self dismissSelfWithCity:button.titleLabel.text];
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
