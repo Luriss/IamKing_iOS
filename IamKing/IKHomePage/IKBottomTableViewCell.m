@@ -15,7 +15,7 @@
 
 @property(nonatomic,strong)UIView      *bottomLine;
 @property(nonatomic,strong)IKSearchView *searchView;
-@property(nonatomic,strong)IKLoopPlayView *lpView;
+@property(nonatomic,strong)UIView      *topLine;
 
 @end
 
@@ -40,8 +40,8 @@
 
 - (void)addSubViews
 {
-//    [self.contentView addSubview:self.searchView];
-//    [self.contentView addSubview:self.lpView];
+    [self.contentView addSubview:self.searchView];
+    [self.contentView addSubview:self.topLine];
     [self.contentView addSubview:self.bottomLine];
 }
 
@@ -59,6 +59,15 @@
     return _searchView;
 }
 
+- (UIView *)topLine
+{
+    if (_topLine == nil) {
+        _topLine = [[UIView alloc] init];
+        _topLine.backgroundColor = IKLineColor;
+        _topLine.hidden = YES;
+    }
+    return _topLine;
+}
 
 - (UIView *)bottomLine
 {
@@ -69,23 +78,10 @@
     return _bottomLine;
 }
 
--(IKLoopPlayView *)lpView
+
+-(void)setIsShowTopLine:(BOOL)isShowTopLine
 {
-    if (_lpView == nil) {
-        _lpView = [[IKLoopPlayView alloc]init];
-        _lpView.imagesArray = @[
-                                @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg",
-                                @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg",
-                                @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646706_1456498430419_800x600.jpg",
-                                @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646723_1456498427059_800x600.jpg",
-                                @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg"
-                                ];
-        _lpView.scrollDirection = IKLPVScrollDirectionHorizontal;
-        _lpView.pageControlHidden = NO;
-        _lpView.hidden = YES;
-    }
-    
-    return _lpView;
+    self.topLine.hidden = !isShowTopLine;
 }
 
 - (void)setIsShowSearchView:(BOOL)isShowSearchView
@@ -102,20 +98,6 @@
     }
 }
 
-- (void)setIsShowLooPalyView:(BOOL)isShowLooPalyView
-{
-    self.lpView.hidden = !isShowLooPalyView;
-    
-    if (isShowLooPalyView) {
-        __weak typeof (self) weakSelf = self;
-        [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(weakSelf.contentView).offset(1);
-            make.left.and.right.equalTo(weakSelf.contentView);
-            make.height.mas_equalTo(175);
-        }];
-//        [_lpView startAutoScrollPage];
-    }
-}
 
 -(void)setDelegate:(id<IKBottomTableViewCellDelegate>)delegate
 {
@@ -132,6 +114,12 @@
     
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(weakSelf.contentView).offset(1);
+        make.left.and.right.equalTo(weakSelf.contentView);
+        make.height.mas_equalTo(1);
+    }];
+    
+    [_topLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView).offset(0);
         make.left.and.right.equalTo(weakSelf.contentView);
         make.height.mas_equalTo(1);
     }];

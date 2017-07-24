@@ -14,6 +14,8 @@
 
 @property (nonatomic,strong)UITableView *tableView;
 
+@property(nonatomic,strong)NSArray *logoArray;
+
 
 @end
 
@@ -57,13 +59,30 @@
     self.tableView = tableView;
 }
 
+- (void)setJobTypeData:(NSArray *)jobTypeData
+{
+    if (IKArrayIsNotEmpty(jobTypeData)) {
+        _jobTypeData = jobTypeData;
+    }
+}
 
 - (void)setDelegate:(id<IKTypeTableViewDelegate>)delegate
 {
     _delegate = delegate;
 }
 
+- (NSArray *)logoArray
+{
+    if (_logoArray == nil) {
+        _logoArray = [NSArray arrayWithObjects:@"IK_cocah",@"IK_sellPerformance",@"IK_operationManage",@"IK_bulb",@"IK_trainTeacher",@"IK_presellProject", nil];
+    }
+    return _logoArray;
+}
 
+- (void)reloadTableViewData
+{
+    [self.tableView reloadData];
+}
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -73,7 +92,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 6;
+    return self.jobTypeData.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -88,7 +107,9 @@
     }
 //    cell.backgroundColor = [UIColor whiteColor];
     cell.selectionStyle = UITableViewCellSelectionStyleGray;
-    [cell addCellData];
+    if (indexPath.row < self.logoArray.count) {
+        [cell addCellDataWithLogo:self.logoArray[indexPath.row] data:[self.jobTypeData objectAtIndex:indexPath.row]];
+    }
     return cell;
 }
 

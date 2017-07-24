@@ -18,7 +18,9 @@
 
 @interface IKJobTypeDetailVC : IKViewController
 
-@property (nonatomic,strong,nullable) NSArray *tagsData;//传入的标签数组 字符串数组
+@property(nonatomic,strong,nullable)NSArray *childJobTypeData;
+
 @property (nonatomic, weak, nullable) id<IKJobTypeDetailVCDelegate> delegate;
+@property (nonatomic,strong,nullable) NSMutableArray *silderData;//传入的标签数组 字符串数组
 
 @end

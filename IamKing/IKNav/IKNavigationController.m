@@ -42,6 +42,8 @@
 {
     if ([view isKindOfClass:[UIImageView class]] && (CGRectGetHeight(view.bounds) <= 1.0)) {
         IKLog(@"======= %@",view);
+//        view.backgroundColor = IKLineColor;
+//        view.frame = CGRectMake(view.bounds.origin.x, view.bounds.origin.y, view.bounds.size.width, 2);
         view.hidden = YES;
         self.shadowImage = (UIImageView *)view;
         self.shadowImage.hidden = YES;

@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IKJobTypeModel.h"
 
 @interface IKTypeTableViewCell : UITableViewCell
 
-- (void)addCellData;
+- (void)addCellDataWithLogo:(NSString *)logoName data:(IKJobTypeModel *)model;
 
 @end

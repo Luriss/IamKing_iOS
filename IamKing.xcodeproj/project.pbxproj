@@ -58,6 +58,10 @@
 		2199E2541F21E6BD00D43EE1 /* IKLoopPlayModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2199E2531F21E6BD00D43EE1 /* IKLoopPlayModel.m */; };
 		2199E2571F21ED1C00D43EE1 /* IK_logo_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 2199E2551F21ED1C00D43EE1 /* IK_logo_blue.png */; };
 		2199E2581F21ED1C00D43EE1 /* IK_logo_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 2199E2561F21ED1C00D43EE1 /* IK_logo_grey.png */; };
+		21BC616E1F25896300CE85D9 /* IKHotCityModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC616D1F25896300CE85D9 /* IKHotCityModel.m */; };
+		21BC61711F25931E00CE85D9 /* IKProvinceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61701F25931E00CE85D9 /* IKProvinceModel.m */; };
+		21BC61751F25A77700CE85D9 /* IKJobTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61741F25A77700CE85D9 /* IKJobTypeModel.m */; };
+		21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61771F25B79900CE85D9 /* IKChildJobTypeModel.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -211,6 +215,14 @@
 		2199E2531F21E6BD00D43EE1 /* IKLoopPlayModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKLoopPlayModel.m; sourceTree = "<group>"; };
 		2199E2551F21ED1C00D43EE1 /* IK_logo_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_logo_blue.png; sourceTree = "<group>"; };
 		2199E2561F21ED1C00D43EE1 /* IK_logo_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_logo_grey.png; sourceTree = "<group>"; };
+		21BC616C1F25896300CE85D9 /* IKHotCityModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKHotCityModel.h; sourceTree = "<group>"; };
+		21BC616D1F25896300CE85D9 /* IKHotCityModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKHotCityModel.m; sourceTree = "<group>"; };
+		21BC616F1F25931E00CE85D9 /* IKProvinceModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKProvinceModel.h; sourceTree = "<group>"; };
+		21BC61701F25931E00CE85D9 /* IKProvinceModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKProvinceModel.m; sourceTree = "<group>"; };
+		21BC61731F25A77700CE85D9 /* IKJobTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobTypeModel.h; sourceTree = "<group>"; };
+		21BC61741F25A77700CE85D9 /* IKJobTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobTypeModel.m; sourceTree = "<group>"; };
+		21BC61761F25B79900CE85D9 /* IKChildJobTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKChildJobTypeModel.h; sourceTree = "<group>"; };
+		21BC61771F25B79900CE85D9 /* IKChildJobTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKChildJobTypeModel.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -517,6 +529,7 @@
 		2197CBBA1F1E2A0800F61562 /* IKChooseCityView */ = {
 			isa = PBXGroup;
 			children = (
+				21BC616B1F25893500CE85D9 /* Model */,
 				2197CBBB1F1E2A2600F61562 /* IKChooseCityView.h */,
 				2197CBBC1F1E2A2600F61562 /* IKChooseCityView.m */,
 			);
@@ -539,6 +552,28 @@
 			children = (
 				2199E2521F21E6BD00D43EE1 /* IKLoopPlayModel.h */,
 				2199E2531F21E6BD00D43EE1 /* IKLoopPlayModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		21BC616B1F25893500CE85D9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				21BC616C1F25896300CE85D9 /* IKHotCityModel.h */,
+				21BC616D1F25896300CE85D9 /* IKHotCityModel.m */,
+				21BC616F1F25931E00CE85D9 /* IKProvinceModel.h */,
+				21BC61701F25931E00CE85D9 /* IKProvinceModel.m */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		21BC61721F25A75E00CE85D9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61731F25A77700CE85D9 /* IKJobTypeModel.h */,
+				21BC61741F25A77700CE85D9 /* IKJobTypeModel.m */,
+				21BC61761F25B79900CE85D9 /* IKChildJobTypeModel.h */,
+				21BC61771F25B79900CE85D9 /* IKChildJobTypeModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -624,6 +659,7 @@
 		21C3AE2E1F173ACE008FC124 /* TypeTableView */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61721F25A75E00CE85D9 /* Model */,
 				21C3AE2B1F173727008FC124 /* IKTypeTableView.h */,
 				21C3AE2C1F173727008FC124 /* IKTypeTableView.m */,
 				21C3AE2F1F173AFE008FC124 /* IKTypeTableViewCell.h */,
@@ -1137,6 +1173,7 @@
 				2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */,
 				21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */,
 				21C3AE021F14D760008FC124 /* IKLocationManager.m in Sources */,
+				21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */,
 				218AD7181F208C0F00138A68 /* LRPageControl.m in Sources */,
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
@@ -1155,6 +1192,7 @@
 				210B0D971F0DE16D003FD950 /* ViewController.m in Sources */,
 				21D6232C1F137D700054D980 /* UIImageView+CornerRadius.m in Sources */,
 				210B0DF01F0E1756003FD950 /* IKHomePageVC.m in Sources */,
+				21BC61751F25A77700CE85D9 /* IKJobTypeModel.m in Sources */,
 				21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */,
 				2197CBAA1F1E058100F61562 /* IKCompanyTableViewCell.m in Sources */,
 				2197CBAD1F1E06E500F61562 /* IKCompanyInfoModel.m in Sources */,
@@ -1170,7 +1208,9 @@
 				21C3AE0E1F1616B6008FC124 /* IKMoreTypeVC.m in Sources */,
 				21C3AE5D1F175615008FC124 /* IKSearchView.m in Sources */,
 				21C3ADFB1F14CA3A008FC124 /* IKChooseCityVC.m in Sources */,
+				21BC61711F25931E00CE85D9 /* IKProvinceModel.m in Sources */,
 				21C3AE1F1F172400008FC124 /* IKSearchResultVC.m in Sources */,
+				21BC616E1F25896300CE85D9 /* IKHotCityModel.m in Sources */,
 				21C3AE5A1F175615008FC124 /* IKJobInfoModel.m in Sources */,
 				210B0D911F0DE16D003FD950 /* main.m in Sources */,
 				21E2B59B1F1B21A100F9EC14 /* IKBottomTableViewCell.m in Sources */,

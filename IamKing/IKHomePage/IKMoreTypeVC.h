@@ -10,4 +10,6 @@
 
 @interface IKMoreTypeVC : IKViewController
 
+@property(nonatomic,strong)NSArray *jobTypeData;
+
 @end

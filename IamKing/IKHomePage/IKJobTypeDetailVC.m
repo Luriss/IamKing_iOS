@@ -10,10 +10,13 @@
 #import "IKSlideView.h"
 #import "IKTagsCollectionViewCell.h"
 #import "IKSearchVC.h"
+#import "IKChildJobTypeModel.h"
+
 
 @interface IKJobTypeDetailVC ()<IKSlideViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout,IKSearchViewControllerDelegate>
 @property(nonatomic, strong)IKSlideView *slideView;
 @property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic,strong,nullable) NSMutableArray *tagsData;//传入的标签数组 字符串数组
 
 @end
 
@@ -40,12 +43,54 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    self.tagsData = @[@"私人教练",@"私人主管",@"私人主管",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP"];
-    
-    [_slideView reloadData];
-    [_collectionView reloadData];
 }
+
+
+- (void)setSilderData:(NSMutableArray *)silderData
+{
+    NSLog(@"silderData = %@",silderData);
+    if (IKArrayIsNotEmpty(silderData)) {
+        [_silderData removeAllObjects];
+        _silderData = silderData;
+        
+        _slideView.data = silderData;
+    }
+}
+
+- (NSMutableArray *)tagsData
+{
+    if (_tagsData == nil) {
+        _tagsData = [[NSMutableArray alloc] init];
+    }
+    return _tagsData;
+}
+
+- (void)setChildJobTypeData:(NSArray *)childJobTypeData
+{
+    if (IKArrayIsNotEmpty(childJobTypeData)) {
+        _childJobTypeData = childJobTypeData;
+        
+        [self setTagsDataWithModel:(IKChildJobTypeModel *)childJobTypeData.firstObject];
+    }
+}
+
+
+- (void)setTagsDataWithModel:(IKChildJobTypeModel *)model
+{
+    [self.tagsData removeAllObjects];
+    for (NSDictionary *dic in model.workList) {
+        [self.tagsData addObject:[dic objectForKey:@"name"]];
+    }
+    
+    
+    for (NSDictionary *dict in model.skillList) {
+        [self.tagsData addObject:[dict objectForKey:@"name"]];
+    }
+    
+    [_collectionView reloadData];
+
+}
+
 
 - (void)initLeftBackItem
 {
@@ -89,8 +134,8 @@
 {
     _slideView = [[IKSlideView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 50)];
     _slideView.backgroundColor = IKGeneralLightGray;
-    _slideView.data = @[@"私人教练",@"团课教练"];
     _slideView.delegate = self;
+    _slideView.data = _silderData;
     [self.view addSubview:_slideView];
 }
 
@@ -99,11 +144,11 @@
 - (void)initCollectionView
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-    layout.itemSize = CGSizeMake(100, 50);
+    layout.itemSize = CGSizeMake(80, 50);
     layout.scrollDirection = UICollectionViewScrollDirectionVertical;
     layout.minimumInteritemSpacing = 10.0f; // 列间距
     layout.minimumLineSpacing = 20.0f; //行间距
-    layout.sectionInset = UIEdgeInsetsMake(20.0f, 20.0f, 20.0f, 20.0f);
+    layout.sectionInset = UIEdgeInsetsMake(20.0f, 15.0f, 20.0f, 15.0f);
     
     _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-115) collectionViewLayout:layout];
     _collectionView.tag = 101;
@@ -200,17 +245,10 @@
 
 - (void)slideView:(IKSlideView *)slideView didSelectItemAtIndex:(NSUInteger )selectedIndex
 {
+    NSLog(@"selectedIndex = %ld",selectedIndex);
     
-    NSInteger x = selectedIndex % 2;
-    if (x == 1) {
-        self.tagsData = @[@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"私人主管",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX"];
-    }
-    else{
-        self.tagsData = @[@"私人教练",@"私人主管",@"私人主管",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP",@"私人教练",@"私人主管",@"TRX",@"SPRINNNG",@"AASFP"];
-    }
-    
-    
-    [_collectionView reloadData];
+    [self setTagsDataWithModel:(IKChildJobTypeModel *)_childJobTypeData[selectedIndex]];
+
 }
 
 - (void)didReceiveMemoryWarning {

@@ -62,10 +62,10 @@
         
         _collectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:layout];
         _collectionView.tag = 101;
-        _collectionView.bounces = YES;
+        _collectionView.bounces = NO;
         _collectionView.showsHorizontalScrollIndicator = NO;
         _collectionView.pagingEnabled = NO;
-        _collectionView.scrollEnabled = NO;
+        _collectionView.scrollEnabled = YES;
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.backgroundColor = [UIColor clearColor];
@@ -77,8 +77,11 @@
 
 - (void)setData:(NSArray *)data
 {
+    NSLog(@"data = %@",data);
     if (IKArrayIsNotEmpty(data)) {
-        _data = [NSArray arrayWithArray:data];
+        _data = nil;
+        _data = data;
+        [self.collectionView reloadData];
     }
 }
 
@@ -90,6 +93,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    NSLog(@" ========== %@",self.data);
     return [self.data count];
 }
 

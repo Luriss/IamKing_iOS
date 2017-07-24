@@ -21,6 +21,9 @@
 #import "IKJobInfoModel.h"
 #import "IKInfoTableViewCell.h"
 #import "IKHomePageConfig.h"
+#import "IKHotCityModel.h"
+#import "IKProvinceModel.h"
+
 
 
 #define IKJobTypeHeaderHeight   (45.0f)
@@ -57,6 +60,11 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 @property(nonatomic,strong)NSArray *dataArray;
 @property(nonatomic,assign)CGFloat lpHeight;
 @property(nonatomic,strong)UIImageView *refreshView;
+@property(nonatomic,strong)NSArray *hotCity;
+@property(nonatomic,strong)NSArray *provinceCityData;
+@property(nonatomic,strong)NSArray *jobTypeData;
+
+
 
 @end
 
@@ -98,38 +106,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     IKLog(@"self.navigationController = %@",self.navigationController);
 }
 
-- (void)testData
-{
-    for (int i = 0; i < 10; i ++) {
-        
-        IKJobInfoModel *model = [[IKJobInfoModel alloc] init];
-        
-        if (i%2 == 0) {
-            model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646705_1456498422529_800x600.jpg";
-            model.isAuthen = YES;
-            model.title = @"私人教练";
-            model.salary = @"20~28k";
-            model.address = @"乌鲁木齐";
-            model.experience = @"10~20年";
-            model.education = @"本科";
-            model.skill1 = @"销售能手好";
-        }
-        else{
-            model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg";
-            model.isAuthen = NO;
-            model.title = @"高级营销总监高级营销总监高级营销总监高级营销总监";
-            model.salary = @"13~18k";
-            model.address = @"杭州";
-            model.experience = @"6~8年";
-            model.education = @"本科";
-            model.skill1 = @"销售能手好";
-            model.skill2 = @"NAFC";
-            model.skill3 = @"形象好";
-        }
-        model.introduce = @"时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.";
-//        [self.dataArray addObject:model];
-    }
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -143,8 +119,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    
 }
 
 
@@ -163,6 +137,34 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     }
     
     return _dataArray;
+}
+
+- (NSArray *)hotCity
+{
+    if (_hotCity == nil) {
+        _hotCity = [[NSArray alloc] init];
+    }
+    
+    return _hotCity;
+}
+
+- (NSArray *)provinceCityData
+{
+    if (_provinceCityData == nil) {
+        _provinceCityData = [[NSArray alloc] init];
+    }
+    
+    return _provinceCityData;
+}
+
+
+- (NSArray *)jobTypeData
+{
+    if (_jobTypeData == nil) {
+        _jobTypeData = [[NSArray array] init];
+    }
+    
+    return _jobTypeData;
 }
 
 #pragma mark - InitView
@@ -192,7 +194,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     [button setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 
     button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
-    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
+    
+    NSString *cityStr = [IKUSERDEFAULT objectForKey:@"selectedCity"];
+    [button setTitle:cityStr forState:UIControlStateNormal];
     
     UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_Address"]];
     [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
@@ -416,16 +420,11 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             cell=[[IKBottomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.delegate = self;
-        cell.backgroundColor = [UIColor whiteColor];
+//        cell.backgroundColor = [UIColor clearColor];
         if (indexPath.section == 0){
             if (indexPath.row == 0) {
-                //                cell.isShowSearchView = YES;
-                [cell.contentView addSubview:_searchView];
-                [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.top.equalTo(cell.contentView).offset(1);
-                    make.left.and.right.equalTo(cell.contentView);
-                    make.height.mas_equalTo(44);
-                }];
+                cell.isShowSearchView = YES;
+                cell.isShowTopLine = YES;
             }
             else if (indexPath.row == 1){
                 [cell.contentView addSubview:_lpView];
@@ -560,7 +559,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             [_bottomTableView setContentOffset:CGPointMake(0, _bottomTableView.contentSize.height)];
         }
         
-        NSLog(@"scrollView.contentOffset.y = %.0f",scrollView.contentOffset.y);
+//        NSLog(@"scrollView.contentOffset.y = %.0f",scrollView.contentOffset.y);
         
         if (offsetY < 0) {
             CGFloat s = offsetY/30;
@@ -740,7 +739,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
 }
 
-- (void)searchViewStartSearch
+- (void)searchViewCellStartSearch
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         IKSearchVC *searchvc = [IKSearchVC alloc];
@@ -794,7 +793,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     //设置该属性可以使 presentView 在导航栏之下不覆盖原先的 VC
     //    moreVC.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
     moreVC.view.backgroundColor = [UIColor whiteColor];
-    
+    moreVC.jobTypeData = self.jobTypeData;
     IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:moreVC];
     [self presentViewController:nav animated:YES completion:^{
         
@@ -806,6 +805,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     IKChooseCityVC *cityVC = [[IKChooseCityVC alloc] init];
     cityVC.delegate = self;
+    cityVC.hotCity = self.hotCity;
+    cityVC.baseProvinceData = self.provinceCityData;
     
     IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:cityVC];
     [self presentViewController:nav animated:NO completion:^{
@@ -817,6 +818,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
 - (void)requestHomePageData
 {
+    // 轮播图
     [[IKNetworkManager shareInstance] getHomePageLoopPlayImageData:^(NSDictionary *dict, BOOL success) {
         NSLog(@"daaaaaaaaaaa = %@,success = %d",dict,success);
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -827,17 +829,43 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         });
     }];
     
-    
+    // 获取列表信息.
     NSDictionary *jobParam = @{@"cityId":@"0",@"pageSize":@"16",@"type":@"0"};
-    [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-        self.dataArray = [dataArray mutableCopy];
+    [self getJobInfoTableViewData:jobParam];
+    
+    
+    // 获取热门城市
+    [[IKNetworkManager shareInstance] getHomePageHotCityDataWithBackData:^(NSArray *dataArray, BOOL success) {
+        if (success) {
+            self.hotCity = dataArray;
+        }
+        for (IKHotCityModel *moel in dataArray) {
+            NSLog(@"%@",[moel description]);
+        }
+    }];
+    
+    // 获取省市信息.
+    [[IKNetworkManager shareInstance] getHomePageProvinceCityDataWithBackData:^(NSArray *dataArray, BOOL success) {
         
+        self.provinceCityData = dataArray;
+    }];
+    
+    
+    // 获取工作类型.
+    [[IKNetworkManager shareInstance] getHomePageWorkListDataWithBackData:^(NSArray *dataArray, BOOL success) {
+        
+        self.jobTypeData = dataArray;
     }];
 }
 
 
-
-
+- (void)getJobInfoTableViewData:(NSDictionary *)param
+{
+    [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithParam:param backData:^(NSArray *dataArray, BOOL success) {
+        self.dataArray = [dataArray mutableCopy];
+        [self.jobTableView reloadData];
+    }];
+}
 
 
 

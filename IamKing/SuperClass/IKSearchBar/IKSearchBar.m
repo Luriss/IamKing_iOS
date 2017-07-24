@@ -37,9 +37,14 @@
         searchField.layer.masksToBounds = YES;
         searchField.textColor= IKMainTitleColor;
 
+        [searchField setValue:[UIFont systemFontOfSize:13] forKeyPath:@"_placeholderLabel.font"];
+        searchField.font=[UIFont systemFontOfSize:13];
+        
+        
         NSDictionary *attribute = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSForegroundColorAttributeName:IKPlaceHolderColor};
         NSAttributedString *placeHolder = [[NSAttributedString alloc] initWithString:@" 搜索职位/公司/技能" attributes:attribute];
         searchField.attributedPlaceholder = placeHolder;
+        searchField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
         searchField.leftViewMode = UITextFieldViewModeAlways;
         searchField.clearButtonMode = UITextFieldViewModeAlways;
         UIImageView *search = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 15, 15)];

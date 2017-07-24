@@ -8,7 +8,7 @@
 
 #import "IKChooseCityView.h"
 #import "IKLocationCell.h"
-
+#import "IKProvinceModel.h"
 
 @interface IKChooseCityView ()<UITableViewDelegate,UITableViewDataSource>
 {
@@ -17,11 +17,12 @@
 }
 @property (nonatomic, strong)UITableView *provinceTableView;
 @property (nonatomic, strong)UITableView *cityTableView;
-
-
+@property (nonatomic,copy)NSMutableArray *provinceData;
+@property (nonatomic,copy)NSArray *cityData;
 @property (nonatomic,   copy)NSDictionary *baseDict;
 @property (nonatomic,   copy)NSString    *selectProvince;
 @property (nonatomic,   copy)NSString    *selectCity;
+@property (nonatomic,copy)NSMutableDictionary *cityIdDict;
 
 @end
 
@@ -54,13 +55,12 @@
 {
     [self configBaseData];
     
-    [self plistData];
+//    [self plistData];
     
     [self addSubview:self.provinceTableView];
-    [self.provinceTableView scrollToRowAtIndexPath:_oldProvinceIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    
     
     [self addSubview:self.cityTableView];
-    [self.cityTableView scrollToRowAtIndexPath:_oldCityIndexPath atScrollPosition:UITableViewScrollPositionNone animated:NO];
 
 }
 
@@ -92,6 +92,82 @@
     IKLog(@"self.selectProvince = %@,self.selectCity = %@",self.selectProvince,self.selectCity);
 }
 
+- (NSMutableArray *)provinceData
+{
+    if (_provinceData == nil) {
+        _provinceData = [[NSMutableArray alloc] init];
+    }
+    return _provinceData;
+}
+
+
+- (NSArray *)cityData
+{
+    if (_cityData == nil) {
+        _cityData = [[NSArray array] init];
+    }
+    
+    return _cityData;
+}
+
+- (NSMutableDictionary *)cityIdDict
+{
+    if (_cityIdDict == nil) {
+        _cityIdDict = [[NSMutableDictionary alloc] init];
+    }
+    return _cityIdDict;
+}
+
+- (void)setBaseProvinceData:(NSArray *)baseProvinceData
+{
+    if (IKArrayIsNotEmpty(baseProvinceData)) {
+        _baseProvinceData = baseProvinceData;
+        
+        IKProvinceModel *showModel = nil;
+        for (IKProvinceModel *model in baseProvinceData) {
+            if ([model.provinceName isEqualToString:self.selectProvince]) {
+                showModel = model;
+            }
+            [self.provinceData addObject:model.provinceName];
+        }
+        
+        if (showModel == nil) {
+            showModel = baseProvinceData.firstObject;
+        }
+        
+        _cityData = [self setCityDataWithProvince:showModel];
+        
+        // 默认选中的行.
+        NSInteger row = [_provinceData indexOfObject:self.selectProvince];
+        _oldProvinceIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
+        
+        NSInteger cRow = [_cityData indexOfObject:self.selectCity];
+        _oldCityIndexPath = [NSIndexPath indexPathForRow:cRow inSection:0];
+        
+        
+        [self.provinceTableView scrollToRowAtIndexPath:_oldProvinceIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        
+        [self.cityTableView scrollToRowAtIndexPath:_oldCityIndexPath atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+}
+
+- (NSArray *)setCityDataWithProvince:(IKProvinceModel *)model
+{
+    NSMutableArray *data = [NSMutableArray arrayWithCapacity:model.childCity.count];
+    
+    [self.cityIdDict removeAllObjects];
+    
+    for (int i = 0; i < model.childCity.count; i ++) {
+        NSDictionary *dict = (NSDictionary *)[model.childCity objectAtIndex:i];
+        NSString *city = [dict objectForKey:@"text"];
+        [data addObject:city];
+        NSString *cityId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"value"]];
+        [self.cityIdDict setObject:cityId forKey:city];
+    }
+    return data;
+}
+
+
 - (void)plistData
 {
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
@@ -101,13 +177,7 @@
     self.provinceData = [data objectForKey:@"province"];
     
     if (IKStringIsNotEmpty(self.selectProvince)) {
-        self.cityData = [self.baseDict objectForKey:self.selectProvince];
-        // 默认选中的行.
-        NSInteger row = [self.provinceData indexOfObject:self.selectProvince];
-        _oldProvinceIndexPath = [NSIndexPath indexPathForRow:row inSection:0];
         
-        NSInteger cRow = [self.cityData indexOfObject:self.selectCity];
-        _oldCityIndexPath = [NSIndexPath indexPathForRow:cRow inSection:0];
 
     }
     else{
@@ -192,7 +262,7 @@
 
         }
         else{
-            cell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
+            cell.tLabel.textColor = IKMainTitleColor;
             cell.lineView.hidden = YES;
 
         }
@@ -216,7 +286,7 @@
             cell.lineView.hidden = NO;
         }
         else{
-            cell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
+            cell.tLabel.textColor = IKMainTitleColor;
             cell.lineView.hidden = YES;
             
         }
@@ -235,13 +305,15 @@
         
         IKLocationCell *cell = (IKLocationCell *)[tableView cellForRowAtIndexPath:indexPath];
         cell.tLabel.textColor = IKGeneralBlue;
+        cell.lineView.hidden = NO;
         
         if (_oldProvinceIndexPath != indexPath) {
             IKLocationCell *oldCell = (IKLocationCell *)[tableView cellForRowAtIndexPath:_oldProvinceIndexPath];
-            oldCell.tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
+            oldCell.tLabel.textColor = IKMainTitleColor;
+            oldCell.lineView.hidden = YES;
             
-            NSString *province = [self.provinceData objectAtIndex:indexPath.row];
-            self.cityData = [self.baseDict objectForKey:province];
+            IKProvinceModel *province = (IKProvinceModel *)[self.baseProvinceData objectAtIndex:indexPath.row];
+            self.cityData = [self setCityDataWithProvince:province];
             [self.cityTableView reloadData];
         }
         

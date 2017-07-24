@@ -39,7 +39,7 @@
         _tLabel = [[UILabel alloc] init];
         _tLabel.textAlignment = NSTextAlignmentCenter;
         _tLabel.font = [UIFont systemFontOfSize:14.0f];
-        _tLabel.textColor = IKRGBColor(93.0, 93.0, 93.0);
+        _tLabel.textColor = IKMainTitleColor;
     }
     return _tLabel;
 }

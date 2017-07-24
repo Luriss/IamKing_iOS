@@ -61,6 +61,8 @@
         make.top.and.right.and.bottom.equalTo(weakSelf);
         make.left.equalTo(_imageView.mas_right).offset(3);
     }];
+    
+    [super layoutSubviews];
 }
 
 

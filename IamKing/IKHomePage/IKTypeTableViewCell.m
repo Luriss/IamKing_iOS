@@ -8,6 +8,7 @@
 
 #import "IKTypeTableViewCell.h"
 
+
 @interface IKTypeTableViewCell ()
 
 @property(nonatomic,strong)UIImageView *logoImageView;
@@ -156,12 +157,12 @@
 }
 
 
-- (void)addCellData
+- (void)addCellDataWithLogo:(NSString *)logoName data:(IKJobTypeModel *)model
 {
-    [self.logoImageView setImage:[UIImage imageNamed:@"IK_cocah"]];
+    [self.logoImageView setImage:[UIImage imageNamed:logoName]];
     
-    self.titleLabel.text = @"健身教练";
-    self.introduceLabel.text = @"私人教练 团课教练 国职国专 ACE AASFP";
+    self.titleLabel.text = model.JobName;
+    self.introduceLabel.text = model.describe;
 }
 
 

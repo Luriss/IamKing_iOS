@@ -19,5 +19,9 @@
 @interface IKTypeTableView : IKView
 
 @property (nonatomic, weak) id<IKTypeTableViewDelegate> delegate;
+@property(nonatomic,strong)NSArray *jobTypeData;
+
+- (void)reloadTableViewData;
+
 
 @end

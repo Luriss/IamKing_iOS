@@ -11,6 +11,9 @@
 #import "IKSearchResultVC.h"
 #import "IKTypeTableView.h"
 #import "IKJobTypeDetailVC.h"
+#import "IKJobTypeModel.h"
+#import "IKChildJobTypeModel.h"
+
 
 @interface IKMoreTypeVC ()<IKTypeTableViewDelegate,IKJobTypeDetailVCDelegate>
 {
@@ -18,6 +21,7 @@
 }
 @property(nonatomic, strong)IKSearchView *searchView;
 @property(nonatomic, strong)NSIndexPath *selectIndexPath;
+@property(nonatomic, strong)IKTypeTableView *typeTableView;
 
 
 @end
@@ -54,6 +58,15 @@
 }
 
 
+- (void)setJobTypeData:(NSArray *)jobTypeData
+{
+    if (IKArrayIsNotEmpty(jobTypeData)) {
+        _jobTypeData = jobTypeData;
+        _typeTableView.jobTypeData = self.jobTypeData;
+        
+    }
+}
+
 - (void)initLeftBackItem
 {
     // 返回
@@ -82,13 +95,14 @@
 
 - (void)initTypeTableView
 {
-    IKTypeTableView *typeTableView = [[IKTypeTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1200+100)];
-    typeTableView.delegate = self;
-    [self.view addSubview:typeTableView];
+    _typeTableView = [[IKTypeTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1200+100)];
+    _typeTableView.delegate = self;
+    
+    [self.view addSubview:_typeTableView];
     
     __weak typeof (self) weakSelf = self;
 
-    [typeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_typeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf.view).offset(1);
         make.left.and.bottom.and.right.equalTo(weakSelf.view);
     }];
@@ -139,6 +153,27 @@
 
 - (void)typeTableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    IKJobTypeModel *model = [self.jobTypeData objectAtIndex:indexPath.row];
+    
+    NSLog(@"description = %@",model.description);
+    
+    NSMutableArray *childArray = [NSMutableArray arrayWithCapacity:model.childType.count];
+    NSMutableArray *sildeArray = [[NSMutableArray alloc] init];
+    for (int i = 0; i < model.childType.count; i ++) {
+        NSDictionary *dict = (NSDictionary *)[model.childType objectAtIndex:i];
+        
+        IKChildJobTypeModel *childModel = [[IKChildJobTypeModel alloc] init];
+        
+        childModel.childJobName = [dict objectForKey:@"name"];
+        [sildeArray addObject:childModel.childJobName];
+        childModel.skillList = (NSArray *)[dict objectForKey:@"skillList"];
+        childModel.workList = (NSArray *)[dict objectForKey:@"workList"];
+        [childArray addObject:childModel];
+    }
+    
+    
+    _jobDeatil.childJobTypeData = childArray;
+    _jobDeatil.silderData = sildeArray;
     [self.navigationController pushViewController:_jobDeatil animated:YES];
     
     _selectIndexPath = indexPath;

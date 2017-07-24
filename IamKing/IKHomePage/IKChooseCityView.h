@@ -17,6 +17,7 @@
 @interface IKChooseCityView : IKView
 
 @property (nonatomic, weak) id<IKChooseCityViewDelegate> delegate;
-@property (nonatomic,copy)NSArray *provinceData;
-@property (nonatomic,copy)NSArray *cityData;
+@property (nonatomic,copy)NSArray *baseProvinceData;
+
+
 @end

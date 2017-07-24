@@ -21,6 +21,7 @@
 
 @property(nonatomic,assign)BOOL isShowSearchView;
 @property(nonatomic,assign)BOOL isShowLooPalyView;
+@property(nonatomic,assign)BOOL isShowTopLine;
 
 
 @end

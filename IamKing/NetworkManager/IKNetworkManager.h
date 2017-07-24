@@ -29,4 +29,12 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData;
 
+- (void)getHomePageHotCityDataWithBackData:(IKRequestArrayData)requestData;
+
+
+- (void)getHomePageProvinceCityDataWithBackData:(IKRequestArrayData)requestData;
+
+
+- (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)requestData;
+
 @end

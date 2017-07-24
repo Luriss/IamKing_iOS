@@ -10,6 +10,8 @@
 #import "IKTagsCollectionViewCell.h"
 #import "IKChooseCityView.h"
 #import "IKTagsView.h"
+#import "IKHotCityModel.h"
+#import "IKProvinceModel.h"
 
 
 static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
@@ -22,7 +24,8 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 @property (nonatomic,strong) IKTagsView *tag;
 
 @property (nonatomic,   copy)NSDictionary *baseDict;
-
+@property (nonatomic,copy)NSMutableArray *provinceData;
+@property (nonatomic,copy)NSArray *cityData;
 
 @end
 
@@ -32,7 +35,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self initNavView];
-    [self plistData];
+//    [self plistData];
 
 //    [self initHotCityView];
     [self addSubViews];
@@ -55,6 +58,25 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [super viewWillDisappear:animated];
 }
 
+
+- (void)setHotCity:(NSArray *)hotCity
+{
+    if (IKArrayIsNotEmpty(hotCity)) {
+        
+        _hotCity = hotCity;
+        
+    }
+}
+
+
+- (void)setBaseProvinceData:(NSArray *)baseProvinceData
+{
+    if (IKArrayIsNotEmpty(baseProvinceData)) {
+        _baseProvinceData = baseProvinceData;
+    }
+}
+
+
 - (void)initTagsView
 {
     _tag = [[IKTagsView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 200)];
@@ -70,7 +92,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     
 //    tag.backgroundColor = [UIColor cyanColor];
     _tag.delegate = self;
-    _tag.data = @[@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海",@"杭州",@"上海"];
     _tag.lineSpacing = 23.0;
     _tag.verticalSpacing = 20;
     _tag.tagHeight = 25;
@@ -81,11 +102,16 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     _tag.tagCornerRadius = _tag.tagHeight *0.5;
     _tag.tagTitleColor = IKSubHeadTitleColor;
     _tag.tagFont = IKSubTitleFont;
-
+    
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:_hotCity.count];
+    for (IKHotCityModel *model in _hotCity) {
+        [array addObject:model.cityName];
+    }
+    _tag.data = [array copy];
     [_tag createViewAdjustViewFrame:^(CGRect newFrame) {
         NSLog(@"newFrame = %@",[NSValue valueWithCGRect:newFrame]);
         [_tag mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.left.and.right.equalTo(weakSelf.view);
+            make.left.and.right.equalTo(self.view);
             make.top.equalTo(_locationInfoView.mas_bottom);
             make.height.mas_equalTo(CGRectGetHeight(newFrame));
         }];
@@ -94,16 +120,16 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
 
 
-- (void)plistData
-{
-    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
-    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
-    
-    self.baseDict = [data objectForKey:@"provinceCity"];
-    self.provinceData = [data objectForKey:@"province"];
-    
-    self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
-}
+//- (void)plistData
+//{
+//    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKProvinceCity" ofType:@"plist"];
+//    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
+//    
+//    self.baseDict = [data objectForKey:@"provinceCity"];
+//    self.provinceData = [data objectForKey:@"province"];
+//    
+//    self.cityData = [self.baseDict objectForKey:[self.provinceData firstObject]];
+//}
 
 - (void)initNavView
 {
@@ -143,6 +169,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
     _chooseCity = [[IKChooseCityView alloc] init];
     _chooseCity.delegate = self;
+    _chooseCity.baseProvinceData = self.baseProvinceData;
     [self.view addSubview:_chooseCity];
     
     __weak typeof (self) weakSelf = self;
@@ -188,7 +215,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [button addTarget:self action:@selector(locationButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    [button setTitle:@"乌鲁木齐" forState:UIControlStateNormal];
+    [button setTitle:@"杭州" forState:UIControlStateNormal];
 
     button.layer.cornerRadius = 0.038*IKSCREENH_HEIGHT*0.5;
     button.layer.masksToBounds = YES;
@@ -253,12 +280,21 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 {
     IKLog(@"chooseCityViewSelectedCity");
     
+    
+    
     [self dismissSelfWithCity:city];
 }
 
 - (void)tagViewDidSelectedTagWithTitle:(NSString *)title
 {
     NSLog(@"tagViewDidSelectedTagWithTitle = %@",title);
+    [IKUSERDEFAULT removeObjectForKey:@"selectedProvince"];
+    [IKUSERDEFAULT removeObjectForKey:@"selectedCity"];
+    [IKUSERDEFAULT synchronize];
+    
+    
+    IKLog(@"self.selectProvince = %@,self.selectCity = %@",[IKUSERDEFAULT objectForKey:@"selectedCity"],[IKUSERDEFAULT objectForKey:@"selectedProvince"]);
+    
     [self dismissSelfWithCity:title];
 }
 

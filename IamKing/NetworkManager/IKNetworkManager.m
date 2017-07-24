@@ -9,6 +9,9 @@
 #import "IKNetworkManager.h"
 #import "IKNetworkHelper.h"
 #import "IKJobInfoModel.h"
+#import "IKHotCityModel.h"
+#import "IKProvinceModel.h"
+#import "IKJobTypeModel.h"
 
 
 // 轮播图请求 url
@@ -17,8 +20,12 @@
 // 职位列表请求 url
 #define IKRecommendListUrl (@"http://api.job.king2015.com/InviteWork/getRecommendList?")
 
+// 热门城市
+#define IKHotCityListUrl (@"https://www.iamking.com.cn/index.php/Region/getCityList?provinceId=-1")
 
+#define IKProvinceCityListUrl (@"https://www.iamking.com.cn/index.php/region/getProvinceCityList")
 
+#define IKWorkListUrl (@"https://www.iamking.com.cn/index.php/Work/getWorkList")
 
 
 @implementation IKNetworkManager
@@ -161,13 +168,17 @@ static IKNetworkManager *_shareInstance;
         
         NSArray *tagsArr = (NSArray *)[dict objectForKey:@"tagList"];
         
+        
         if (tagsArr.count == 1) {
             model.skill1 = [tagsArr.firstObject objectForKey:@"name"];
         }
         else if(tagsArr.count == 2){
+            model.skill1 = [tagsArr.firstObject objectForKey:@"name"];
             model.skill2 = [tagsArr[1] objectForKey:@"name"];
         }
         else if(tagsArr.count == 3){
+            model.skill1 = [tagsArr.firstObject objectForKey:@"name"];
+            model.skill2 = [tagsArr[1] objectForKey:@"name"];
             model.skill3 = [tagsArr[2] objectForKey:@"name"];
         }
         
@@ -177,6 +188,163 @@ static IKNetworkManager *_shareInstance;
     
     return backArray;
 }
+
+
+- (void)getHomePageHotCityDataWithBackData:(IKRequestArrayData)requestData
+{
+    __block id dataResult = nil;
+
+    [IKNetworkHelper GET:IKHotCityListUrl parameters:nil responseCache:^(id responseCache) {
+//        NSLog(@"responseCache = %@",responseCache);
+        
+        dataResult = responseCache;
+        NSArray *arr = [self dealHotCityData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        if (requestData && arr.count > 0) {
+            requestData(arr,success);
+        }
+        
+    } success:^(id responseObject) {
+//        NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *arr = [self dealHotCityData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (requestData && arr.count > 0) {
+                requestData(arr,success);
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealHotCityData:(id)data
+{
+    NSArray *dataArr = (NSArray *)[data objectForKey:@"data"];
+    if (!dataArr || dataArr.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *reArray = [NSMutableArray arrayWithCapacity:dataArr.count];
+    for (int i = 0; i <dataArr.count; i ++ ) {
+        NSDictionary *dict = (NSDictionary *)[dataArr objectAtIndex:i];
+        
+        IKHotCityModel *model = [[IKHotCityModel alloc] init];
+        model.regionID = NSStringFormat(@"%@", [dict objectForKey:@"region_id"]);
+        model.cityName = [dict objectForKey:@"region_name"];
+        
+        [reArray addObject:model];
+    }
+    
+    return reArray;
+}
+
+
+- (void)getHomePageProvinceCityDataWithBackData:(IKRequestArrayData)requestData
+{
+    __block id dataResult = nil;
+
+    [IKNetworkHelper GET:IKProvinceCityListUrl parameters:nil responseCache:^(id responseCache) {
+//        NSLog(@"responseCache = %@",responseCache);
+        dataResult = responseCache;
+        NSArray *arr = [self dealProviceCityData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        if (requestData && arr.count > 0) {
+            requestData(arr,success);
+        }
+    } success:^(id responseObject) {
+//        NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *arr = [self dealProviceCityData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (requestData && arr.count > 0) {
+                requestData(arr,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (NSArray *)dealProviceCityData:(id)data
+{
+    NSArray *array = (NSArray *)[data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return  nil;
+    }
+    
+    NSMutableArray *reArray = [[NSMutableArray alloc] init];
+    
+    for (int i = 0; i < array.count; i ++) {
+        NSDictionary *subDict = (NSDictionary *)[array objectAtIndex:i];
+        
+        IKProvinceModel *model = [[IKProvinceModel alloc] init];
+        
+        model.provinceName = [subDict objectForKey:@"text"];
+        model.provinceID = NSStringFormat(@"%@",[subDict objectForKey:@"value"]);
+        model.childCity = (NSArray *)[subDict objectForKey:@"children"];
+        [reArray addObject:model];
+    }
+    return reArray;
+}
+
+
+
+- (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)requestData
+{
+    __block id dataResult = nil;
+
+    [IKNetworkHelper GET:IKWorkListUrl parameters:nil responseCache:^(id responseCache) {
+                NSLog(@"responseCache = %@",responseCache);
+        dataResult = responseCache;
+        NSArray *arr = [self dealWorkListData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        if (requestData && arr.count > 0) {
+            requestData(arr,success);
+        }
+    } success:^(id responseObject) {
+                NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *arr = [self dealWorkListData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (requestData && arr.count > 0) {
+                requestData(arr,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealWorkListData:(id)data
+{
+    NSArray *array = (NSArray *)[data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *reArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        IKJobTypeModel *model = [[IKJobTypeModel alloc] init];
+        
+        NSDictionary *subDict = (NSDictionary *)[array objectAtIndex:i];
+        model.describe = [subDict objectForKey:@"describe"];
+        model.JobName = [subDict objectForKey:@"name"];
+        model.childType = (NSArray *)[subDict objectForKey:@"list"];
+        [reArray addObject:model];
+    }
+    
+    return reArray;
+}
+
 
 
 // 判断请求的数据是否正确,0 代表正确
