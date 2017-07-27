@@ -45,7 +45,7 @@
     [_imageview mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(10);
         make.left.equalTo(self.contentView.mas_left).offset(20);
-        make.width.mas_equalTo(19);
+        make.width.mas_equalTo(22);
         make.height.mas_equalTo(22);
     }];
     

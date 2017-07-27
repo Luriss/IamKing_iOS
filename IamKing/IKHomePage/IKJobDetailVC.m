@@ -14,6 +14,8 @@
 #import "IKJobDetailCompanyTableViewCell.h"
 #import "IKDetailTitleTableViewCell.h"
 #import "IKRespRequireTableViewCell.h"
+#import "IKWorkAddressTableViewCell.h"
+#import "IKSkillTableViewCell.h"
 
 
 
@@ -34,9 +36,7 @@
     [super viewDidLoad];
     [self initLeftBackItem];
     [self initNavTitle];
-    
-    needShowSkillSection = NO;
-    
+        
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
     view.backgroundColor = IKLineColor;
     [self.view addSubview:view];
@@ -150,6 +150,8 @@
         _bgTableView.backgroundColor = IKGeneralLightGray;
         _bgTableView.sectionFooterHeight = 1.0;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _bgTableView.showsVerticalScrollIndicator = NO;
+        _bgTableView.showsHorizontalScrollIndicator = NO;
         _bgTableView.delegate = self;
         _bgTableView.dataSource = self;
     }
@@ -170,7 +172,6 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     if (needShowSkillSection) {
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
@@ -188,18 +189,21 @@
             if (indexPath.row == 0) {
                 return 41;
             }
-            else if (indexPath.row == 1){
-                return 180; // 技能
+            else if (indexPath.row == 1){ // 技能认证
+                
+                
+                return 68 + _jobDetailModel.tagsList.count * 30; // 技能
             }
             else{
                 return 0;
             }
         }
-        else if (indexPath.section == 2){
+        else if (indexPath.section == 2){ // 职位详情
             if (indexPath.row == 0) {
                 return 41; // 标题
             }
             else{
+                // 职位要求
                 if (indexPath.row == 1) {
                     CGSize size = [self getResponsibilityAndRequireCellHeight:_jobDetailModel.responsibility];
                     return size.height + 40;
@@ -211,6 +215,22 @@
                 else{
                     return 0;
                 }
+            }
+        }
+        else if (indexPath.section == 3){ // 地点
+            if (indexPath.row == 0) {
+                return 41; // 标题
+            }
+            else{
+                // 地点
+                CGSize size = [NSString getSizeWithString:_jobDetailModel.workAddress size:CGSizeMake(IKSCREEN_WIDTH*0.67, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
+                CGFloat h = size.height<18?18:size.height;
+                return h + 50;
+            }
+        }
+        else if (indexPath.section == 4){ // 评价
+            if (indexPath.row == 0) {
+                return 41;
             }
         }
     }
@@ -227,7 +247,7 @@
                 return 0;
             }
         }
-        else if (indexPath.section == 1){
+        else if (indexPath.section == 1){ // 职位详情
             if (indexPath.row == 0) {
                 return 41;
             }
@@ -240,12 +260,19 @@
                 return size.height + 40; //要求
             }
         }
-        else if (indexPath.section == 2){
+        else if (indexPath.section == 2){ // 地点
             if (indexPath.row == 0) {
                 return 41; // 标题
             }
             else{
-                return 94;
+                CGSize size = [NSString getSizeWithString:_jobDetailModel.workAddress size:CGSizeMake(IKSCREEN_WIDTH*0.67, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
+                CGFloat h = size.height<18?18:size.height;
+                return h + 50;
+            }
+        }
+        else if (indexPath.section == 3){ // 评价
+            if (indexPath.row == 0) {
+                return 41;
             }
         }
     }
@@ -268,19 +295,19 @@
     
     if (needShowSkillSection) {
         if (section == 0) {
-            return 2;
+            return 2; // 公司
         }
         else if (section == 1){
-            return 2;
+            return 2; // 技能
         }
         else if (section == 2){
-            return 3;
+            return 3; // 职位
         }
         else if (section == 3){
-            return 2;
+            return 2; // 地点
         }
         else if (section == 4){
-            return 2;
+            return 2; //评论
         }
         else{
             return 0;
@@ -288,16 +315,16 @@
     }
     else{
         if (section == 0) {
-            return 2;
+            return 2; // 公司
         }
         else if (section == 1){
-            return 3;
+            return 3; // 职位
         }
         else if (section == 2){
-            return 2;
+            return 2; // 地点
         }
         else if (section == 3){
-            return 2;
+            return 2; // 评论
         }
         else{
             return 0;
@@ -351,14 +378,21 @@
             return cell;
         }
         else{
+            // 技能
             if (needShowSkillSection && indexPath.row == 1) {
-                UITableViewCell *cell = [[UITableViewCell alloc] init];
+                // 技能
+                static  NSString *cellId=@"IKSkillTableViewCellId";
+                IKSkillTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKSkillTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                }
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.backgroundColor = [UIColor cyanColor];
-
+                [cell addSkillCellData:_jobDetailModel.tagsList];
                 return cell;
             }
             else{
+                // 职位要求
                 static  NSString *cellId=@"IKRespRequireTableViewCellId";
                 IKRespRequireTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
                 
@@ -397,6 +431,7 @@
             return cell;
         }
         else {
+            // 职位要求
             if (needShowSkillSection) {
                 static  NSString *cellId=@"IKRespRequireTableViewCellId";
                 IKRespRequireTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -416,10 +451,76 @@
                 return cell;
             }
             else{
+                // 地点
+                static  NSString *cellId=@"IKWorkAddressTableViewCellId";
+                IKWorkAddressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKWorkAddressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.shopName = _jobDetailModel.shopName;
+                cell.shopAddress = _jobDetailModel.workAddress;
+                return cell;
+            }
+        }
+    }
+    else if (indexPath.section == 3){
+        if (indexPath.row == 0) {
+            static  NSString *cellId=@"IKDetailTitleTableViewCellId";
+            IKDetailTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKDetailTitleTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            if (needShowSkillSection) {
+                cell.titleType = IKDetailTitleTypeWorkAddress;
+            }
+            else{
+                cell.titleType = IKDetailTitleTypeInterViewAssessment;
+            }
+            return cell;
+        }
+        else{
+            if (needShowSkillSection) {
+                // 地点
+                static  NSString *cellId=@"IKWorkAddressTableViewCellId";
+                IKWorkAddressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKWorkAddressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.shopName = _jobDetailModel.shopName;
+                cell.shopAddress = _jobDetailModel.workAddress;
+                return cell;
+            }
+            else{
                 UITableViewCell *cell = [[UITableViewCell alloc] init];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
+        }
+    }
+    else if (indexPath.section == 4){
+        if (indexPath.row == 0) {
+            static  NSString *cellId=@"IKDetailTitleTableViewCellId";
+            IKDetailTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKDetailTitleTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            cell.titleType = IKDetailTitleTypeInterViewAssessment;
+            return cell;
+        }
+        else{
+            UITableViewCell *cell = [[UITableViewCell alloc] init];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            return cell;
         }
     }
     else{
@@ -428,7 +529,6 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         return cell;
     }
-
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

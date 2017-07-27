@@ -492,21 +492,21 @@ static IKNetworkManager *_shareInstance;
     
     IKJobDetailModel *model = [[IKJobDetailModel alloc] init];
 
-    model.workAddress = [dict objectForKey:@"address"];
-    model.workCity = [dict objectForKey:@"city_name"];
-    model.responsibility = [dict objectForKey:@"duties"];
-    model.education = [dict objectForKey:@"education_name"];
-    model.jobID = [dict objectForKey:@"id"];
-    model.feedback = [dict objectForKey:@"inviteWorkFeedback"];
-    model.require = [dict objectForKey:@"require"];
-    model.salary = [dict objectForKey:@"salary_name"];
-    model.shopName = [dict objectForKey:@"shop_name"];
-    model.tagsList = [dict objectForKey:@"tagList"];
+    model.workAddress = [NSString stringWithFormat:@"%@",[dict objectForKey:@"address"]];
+    model.workCity = [NSString stringWithFormat:@"%@",[dict objectForKey:@"city_name"]] ;
+    model.responsibility = [NSString stringWithFormat:@"%@",[dict objectForKey:@"duties"]];
+    model.education = [NSString stringWithFormat:@"%@",[dict objectForKey:@"education_name"]];
+    model.jobID = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+    model.feedback = (NSArray *)[dict objectForKey:@"inviteWorkFeedback"];
+    model.require = [NSString stringWithFormat:@"%@",[dict objectForKey:@"require"]];
+    model.salary = [NSString stringWithFormat:@"%@",[dict objectForKey:@"salary_name"]];
+    model.shopName = [NSString stringWithFormat:@"%@",[dict objectForKey:@"shop_name"]];
+    model.tagsList = (NSArray *)[dict objectForKey:@"tagList"];
     model.temptation = [NSString stringWithFormat:@"职位诱惑: %@",[dict objectForKey:@"temptation"]];
-    model.companyInfo = [dict objectForKey:@"userCompany"];
+    model.companyInfo = (NSDictionary *)[dict objectForKey:@"userCompany"];
     model.releaseTime = [self timeWithTimeIntervalString:[dict objectForKey:@"vaild_time_start"]];
-    model.experience = [dict objectForKey:@"work_experience_name"];
-    model.jobName = [dict objectForKey:@"work_name"];
+    model.experience = [NSString stringWithFormat:@"%@",[dict objectForKey:@"work_experience_name"]];
+    model.jobName = [NSString stringWithFormat:@"%@",[dict objectForKey:@"work_name"]];
     
     NSInteger index = 4; // tabelView 最少有 4 个 section
     
