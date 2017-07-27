@@ -18,6 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
+
+    self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
 
 }
 
@@ -26,9 +29,23 @@
 {
     [super viewWillAppear:animated];
     
+    
+
     [self fineNavigationBottomLine:self.tabBarController.navigationController.navigationBar];
 }
 
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (self.navigationController.viewControllers.count > 1){
+        self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+    }
+    else{
+        self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
+}
 
 - (void)viewDidDisappear:(BOOL)animated
 {

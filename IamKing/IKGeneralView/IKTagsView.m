@@ -227,8 +227,8 @@
     // 最大宽度
     CGFloat maxWidth = CGRectGetWidth(self.bounds);
     NSLog(@"maxWidth = %.0f",maxWidth);
-    CGFloat totalWidth = 0;
-    CGFloat totalHeight = (_isHideTitle? 0:IKDefaultHeight); // 标题高度
+    CGFloat totalWidth = 5;
+    CGFloat totalHeight = (_isHideTitle? 0:IKDefaultHeight - 12); // 标题高度
     CGFloat contentHeight = 0 ;
     
     
@@ -253,11 +253,11 @@
         [button setBackgroundImage:IKButtonClickBgImage forState:UIControlStateHighlighted];
         [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
         if ((totalWidth + self.lineSpacing*2 + width) > maxWidth) {
-            totalWidth = 0;
+            totalWidth = 5;
             totalHeight += self.tagHeight + self.verticalSpacing;
             
         }
-        
+    
         button.frame = CGRectMake(self.lineSpacing + totalWidth, self.verticalSpacing + totalHeight, width, self.tagHeight);
 
         totalWidth = button.frame.origin.x + width;

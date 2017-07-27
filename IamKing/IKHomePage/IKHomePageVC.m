@@ -13,7 +13,6 @@
 #import "IKLocationManager.h"
 #import "IKMoreTypeVC.h"
 #import "IKSearchVC.h"
-#import "IKSearchView.h"
 #import "IKJobTypeView.h"
 #import "IKJobInfoScrollView.h"
 #import "IKTableView.h"
@@ -23,6 +22,7 @@
 #import "IKHomePageConfig.h"
 #import "IKHotCityModel.h"
 #import "IKProvinceModel.h"
+#import "IKJobDetailVC.h"
 
 
 
@@ -32,7 +32,7 @@
 static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
 
-@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKSearchViewDelegate,IKSearchViewControllerDelegate,IKBottomTableViewCellDelegate,UIGestureRecognizerDelegate>
+@interface IKHomePageVC ()<UIScrollViewDelegate,IKChooseCityViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,IKJobTypeViewDelegate,IKSearchViewControllerDelegate,IKBottomTableViewCellDelegate,UIGestureRecognizerDelegate>
 {
     BOOL  _navRightBtnHadClick;
     BOOL isScrollToTop;
@@ -43,30 +43,36 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     BOOL _isRefreshEnd;
     
 }
-@property(nonatomic,strong)IKNavIconView *navLogoView;
-@property(nonatomic,strong)UIBarButtonItem *leftBarBtn;
-@property(nonatomic,strong)UIBarButtonItem *rightBarBtn;
-@property(nonatomic,strong)IKScrollView *bottomScrollView;
 
-@property(nonatomic,strong)IKTableView *bottomTableView;
-@property (nonatomic,strong)IKTableView *jobTableView;
-@property (nonatomic,strong)IKJobInfoModel *model;
-@property(nonatomic,strong)IKSearchView *searchView;
+// system
+@property(nonatomic,strong)UIBarButtonItem  *leftBarBtn;
+@property(nonatomic,strong)UIBarButtonItem  *rightBarBtn;
+@property(nonatomic,strong)UIImageView      *loadMoreView;
+@property(nonatomic,strong)UIImageView      *refreshView;
+@property(nonatomic,strong)UIView           *sysNavView;
 
-@property(nonatomic,assign)NSUInteger   selectedTableView;
+// custom
+@property(nonatomic,strong)IKNavIconView    *navLogoView;
+@property(nonatomic,strong)IKScrollView     *bottomScrollView;
+@property(nonatomic,strong)IKTableView      *bottomTableView;
+@property (nonatomic,strong)IKTableView     *jobTableView;
+@property(nonatomic,strong)IKJobTypeView    *jobTypeView;
+@property(nonatomic,strong)IKLoopPlayView   *lpView;
+@property(nonatomic,strong)IKJobDetailVC    *jobDetailVc;
+
+// model
+@property (nonatomic,strong)IKJobInfoModel  *model;
+
+// system data type
+@property(nonatomic,assign)NSUInteger        selectedTableView;
 @property(nonatomic,strong)NSMutableArray<IKTableView *> *infoTableViewArray;
-@property(nonatomic,strong)IKJobTypeView *jobTypeView;
-@property(nonatomic,strong)UISearchController *searchVc;
-@property(nonatomic,strong)IKLoopPlayView *lpView;
-@property(nonatomic,strong)UIImageView *loadMoreView;
-@property(nonatomic,strong)NSArray *dataArray;
-@property(nonatomic,assign)CGFloat lpHeight;
-@property(nonatomic,strong)UIImageView *refreshView;
-@property(nonatomic,strong)NSArray *hotCity;
-@property(nonatomic,strong)NSArray *provinceCityData;
-@property(nonatomic,strong)NSArray *jobTypeData;
-@property(nonatomic,assign)NSInteger tableType;
-
+@property(nonatomic,strong)NSArray          *dataArray;
+@property(nonatomic,assign)CGFloat           lpHeight;
+@property(nonatomic,strong)NSArray          *hotCity;
+@property(nonatomic,strong)NSArray          *provinceCityData;
+@property(nonatomic,strong)NSArray          *jobTypeData;
+@property(nonatomic,assign)NSInteger         tableType;
+@property(nonatomic,assign)NSInteger         dataPage;
 
 
 @end
@@ -85,10 +91,16 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     isScrollToTop = NO;
     _isLoading = NO;
     _tableType = 0;  // 默认 0
+    _dataPage = 1;
     _isRefreshEnd = NO;
     
     self.lpHeight = 0.48*IKSCREEN_WIDTH;
     _infoTableViewArray = [[NSMutableArray alloc] init];
+    
+    
+    self.sysNavView = [[self.navigationController.navigationBar subviews] objectAtIndex:0];
+    
+    
     
     NSLog(@"IKSCREEN_WIDTH = %.0f",IKSCREENH_HEIGHT );
     
@@ -106,8 +118,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     //    // 职位列表
     [self initTableView];
     
-    [self initSearchVC];
-    
     IKLog(@"self.navigationController = %@",self.navigationController);
 }
 
@@ -115,8 +125,12 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    
+        
+    // 内容视图若有滚动,则设置导航栏透明度95%
+    if (_bottomTableView.contentOffset.y > 0) {
+        self.sysNavView.alpha = 0.95;
+    }
+
     // 视图显示开始轮播
     [self startLoopPlayView];
 }
@@ -126,10 +140,16 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     [super viewDidAppear:animated];
 }
 
-
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    self.sysNavView.alpha = 1.0;
+}
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
+    
     
     // 视图消失,停止轮播
     [self stopLoopPlayView];
@@ -170,6 +190,15 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     }
     
     return _jobTypeData;
+}
+
+
+- (IKJobDetailVC *)jobDetailVc
+{
+    if (_jobDetailVc == nil) {
+        _jobDetailVc = [[IKJobDetailVC alloc] init];
+    }
+    return _jobDetailVc;
 }
 
 #pragma mark - InitView
@@ -303,9 +332,11 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)initTableView
 {
     
-    _bottomScrollView.contentSize = CGSizeMake(IKSCREEN_WIDTH * 3, IKSCREENH_HEIGHT- 64 - 80);
+    NSInteger jobTableIndex = 2;
     
-    for (int i = 0; i < 2; i ++) {
+    _bottomScrollView.contentSize = CGSizeMake(IKSCREEN_WIDTH * jobTableIndex, IKSCREENH_HEIGHT- 64 - 80);
+    
+    for (int i = 0; i < jobTableIndex; i ++) {
         
         IKTableView *tableView = [[IKTableView alloc] initWithFrame:CGRectMake(i *IKSCREEN_WIDTH, 0, IKSCREEN_WIDTH, CGRectGetHeight(_bottomScrollView.frame)) style:UITableViewStylePlain];
         tableView.tag = 1000 + i;
@@ -325,13 +356,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 }
 
 
-- (void)initSearchVC
-{
-    _searchView = [[IKSearchView alloc] init];
-    _searchView.hiddenColse = YES;
-    _searchView.hidden = NO;
-    _searchView.delegate = self;
-}
 
 #pragma mark - Stop & Start LoopPlayView
 
@@ -520,12 +544,11 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     if (tableView != _bottomTableView) {
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
-        UIViewController *vc = [[UIViewController alloc] init];
-        vc.view.backgroundColor = [UIColor whiteColor];
-        
-        [self.navigationController pushViewController:vc animated:YES];
+
+        IKJobInfoModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        self.jobDetailVc.jobModel = model;
+        [self.navigationController pushViewController:self.jobDetailVc animated:YES];
     }
-    
 }
 
 
@@ -558,10 +581,10 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     if (scrollView == _bottomTableView) {
         // 底部的 tableView 滑动时,导航栏设置0.95的透明度.
         if (offsetY > 0) {
-            [[self.navigationController.navigationBar subviews] objectAtIndex:0].alpha = 0.95;
+            self.sysNavView.alpha = 0.95;
         }
         else{
-            [[self.navigationController.navigationBar subviews] objectAtIndex:0].alpha = 1;
+            self.sysNavView.alpha = 1.0;
         }
         
         // _bottomTableView 拉倒最下面就禁止拉.
@@ -652,7 +675,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             if (!_isLoading) {
                 _isLoading = YES;
                 self.jobTableView.contentInset = UIEdgeInsetsMake(0, 0, 26, 0);
-                [self startLoadingAnimation];
+                [self startLoadingMoreAnimation];
             }
         }
         else{
@@ -677,13 +700,16 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     CGFloat index = (scrollView.contentOffset.x)/IKSCREEN_WIDTH;
     NSLog(@"index = %.0f",index);
     if (scrollView == _bottomScrollView ) {
-        [_jobTypeView adjustBottomLine:index];
-        self.selectedTableView = index;
-        _tableType = index;
-        self.jobTableView = [_infoTableViewArray objectAtIndex:index];
-        [self getJobInfoTableViewDataUseCache:YES];
+        IKTableView *tabelView = (IKTableView *)[_infoTableViewArray objectAtIndex:index];
+        
+        if (self.jobTableView.tag != tabelView.tag) {
+            self.jobTableView = tabelView;
+            [_jobTypeView adjustBottomLine:index];
+            self.selectedTableView = index;
+            _tableType = index;
+            [self getJobInfoTableViewDataUseCache:YES];
+        }
     }
-    
 }
 
 
@@ -704,7 +730,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 }
 
 
-- (void)startLoadingAnimation
+- (void)startLoadingMoreAnimation
 {
     CABasicAnimation *animation =  [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
     
@@ -717,13 +743,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     animation.repeatCount = MAXFLOAT; //如果这里想设置成一直自旋转，可以设置为MAXFLOAT，否则设置具体的数值则代表执行多少次
     [self.loadMoreView.layer addAnimation:animation forKey:loadingAnimationKey];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        
-        [self stopLoadingAnimation];
-        
-//        [self.dataArray addObjectsFromArray:self.dataArray];
-        [self.jobTableView reloadData];
-    });
+    // 调用接口获取更多数据
+    [self loadMoreJobJinfo];
 }
 
 
@@ -731,6 +752,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     
     [self.loadMoreView.layer removeAnimationForKey:loadingAnimationKey];
+    [self.refreshView.layer removeAnimationForKey:loadingAnimationKey];
     _isLoading = NO;
     self.jobTableView.contentInset = UIEdgeInsetsZero;
     _bottomTableView.contentInset = UIEdgeInsetsZero;
@@ -777,16 +799,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)searchViewControllerDismiss
 {
     IKLog(@"searchViewControllerDismiss");
-    [_searchView.searchBar resignFirstResponder];
-    //
-    //    UITableViewCell *cell = [_bottomTableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    //
-    //    [cell.contentView addSubview:_searchView];
-    //    [_searchView mas_makeConstraints:^(MASConstraintMaker *make) {
-    //        make.top.equalTo(cell.contentView).offset(1);
-    //        make.left.and.right.equalTo(cell.contentView);
-    //        make.height.mas_equalTo(44);
-    //    }];
     
 }
 
@@ -852,9 +864,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         if (success) {
             self.hotCity = dataArray;
         }
-        for (IKHotCityModel *moel in dataArray) {
-            NSLog(@"%@",[moel description]);
-        }
     }];
     
     // 获取省市信息.
@@ -877,7 +886,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     if (useCache) {
         // 轮播图
         [[IKNetworkManager shareInstance] getHomePageLoopPlayImageData:^(NSDictionary *dict, BOOL success) {
-            NSLog(@"daaaaaaaaaaa = %@,success = %d",dict,success);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (success) {
                     _lpView.imagesArray = [dict objectForKey:@"imageUrlArray"];
@@ -908,13 +916,10 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
 - (void)getJobInfoTableViewDataUseCache:(BOOL)useCache
 {
-    NSString *selectedCityId = [IKUSERDEFAULT objectForKey:@"selectedCityId"];
-    
-    if (IKStringIsEmpty(selectedCityId)) {
-        selectedCityId = @"0";
-    }
+    NSString *cityId = [self getCurrentCityIdFromUserDefault];
+
     // 获取列表信息.
-    NSDictionary *jobParam = @{@"cityId":selectedCityId,@"pageSize":@"16",@"type":[NSString stringWithFormat:@"%ld",_tableType]};
+    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"16",@"type":[NSString stringWithFormat:@"%ld",_tableType]};
     
     if (!useCache) {
         [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithoutCacheParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
@@ -945,7 +950,39 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 }
 
 
+- (void)loadMoreJobJinfo
+{
+    NSString *cityId = [self getCurrentCityIdFromUserDefault];
+    // 获取列表信息.
+    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"16",@"type":[NSString stringWithFormat:@"%ld",_tableType],@"page":[NSString stringWithFormat:@"%ld",_dataPage++] };
+    
+    [[IKNetworkManager shareInstance] getHomePageMoreJobInfoDataWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
+        
+        NSLog(@"self.dataArray.count = %ld,dataArray.count = %ld",self.dataArray.count,dataArray.count);
+        if (dataArray.count > 0 && success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self stopLoadingAnimation];
+                self.dataArray = [self.dataArray arrayByAddingObjectsFromArray:dataArray];
+                [self.jobTableView reloadData];
+                NSLog(@"self.dataArray.count = %ld,dataArray.count = %ld",self.dataArray.count,dataArray.count);
 
+            });
+            
+        }
+
+    }];
+}
+
+
+- (NSString *)getCurrentCityIdFromUserDefault
+{
+    NSString *selectedCityId = [IKUSERDEFAULT objectForKey:@"selectedCityId"];
+    
+    if (IKStringIsEmpty(selectedCityId)) {
+        selectedCityId = @"0";
+    }
+    return selectedCityId;
+}
 
 
 - (void)didReceiveMemoryWarning {

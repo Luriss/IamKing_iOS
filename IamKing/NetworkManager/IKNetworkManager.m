@@ -23,14 +23,30 @@
 // 热门城市
 #define IKHotCityListUrl (@"https://www.iamking.com.cn/index.php/Region/getCityList?provinceId=-1")
 
+
+// 省市信息
 #define IKProvinceCityListUrl (@"https://www.iamking.com.cn/index.php/region/getProvinceCityList")
 
+// 职位类型信息
 #define IKWorkListUrl (@"https://www.iamking.com.cn/index.php/Work/getWorkList")
 
+
+// 获取城市 ID
 #define IKGetCityIdUrl (@"https://www.iamking.com.cn/index.php/Region/getCityIdByCityName?")
 
+// 加载更多
+#define IKGetMoreJobListUrl (@"https://www.iamking.com.cn/index.php/InviteWork/getList?")
 
+// 搜索工作    cityId=0&companyType=0&page=1&pageSize=8&salaryType=0&str=TABATA&workExperienceType=0
+#define IKSearchJobByJobNameUrl (@"https://www.iamking.com.cn/index.php/InviteWork/searchByWorkName?")
 
+// 职位详情
+#define IKJobDeatailUrl (@"https://www.iamking.com.cn/index.php/InviteWork/getInfo?")
+
+@interface IKNetworkManager ()
+
+@property(nonatomic,strong)NSDateFormatter *dataFormatter;
+@end
 
 @implementation IKNetworkManager
 
@@ -66,38 +82,53 @@ static IKNetworkManager *_shareInstance;
     return _shareInstance;
 }
 
-- (void)getHomePageLoopPlayImageDataWithoutCache:(IKRequestDictData)requestData
+
+- (NSDateFormatter *)dataFormatter
+{
+    if (_dataFormatter == nil) {
+        _dataFormatter = [[NSDateFormatter alloc] init];
+    }
+    return _dataFormatter;
+}
+
+
+
+
+
+
+
+- (void)getHomePageLoopPlayImageDataWithoutCache:(IKRequestDictData)callback
 {
     [IKNetworkHelper GET:IKGetLoopPlayUrl parameters:nil responseCache:nil success:^(id responseObject) {
         NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseObject];
         BOOL success = [self requestDataSuccess:responseObject];
-        if (requestData) {
-            requestData(dict,success);
+        if (callback) {
+            callback(dict,success);
         }
     } failure:^(NSError *error) {
         
     }];
 }
 
-- (void)getHomePageLoopPlayImageData:(IKRequestDictData)requestData
+- (void)getHomePageLoopPlayImageData:(IKRequestDictData)callback
 {
     __block id dataResult = nil;
     
     [IKNetworkHelper GET:IKGetLoopPlayUrl parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
 
-        if (requestData) {
+        if (callback) {
             NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseCache];
             BOOL success = [self requestDataSuccess:responseCache];
-            requestData(dict,success);
+            callback(dict,success);
         }
     } success:^(id responseObject) {
         
         if (![dataResult isEqual:responseObject]) {
             NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
-            if (requestData) {
-                requestData(dict,success);
+            if (callback) {
+                callback(dict,success);
             }
         }
     } failure:^(NSError *error) {
@@ -127,7 +158,7 @@ static IKNetworkManager *_shareInstance;
 }
 
 
-- (void)getHomePageJobInfoDataWithoutCacheParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData
+- (void)getHomePageJobInfoDataWithoutCacheParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
 {
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@",IKRecommendListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"]];
     
@@ -135,15 +166,15 @@ static IKNetworkManager *_shareInstance;
         NSArray *arr = [self dealHomePageJobInfoData:responseObject];
         BOOL success = [self requestDataSuccess:responseObject];
         
-        if (requestData) {
-            requestData(arr,success);
+        if (callback) {
+            callback(arr,success);
         }
     } failure:^(NSError *error) {
         
     }];
 }
 
-- (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)requestData
+- (void)getHomePageJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
 {
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@",IKRecommendListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"]];
     
@@ -154,8 +185,8 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealHomePageJobInfoData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (requestData) {
-            requestData(arr,success);
+        if (callback) {
+            callback(arr,success);
         }
     } success:^(id responseObject) {
         
@@ -163,8 +194,8 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealHomePageJobInfoData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (requestData) {
-                requestData(arr,success);
+            if (callback) {
+                callback(arr,success);
             }
         }
     } failure:^(NSError *error) {
@@ -222,7 +253,7 @@ static IKNetworkManager *_shareInstance;
 }
 
 
-- (void)getHomePageHotCityDataWithBackData:(IKRequestArrayData)requestData
+- (void)getHomePageHotCityDataWithBackData:(IKRequestArrayData)callback
 {
     __block id dataResult = nil;
 
@@ -232,8 +263,8 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealHotCityData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (requestData && arr.count > 0) {
-            requestData(arr,success);
+        if (callback && arr.count > 0) {
+            callback(arr,success);
         }
         
     } success:^(id responseObject) {
@@ -242,8 +273,8 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealHotCityData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (requestData && arr.count > 0) {
-                requestData(arr,success);
+            if (callback && arr.count > 0) {
+                callback(arr,success);
             }
         }
         
@@ -275,7 +306,7 @@ static IKNetworkManager *_shareInstance;
 }
 
 
-- (void)getHomePageProvinceCityDataWithBackData:(IKRequestArrayData)requestData
+- (void)getHomePageProvinceCityDataWithBackData:(IKRequestArrayData)callback
 {
     __block id dataResult = nil;
 
@@ -284,8 +315,8 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealProviceCityData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (requestData && arr.count > 0) {
-            requestData(arr,success);
+        if (callback && arr.count > 0) {
+            callback(arr,success);
         }
     } success:^(id responseObject) {
 //        NSLog(@"responseObject = %@",responseObject);
@@ -293,8 +324,8 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealProviceCityData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (requestData && arr.count > 0) {
-                requestData(arr,success);
+            if (callback && arr.count > 0) {
+                callback(arr,success);
             }
         }
     } failure:^(NSError *error) {
@@ -327,7 +358,7 @@ static IKNetworkManager *_shareInstance;
 
 
 
-- (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)requestData
+- (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)callback
 {
     __block id dataResult = nil;
 
@@ -336,8 +367,8 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealWorkListData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (requestData && arr.count > 0) {
-            requestData(arr,success);
+        if (callback && arr.count > 0) {
+            callback(arr,success);
         }
     } success:^(id responseObject) {
 //                NSLog(@"responseObject = %@",responseObject);
@@ -345,8 +376,8 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealWorkListData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (requestData && arr.count > 0) {
-                requestData(arr,success);
+            if (callback && arr.count > 0) {
+                callback(arr,success);
             }
         }
     } failure:^(NSError *error) {
@@ -377,7 +408,7 @@ static IKNetworkManager *_shareInstance;
     return reArray;
 }
 
-- (void)getHomePageCityIDWithCityName:(NSString *)cityName backData:(void(^)(NSString *cityId))block
+- (void)getHomePageCityIDWithCityName:(NSString *)cityName backData:(void(^)(NSString *cityId))callback
 {
     NSString *url = [NSString stringWithFormat:@"%@cityName=%@",IKGetCityIdUrl,cityName];
     NSLog(@"url = %@",url);
@@ -388,15 +419,123 @@ static IKNetworkManager *_shareInstance;
         NSString *str = [[responseObject objectForKey:@"data"] objectForKey:@"region_id"];
         [IKUSERDEFAULT setObject:str forKey:@"locationCityId"];
         
-        if (block) {
-            block(str);
+        if (callback) {
+            callback(str);
         }
     } failure:^(NSError *error) {
         
     }];
 }
 
-// 判断请求的数据是否正确,0 代表正确
+
+- (void)getHomePageMoreJobInfoDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    // cityId=0&&pageSize=8
+    NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@page=%@",IKGetMoreJobListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"],[param objectForKey:@"page"]];
+    NSLog(@"url = %@",url);
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
+
+        NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback(arr,success);
+        }
+        
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)getHomePageJobInfoDetailWithParam:(NSDictionary *)param backData:(void (^)(IKJobDetailModel *detailModel, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@inviteWorkId=%@&userId=0",IKJobDeatailUrl,[param objectForKey:@"inviteWorkId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+        NSLog(@"responseCache = %@",responseCache);
+
+        IKJobDetailModel *model = [self dealJobDetailData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        if (callback && model) {
+            callback(model,success);
+        }
+    } success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            IKJobDetailModel *model = [self dealJobDetailData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && model) {
+                callback(model,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (IKJobDetailModel *)dealJobDetailData:(id)data
+{
+    NSDictionary *dict = (NSDictionary *)[data objectForKey:@"data"];
+    
+    if (dict.allKeys.count == 0) {
+        return nil;
+    }
+    
+    IKJobDetailModel *model = [[IKJobDetailModel alloc] init];
+
+    model.workAddress = [dict objectForKey:@"address"];
+    model.workCity = [dict objectForKey:@"city_name"];
+    model.responsibility = [dict objectForKey:@"duties"];
+    model.education = [dict objectForKey:@"education_name"];
+    model.jobID = [dict objectForKey:@"id"];
+    model.feedback = [dict objectForKey:@"inviteWorkFeedback"];
+    model.require = [dict objectForKey:@"require"];
+    model.salary = [dict objectForKey:@"salary_name"];
+    model.shopName = [dict objectForKey:@"shop_name"];
+    model.tagsList = [dict objectForKey:@"tagList"];
+    model.temptation = [NSString stringWithFormat:@"职位诱惑: %@",[dict objectForKey:@"temptation"]];
+    model.companyInfo = [dict objectForKey:@"userCompany"];
+    model.releaseTime = [self timeWithTimeIntervalString:[dict objectForKey:@"vaild_time_start"]];
+    model.experience = [dict objectForKey:@"work_experience_name"];
+    model.jobName = [dict objectForKey:@"work_name"];
+    
+    NSInteger index = 4; // tabelView 最少有 4 个 section
+    
+    if (model.tagsList.count > 0) {
+        index += 1;   // 有技能标签,添加 1 个 section.
+    }
+    model.numberOfSection = index;
+    
+    return model;
+}
+
+
+
+- (NSString *)timeWithTimeIntervalString:(NSString *)timeInterval
+{
+    // 格式化时间
+    self.dataFormatter.timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [self.dataFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [self.dataFormatter setTimeStyle:NSDateFormatterShortStyle];
+    [self.dataFormatter setDateFormat:@"yyyy.MM.dd"];
+    
+    // 毫秒值转化为秒
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:[timeInterval doubleValue]];
+    NSString* dateString = [self.dataFormatter stringFromDate:date];
+    NSLog(@"dateString ======= %@",dateString);
+    return [NSString stringWithFormat:@"职位发布时间: %@",dateString];
+}
+
+// 判断服务器数据是否正常,0 代表正确
 - (BOOL)requestDataSuccess:(id)data
 {
     NSString *errCode = [NSString stringWithFormat:@"%@",[data objectForKey:@"err"]];

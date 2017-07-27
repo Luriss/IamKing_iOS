@@ -257,8 +257,6 @@
 
 - (void)setImagesArray:(NSArray *)imagesArray
 {
-    NSLog(@"imagesArray = %@,",imagesArray);
-
     if (!IKArrayIsEmpty(imagesArray)) {
         _imagesArray = [imagesArray copy];
         

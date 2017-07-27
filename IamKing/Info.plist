@@ -52,7 +52,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
-	<key>kCGBitmapAlphaInfoMask</key>
-	<string></string>
 </dict>
 </plist>

@@ -76,6 +76,9 @@
         _logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height - 10, self.bounds.size.height - 10)];
         _logoImageView.contentMode = UIViewContentModeScaleToFill;
         _logoImageView.backgroundColor = IKGeneralLightGray;
+        _logoImageView.layer.borderWidth = 1.0;
+        _logoImageView.layer.borderColor = IKGeneralLightGray.CGColor;
+        _logoImageView.layer.cornerRadius = 5;
     }
     return _logoImageView;
 }
@@ -126,7 +129,7 @@
     if (_addressView == nil) {
         // 地点
         _addressView = [[IKImageWordView alloc] init];
-        [_addressView.imageView setImage:[UIImage imageNamed:@"IK_applyJobAddress"]];
+        [_addressView.imageView setImage:[UIImage imageNamed:@"IK_address_blue"]];
     }
     return _addressView;
 }
@@ -136,7 +139,7 @@
     if (_experienceView == nil) {
         // 工作经验
         _experienceView = [[IKImageWordView alloc] init];
-        [_experienceView.imageView setImage:[UIImage imageNamed:@"IK_experience"]];
+        [_experienceView.imageView setImage:[UIImage imageNamed:@"IK_experience_blue"]];
     }
     return _experienceView;
 }
@@ -147,7 +150,7 @@
     if (_educationView == nil) {
         // 学历
         _educationView = [[IKImageWordView alloc] init];
-        [_educationView.imageView setImage:[UIImage imageNamed:@"IK_education"]];
+        [_educationView.imageView setImage:[UIImage imageNamed:@"IK_education_blue"]];
     }
     return _educationView;
 }
@@ -282,7 +285,6 @@
 
 - (void)addCellData:(IKJobInfoModel *)model
 {
-    NSLog(@"logoImageUrl = %@",model.logoImageUrl);
     [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:5.0];
     self.logoImageView.backgroundColor = [UIColor whiteColor];
     self.authImageView.hidden = !model.isAuthen;

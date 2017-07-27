@@ -180,15 +180,21 @@
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
 {
-    return YES;
+    NSLog(@"searchBarShouldBeginEditing");
+    
+    // 如果不可以点击,则说明是首页的搜索框.
+    if (!_canSearch) {
+        if ([self.delegate respondsToSelector:@selector(searchViewStartSearch)]) {
+            [self.delegate searchViewStartSearch];
+        }
+    }
+    return _canSearch;
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
     NSLog(@"searchBarTextDidBeginEditing");
-    if ([self.delegate respondsToSelector:@selector(searchViewStartSearch)]) {
-        [self.delegate searchViewStartSearch];
-    }
+    
 }
 
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar

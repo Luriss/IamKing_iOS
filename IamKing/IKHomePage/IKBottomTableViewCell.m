@@ -53,6 +53,7 @@
     if (_searchView == nil) {
         _searchView = [[IKSearchView alloc] init];
         _searchView.hiddenColse = YES;
+        _searchView.canSearch = NO;
         _searchView.hidden = YES;
     }
     

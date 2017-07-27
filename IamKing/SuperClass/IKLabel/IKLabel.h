@@ -8,6 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, IKVerticalAlignment)
+{
+    IKVerticalAlignmentTop = 0, // default
+    IKVerticalAlignmentMiddle,
+    IKVerticalAlignmentBottom,
+};
+
 @interface IKLabel : UILabel
+
+
+@property (nonatomic,assign) IKVerticalAlignment verticalAlignment;
 
 @end

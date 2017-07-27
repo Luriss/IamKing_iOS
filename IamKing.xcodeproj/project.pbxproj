@@ -62,6 +62,23 @@
 		21BC61711F25931E00CE85D9 /* IKProvinceModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61701F25931E00CE85D9 /* IKProvinceModel.m */; };
 		21BC61751F25A77700CE85D9 /* IKJobTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61741F25A77700CE85D9 /* IKJobTypeModel.m */; };
 		21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61771F25B79900CE85D9 /* IKChildJobTypeModel.m */; };
+		21BC617C1F2706F900CE85D9 /* IKJobDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC617B1F2706F900CE85D9 /* IKJobDetailVC.m */; };
+		21BC617F1F270DC100CE85D9 /* IKNoDataBgView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC617E1F270DC100CE85D9 /* IKNoDataBgView.m */; };
+		21BC61831F2733FB00CE85D9 /* IKJobDetailModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61821F2733FB00CE85D9 /* IKJobDetailModel.m */; };
+		21BC61871F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61861F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m */; };
+		21BC61891F282B7800CE85D9 /* IK_detail_pin.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61881F282B7800CE85D9 /* IK_detail_pin.png */; };
+		21BC618C1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC618B1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m */; };
+		21BC618F1F2869C300CE85D9 /* IK_star_hollow_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC618D1F2869C300CE85D9 /* IK_star_hollow_red.png */; };
+		21BC61901F2869C300CE85D9 /* IK_star_solid_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC618E1F2869C300CE85D9 /* IK_star_solid_red.png */; };
+		21BC61921F28755C00CE85D9 /* IK_v.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61911F28755C00CE85D9 /* IK_v.png */; };
+		21BC61951F2884B600CE85D9 /* IK_education_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61931F2884B600CE85D9 /* IK_education_blue.png */; };
+		21BC61961F2884B600CE85D9 /* IK_experience_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61941F2884B600CE85D9 /* IK_experience_blue.png */; };
+		21BC61991F28860000CE85D9 /* IK_jobDesc.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61971F28860000CE85D9 /* IK_jobDesc.png */; };
+		21BC619A1F28860000CE85D9 /* IK_jobDetail.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61981F28860000CE85D9 /* IK_jobDetail.png */; };
+		21BC619D1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC619C1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m */; };
+		21BC61A01F2893B600CE85D9 /* IK_assessment.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC619E1F2893B600CE85D9 /* IK_assessment.png */; };
+		21BC61A11F2893B600CE85D9 /* IK_certificate.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC619F1F2893B600CE85D9 /* IK_certificate.png */; };
+		21BC61A41F28980700CE85D9 /* IKRespRequireTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61A31F28980700CE85D9 /* IKRespRequireTableViewCell.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -105,9 +122,9 @@
 		21D623101F132B660054D980 /* IK_exchange.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D6230F1F132B660054D980 /* IK_exchange.png */; };
 		21D623181F132E240054D980 /* UIImage+GetImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D623171F132E240054D980 /* UIImage+GetImage.m */; };
 		21D6231D1F1355610054D980 /* IK_applyJobSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D6231C1F1355610054D980 /* IK_applyJobSelected@3x.png */; };
-		21D623221F1360F80054D980 /* IK_applyJobAddress.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D6231F1F1360F80054D980 /* IK_applyJobAddress.png */; };
+		21D623221F1360F80054D980 /* IK_address_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D6231F1F1360F80054D980 /* IK_address_grey.png */; };
 		21D623231F1360F80054D980 /* IK_education.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D623201F1360F80054D980 /* IK_education.png */; };
-		21D623241F1360F80054D980 /* IK_experience.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D623211F1360F80054D980 /* IK_experience.png */; };
+		21D623241F1360F80054D980 /* IK_experience_grey.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D623211F1360F80054D980 /* IK_experience_grey.png */; };
 		21D6232C1F137D700054D980 /* UIImageView+CornerRadius.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D6232B1F137D700054D980 /* UIImageView+CornerRadius.m */; };
 		21D6232F1F138CFE0054D980 /* NSString+StringSize.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D6232E1F138CFE0054D980 /* NSString+StringSize.m */; };
 		21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21E2B5961F1B1EA700F9EC14 /* IKTableView.m */; };
@@ -223,6 +240,30 @@
 		21BC61741F25A77700CE85D9 /* IKJobTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobTypeModel.m; sourceTree = "<group>"; };
 		21BC61761F25B79900CE85D9 /* IKChildJobTypeModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKChildJobTypeModel.h; sourceTree = "<group>"; };
 		21BC61771F25B79900CE85D9 /* IKChildJobTypeModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKChildJobTypeModel.m; sourceTree = "<group>"; };
+		21BC617A1F2706F900CE85D9 /* IKJobDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobDetailVC.h; sourceTree = "<group>"; };
+		21BC617B1F2706F900CE85D9 /* IKJobDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobDetailVC.m; sourceTree = "<group>"; };
+		21BC617D1F270DC100CE85D9 /* IKNoDataBgView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNoDataBgView.h; sourceTree = "<group>"; };
+		21BC617E1F270DC100CE85D9 /* IKNoDataBgView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNoDataBgView.m; sourceTree = "<group>"; };
+		21BC61811F2733FB00CE85D9 /* IKJobDetailModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobDetailModel.h; sourceTree = "<group>"; };
+		21BC61821F2733FB00CE85D9 /* IKJobDetailModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobDetailModel.m; sourceTree = "<group>"; };
+		21BC61851F2755F500CE85D9 /* IKJobDetailTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobDetailTopTableViewCell.h; sourceTree = "<group>"; };
+		21BC61861F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobDetailTopTableViewCell.m; sourceTree = "<group>"; };
+		21BC61881F282B7800CE85D9 /* IK_detail_pin.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_detail_pin.png; sourceTree = "<group>"; };
+		21BC618A1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobDetailCompanyTableViewCell.h; sourceTree = "<group>"; };
+		21BC618B1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobDetailCompanyTableViewCell.m; sourceTree = "<group>"; };
+		21BC618D1F2869C300CE85D9 /* IK_star_hollow_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_hollow_red.png; sourceTree = "<group>"; };
+		21BC618E1F2869C300CE85D9 /* IK_star_solid_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_star_solid_red.png; sourceTree = "<group>"; };
+		21BC61911F28755C00CE85D9 /* IK_v.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_v.png; sourceTree = "<group>"; };
+		21BC61931F2884B600CE85D9 /* IK_education_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_education_blue.png; sourceTree = "<group>"; };
+		21BC61941F2884B600CE85D9 /* IK_experience_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_experience_blue.png; sourceTree = "<group>"; };
+		21BC61971F28860000CE85D9 /* IK_jobDesc.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IK_jobDesc.png; path = ../TableViewImage/IK_jobDesc.png; sourceTree = "<group>"; };
+		21BC61981F28860000CE85D9 /* IK_jobDetail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = IK_jobDetail.png; path = ../TableViewImage/IK_jobDetail.png; sourceTree = "<group>"; };
+		21BC619B1F288EE100CE85D9 /* IKDetailTitleTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKDetailTitleTableViewCell.h; sourceTree = "<group>"; };
+		21BC619C1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKDetailTitleTableViewCell.m; sourceTree = "<group>"; };
+		21BC619E1F2893B600CE85D9 /* IK_assessment.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_assessment.png; sourceTree = "<group>"; };
+		21BC619F1F2893B600CE85D9 /* IK_certificate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_certificate.png; sourceTree = "<group>"; };
+		21BC61A21F28980700CE85D9 /* IKRespRequireTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKRespRequireTableViewCell.h; sourceTree = "<group>"; };
+		21BC61A31F28980700CE85D9 /* IKRespRequireTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKRespRequireTableViewCell.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -293,9 +334,9 @@
 		21D623161F132E240054D980 /* UIImage+GetImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+GetImage.h"; sourceTree = "<group>"; };
 		21D623171F132E240054D980 /* UIImage+GetImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+GetImage.m"; sourceTree = "<group>"; };
 		21D6231C1F1355610054D980 /* IK_applyJobSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_applyJobSelected@3x.png"; sourceTree = "<group>"; };
-		21D6231F1F1360F80054D980 /* IK_applyJobAddress.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_applyJobAddress.png; sourceTree = "<group>"; };
+		21D6231F1F1360F80054D980 /* IK_address_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_address_grey.png; sourceTree = "<group>"; };
 		21D623201F1360F80054D980 /* IK_education.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_education.png; sourceTree = "<group>"; };
-		21D623211F1360F80054D980 /* IK_experience.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_experience.png; sourceTree = "<group>"; };
+		21D623211F1360F80054D980 /* IK_experience_grey.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_experience_grey.png; sourceTree = "<group>"; };
 		21D6232A1F137D700054D980 /* UIImageView+CornerRadius.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+CornerRadius.h"; sourceTree = "<group>"; };
 		21D6232B1F137D700054D980 /* UIImageView+CornerRadius.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+CornerRadius.m"; sourceTree = "<group>"; };
 		21D6232D1F138CFE0054D980 /* NSString+StringSize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+StringSize.h"; sourceTree = "<group>"; };
@@ -578,6 +619,41 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		21BC61791F2706BF00CE85D9 /* JobDetailVC */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61841F2755B400CE85D9 /* view */,
+				21BC61801F2733D800CE85D9 /* IKDetailModel */,
+				21BC617A1F2706F900CE85D9 /* IKJobDetailVC.h */,
+				21BC617B1F2706F900CE85D9 /* IKJobDetailVC.m */,
+			);
+			name = JobDetailVC;
+			sourceTree = "<group>";
+		};
+		21BC61801F2733D800CE85D9 /* IKDetailModel */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61811F2733FB00CE85D9 /* IKJobDetailModel.h */,
+				21BC61821F2733FB00CE85D9 /* IKJobDetailModel.m */,
+			);
+			name = IKDetailModel;
+			sourceTree = "<group>";
+		};
+		21BC61841F2755B400CE85D9 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61851F2755F500CE85D9 /* IKJobDetailTopTableViewCell.h */,
+				21BC61861F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m */,
+				21BC618A1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.h */,
+				21BC618B1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m */,
+				21BC619B1F288EE100CE85D9 /* IKDetailTitleTableViewCell.h */,
+				21BC619C1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m */,
+				21BC61A21F28980700CE85D9 /* IKRespRequireTableViewCell.h */,
+				21BC61A31F28980700CE85D9 /* IKRespRequireTableViewCell.m */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
 		21C3ADEF1F1499FF008FC124 /* NetworkManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +752,8 @@
 				21C3AE621F1756D0008FC124 /* IKLoopPlayView */,
 				21C3AE601F1756A4008FC124 /* IKJobInfoTableView */,
 				21C3AE5F1F175666008FC124 /* IKButtonView */,
+				21BC617D1F270DC100CE85D9 /* IKNoDataBgView.h */,
+				21BC617E1F270DC100CE85D9 /* IKNoDataBgView.m */,
 			);
 			path = IKGeneralView;
 			sourceTree = "<group>";
@@ -753,6 +831,7 @@
 		21D622D91F0F314B0054D980 /* VC */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61791F2706BF00CE85D9 /* JobDetailVC */,
 				21C3AE241F1731F4008FC124 /* SearchVC */,
 				21C3AE231F17318F008FC124 /* SeachReslutVC */,
 				21C3AE221F17317D008FC124 /* MoreTypeVC */,
@@ -779,6 +858,14 @@
 		21D622E21F0F6C8B0054D980 /* HomePageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61911F28755C00CE85D9 /* IK_v.png */,
+				21BC619E1F2893B600CE85D9 /* IK_assessment.png */,
+				21BC619F1F2893B600CE85D9 /* IK_certificate.png */,
+				21BC61971F28860000CE85D9 /* IK_jobDesc.png */,
+				21BC61981F28860000CE85D9 /* IK_jobDetail.png */,
+				21BC618D1F2869C300CE85D9 /* IK_star_hollow_red.png */,
+				21BC618E1F2869C300CE85D9 /* IK_star_solid_red.png */,
+				21BC61881F282B7800CE85D9 /* IK_detail_pin.png */,
 				218AD7191F209BC300138A68 /* IK_loading.png */,
 				2197CBA61F1DF43B00F61562 /* IK_showMore.png */,
 				2197CB8E1F1CC80200F61562 /* IK_hot.png */,
@@ -878,10 +965,12 @@
 				2197CBC21F1EF73B00F61562 /* IK_star_hollow_grey.png */,
 				2197CBC31F1EF73B00F61562 /* IK_star_solid_blue.png */,
 				2197CBC41F1EF73B00F61562 /* IK_star_solid_grey.png */,
-				21D6231F1F1360F80054D980 /* IK_applyJobAddress.png */,
+				21D6231F1F1360F80054D980 /* IK_address_grey.png */,
 				21D623201F1360F80054D980 /* IK_education.png */,
-				21D623211F1360F80054D980 /* IK_experience.png */,
+				21D623211F1360F80054D980 /* IK_experience_grey.png */,
 				2197CBAE1F1E0C5F00F61562 /* IK_address_blue.png */,
+				21BC61931F2884B600CE85D9 /* IK_education_blue.png */,
+				21BC61941F2884B600CE85D9 /* IK_experience_blue.png */,
 				2197CBAF1F1E0C5F00F61562 /* IK_job_blue.png */,
 				2197CBB01F1E0C5F00F61562 /* IK_star_solid.png */,
 				2197CBB11F1E0C5F00F61562 /* IK_star_hollow.png */,
@@ -1044,18 +1133,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				2197CBB91F1E0C5F00F61562 /* IK_time_blue.png in Resources */,
+				21BC61961F2884B600CE85D9 /* IK_experience_blue.png in Resources */,
 				21E2B5A11F1BAC2B00F9EC14 /* IK_meSelected@3x.png in Resources */,
+				21BC61951F2884B600CE85D9 /* IK_education_blue.png in Resources */,
 				21C3AE1C1F171F2F008FC124 /* IK_bg_white.png in Resources */,
 				2197CB7E1F1C7F2700F61562 /* IK_MessageSelected@3x.png in Resources */,
 				21D623231F1360F80054D980 /* IK_education.png in Resources */,
 				21C3AE091F15D90B008FC124 /* IKProvinceCity.plist in Resources */,
+				21BC619A1F28860000CE85D9 /* IK_jobDetail.png in Resources */,
 				2197CBC81F1EF73B00F61562 /* IK_star_solid_grey.png in Resources */,
 				21C3AE391F174650008FC124 /* IK_operationManage.png in Resources */,
+				21BC61A11F2893B600CE85D9 /* IK_certificate.png in Resources */,
 				21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */,
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
 				218AD71A1F209BC300138A68 /* IK_loading.png in Resources */,
+				21BC61991F28860000CE85D9 /* IK_jobDesc.png in Resources */,
 				21D622FF1F112DA50054D980 /* IK_tabbarSelectImage.png in Resources */,
-				21D623221F1360F80054D980 /* IK_applyJobAddress.png in Resources */,
+				21BC61921F28755C00CE85D9 /* IK_v.png in Resources */,
+				21D623221F1360F80054D980 /* IK_address_grey.png in Resources */,
 				2199E2581F21ED1C00D43EE1 /* IK_logo_grey.png in Resources */,
 				2197CB801F1C88A700F61562 /* IK_back.png in Resources */,
 				2197CB8F1F1CC80200F61562 /* IK_hot.png in Resources */,
@@ -1065,6 +1160,7 @@
 				214122271F18A8F600062A2F /* IK_classify.png in Resources */,
 				21C3AE381F174650008FC124 /* IK_cocah.png in Resources */,
 				21D623101F132B660054D980 /* IK_exchange.png in Resources */,
+				21BC618F1F2869C300CE85D9 /* IK_star_hollow_red.png in Resources */,
 				2197CBC61F1EF73B00F61562 /* IK_star_hollow_grey.png in Resources */,
 				21C3AE3B1F174650008FC124 /* IK_trainTeacher.png in Resources */,
 				2199E2571F21ED1C00D43EE1 /* IK_logo_blue.png in Resources */,
@@ -1072,23 +1168,26 @@
 				218AD71C1F20A20100138A68 /* IK_authen.png in Resources */,
 				2197CBB81F1E0C5F00F61562 /* IK_store.png in Resources */,
 				210B0DF81F0E3253003FD950 /* IK_cycle.png in Resources */,
+				21BC61A01F2893B600CE85D9 /* IK_assessment.png in Resources */,
 				21D622E51F0F6CCE0054D980 /* IK_more.png in Resources */,
 				21E2B5A31F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png in Resources */,
 				21D622E61F0F6CCE0054D980 /* IK_search.png in Resources */,
 				210B0DE51F0E0B56003FD950 /* IK_me@3x.png in Resources */,
 				21C3AE3F1F1746AA008FC124 /* IK_sellPerformance.png in Resources */,
 				21C3AE141F162024008FC124 /* IK_close.png in Resources */,
+				21BC61891F282B7800CE85D9 /* IK_detail_pin.png in Resources */,
 				2197CBC71F1EF73B00F61562 /* IK_star_solid_blue.png in Resources */,
 				21C3AE3A1F174650008FC124 /* IK_presellProject.png in Resources */,
 				2197CBB61F1E0C5F00F61562 /* IK_star_solid.png in Resources */,
 				21C3AE1A1F171EC0008FC124 /* IK_bg.png in Resources */,
 				2197CBB71F1E0C5F00F61562 /* IK_star_hollow.png in Resources */,
-				21D623241F1360F80054D980 /* IK_experience.png in Resources */,
+				21D623241F1360F80054D980 /* IK_experience_grey.png in Resources */,
 				2197CBC51F1EF73B00F61562 /* IK_star_hollow_blue.png in Resources */,
 				21C3AE3E1F1746AA008FC124 /* IK_arrow.png in Resources */,
 				210B0D9C1F0DE16D003FD950 /* Assets.xcassets in Resources */,
 				2197CBA71F1DF43B00F61562 /* IK_showMore.png in Resources */,
 				21E2B59F1F1BA6BF00F9EC14 /* IK_homePageSelected@3x.png in Resources */,
+				21BC61901F2869C300CE85D9 /* IK_star_solid_red.png in Resources */,
 				210B0DE21F0E0B56003FD950 /* IK_applyJob@3x.png in Resources */,
 				210B0DF91F0E3253003FD950 /* IK_logo.png in Resources */,
 				210B0D9A1F0DE16D003FD950 /* Main.storyboard in Resources */,
@@ -1167,6 +1266,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21BC61871F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m in Sources */,
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
 				2197CBCB1F1EFDDA00F61562 /* IKSelectModel.m in Sources */,
 				210B0DDD1F0DFE4D003FD950 /* IKNavigationController.m in Sources */,
@@ -1185,9 +1285,11 @@
 				2197CBA51F1DE63A00F61562 /* IKSearchResultView.m in Sources */,
 				21D623181F132E240054D980 /* UIImage+GetImage.m in Sources */,
 				210B0DE91F0E0CA1003FD950 /* IKNavIconView.m in Sources */,
+				21BC617F1F270DC100CE85D9 /* IKNoDataBgView.m in Sources */,
 				2199E2541F21E6BD00D43EE1 /* IKLoopPlayModel.m in Sources */,
 				21C3AE311F173AFE008FC124 /* IKTypeTableViewCell.m in Sources */,
 				2197CB931F1DB6AE00F61562 /* IKSlideCollectionViewCell.m in Sources */,
+				21BC619D1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m in Sources */,
 				218AD7151F208B6600138A68 /* IKTagsCollectionViewCell.m in Sources */,
 				210B0D971F0DE16D003FD950 /* ViewController.m in Sources */,
 				21D6232C1F137D700054D980 /* UIImageView+CornerRadius.m in Sources */,
@@ -1195,9 +1297,11 @@
 				21BC61751F25A77700CE85D9 /* IKJobTypeModel.m in Sources */,
 				21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */,
 				2197CBAA1F1E058100F61562 /* IKCompanyTableViewCell.m in Sources */,
+				21BC617C1F2706F900CE85D9 /* IKJobDetailVC.m in Sources */,
 				2197CBAD1F1E06E500F61562 /* IKCompanyInfoModel.m in Sources */,
 				2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */,
 				21C3AE2D1F173727008FC124 /* IKTypeTableView.m in Sources */,
+				21BC61831F2733FB00CE85D9 /* IKJobDetailModel.m in Sources */,
 				21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */,
 				21D622FD1F10FDAD0054D980 /* IKLabel.m in Sources */,
 				2141222B1F18D08F00062A2F /* IKJobTypeView.m in Sources */,
@@ -1220,6 +1324,8 @@
 				21D622F71F10FD6E0054D980 /* IKScrollView.m in Sources */,
 				2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */,
 				21C3AE5B1F175615008FC124 /* IKLoopPlayView.m in Sources */,
+				21BC61A41F28980700CE85D9 /* IKRespRequireTableViewCell.m in Sources */,
+				21BC618C1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m in Sources */,
 				21D6232F1F138CFE0054D980 /* NSString+StringSize.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

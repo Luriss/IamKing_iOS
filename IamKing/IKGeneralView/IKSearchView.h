@@ -31,5 +31,6 @@
 @property (nonatomic, assign) BOOL hiddenColse;
 @property (nonatomic, strong, nullable)IKSearchBar *searchBar;
 @property (nonatomic, strong, nullable)UIView *bottomLine;
+@property (nonatomic, assign)BOOL canSearch;
 
 @end

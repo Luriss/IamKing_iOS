@@ -226,7 +226,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
         make.height.mas_equalTo(0.023*IKSCREENH_HEIGHT);
     }];
     
-    CGSize stringSize = [NSString getSizeWithString:@"乌鲁木齐" size:CGSizeMake(IKSCREEN_WIDTH,0.038*IKSCREENH_HEIGHT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0f]}];
+    CGSize stringSize = [NSString getSizeWithString:@"全国" size:CGSizeMake(IKSCREEN_WIDTH,0.038*IKSCREENH_HEIGHT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:15.0f]}];
 
     [button mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(_locationInfoView);

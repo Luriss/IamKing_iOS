@@ -135,7 +135,7 @@
             showModel = baseProvinceData.firstObject;
         }
         
-        _cityData = [self setCityDataWithProvince:showModel];
+        self.cityData = [self setCityDataWithProvince:showModel];
         
         // 默认选中的行.
         NSInteger row = [_provinceData indexOfObject:self.selectProvince];
