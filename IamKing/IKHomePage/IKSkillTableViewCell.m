@@ -7,7 +7,7 @@
 //
 
 #import "IKSkillTableViewCell.h"
-
+#import "IKTipsView.h"
 
 @interface IKSkillTableViewCell ()
 
@@ -25,6 +25,9 @@
 @property(nonatomic, strong)UIButton *skill3;
 @property(nonatomic, assign)CGFloat   maxSkillButtonWidth;
 @property(nonatomic, assign)CGFloat   width;
+@property(nonatomic, assign)CGFloat   skill1Width;
+@property(nonatomic, assign)CGFloat   skill2Width;
+@property(nonatomic, assign)CGFloat   skill3Width;
 
 @property(nonatomic,strong)UILabel *label1;
 @property(nonatomic,strong)UILabel *label2;
@@ -381,12 +384,15 @@
 {
     [self.contentView addSubview:self.skill1];
     
-    NSString *str = [dict objectForKey:@"name"];
+    NSString *str = [NSString stringWithFormat:@"qweeeeeeeeeeeeeee%@",[dict objectForKey:@"name"]];
     [self.skill1 setTitle:str forState:UIControlStateNormal];
     
-    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(_maxSkillButtonWidth, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
+    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(MAXFLOAT, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
     NSLog(@"wwwwwwwww = %.0f",w);
-    if ((w +5) > _maxSkillButtonWidth) {
+    self.skill1Width = w;
+    
+    if (w > _maxSkillButtonWidth) {
+        w = _maxSkillButtonWidth;
         self.skill1.userInteractionEnabled = YES;
     }
     
@@ -452,10 +458,11 @@
 
     [self.skill2 setTitle:str forState:UIControlStateNormal];
     
-    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(_maxSkillButtonWidth, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
+    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(MAXFLOAT, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
     NSLog(@"wwwwwwwww 2 = %.0f",w + 5);
-    
+    self.skill2Width = w;
     if (w > _maxSkillButtonWidth) {
+        w = _maxSkillButtonWidth;
         self.skill2.userInteractionEnabled = YES;
     }
     
@@ -520,10 +527,12 @@
     
     [self.skill3 setTitle:str forState:UIControlStateNormal];
     
-    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(_maxSkillButtonWidth, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
+    CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(MAXFLOAT, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
     NSLog(@"wwwwwwwww 3 = %.0f",w);
-    
-    if ((w +5) > _maxSkillButtonWidth) {
+    self.skill3Width = w;
+
+    if (w > _maxSkillButtonWidth) {
+        w = _maxSkillButtonWidth;
         self.skill3.userInteractionEnabled = YES;
     }
     [_skill3 mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -603,33 +612,41 @@
 
 - (void)defaultButtonClick:(UIButton *)button
 {
-    [self.contentView becomeFirstResponder];
-    UIMenuItem * copyItem=[[UIMenuItem alloc] initWithTitle:@"复制" action:@selector(myCopy:)];
-    //   获取UIMenuController单例
-    UIMenuController * menuControl=[UIMenuController sharedMenuController];
-    //   塞进UIMenuController中
-    [menuControl setMenuItems:[NSArray arrayWithObjects:copyItem ,nil]];
-    //   设置要显示的位置
-    [menuControl setTargetRect:CGRectMake(100, 100, 100,30) inView:self];
-    //   显示出来
-    [menuControl setMenuVisible:YES animated:YES];
-
+    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    //获取button在contentView的位置
+    CGRect rect1 = [button convertRect:button.frame fromView:self.contentView];
+    CGRect rect2 = [button convertRect:rect1 toView:window];
     
     switch (button.tag) {
         case 1001:
-            NSLog(@"1");
+        {
+            CGRect frame = CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, 170, 24);
+            [self showTipsWithViewFrame:frame tipsContent:@"是否必须经官方权威机构认证"];
+        }            
             break;
         case 1002:
-            NSLog(@"2");
+        {
+            CGRect frame = CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, 170, 24);
+            [self showTipsWithViewFrame:frame tipsContent:@"是否必须持有认证证书才聘用"];
+        }
             break;
         case 1003:
-            NSLog(@"3");
+        {
+            CGRect frame = CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, 120, 24);
+            [self showTipsWithViewFrame:frame tipsContent:@"需要多久的授课经验"];
+        }
             break;
         case 1004:
-            NSLog(@"4");
+        {
+            CGRect frame = CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, 80, 40);
+            [self showTipsWithViewFrame:frame tipsContent:@"需要达到什么等级"];
+        }
             break;
         case 1005:
-            NSLog(@"5");
+        {
+            CGRect frame = CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, 90, 24);
+            [self showTipsWithViewFrame:frame tipsContent:@"专业/技能名称"];
+        }
             break;
         default:
             break;
@@ -638,24 +655,45 @@
 
 - (void)skillButtonClick:(UIButton *)button
 {
+    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    //获取button在contentView的位置
+    CGRect rect1 = [button convertRect:button.frame fromView:self.contentView];
+    CGRect rect2 = [button convertRect:rect1 toView:window];
+
+    CGFloat w = 0;
     switch (button.tag) {
         case 2001:
-            NSLog(@"21");
+            w = self.skill1Width;
             break;
         case 2002:
+            w = self.skill2Width;
             NSLog(@"22");
             break;
         case 2003:
+            w = self.skill3Width;
             NSLog(@"23");
             break;
 
         default:
             break;
     }
+        
+    CGFloat h = 24;
+    
+    if (w > 100) {
+        w = 100;
+        h = 40;
+    }
+    [self showTipsWithViewFrame:CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, w, h) tipsContent:button.titleLabel.text];
 }
 
 
-
+- (void)showTipsWithViewFrame:(CGRect )frame tipsContent:(NSString *)content
+{
+    IKTipsView *tips = [[IKTipsView alloc] initWithFrame:frame arrowDirection:IKTipsArrowDirectionDownCenter bgColor:IKGeneralBlue];
+    tips.tipsContent = content;
+    [tips popView];
+}
 
 
 - (void)addSkillCellData:(NSArray *)tagList

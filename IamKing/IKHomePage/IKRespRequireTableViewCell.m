@@ -153,7 +153,7 @@
         {
             _titleLabel.text = @"任职要求";
             _psLabel.text = @"(任职所需具备的要求)";
-            _bottomLineView.hidden = NO;
+            _bottomLineView.hidden = YES;
             break;
         }
         default:

@@ -81,6 +81,8 @@
 		21BC61A41F28980700CE85D9 /* IKRespRequireTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61A31F28980700CE85D9 /* IKRespRequireTableViewCell.m */; };
 		21BC61A71F297AA500CE85D9 /* IKWorkAddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61A61F297AA500CE85D9 /* IKWorkAddressTableViewCell.m */; };
 		21BC61AA1F2994FA00CE85D9 /* IKSkillTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61A91F2994FA00CE85D9 /* IKSkillTableViewCell.m */; };
+		21BC61AE1F29E65000CE85D9 /* IKTipsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61AD1F29E65000CE85D9 /* IKTipsView.m */; };
+		21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61B01F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -270,6 +272,10 @@
 		21BC61A61F297AA500CE85D9 /* IKWorkAddressTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKWorkAddressTableViewCell.m; sourceTree = "<group>"; };
 		21BC61A81F2994FA00CE85D9 /* IKSkillTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSkillTableViewCell.h; sourceTree = "<group>"; };
 		21BC61A91F2994FA00CE85D9 /* IKSkillTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSkillTableViewCell.m; sourceTree = "<group>"; };
+		21BC61AC1F29E65000CE85D9 /* IKTipsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTipsView.h; sourceTree = "<group>"; };
+		21BC61AD1F29E65000CE85D9 /* IKTipsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTipsView.m; sourceTree = "<group>"; };
+		21BC61AF1F2A2FB600CE85D9 /* IKFeedbackTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKFeedbackTableViewCell.h; sourceTree = "<group>"; };
+		21BC61B01F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKFeedbackTableViewCell.m; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -660,8 +666,19 @@
 				21BC61A61F297AA500CE85D9 /* IKWorkAddressTableViewCell.m */,
 				21BC61A81F2994FA00CE85D9 /* IKSkillTableViewCell.h */,
 				21BC61A91F2994FA00CE85D9 /* IKSkillTableViewCell.m */,
+				21BC61AF1F2A2FB600CE85D9 /* IKFeedbackTableViewCell.h */,
+				21BC61B01F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m */,
 			);
 			name = view;
+			sourceTree = "<group>";
+		};
+		21BC61AB1F29E62900CE85D9 /* IKTipsView */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61AC1F29E65000CE85D9 /* IKTipsView.h */,
+				21BC61AD1F29E65000CE85D9 /* IKTipsView.m */,
+			);
+			name = IKTipsView;
 			sourceTree = "<group>";
 		};
 		21C3ADEF1F1499FF008FC124 /* NetworkManager */ = {
@@ -757,6 +774,7 @@
 		21C3AE441F175615008FC124 /* IKGeneralView */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61AB1F29E62900CE85D9 /* IKTipsView */,
 				218AD70C1F203EB500138A68 /* IKTagsView */,
 				21C3AE631F1756DD008FC124 /* IKSearchView */,
 				21C3AE621F1756D0008FC124 /* IKLoopPlayView */,
@@ -1286,6 +1304,7 @@
 				21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */,
 				218AD7181F208C0F00138A68 /* LRPageControl.m in Sources */,
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,
+				21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				2199E24F1F21A4DF00D43EE1 /* IKHomePageConfig.m in Sources */,
@@ -1336,6 +1355,7 @@
 				21D622F71F10FD6E0054D980 /* IKScrollView.m in Sources */,
 				2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */,
 				21C3AE5B1F175615008FC124 /* IKLoopPlayView.m in Sources */,
+				21BC61AE1F29E65000CE85D9 /* IKTipsView.m in Sources */,
 				21BC61A41F28980700CE85D9 /* IKRespRequireTableViewCell.m in Sources */,
 				21BC618C1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m in Sources */,
 				21D6232F1F138CFE0054D980 /* NSString+StringSize.m in Sources */,

@@ -16,7 +16,7 @@
 #import "IKRespRequireTableViewCell.h"
 #import "IKWorkAddressTableViewCell.h"
 #import "IKSkillTableViewCell.h"
-
+#import "IKFeedbackTableViewCell.h"
 
 
 @interface IKJobDetailVC ()<UITableViewDelegate,UITableViewDataSource>
@@ -146,9 +146,9 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64 - 60) style:UITableViewStyleGrouped];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64 - 50) style:UITableViewStyleGrouped];
         _bgTableView.backgroundColor = IKGeneralLightGray;
-        _bgTableView.sectionFooterHeight = 1.0;
+//        _bgTableView.sectionFooterHeight = 1.0;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bgTableView.showsVerticalScrollIndicator = NO;
         _bgTableView.showsHorizontalScrollIndicator = NO;
@@ -232,6 +232,14 @@
             if (indexPath.row == 0) {
                 return 41;
             }
+            else if (indexPath.row == 1){
+                if (_jobDetailModel.feedback.count > 0) {
+                    return 100;
+                }
+                else{
+                    return 60;
+                }
+            }
         }
     }
     else{
@@ -274,12 +282,20 @@
             if (indexPath.row == 0) {
                 return 41;
             }
+            else if (indexPath.row == 1){
+                if (_jobDetailModel.feedback.count > 0) {
+                    return 100;
+                }
+                else{
+                    return 60;
+                }
+            }
         }
     }
     
     
     
-    return 50;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -287,7 +303,21 @@
     if (section == 0) {
         return 0.1;
     }
-    return 5.9;
+
+    return 4.9;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (needShowSkillSection && section == 4) {
+        return 6;
+    }
+    else if (!needShowSkillSection && section == 3){
+        return 6;
+    }
+    else{
+        return 1;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -498,7 +528,13 @@
                 return cell;
             }
             else{
-                UITableViewCell *cell = [[UITableViewCell alloc] init];
+                // 地点
+                static  NSString *cellId=@"IKFeedbackTableViewCellId";
+                IKFeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData:YES];
+                }
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 return cell;
             }
@@ -518,7 +554,13 @@
             return cell;
         }
         else{
-            UITableViewCell *cell = [[UITableViewCell alloc] init];
+            // 地点
+            static  NSString *cellId=@"IKFeedbackTableViewCellId";
+            IKFeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData:YES];
+            }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             return cell;
         }
