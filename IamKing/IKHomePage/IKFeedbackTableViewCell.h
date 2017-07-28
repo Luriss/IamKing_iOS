@@ -10,6 +10,10 @@
 
 @interface IKFeedbackTableViewCell : UITableViewCell
 
+@property (nonatomic, assign)BOOL showBottomLine;
+
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier noData:(BOOL)isNoData;
+
+- (void)addFeedbackCellData:(NSDictionary *)dict;
 
 @end

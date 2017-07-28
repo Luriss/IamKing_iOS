@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
     [UITabBar appearance].translucent = NO;
 //

@@ -17,9 +17,10 @@
 #import "IKWorkAddressTableViewCell.h"
 #import "IKSkillTableViewCell.h"
 #import "IKFeedbackTableViewCell.h"
+#import "IKAlertView.h"
 
 
-@interface IKJobDetailVC ()<UITableViewDelegate,UITableViewDataSource>
+@interface IKJobDetailVC ()<UITableViewDelegate,UITableViewDataSource,IKAlertViewDelegate>
 {
     BOOL needShowSkillSection;
 }
@@ -36,11 +37,13 @@
     [super viewDidLoad];
     [self initLeftBackItem];
     [self initNavTitle];
-        
+    
+    [self initBottomView];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
     view.backgroundColor = IKLineColor;
     [self.view addSubview:view];
     
+
     // Do any additional setup after loading the view.
 }
 
@@ -102,7 +105,7 @@
             
             NSLog(@"1111  =%@",_bgTableView);
             if (_bgTableView == nil) {
-                [self.view addSubview:self.bgTableView];
+                [self.view insertSubview:self.bgTableView atIndex:0];
             }
         }];
     }
@@ -132,8 +135,110 @@
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    
+    // 返回
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    shareBtn.frame = CGRectMake(0, 00, 44, 44);
+    shareBtn.imageEdgeInsets = UIEdgeInsetsMake(11, 35, 11, -13);
+    [shareBtn setImage:[UIImage imageNamed:@"IK_share"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_share"] forState:UIControlStateHighlighted];
+    
+    // 返回
+    UIButton *favBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [favBtn addTarget:self action:@selector(favButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    favBtn.frame = CGRectMake(0, 00, 44, 44);
+    favBtn.imageEdgeInsets = UIEdgeInsetsMake(11, 20, 11, 2);
+    [favBtn setImage:[UIImage imageNamed:@"IK_star_hollow_grey"] forState:UIControlStateNormal];
+    [favBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_star_hollow_grey"] forState:UIControlStateHighlighted];
+    
+    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:favBtn],[[UIBarButtonItem alloc] initWithCustomView:shareBtn]];
+
+    
 }
 
+- (void)shareButtonClick:(UIButton *)button
+{
+    NSLog(@"shareButtonClick");
+}
+
+
+- (void)favButtonClick:(UIButton *)button
+{
+    NSLog(@"favButtonClick");
+}
+
+
+- (void)initBottomView
+{
+    UIView *bottomView = [[UIView alloc] init];
+    bottomView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.95f];
+    [self.view addSubview:bottomView];
+    [self.view bringSubviewToFront:bottomView];
+    
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.view.mas_left);
+        make.right.equalTo(self.view.mas_right);
+        make.bottom.equalTo(self.view.mas_bottom);
+        make.height.mas_equalTo(60);
+    }];
+    
+    UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [sendButton setTitle:@"投递简历" forState:UIControlStateNormal];
+    [sendButton setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
+    sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
+    sendButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    sendButton.layer.cornerRadius = 6;
+    sendButton.layer.borderColor = IKGeneralBlue.CGColor;
+    sendButton.layer.borderWidth = 1.0;
+    [sendButton addTarget:self action:@selector(sendResumeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:sendButton];
+    
+    
+    [sendButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(bottomView.mas_top).offset(10);
+        make.left.equalTo(bottomView.mas_left).offset(20);
+        make.bottom.equalTo(bottomView.mas_bottom).offset(-10);
+        make.width.equalTo(bottomView).multipliedBy(0.293);
+    }];
+    
+    UIButton *chatButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [chatButton setTitle:@"聊一聊" forState:UIControlStateNormal];
+    [chatButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    chatButton.titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
+    chatButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
+    chatButton.layer.cornerRadius = 6;
+    chatButton.backgroundColor = IKGeneralBlue;
+    [chatButton addTarget:self action:@selector(chatButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [bottomView addSubview:chatButton];
+    
+    
+    [chatButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(sendButton.mas_top);
+        make.left.equalTo(sendButton.mas_right).offset(15);
+        make.bottom.equalTo(sendButton.mas_bottom);
+        make.right.equalTo(bottomView.mas_right).offset(-15);
+    }];
+}
+
+- (void)sendResumeButtonClick:(UIButton *)button
+{
+    NSLog(@"sendButtonClick:");
+    
+    IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"测试" message:@"这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert show];
+}
+
+- (void)alertView:(IKAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"buuuu = %ld",buttonIndex);
+}
+
+
+- (void)chatButtonClick:(UIButton *)button
+{
+    NSLog(@"chatButtonClick:");
+}
 
 - (IKNoDataBgView *)noDataBgView
 {
@@ -146,7 +251,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64 - 50) style:UITableViewStyleGrouped];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStyleGrouped];
         _bgTableView.backgroundColor = IKGeneralLightGray;
 //        _bgTableView.sectionFooterHeight = 1.0;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -154,6 +259,7 @@
         _bgTableView.showsHorizontalScrollIndicator = NO;
         _bgTableView.delegate = self;
         _bgTableView.dataSource = self;
+        _bgTableView.bounces = NO;
     }
     
     return _bgTableView;
@@ -167,7 +273,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return  _jobDetailModel.numberOfSection;
+    return  _jobDetailModel.numberOfSection + 1; // 多返回一个 空白 section,用于投递简历按钮
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -232,13 +338,8 @@
             if (indexPath.row == 0) {
                 return 41;
             }
-            else if (indexPath.row == 1){
-                if (_jobDetailModel.feedback.count > 0) {
-                    return 100;
-                }
-                else{
-                    return 60;
-                }
+            else{
+                return [self getFeedbackCellHeight:indexPath];
             }
         }
     }
@@ -283,19 +384,13 @@
                 return 41;
             }
             else if (indexPath.row == 1){
-                if (_jobDetailModel.feedback.count > 0) {
-                    return 100;
-                }
-                else{
-                    return 60;
-                }
+                return [self getFeedbackCellHeight:indexPath];
             }
         }
     }
     
-    
-    
-    return 0;
+    // 空白 section
+    return 58;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -309,16 +404,17 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (needShowSkillSection && section == 4) {
+    if (needShowSkillSection && section == 5) {
         return 6;
     }
-    else if (!needShowSkillSection && section == 3){
+    else if (!needShowSkillSection && section == 4){
         return 6;
     }
     else{
         return 1;
     }
 }
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -337,10 +433,11 @@
             return 2; // 地点
         }
         else if (section == 4){
-            return 2; //评论
+            NSInteger count = _jobDetailModel.feedback.count;
+            return  count>0?(count+1):2; //评论 1 是标题  2.标题加无内容
         }
         else{
-            return 0;
+            return 1; // 空白row
         }
     }
     else{
@@ -354,10 +451,11 @@
             return 2; // 地点
         }
         else if (section == 3){
-            return 2; // 评论
+            NSInteger count = _jobDetailModel.feedback.count;
+            return  count>0?(count+1):2; //评论 1 是标题  2.标题加无内容
         }
         else{
-            return 0;
+            return 1; // 空白 row
         }
     }
     
@@ -528,19 +626,31 @@
                 return cell;
             }
             else{
-                // 地点
+                // 评价
                 static  NSString *cellId=@"IKFeedbackTableViewCellId";
                 IKFeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-                
+                BOOL noData = _jobDetailModel.feedback.count>0?NO:YES;
+
                 if(cell == nil){
-                    cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData:YES];
+                    cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData: noData];
                 }
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                if (!noData) {
+                    [cell addFeedbackCellData:[_jobDetailModel.feedback objectAtIndex:indexPath.row - 1]];  // -1 是减去标题 row.
+                }
+                
+                if (indexPath.row == _jobDetailModel.feedback.count) {
+                    cell.showBottomLine = NO;
+                }
+                else{
+                    cell.showBottomLine = YES;
+                }
+                
                 return cell;
             }
         }
     }
-    else if (indexPath.section == 4){
+    else if (indexPath.section == 4 && needShowSkillSection){
         if (indexPath.row == 0) {
             static  NSString *cellId=@"IKDetailTitleTableViewCellId";
             IKDetailTitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
@@ -554,14 +664,27 @@
             return cell;
         }
         else{
-            // 地点
+            // 评价
             static  NSString *cellId=@"IKFeedbackTableViewCellId";
             IKFeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
             
+            BOOL noData = _jobDetailModel.feedback.count>0?NO:YES;
             if(cell == nil){
-                cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData:YES];
+                cell = [[IKFeedbackTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId noData:noData];
             }
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            if (!noData) {
+                [cell addFeedbackCellData:[_jobDetailModel.feedback objectAtIndex:indexPath.row - 1]];  // -1 是减去标题 row.
+            }
+            
+            if (indexPath.row == _jobDetailModel.feedback.count) {
+                cell.showBottomLine = NO;
+            }
+            else{
+                cell.showBottomLine = YES;
+            }
+            
             return cell;
         }
     }
@@ -593,7 +716,29 @@
     return szie;
 }
 
-
+- (CGFloat)getFeedbackCellHeight:(NSIndexPath *)indexPath
+{
+    if (_jobDetailModel.feedback.count > 0) {
+        CGFloat h = 110;
+        NSDictionary *dict = (NSDictionary *)[_jobDetailModel.feedback objectAtIndex:(indexPath.row -1)];
+        if (IKStringIsNotEmpty([dict objectForKey:@"tag_str"])) {
+            h += 25;
+        }
+        
+        NSString *content = [dict objectForKey:@"content"];
+        
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineSpacing = 3.0;
+        
+        CGSize size = [NSString getSizeWithString:content size:CGSizeMake(IKSCREEN_WIDTH * 0.76, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:13.0f],NSParagraphStyleAttributeName:style}];
+        
+        NSLog(@"hhhhhhhhhh = %.0f",h + size.height);
+        return h + size.height;
+    }
+    else{
+        return 60;
+    }
+}
 
 - (void)backButtonClick:(UIButton *)back
 {

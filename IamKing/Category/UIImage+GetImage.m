@@ -33,7 +33,7 @@
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
     
-    int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
+//    int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
     
 #else
     
