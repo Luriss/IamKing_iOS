@@ -458,7 +458,7 @@ static IKNetworkManager *_shareInstance;
 
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-        NSLog(@"responseCache = %@",responseCache);
+//        NSLog(@"responseCache = %@",responseCache);
 
         IKJobDetailModel *model = [self dealJobDetailData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
@@ -467,7 +467,7 @@ static IKNetworkManager *_shareInstance;
             callback(model,success);
         }
     } success:^(id responseObject) {
-        NSLog(@"responseObject = %@",responseObject);
+//        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
             IKJobDetailModel *model = [self dealJobDetailData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];

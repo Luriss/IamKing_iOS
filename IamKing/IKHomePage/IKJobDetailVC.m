@@ -342,6 +342,9 @@
                 return [self getFeedbackCellHeight:indexPath];
             }
         }
+        else{
+            return 10;
+        }
     }
     else{
         if (indexPath.section == 0) {
@@ -387,10 +390,12 @@
                 return [self getFeedbackCellHeight:indexPath];
             }
         }
+        else{
+            return 10;
+        }
     }
     
-    // 空白 section
-    return 58;
+    return 0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section

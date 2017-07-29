@@ -143,17 +143,17 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    
     self.sysNavView.alpha = 1.0;
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
-    
     // 视图消失,停止轮播
     [self stopLoopPlayView];
 }
+
+
 
 - (NSArray *)dataArray
 {
@@ -399,7 +399,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             }
         }
         else{
-            return IKSCREENH_HEIGHT- 64 - 70;
+            return IKSCREENH_HEIGHT- 64 - 68;
         }
     }
     else{

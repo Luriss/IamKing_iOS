@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IKTabBar.h"
+
+
+
 
 @interface IKTabBarController : UITabBarController
+
+@property(nonatomic,strong)IKTabBar *customTabBar;
+
 
 @end

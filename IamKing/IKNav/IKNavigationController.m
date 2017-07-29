@@ -8,7 +8,9 @@
 
 #import "IKNavigationController.h"
 
-@interface IKNavigationController ()
+
+@interface IKNavigationController ()<UINavigationControllerDelegate>
+
 @property(nonatomic,strong)UIImageView *shadowImage;
 
 @end
@@ -19,10 +21,13 @@
     [super viewDidLoad];
 
     self.navigationBar.barTintColor = [UIColor whiteColor];
+    self.delegate = self;
+    
     [self.navigationBar setBackgroundImage:[UIImage GetImageWithColor:[UIColor whiteColor] size:CGSizeMake(1, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationBar.alpha = 0.5f;
     [self fineNavigationBottomLine:self.navigationBar];
 
+    
     // Do any additional setup after loading the view.
 }
 
@@ -30,12 +35,16 @@
 {
     [super viewWillAppear:animated];
     self.shadowImage.hidden = YES;
+    
+    NSLog(@"viewWillAppear");
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     self.shadowImage.hidden = NO;
+    NSLog(@"viewDidDisappear");
+
 }
 
 - (void)fineNavigationBottomLine:(UIView *)view
@@ -53,18 +62,6 @@
     for (UIView *subview in view.subviews) {
         [self fineNavigationBottomLine:subview];
     }
-}
-
-
-- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
-{
-    // 影藏底部的tabbar。
-    if (self.viewControllers.count > 0) {
-        viewController.hidesBottomBarWhenPushed = YES;
-    }
-    
-    
-    [super pushViewController:viewController animated:animated];
 }
 
 

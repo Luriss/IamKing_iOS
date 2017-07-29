@@ -7,6 +7,8 @@
 //
 
 #import "IKViewController.h"
+#import "IKTabBarController.h"
+
 
 @interface IKViewController ()
 @property(nonatomic,strong)UIImageView *shadowImage;
@@ -29,7 +31,14 @@
 {
     [super viewWillAppear:animated];
     
+    if ([NSStringFromClass([self class]) isEqualToString:@"IKHomePageVC"]) {
+        [self showTabBar];
+    }
+    else{
+        [self hideTabBar];
+    }
     
+    NSLog(@"self = %@",self);
 
     [self fineNavigationBottomLine:self.tabBarController.navigationController.navigationBar];
 }
@@ -66,6 +75,28 @@
     }
 }
 
+
+- (void)showTabBar
+{
+    // 影藏底部的tabbar。
+    UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+    UIViewController *vc = keyWindow.rootViewController;
+    if ([vc isKindOfClass:[IKTabBarController class]] ) {
+        IKTabBarController *tabBarController = (IKTabBarController *)vc;
+        tabBarController.customTabBar.hidden = NO ;
+    }
+}
+
+- (void)hideTabBar
+{
+    // 影藏底部的tabbar。
+    UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
+    UIViewController *vc = keyWindow.rootViewController;
+    if ([vc isKindOfClass:[IKTabBarController class]] ) {
+        IKTabBarController *tabBarController = (IKTabBarController *)vc;
+        tabBarController.customTabBar.hidden = YES ;
+    }
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
