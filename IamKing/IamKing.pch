@@ -17,6 +17,7 @@
 #import "IKGeneralMacro.h"
 #import "IKScrollView.h"
 #import "IKNavigationController.h"
+#import "IKTabBarController.h"
 
 #import "IKViewController.h"
 #import "UIImageView+CornerRadius.h"

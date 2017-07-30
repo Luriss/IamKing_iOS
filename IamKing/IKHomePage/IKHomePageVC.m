@@ -889,6 +889,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (success) {
                     _lpView.imagesArray = [dict objectForKey:@"imageUrlArray"];
+                    NSLog(@"_lpView.imagesArray = %@",_lpView.imagesArray);
                     [_lpView reloadImageData];
                 }
             });

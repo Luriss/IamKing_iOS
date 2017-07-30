@@ -7,7 +7,6 @@
 //
 
 #import "IKViewController.h"
-#import "IKTabBarController.h"
 
 
 @interface IKViewController ()
@@ -31,12 +30,7 @@
 {
     [super viewWillAppear:animated];
     
-    if ([NSStringFromClass([self class]) isEqualToString:@"IKHomePageVC"]) {
-        [self showTabBar];
-    }
-    else{
-        [self hideTabBar];
-    }
+    [self setTabBarHideOrShow];
     
     NSLog(@"self = %@",self);
 
@@ -75,6 +69,21 @@
     }
 }
 
+
+- (void)setTabBarHideOrShow
+{
+    NSString *selfClass = NSStringFromClass([self class]);
+    if ([selfClass isEqualToString:@"IKHomePageVC"] ||
+        [selfClass isEqualToString:@"IKCompanyViewController"] ||
+        [selfClass isEqualToString:@"IKMineViewController"] ||
+        [selfClass isEqualToString:@"IKMessageViewController"])
+    {
+        [self showTabBar];
+    }
+    else{
+        [self hideTabBar];
+    }
+}
 
 - (void)showTabBar
 {

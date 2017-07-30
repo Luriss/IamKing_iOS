@@ -115,4 +115,15 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
  */
 - (void)getHomePageJobInfoDetailWithParam:(NSDictionary *)param backData:(void(^)(IKJobDetailModel *detailModel,BOOL success))callback;
 
+
+
+/**
+ 获取公司列表信息
+
+ @param param 入参
+ @param callback 回调
+ */
+- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+
 @end

@@ -262,7 +262,7 @@
     self.titleLabel.text = model.title;
 
     [self.addressView.imageView setImage:[UIImage imageNamed:@"IK_address_blue"]];
-    self.addressView.label.text = @"乌鲁木齐";
+    self.addressView.label.text = model.address;
     
     [self.numberStoreView.imageView setImage:[UIImage imageNamed:@"IK_store"]];
     self.numberStoreView.label.text = model.numberOfStore;

@@ -225,7 +225,7 @@
         _pageControl = [[LRPageControl alloc]initWithFrame:CGRectMake(0, 0, width, 20)];
         _pageControl.numberOfPages = self.numberOfPages;
         
-        [self insertSubview:self.pageControl aboveSubview:self.collectionView];
+        [self insertSubview:_pageControl aboveSubview:self.collectionView];
         
         __weak typeof (self) weakSelf = self;
 
@@ -512,7 +512,9 @@
         
         NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(nextPageX,_flowLayout.itemSize.height * 0.5)];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:hasScrollAnimation];
-        _pageControl.currentPage = (indexPath.row % 5);
+        if (!_pageControlHidden) {
+            _pageControl.currentPage = (indexPath.row % 5);
+        }
     }
     else {
         CGFloat nextPageY = 0;
@@ -537,8 +539,9 @@
         
         NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(_flowLayout.itemSize.width * 0.5, nextPageY)];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:hasScrollAnimation];
-        _pageControl.currentPage = (indexPath.row % 5);
-
+        if (!_pageControlHidden) {
+            _pageControl.currentPage = (indexPath.row % 5);
+        }
     }
 }
 

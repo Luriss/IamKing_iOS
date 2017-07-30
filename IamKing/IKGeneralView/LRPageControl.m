@@ -84,19 +84,20 @@
 
 - (void)setCurrentPage:(NSInteger)currentPage
 {
-    _currentPage = currentPage;
-
-    if (self.oldView) {
-        self.oldView.backgroundColor = [IKGeneralLightGray colorWithAlphaComponent:0.6];
-        self.oldView.frame = CGRectMake(self.oldView.frame.origin.x+2, self.oldView.frame.origin.y, 5, 5);
+    if (currentPage < self.viewArray.count) {
+        _currentPage = currentPage;
+        
+        if (self.oldView) {
+            self.oldView.backgroundColor = [IKGeneralLightGray colorWithAlphaComponent:0.6];
+            self.oldView.frame = CGRectMake(self.oldView.frame.origin.x+2, self.oldView.frame.origin.y, 5, 5);
+        }
+        
+        UIView *currentView = (UIView *)[self.viewArray objectAtIndex:currentPage];
+        currentView.backgroundColor = [UIColor whiteColor];
+        currentView.frame = CGRectMake(currentView.frame.origin.x-2, currentView.frame.origin.y, 9, 5);
+        
+        self.oldView = currentView;
     }
-    
-    UIView *currentView = (UIView *)[self.viewArray objectAtIndex:currentPage];
-    currentView.backgroundColor = [UIColor whiteColor];
-    currentView.frame = CGRectMake(currentView.frame.origin.x-2, currentView.frame.origin.y, 9, 5);
-    
-    self.oldView = currentView;
-    
 }
 
 

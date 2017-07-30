@@ -1,5 +1,5 @@
 //
-//  CompanyViewController.h
+//  IKMineViewController.h
 //  IamKing
 //
 //  Created by Luris on 2017/7/29.
@@ -8,6 +8,6 @@
 
 #import "IKViewController.h"
 
-@interface CompanyViewController : IKViewController
+@interface IKMineViewController : IKViewController
 
 @end

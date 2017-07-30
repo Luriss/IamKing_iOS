@@ -12,7 +12,6 @@ extern NSString *const kIKTabBarItemTitle;
 extern NSString *const kIKTabBarItemNormalImageName;  
 extern NSString *const kIKLTabBarItemSelectedImageName; 
 
-
 @interface IKTabBar : UIView
 
 @property (nonatomic, copy) NSArray<NSDictionary *> *tabBarItemAttributes;

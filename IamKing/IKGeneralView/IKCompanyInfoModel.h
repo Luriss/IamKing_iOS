@@ -10,6 +10,7 @@
 
 @interface IKCompanyInfoModel : NSObject
 
+@property(nonatomic,copy)NSString     *companyID;    // 
 @property(nonatomic,copy)NSString     *logoImageUrl;    // 图片
 @property(nonatomic,copy)NSString     *title;           // 标题
 @property(nonatomic,assign)NSInteger  evaluate;        // 评价
@@ -18,6 +19,8 @@
 @property(nonatomic,copy)NSString     *numberOfStore;   // 店面数量
 @property(nonatomic,copy)NSString     *introduce;       // 介绍
 @property(nonatomic,copy)NSString     *numberOfJob;     // 在招职位
+@property(nonatomic,assign)BOOL         isAuthen;          // 认证.
 
+- (NSString *)description;
 
 @end

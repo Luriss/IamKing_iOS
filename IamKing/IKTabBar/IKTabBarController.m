@@ -8,6 +8,16 @@
 
 #import "IKTabBarController.h"
 #import "IKHomePageVC.h"
+#import "IKCompanyViewController.h"
+#import "IKMineViewController.h"
+#import "IKMessageViewController.h"
+
+
+NSString *const kIKGetHomePageVcData = @"kIKGetHomePageVcData";
+NSString *const kIKGetCompanyPageVcData = @"kIKGetCompanyPageVcData";
+NSString *const kIKGetMessagePageVcData = @"kIKGetMessagePageVcData";
+NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
+
 
 @interface IKTabBarController ()<UITabBarControllerDelegate,UITabBarDelegate>
 
@@ -21,22 +31,25 @@
     CGRect rect = self.tabBar.frame;
     [self.tabBar removeFromSuperview];  //移除TabBarController自带的下部的条
 
-    IKHomePageVC *c1 = [[IKHomePageVC alloc]init];
-    IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:c1];
+    IKHomePageVC *homePage = [[IKHomePageVC alloc]init];
+    IKNavigationController *homePageNav = [[IKNavigationController alloc] initWithRootViewController:homePage];
     
-    UIViewController *c2 = [[UIViewController alloc]init];
-    c2.view.backgroundColor = [UIColor whiteColor];
-    UIViewController *c3 = [[UIViewController alloc]init];
-    c3.view.backgroundColor = [UIColor yellowColor];
+    IKCompanyViewController *company = [[IKCompanyViewController alloc]init];
+    IKNavigationController *companyNav = [[IKNavigationController alloc] initWithRootViewController:company];
+    
+    IKMessageViewController *message = [[IKMessageViewController alloc]init];
+    message.view.backgroundColor = [UIColor yellowColor];
+    IKNavigationController *messageNav = [[IKNavigationController alloc] initWithRootViewController:message];
 
-    UIViewController *c4 = [[UIViewController alloc]init];
-    c4.view.backgroundColor = [UIColor orangeColor];
+    IKMineViewController *mine = [[IKMineViewController alloc]init];
+    mine.view.backgroundColor = [UIColor orangeColor];
+    IKNavigationController *mineNav = [[IKNavigationController alloc] initWithRootViewController:mine];
 
     
-    [self addChildViewController:nav];
-    [self addChildViewController:c2];
-    [self addChildViewController:c3];
-    [self addChildViewController:c4];
+    [self addChildViewController:homePageNav];
+    [self addChildViewController:companyNav];
+    [self addChildViewController:messageNav];
+    [self addChildViewController:mineNav];
     
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
@@ -52,9 +65,22 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+- (void)tabBarControllerDidSelectedIndex:(NSInteger)index
 {
-
+    NSLog(@"selectedIndex = %ld",index);
+    
+    if (index == 0) {
+        
+    }
+    else if (index == 1){
+        [IKNotificationCenter postNotificationName:kIKGetCompanyPageVcData object:nil];
+    }
+    else if (index == 2){
+        
+    }
+    else{
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {

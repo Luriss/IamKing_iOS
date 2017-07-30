@@ -10,4 +10,9 @@
 
 @interface IKViewController : UIViewController
 
+
+- (void)showTabBar;
+
+- (void)hideTabBar;
+
 @end

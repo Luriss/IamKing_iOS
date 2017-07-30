@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong)UILabel *label;
 @property (nonatomic, strong)UIButton *exchangeBtn;
+@property (nonatomic, strong)UIImageView *imageV;
 
 @end
 @implementation IKButtonView
@@ -22,6 +23,7 @@
     if (self) {
         [self addSubview:self.exchangeBtn];
         [self addSubview:self.label];
+        [self addSubview:self.imageV];
     }
     return self;
 }
@@ -34,6 +36,7 @@
 
         [self addSubview:self.exchangeBtn];
         [self addSubview:self.label];
+        [self addSubview:self.imageV];
     }
     
     return self;
@@ -60,9 +63,18 @@
         _label = [[UILabel alloc] init];
         _label.textColor = IKRGBColor(94.0, 94.0, 94.0);
         _label.backgroundColor = [UIColor clearColor];
-        _label.textAlignment = NSTextAlignmentCenter;
+        _label.textAlignment = NSTextAlignmentLeft;
     }
     return _label;
+}
+
+- (UIImageView *)imageV
+{
+    if (_imageV == nil) {
+        _imageV = [[UIImageView alloc] init];
+        _imageV.image = [UIImage imageNamed:@"IK_xuanzhuan"];
+    }
+    return _imageV;
 }
 
 - (void)layoutSubviews
@@ -72,8 +84,16 @@
         make.edges.and.width.and.height.equalTo(weakSelf);
     }];
     
+    
+    [_imageV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(weakSelf.mas_centerY);
+        make.left.equalTo(weakSelf.mas_left).offset(80);
+        make.width.and.height.mas_equalTo(18);
+    }];
+    
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.and.width.and.height.equalTo(weakSelf);
+        make.top.right.and.bottom.equalTo(weakSelf);
+        make.left.equalTo(_imageV.mas_right).offset(2);
     }];
     
     [super layoutSubviews];
@@ -84,7 +104,7 @@
 {
     _exchangeBtn.layer.cornerRadius = cornerRadius;
     self.layer.cornerRadius = cornerRadius;
-
+    self.layer.masksToBounds = YES;
 }
 
 - (void)setBorderWidth:(CGFloat)borderWidth

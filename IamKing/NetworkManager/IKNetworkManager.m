@@ -12,6 +12,7 @@
 #import "IKHotCityModel.h"
 #import "IKProvinceModel.h"
 #import "IKJobTypeModel.h"
+#import "IKCompanyInfoModel.h"
 
 
 // 轮播图请求 url
@@ -43,6 +44,8 @@
 // 职位详情
 #define IKJobDeatailUrl (@"https://www.iamking.com.cn/index.php/InviteWork/getInfo?")
 
+// 公司信息
+#define IKCompanyInfoUrl (@"https://www.iamking.com.cn/index.php/User/getUserCompanyList?")
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -518,6 +521,69 @@ static IKNetworkManager *_shareInstance;
     return model;
 }
 
+- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    //cityId=0&page=1&pageSize=8
+    NSString *url = [NSString stringWithFormat:@"%@cityId=%@&page=%@&pageSize=%@",IKCompanyInfoUrl,[param objectForKey:@"cityId"],[param objectForKey:@"page"],[param objectForKey:@"pageSize"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+//                NSLog(@"responseCache = %@",responseCache);
+        NSArray *array = [self dealCompanyInfoData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        if (callback && array.count > 0) {
+            callback(array,success);
+        }
+    } success:^(id responseObject) {
+//                NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *array = [self dealCompanyInfoData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && array.count > 0) {
+                callback(array,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealCompanyInfoData:(id)data
+{
+    NSArray *array = [data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        IKCompanyInfoModel *model = [[IKCompanyInfoModel alloc] init];
+        
+        NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
+        
+        model.address = [self getString:[dict objectForKey:@"cityName"]];
+        model.title = [self getString:[dict objectForKey:@"nickname"]];
+        model.evaluate = [self getInteger:[dict objectForKey:@"isRecommend"]];
+        model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];;
+        model.introduce = [self getString:[dict objectForKey:@"brandDescribe"]];
+        model.isAuthen = [self getBool:[dict objectForKey:@"isApproveOffcial"] ];
+        model.setupTime = [NSString stringWithFormat:@"%@年成立",[dict objectForKey:@"createCompanyYear"]];
+        model.companyID = [self getString:[dict objectForKey:@"id"]];
+        model.numberOfJob = [NSString stringWithFormat:@"%@个在招职位",[dict objectForKey:@"inviteWorkNum"]];
+        model.numberOfStore = [self getString:[dict objectForKey:@"shopName"]];
+
+        [backArray addObject:model];
+    }
+    
+    return backArray;
+}
 
 
 - (NSString *)timeWithTimeIntervalString:(NSString *)timeInterval
@@ -533,6 +599,26 @@ static IKNetworkManager *_shareInstance;
     NSString* dateString = [self.dataFormatter stringFromDate:date];
     NSLog(@"dateString ======= %@",dateString);
     return [NSString stringWithFormat:@"职位发布时间: %@",dateString];
+}
+
+
+- (NSString *)getString:(id)object
+{
+    return [NSString stringWithFormat:@"%@",object];
+}
+
+- (BOOL)getBool:(id)object
+{
+    if ([[self getString:object] isEqualToString:@"0"]) {
+        return NO;
+    }
+    return YES;
+}
+
+
+- (NSInteger)getInteger:(id)object
+{
+    return [[self getString:object] integerValue];
 }
 
 // 判断服务器数据是否正常,0 代表正确

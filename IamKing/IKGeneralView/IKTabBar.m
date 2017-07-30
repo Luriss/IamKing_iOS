@@ -7,6 +7,8 @@
 //
 
 #import "IKTabBar.h"
+
+
 NSString *const kIKTabBarItemTitle = @"kIKTabBarItemTitle";
 NSString *const kIKTabBarItemNormalImageName = @"kIKTabBarItemNormalImageName";
 NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageName";
@@ -114,9 +116,12 @@ NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageN
     }
     
     UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-    UITabBarController *tabBarController = (UITabBarController *)keyWindow.rootViewController;
-    if (tabBarController) {
+    UIViewController *vc = keyWindow.rootViewController;
+
+    if ([vc isKindOfClass:[IKTabBarController class]] ) {
+        IKTabBarController *tabBarController = (IKTabBarController *)vc;
         tabBarController.selectedIndex = index;
+        [tabBarController tabBarControllerDidSelectedIndex:index];
     }
 }
 

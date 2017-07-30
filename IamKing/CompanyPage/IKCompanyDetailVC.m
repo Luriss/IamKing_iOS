@@ -1,18 +1,18 @@
 //
-//  CompanyViewController.m
+//  IKCompanyDetailVC.m
 //  IamKing
 //
-//  Created by Luris on 2017/7/29.
+//  Created by Luris on 2017/7/30.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "CompanyViewController.h"
+#import "IKCompanyDetailVC.h"
 
-@interface CompanyViewController ()
+@interface IKCompanyDetailVC ()
 
 @end
 
-@implementation CompanyViewController
+@implementation IKCompanyDetailVC
 
 - (void)viewDidLoad {
     [super viewDidLoad];

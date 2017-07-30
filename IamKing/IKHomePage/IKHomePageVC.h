@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "IKViewController.h"
-#import "IKTabBarController.h"
 
 
 @protocol IKHomePageViewControllerDelegate <NSObject>

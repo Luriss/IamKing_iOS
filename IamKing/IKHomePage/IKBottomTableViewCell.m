@@ -8,7 +8,6 @@
 
 #import "IKBottomTableViewCell.h"
 #import "IKSearchView.h"
-#import "IKLoopPlayView.h"
 
 
 @interface IKBottomTableViewCell ()<IKSearchViewDelegate>
