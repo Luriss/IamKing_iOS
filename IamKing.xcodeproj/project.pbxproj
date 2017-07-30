@@ -101,6 +101,15 @@
 		21BC61E91F2D8CFF00CE85D9 /* IKRecommandCompanyVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61E81F2D8CFF00CE85D9 /* IKRecommandCompanyVC.m */; };
 		21BC61EC1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61EB1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m */; };
 		21BC61EF1F2DB48800CE85D9 /* IKCompanyDetailVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61EE1F2DB48800CE85D9 /* IKCompanyDetailVC.m */; };
+		21BC61F11F2DC2FC00CE85D9 /* IK_back_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC61F01F2DC2FC00CE85D9 /* IK_back_white.png */; };
+		21BC61F51F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */; };
+		21BC61F71F2DFE1B00CE85D9 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC61F61F2DFE1B00CE85D9 /* Accelerate.framework */; };
+		21BC61F91F2E016000CE85D9 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC61F81F2E016000CE85D9 /* CoreImage.framework */; };
+		21BC62071F2E039700CE85D9 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC62061F2E039700CE85D9 /* CoreMedia.framework */; };
+		21BC62091F2E03A400CE85D9 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC62081F2E03A400CE85D9 /* CoreVideo.framework */; };
+		21BC620B1F2E03AF00CE85D9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620A1F2E03AF00CE85D9 /* OpenGLES.framework */; };
+		21BC620D1F2E03BB00CE85D9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620C1F2E03BB00CE85D9 /* AVFoundation.framework */; };
+		21BC620F1F2E03C700CE85D9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620E1F2E03C700CE85D9 /* QuartzCore.framework */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -323,6 +332,16 @@
 		21BC61EB1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKRecommandCoCollectionViewCell.m; sourceTree = "<group>"; };
 		21BC61ED1F2DB48800CE85D9 /* IKCompanyDetailVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyDetailVC.h; sourceTree = "<group>"; };
 		21BC61EE1F2DB48800CE85D9 /* IKCompanyDetailVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyDetailVC.m; sourceTree = "<group>"; };
+		21BC61F01F2DC2FC00CE85D9 /* IK_back_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_back_white.png; sourceTree = "<group>"; };
+		21BC61F31F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyDetailHeadModel.h; sourceTree = "<group>"; };
+		21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyDetailHeadModel.m; sourceTree = "<group>"; };
+		21BC61F61F2DFE1B00CE85D9 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		21BC61F81F2E016000CE85D9 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		21BC62061F2E039700CE85D9 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		21BC62081F2E03A400CE85D9 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
+		21BC620A1F2E03AF00CE85D9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		21BC620C1F2E03BB00CE85D9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		21BC620E1F2E03C700CE85D9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -417,6 +436,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				21BC620F1F2E03C700CE85D9 /* QuartzCore.framework in Frameworks */,
+				21BC620D1F2E03BB00CE85D9 /* AVFoundation.framework in Frameworks */,
+				21BC620B1F2E03AF00CE85D9 /* OpenGLES.framework in Frameworks */,
+				21BC62091F2E03A400CE85D9 /* CoreVideo.framework in Frameworks */,
+				21BC62071F2E039700CE85D9 /* CoreMedia.framework in Frameworks */,
+				21BC61F91F2E016000CE85D9 /* CoreImage.framework in Frameworks */,
+				21BC61F71F2DFE1B00CE85D9 /* Accelerate.framework in Frameworks */,
 				21C3AE041F14D8B6008FC124 /* CoreLocation.framework in Frameworks */,
 				B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */,
 			);
@@ -590,6 +616,7 @@
 		210B0DF51F0E3253003FD950 /* NavImage */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61F01F2DC2FC00CE85D9 /* IK_back_white.png */,
 				21BC61C71F2CE60900CE85D9 /* IK_arrow_right.png */,
 				21D622CD1F0E5C6E0054D980 /* IK_Address.png */,
 				2197CB7F1F1C88A700F61562 /* IK_back.png */,
@@ -745,6 +772,7 @@
 		21BC61C11F2CDE1D00CE85D9 /* CompanyPage */ = {
 			isa = PBXGroup;
 			children = (
+				21BC61F21F2DC4A200CE85D9 /* Model */,
 				21BC61C91F2CE65B00CE85D9 /* View */,
 				21BC61C51F2CDFC900CE85D9 /* VC */,
 			);
@@ -819,6 +847,15 @@
 				21BC61E51F2D23F800CE85D9 /* IK_showMore_grey.png */,
 			);
 			path = CompanyPageImage;
+			sourceTree = "<group>";
+		};
+		21BC61F21F2DC4A200CE85D9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				21BC61F31F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.h */,
+				21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 		21C3ADEF1F1499FF008FC124 /* NetworkManager */ = {
@@ -1178,6 +1215,13 @@
 		4837E3E442EACAF7D46EE4B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				21BC620E1F2E03C700CE85D9 /* QuartzCore.framework */,
+				21BC620C1F2E03BB00CE85D9 /* AVFoundation.framework */,
+				21BC620A1F2E03AF00CE85D9 /* OpenGLES.framework */,
+				21BC62081F2E03A400CE85D9 /* CoreVideo.framework */,
+				21BC62061F2E039700CE85D9 /* CoreMedia.framework */,
+				21BC61F81F2E016000CE85D9 /* CoreImage.framework */,
+				21BC61F61F2DFE1B00CE85D9 /* Accelerate.framework */,
 				21C3AE031F14D8B6008FC124 /* CoreLocation.framework */,
 				E48124199822055D49273C25 /* Pods_IamKing.framework */,
 			);
@@ -1340,6 +1384,7 @@
 				21C3AE381F174650008FC124 /* IK_cocah.png in Resources */,
 				21D623101F132B660054D980 /* IK_exchange.png in Resources */,
 				21BC618F1F2869C300CE85D9 /* IK_star_hollow_red.png in Resources */,
+				21BC61F11F2DC2FC00CE85D9 /* IK_back_white.png in Resources */,
 				2197CBC61F1EF73B00F61562 /* IK_star_hollow_grey.png in Resources */,
 				21C3AE3B1F174650008FC124 /* IK_trainTeacher.png in Resources */,
 				2199E2571F21ED1C00D43EE1 /* IK_logo_blue.png in Resources */,
@@ -1478,6 +1523,7 @@
 				21BC61C41F2CDE6C00CE85D9 /* IKCompanyViewController.m in Sources */,
 				21BC61D31F2CE6F200CE85D9 /* IKMessageViewController.m in Sources */,
 				21BC619D1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m in Sources */,
+				21BC61F51F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m in Sources */,
 				218AD7151F208B6600138A68 /* IKTagsCollectionViewCell.m in Sources */,
 				210B0D971F0DE16D003FD950 /* ViewController.m in Sources */,
 				21D6232C1F137D700054D980 /* UIImageView+CornerRadius.m in Sources */,
@@ -1686,10 +1732,16 @@
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
 					"$(PODS_ROOT)/Headers/Public/SDWebImage/**",
+					"$(PODS_ROOT)/IamKing/framework/**",
 				);
 				INFOPLIST_FILE = IamKing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/IamKing/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/IamKing/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.kb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1709,10 +1761,16 @@
 				HEADER_SEARCH_PATHS = (
 					"\"${PODS_ROOT}/Headers/Public/Masonry\"",
 					"$(PODS_ROOT)/Headers/Public/SDWebImage/**",
+					"$(PODS_ROOT)/IamKing/framework/**",
 				);
 				INFOPLIST_FILE = IamKing/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/IamKing/build/Debug-iphonesimulator",
+					"$(PROJECT_DIR)/IamKing/build/Debug-iphoneos",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.iamking.kb;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

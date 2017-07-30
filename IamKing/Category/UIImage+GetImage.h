@@ -42,5 +42,6 @@
 
 + (UIImage*) GetImageWithColor:(UIColor*)color size:(CGSize )size;
 
++(UIImage *)boxblurImage:(UIImage *)image withBlurNumber:(CGFloat)blur;
 
 @end

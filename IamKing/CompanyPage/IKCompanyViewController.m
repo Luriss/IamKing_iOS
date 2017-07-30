@@ -178,9 +178,6 @@
             self.dataArray = [NSArray arrayWithArray:dataArray];
             [self reloadTableViewSection:1];
         }
-        for (IKCompanyInfoModel *model in dataArray) {
-            NSLog(@"description = %@",model.description);
-        }
     }];
 }
 
@@ -433,6 +430,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1) {
+        
+        IKCompanyInfoModel *model = self.dataArray[indexPath.row];
+        
+        NSLog(@"description = %@",model.description);
+        self.companyDetailVc.companyInfoModel = model;
         [self.navigationController pushViewController:self.companyDetailVc animated:YES];
     }
     
@@ -442,9 +444,6 @@
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    NSLog(@"ty == %.0f",scrollView.contentOffset.y);
-
-    
     if (scrollView.contentOffset.y > 240) {
         [self.navigationController setNavigationBarHidden:YES animated:YES];
         [_bgTableView setFrame:CGRectMake(0, 20, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 20 -49)];

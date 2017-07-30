@@ -7,7 +7,17 @@
 //
 
 #import "IKViewController.h"
+#import "IKCompanyInfoModel.h"
+
 
 @interface IKCompanyDetailVC : IKViewController
+
+
+@property (nonatomic,strong)IKCompanyInfoModel *companyInfoModel;
+
+
+
+
+
 
 @end

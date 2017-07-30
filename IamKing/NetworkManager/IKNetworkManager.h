@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "IKJobDetailModel.h"
+#import "IKCompanyDetailHeadModel.h"
+
 
 // 请求数据接口
 typedef void(^IKRequestDictData)(NSDictionary *dict,BOOL success);
@@ -124,6 +126,8 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
  @param callback 回调
  */
 - (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getCompanyPageCompanyInfoDetailWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyDetailHeadModel *detailModel, BOOL success))callback;
 
 
 @end

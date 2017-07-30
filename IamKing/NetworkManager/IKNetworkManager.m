@@ -46,6 +46,15 @@
 
 // 公司信息
 #define IKCompanyInfoUrl (@"https://www.iamking.com.cn/index.php/User/getUserCompanyList?")
+
+// 公司详情
+
+#define IKCompanyDetailInfoUrl (@"https://www.iamking.com.cn/index.php/Company/getInfo?")
+
+
+
+
+
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -583,6 +592,69 @@ static IKNetworkManager *_shareInstance;
     }
     
     return backArray;
+}
+
+
+- (void)getCompanyPageCompanyInfoDetailWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyDetailHeadModel *detailModel, BOOL success))callback
+{
+    // userCompanyId=323&userId=0
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=%@&userId=0",IKCompanyDetailInfoUrl,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+//                NSLog(@"responseCache = %@",responseCache);
+        IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+
+        if (callback && model) {
+            callback(model,success);
+        }
+    } success:^(id responseObject) {
+//                NSLog(@"responseObject = %@",responseObject);
+        
+        if (![dataResult isEqual:responseObject]) {
+            IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && model) {
+                callback(model,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (IKCompanyDetailHeadModel *)dealCompanyInfoDetailData:(id)data
+{
+    NSDictionary *dict = (NSDictionary *)[data objectForKey:@"data"];
+    
+    if (dict.allKeys.count == 0) {
+        return nil;
+    }
+    
+    IKCompanyDetailHeadModel *model = [[IKCompanyDetailHeadModel alloc] init];
+    
+    model.workAddress = [self getString:[dict objectForKey:@"address"]];
+    model.workCity = [self getString:[dict objectForKey:@"cityName"]];
+    model.numberOfAttention = [self getString:[dict objectForKey:@"attentionNum"]];
+    model.companyName = [self getString:[dict objectForKey:@"companyName"]];
+    model.companyTypeName = [self getString:[dict objectForKey:@"companyTypeName"]];
+    model.setupYear = [self getString:[dict objectForKey:@"createCompanyYear"]];
+    model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
+    model.isAuthen = [self getBool:[dict objectForKey:@"isApproveOffcial"]];
+    model.nickName = [self getString:[dict objectForKey:@"nickname"]];
+    model.shopName = [self getString:[dict objectForKey:@"shopTypeName"]];
+    model.numberOfSchool = [self getString:[dict objectForKey:@"schoolNum"]];
+
+    model.numberOfProduct = [self getString:[dict objectForKey:@"productNum"]];
+    model.companyDescription = [self getString:[dict objectForKey:@"brandDescribe"]];
+    model.companyID = [self getString:[dict objectForKey:@"userId"]];
+    return model;
 }
 
 
