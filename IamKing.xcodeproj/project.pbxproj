@@ -110,6 +110,8 @@
 		21BC620B1F2E03AF00CE85D9 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620A1F2E03AF00CE85D9 /* OpenGLES.framework */; };
 		21BC620D1F2E03BB00CE85D9 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620C1F2E03BB00CE85D9 /* AVFoundation.framework */; };
 		21BC620F1F2E03C700CE85D9 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21BC620E1F2E03C700CE85D9 /* QuartzCore.framework */; };
+		21BC638A1F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21BC63891F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m */; };
+		21BC638C1F2ECC6300CE85D9 /* IK_classify_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */; };
 		21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */; };
 		21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF41F14A352008FC124 /* IKNetworkHelper.m */; };
 		21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 21C3ADF71F14B019008FC124 /* IKNetworkCache.m */; };
@@ -342,6 +344,9 @@
 		21BC620A1F2E03AF00CE85D9 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		21BC620C1F2E03BB00CE85D9 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		21BC620E1F2E03C700CE85D9 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		21BC63881F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKComDetailTopTableViewCell.h; sourceTree = "<group>"; };
+		21BC63891F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKComDetailTopTableViewCell.m; sourceTree = "<group>"; };
+		21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_classify_blue.png; sourceTree = "<group>"; };
 		21C3ADF01F149A1B008FC124 /* IKNetworkManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkManager.h; sourceTree = "<group>"; };
 		21C3ADF11F149A1B008FC124 /* IKNetworkManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKNetworkManager.m; sourceTree = "<group>"; };
 		21C3ADF31F14A352008FC124 /* IKNetworkHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKNetworkHelper.h; sourceTree = "<group>"; };
@@ -837,6 +842,8 @@
 				21BC61DD1F2CEC0500CE85D9 /* IKCompanyCollectionViewCell.m */,
 				21BC61EA1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.h */,
 				21BC61EB1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m */,
+				21BC63881F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.h */,
+				21BC63891F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -845,6 +852,7 @@
 			isa = PBXGroup;
 			children = (
 				21BC61E51F2D23F800CE85D9 /* IK_showMore_grey.png */,
+				21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */,
 			);
 			path = CompanyPageImage;
 			sourceTree = "<group>";
@@ -1411,6 +1419,7 @@
 				21BC61B41F2AE4F600CE85D9 /* IK_zan_blue.png in Resources */,
 				21D623241F1360F80054D980 /* IK_experience_grey.png in Resources */,
 				2197CBC51F1EF73B00F61562 /* IK_star_hollow_blue.png in Resources */,
+				21BC638C1F2ECC6300CE85D9 /* IK_classify_blue.png in Resources */,
 				21C3AE3E1F1746AA008FC124 /* IK_arrow.png in Resources */,
 				210B0D9C1F0DE16D003FD950 /* Assets.xcassets in Resources */,
 				2197CBA71F1DF43B00F61562 /* IK_showMore.png in Resources */,
@@ -1504,6 +1513,7 @@
 				21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */,
 				218AD7181F208C0F00138A68 /* LRPageControl.m in Sources */,
 				21BC61D71F2CE73900CE85D9 /* IKMineViewController.m in Sources */,
+				21BC638A1F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m in Sources */,
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,
 				21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
