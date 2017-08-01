@@ -182,20 +182,40 @@
 - (void)startBottomLineAnimation:(CGPoint )point
 {
 //    NSLog(@"xxxx = %@msdadd = %@",[NSValue valueWithCGPoint:_oldButton.center],[NSValue valueWithCGPoint:point]);
-//    CABasicAnimation* position = [CABasicAnimation animation];
-//    position.duration = 0.1;
-//    position.keyPath = @"position.x";
-//    position.fromValue = [NSValue valueWithCGPoint:_oldButton.center];
-//    position.toValue = [NSValue valueWithCGPoint:point];
-//    position.removedOnCompletion = NO;
-//    position.fillMode = kCAFillModeForwards;
-//    [_lineView.layer addAnimation:position forKey:@"key"];
+    CABasicAnimation* position = [CABasicAnimation animation];
+    position.duration = 0.1;
+    position.keyPath = @"position.x";
+    position.fromValue = [NSNumber numberWithFloat:_oldButton.center.x]; //[NSValue valueWithCGPoint:_oldButton.center];
+    position.toValue = [NSNumber numberWithFloat:point.x];//[NSValue valueWithCGPoint:point];
+    position.removedOnCompletion = NO;
+    position.fillMode = kCAFillModeForwards;
+    [_lineView.layer addAnimation:position forKey:@"key"];
 
     [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         _lineView.center = CGPointMake(point.x, _lineView.center.y);
     } completion:^(BOOL finished) {
         
     }];
+}
+
+
+- (void)setCompanyType:(NSString *)companyType
+{
+    NSInteger index = [companyType integerValue];
+    
+    switch (index) {
+        case 1:
+            [_button3 setTitle:@"连锁门店" forState:UIControlStateNormal];
+            break;
+        case 2:
+            [_button3 setTitle:@"产品服务" forState:UIControlStateNormal];
+            break;
+        case 3:
+            [_button3 setTitle:@"全国校区" forState:UIControlStateNormal];
+            break;
+        default:
+            break;
+    }
 }
 
 

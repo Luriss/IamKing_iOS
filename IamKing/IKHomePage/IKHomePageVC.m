@@ -133,6 +133,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
     // 视图显示开始轮播
     [self startLoopPlayView];
+    
+    //
+    self.navigationController.view.backgroundColor = [UIColor clearColor];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -151,6 +154,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     // 视图消失,停止轮播
     [self stopLoopPlayView];
+
 }
 
 
@@ -581,6 +585,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     if (scrollView == _bottomTableView) {
         // 底部的 tableView 滑动时,导航栏设置0.95的透明度.
         if (offsetY > 0) {
+            NSLog(@"sysNavView = %@",self.sysNavView);
             self.sysNavView.alpha = 0.95;
         }
         else{

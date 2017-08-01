@@ -110,7 +110,7 @@
 {
     if (_maskView == nil) {
         _maskView = [[UIView alloc] init];
-        _maskView.layer.backgroundColor = IKRGBColor(246.0, 101.0, 101.0).CGColor;
+        _maskView.layer.backgroundColor = IKGeneralRed.CGColor;
         _maskView.layer.cornerRadius = 10;
     }
     return _maskView;
@@ -149,9 +149,9 @@
     if (_introduceLabel == nil) {
         //介绍
         _introduceLabel = [[UILabel alloc] init];
-        _introduceLabel.textAlignment = NSTextAlignmentCenter;
-        _introduceLabel.font = [UIFont boldSystemFontOfSize:11.0f];
-        _introduceLabel.textColor = IKRGBColor(164.0, 164.0, 164.0);
+        _introduceLabel.textAlignment = NSTextAlignmentLeft;
+        _introduceLabel.font = [UIFont systemFontOfSize:11.0f];
+        _introduceLabel.textColor = IKSubHeadTitleColor;
         _introduceLabel.numberOfLines = 0;
     }
     return _introduceLabel;
@@ -161,7 +161,7 @@
 {
     if (_numberJobView == nil) {
         _numberJobView = [[IKImageWordView alloc] init];
-        _numberJobView.label.font = [UIFont boldSystemFontOfSize:13.0f];
+        _numberJobView.label.font = [UIFont systemFontOfSize:13.0f];
         _numberJobView.label.textColor = IKGeneralBlue;
         
     }
@@ -212,7 +212,7 @@
     
     
     [_setupView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_titleLabel.mas_bottom).offset(1);
+        make.top.equalTo(_titleLabel.mas_bottom).offset(5);
         make.left.equalTo(_titleLabel);
         make.width.mas_equalTo(90);
         make.height.mas_equalTo(20);

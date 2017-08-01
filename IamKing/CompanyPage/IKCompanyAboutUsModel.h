@@ -14,7 +14,7 @@
 @property(nonatomic,copy)NSString     *companyID;
 @property(nonatomic,copy)NSString     *cityID;
 @property(nonatomic,copy)NSString     *provinceID;
-//@property(nonatomic,copy)NSString     *workAddress;
+@property(nonatomic,copy)NSString     *workAddress;
 @property(nonatomic,copy)NSString     *cityName;
 @property(nonatomic,copy)NSArray      *imageArray;
 @property(nonatomic,copy)NSString     *informationDetail;

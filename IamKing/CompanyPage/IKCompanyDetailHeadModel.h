@@ -16,6 +16,7 @@
 @property(nonatomic,copy)NSString     *workAddress;
 @property(nonatomic,copy)NSString     *workCity;
 @property(nonatomic,copy)NSString     *companyTypeName;
+@property(nonatomic,copy)NSString     *companyType;
 @property(nonatomic,copy)NSString     *setupYear;
 @property(nonatomic,copy)NSString     *nickName;
 @property(nonatomic,copy)NSString     *numberOfSchool;

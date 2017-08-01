@@ -11,19 +11,19 @@
 
 @protocol IKComInformationTableViewCellDelegate <NSObject>
 
-- (void)showMoreButtonClick:(UIButton *)button;
-- (void)closeMoreButtonClick:(UIButton *)button;
+- (void)showMoreButtonClick:(BOOL)isClickShowMore;
+//- (void)closeMoreButtonClick:(UIButton *)button;
 
 @end
 
 @interface IKComInformationTableViewCell : UITableViewCell
 
 
-@property (nonatomic,assign)BOOL needShowMoreBtn;
-@property (nonatomic,assign)BOOL needCloseMoreBtn;
 
-@property (nonatomic,copy)NSString *content;
+
+//@property (nonatomic,copy)NSString *content;
 @property (nonatomic, weak) id<IKComInformationTableViewCellDelegate> delegate;
 
+- (void)createSubViews:(NSString *)content needShowMore:(BOOL)needMore needClose:(BOOL)needClose cellHeight:(CGFloat)cellH;
 
 @end

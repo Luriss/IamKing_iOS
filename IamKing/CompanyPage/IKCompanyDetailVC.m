@@ -12,23 +12,36 @@
 #import "IKComDetailTypeTableViewCell.h"
 #import "IKComDetailLoopTableViewCell.h"
 #import "IKComInformationTableViewCell.h"
+#import "IKCompanyDetailTitleTableViewCell.h"
+#import "IKCompanyProgressTableViewCell.h"
+#import "IKCompanyProgressVC.h"
+#import "IKWorkAddressTableViewCell.h"
+#import "IKManagerTeamLeftTableViewCell.h"
+#import "IKManagerTeamRightTableViewCell.h"
+#import "IKCompanyManagerTeamModel.h"
+
+
 
 @interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate>
 {
     CGFloat _imageH;
+    CGFloat _infoCellH;
 }
 
 @property(nonatomic,strong)IKTableView      *bottomTableView;
 @property(nonatomic,strong)IKScrollView      *navScrollVIew;
+@property(nonatomic,strong)IKCompanyDetailHeadModel      *headModel;
+@property(nonatomic,strong)IKCompanyAboutUsModel      *aboutUsModel;
+@property(nonatomic,assign)IKCompanyDetailVCType       type;
 
+@property(nonatomic,strong)UILabel      *titleLabel;
 @property(nonatomic,strong)UIImageView *headImageView;
 @property(nonatomic,strong)UIImageView *navImageView;
 @property(nonatomic,strong)UIImageView *logoImageView;
 @property(nonatomic,strong)UIImage      *bulrImage;
-@property(nonatomic,strong)UILabel      *titleLabel;
-@property(nonatomic,strong)IKCompanyDetailHeadModel      *headModel;
-@property(nonatomic,strong)IKCompanyAboutUsModel      *aboutUsModel;
-@property(nonatomic,assign)IKCompanyDetailVCType       type;
+
+@property(nonatomic,strong)NSArray      *managerTeamArray;
+
 @property(nonatomic,assign)BOOL       needShowMoreBtn;
 @property(nonatomic,assign)BOOL       showMore;
 
@@ -42,8 +55,8 @@
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor whiteColor];
-//    _imageViewH = ceilf(IKSCREENH_HEIGHT *0.255);
-
+    //    _imageViewH = ceilf(IKSCREENH_HEIGHT *0.255);
+    
     self.type = IKCompanyDetailVCTypeAboutUs;
     _showMore = NO;
     
@@ -60,7 +73,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
+    
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     self.extendedLayoutIncludesOpaqueBars = NO;
     self.automaticallyAdjustsScrollViewInsets = YES;
@@ -68,22 +81,21 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
+    
     [self.navigationController setNavigationBarHidden:YES animated:NO];
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     self.bottomTableView.contentOffset = CGPointMake(0, -ceilf(IKSCREENH_HEIGHT *0.255));
-    self.headImageView.image = nil;
-    self.navImageView.image = nil;
     _showMore = NO;
     _needShowMoreBtn = NO;
+    self.type = IKCompanyDetailVCTypeAboutUs;
 }
 
 - (void)initLeftBackItem
@@ -92,7 +104,7 @@
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(companyDetailVcDismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(15, 20, 44, 44);
-//    button.backgroundColor = [UIColor redColor];
+    //    button.backgroundColor = [UIColor redColor];
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 24);
     [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
@@ -106,11 +118,11 @@
     scrollView.backgroundColor = [UIColor clearColor];
     scrollView.scrollEnabled = NO;
     scrollView.bounces = NO;
-//    scrollView.delegate = self;
+    //    scrollView.delegate = self;
     scrollView.showsVerticalScrollIndicator = NO;
     [self.view insertSubview:scrollView aboveSubview:self.bottomTableView];
-//    _navScrollVIew.contentSize = CGSizeMake(IKSCREEN_WIDTH, _imageViewH);
-
+    //    _navScrollVIew.contentSize = CGSizeMake(IKSCREEN_WIDTH, _imageViewH);
+    
     UIImageView *imageview = [[UIImageView alloc] init];
     
     imageview.frame = CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), ceilf(IKSCREENH_HEIGHT *0.255));
@@ -133,7 +145,7 @@
         _bottomTableView.delegate = self;
         _bottomTableView.dataSource = self;
         _bottomTableView.bounces = YES;
-
+        
     }
     return _bottomTableView;
 }
@@ -148,7 +160,7 @@
         _logoImageView.layer.cornerRadius = 5;
         _logoImageView.layer.masksToBounds = YES;
         [self.bottomTableView insertSubview:_logoImageView aboveSubview:self.headImageView];
-
+        
     }
     return _logoImageView;
 }
@@ -167,7 +179,7 @@
         
         self.bottomTableView.contentInset = UIEdgeInsetsMake(height, 0, 0, 0);
         [self.bottomTableView addSubview:self.headImageView];
-
+        
     }
     return _headImageView;
 }
@@ -184,6 +196,9 @@
             NSLog(@"description = %@",detailModel.description);
             _headModel = detailModel;
             
+            self.headImageView.image = nil;
+            self.navImageView.image = nil;
+            
             [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:detailModel.logoImageUrl ] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
@@ -196,7 +211,7 @@
                     _navImageView.hidden = YES;
                     
                     [self.bottomTableView reloadData];
-
+                    
                 });
             }];
             
@@ -209,7 +224,7 @@
                     _aboutUsModel = model;
                     
                     [UIView performWithoutAnimation:^{
-                        [self.bottomTableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationNone];
+                        [self.bottomTableView reloadData];
                     }];
                 });
             }
@@ -236,7 +251,7 @@
     title.textColor = IKMainTitleColor;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-//    self.navigationItem.titleView = title;
+    //    self.navigationItem.titleView = title;
     
     _titleLabel = title;
 }
@@ -250,6 +265,14 @@
             break;
         case 2:
             self.type = IKCompanyDetailVCTypeManagerTeam;
+        {
+            if (IKArrayIsEmpty(self.managerTeamArray)) {
+                [[IKNetworkManager shareInstance] getCompanyPageManagerTeamInfoWithParam:nil backData:^(NSArray *dataArray, BOOL success) {
+                    self.managerTeamArray = dataArray;
+                    [self.bottomTableView reloadData];
+                }];
+            }
+        }
             break;
         case 3:
             self.type = IKCompanyDetailVCTypeMultipleShop;
@@ -265,9 +288,9 @@
     [self.bottomTableView reloadData];
 }
 
-- (void)showMoreButtonClick:(UIButton *)button
+- (void)showMoreButtonClick:(BOOL)isClickShowMore
 {
-    _showMore = YES;
+    _showMore = isClickShowMore;
     
     [self.bottomTableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }
@@ -278,7 +301,7 @@
         case  IKCompanyDetailVCTypeAboutUs:
             return 5;
             break;
-        
+            
         case  IKCompanyDetailVCTypeManagerTeam:
         case  IKCompanyDetailVCTypeMultipleShop:
         case  IKCompanyDetailVCTypeNeedJob:
@@ -305,45 +328,75 @@
     else if (indexPath.section == 1){
         return 46;
     }
-    else if (indexPath.section == 2){
-        
+    else{
         switch (self.type) {
             case IKCompanyDetailVCTypeAboutUs:
             {
-                if (indexPath.row == 0) {
-                    return ceilf(IKSCREENH_HEIGHT * 0.2699);
-                }
-                else{
-                    CGSize szie = [NSString getSizeWithString:_aboutUsModel.informationDetail size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:13.0f]}];
-                    
-                    CGFloat titleH = ceilf(IKSCREENH_HEIGHT *0.06);
-                    
-                    if (szie.height < 50) {
-                        return 50 + titleH;
-                        _needShowMoreBtn = NO;
-                    }
-                    else if(szie.height > 120){
-                        
-                        if (_showMore) {
-                            _needShowMoreBtn = NO;
-                            return titleH + szie.height + 60;
-                        }
-                        else{
-                            _needShowMoreBtn = YES;
-                            return 120 + titleH;
-                        }
+                if (indexPath.section == 2){
+                    if (indexPath.row == 0) {
+                        return ceilf(IKSCREENH_HEIGHT * 0.2699);
                     }
                     else{
-                        _needShowMoreBtn = NO;
-                        return titleH + szie.height + 20;
+                        CGSize szie = [NSString getSizeWithString:_aboutUsModel.informationDetail size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:13.0f]}];
+                        
+                        CGFloat titleH = ceilf(IKSCREENH_HEIGHT *0.06);
+                        
+                        if (szie.height < 50) {
+                            _needShowMoreBtn = NO;
+                            _infoCellH = 50 + titleH;
+                            return _infoCellH;
+                        }
+                        else if(szie.height > 120){
+                            
+                            if (_showMore) {
+                                _needShowMoreBtn = NO;
+                                _infoCellH = titleH + szie.height + 60;
+                                return _infoCellH;
+                            }
+                            else{
+                                _needShowMoreBtn = YES;
+                                _infoCellH = 120 + titleH;
+                                return _infoCellH;
+                            }
+                        }
+                        else{
+                            _needShowMoreBtn = NO;
+                            _infoCellH = titleH + szie.height + 20;
+                            return _infoCellH;
+                        }
                     }
+                }
+                else if (indexPath.section == 3){
+                    if (indexPath.row == 0) {
+                        return ceilf(IKSCREENH_HEIGHT *0.06);
+                    }
+                    else{
+                        if (_aboutUsModel.progressList.count > 0) {
+                            return ceilf(IKSCREENH_HEIGHT * 0.12);
+                        }
+                        else{
+                            return 50;
+                        }
+                    }
+                }
+                else{
+                    if (indexPath.row == 0) {
+                        return ceilf(IKSCREENH_HEIGHT *0.06);
+                    }
+                    
+                    // 地点
+                    CGSize size = [NSString getSizeWithString:_aboutUsModel.workAddress size:CGSizeMake(IKSCREEN_WIDTH*0.67, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}];
+                    CGFloat h = size.height<18?18:size.height;
+                    
+                    return h + 50;
+                }
             }
                 break;
                 
             case IKCompanyDetailVCTypeManagerTeam:
-                {
-                    return 40;
-                }
+            {
+                return ceilf(IKSCREENH_HEIGHT *0.345);
+            }
                 break;
                 
             case IKCompanyDetailVCTypeNeedJob:{
@@ -356,7 +409,7 @@
             default:
                 break;
         }
-        }
+        
     }
     return 120;
 }
@@ -366,20 +419,58 @@
     if (section == 0 || section == 1) {
         return 1;
     }
-    else if (section == 2){
-        
-        return 2;
-    }
     else{
-        return 1;
+        switch (self.type) {
+            case IKCompanyDetailVCTypeAboutUs:
+            {
+                if (section == 2) {
+                    return 2;
+                }
+                else if (section == 3){
+                    NSInteger count = _aboutUsModel.progressList.count;
+                    
+                    if (count>0 && count<4) {
+                        return (count + 1); // 标题
+                    }
+                    else if (count >=4){
+                        return 5; // 3 + 1 + 1  (标题 + 全部按钮)
+                    }
+                    else{
+                        return 2;
+                    }
+                }
+                else{
+                    return 2;
+                }
+            }
+                break;
+                
+            case IKCompanyDetailVCTypeManagerTeam:
+            {
+                return self.managerTeamArray.count;
+            }
+                break;
+                
+            case IKCompanyDetailVCTypeNeedJob:
+            {
+            }
+                break;
+            case IKCompanyDetailVCTypeMultipleShop:
+            {
+            }
+            default:
+                break;
+        }
     }
-    
-    return 15;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    NSInteger row = indexPath.row;
+    NSInteger section = indexPath.section;
+    
+    if (section == 0) {
         static  NSString *cellId=@"IKComDetailTopTableViewCellId";
         IKComDetailTopTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
         
@@ -391,7 +482,7 @@
         [cell cellAddData:_headModel];
         return cell;
     }
-    else if (indexPath.section == 1){
+    else if (section == 1){
         
         static  NSString *cellId=@"IKComDetailTypeTableViewCellId";
         IKComDetailTypeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
@@ -401,14 +492,15 @@
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.delegate = self;
+        cell.companyType = @"2";
         return cell;
     }
     else{
         switch (self.type) {
             case IKCompanyDetailVCTypeAboutUs:
             {
-                if (indexPath.section == 2 ){
-                    if (indexPath.row == 0) {
+                if (section == 2 ){
+                    if (row == 0) {
                         static  NSString *cellId=@"IKComDetailLoopTableViewCellId";
                         IKComDetailLoopTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
                         
@@ -428,24 +520,140 @@
                         }
                         cell.selectionStyle = UITableViewCellSelectionStyleNone;
                         cell.delegate = self;
-                        if (_needShowMoreBtn) {
-                            cell.needShowMoreBtn = YES;
+
+                        if (_showMore) {
+                            _needShowMoreBtn = NO;
                         }
-                        else{
-                            cell.needShowMoreBtn = NO;
-                        }
-                        
-                        
-                        cell.content = _aboutUsModel.informationDetail;
+                        [cell createSubViews:_aboutUsModel.informationDetail needShowMore:_needShowMoreBtn needClose:_showMore cellHeight:_infoCellH];
+
                         return cell;
                     }
-                }                
+                }
+                else if (section == 3){
+                    if (row == 0) {
+                        static  NSString *cellId=@"IKCompanyDetailTitleTableViewCellId";
+                        IKCompanyDetailTitleTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+                        
+                        if(cell == nil){
+                            cell = [[IKCompanyDetailTitleTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                        }
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        cell.titleType = IKCompanyDetailTitleTypeProgress;
+                        return cell;
+                    }
+                    else if (row == 4){
+                        UITableViewCell *cell = [[UITableViewCell alloc] init];
+                        
+                        UIButton * allButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                        [allButton setTitle:@"全部历程" forState:UIControlStateNormal];
+                        [allButton setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
+                        allButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+                        allButton.layer.cornerRadius = 5;
+                        allButton.layer.borderColor = IKGeneralBlue.CGColor;
+                        allButton.layer.borderWidth = 1;
+                        [allButton addTarget:self action:@selector(allButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+                        [cell.contentView addSubview:allButton];
+                        
+                        [allButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                            make.center.equalTo(cell.contentView);
+                            make.width.mas_equalTo(80);
+                            make.height.mas_equalTo(30);
+                        }];
+                        return cell;
+                    }
+                    else{
+                        if (_aboutUsModel.progressList.count > 0) {
+                            static  NSString *cellId=@"IKCompanyProgressTableViewCellId";
+                            IKCompanyProgressTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+                            
+                            if(cell == nil){
+                                cell = [[IKCompanyProgressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                            }
+                            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                            NSLog(@"indexPath.row = %ld",indexPath.row);
+                            if (row < _aboutUsModel.progressList.count) {
+                                if (row == 1) {
+                                    [cell addProgressCellData:_aboutUsModel.progressList[1] showVerTopLine:NO showVerBottomLine:YES];
+                                }
+                                else if (row == 3){
+                                    [cell addProgressCellData:_aboutUsModel.progressList[3] showVerTopLine:YES showVerBottomLine:NO];
+                                }
+                                else{
+                                    [cell addProgressCellData:_aboutUsModel.progressList[2] showVerTopLine:YES showVerBottomLine:YES];
+                                }
+                            }
+                            return cell;
+                        }
+                        else{
+                            UITableViewCell *cell = [[UITableViewCell alloc] init];
+                            UILabel *title = [[UILabel alloc] init];
+                            title.font = [UIFont systemFontOfSize:IKSubTitleFont];
+                            title.textColor = IKSubHeadTitleColor;
+                            title.textAlignment = NSTextAlignmentCenter;
+                            title.text = @"暂无发展历程";
+                            [cell.contentView addSubview:title];
+                            
+                            [title mas_makeConstraints:^(MASConstraintMaker *make) {
+                                make.edges.equalTo(cell.contentView);
+                                make.width.and.height.equalTo(cell.contentView);
+                            }];
+                            return cell;
+                        }
+                    }
+                }
+                else{
+                    if (row == 0) {
+                        static  NSString *cellId=@"IKCompanyDetailTitleTableViewCellId";
+                        IKCompanyDetailTitleTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+                        
+                        if(cell == nil){
+                            cell = [[IKCompanyDetailTitleTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                        }
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        cell.titleType = IKCompanyDetailTitleTypeLocation;
+                        return cell;
+                    }
+                    else{
+                        // 地点
+                        static  NSString *cellId=@"IKWorkAddressTableViewCellId";
+                        IKWorkAddressTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                        
+                        if(cell == nil){
+                            cell = [[IKWorkAddressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                        }
+                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                        cell.shopName = _aboutUsModel.cityName;
+                        cell.shopAddress = _aboutUsModel.workAddress;
+                        return cell;
+                    }
+                }
             }
                 break;
             case IKCompanyDetailVCTypeManagerTeam:
             {
-                UITableViewCell *cell = [[UITableViewCell alloc] init];
-                return cell;
+                if (row%2 == 0) {
+                    static  NSString *cellId=@"IKManagerTeamLeftTableViewCellId";
+                    IKManagerTeamLeftTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                    
+                    if(cell == nil){
+                        cell = [[IKManagerTeamLeftTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                    }
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    [cell managerTeamCellAddData:[self.managerTeamArray objectAtIndex:row]];
+                    return cell;
+                }
+                else{
+                    static  NSString *cellId=@"IKManagerTeamRightTableViewCellId";
+                    IKManagerTeamRightTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                    
+                    if(cell == nil){
+                        cell = [[IKManagerTeamRightTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                    }
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    [cell managerTeamCellAddData:[self.managerTeamArray objectAtIndex:row]];
+
+                    return cell;
+                }
             }
                 break;
             case IKCompanyDetailVCTypeMultipleShop:
@@ -464,7 +672,7 @@
                 
             default:
                 break;
-    }
+        }
         
     }
     
@@ -474,25 +682,69 @@
 
 //- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 //{
-////    if (section == 1) {
-////        return 4;
-////    }
+//    if (section == 4) {
+//        return 8;
+//    }
 //    return 0.01;
 //}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0) {
+    if (section == 0 || section == 2) {
         return 8;
     }
+    else if (section == 3 && self.type == IKCompanyDetailVCTypeAboutUs){
+        
+        CGFloat count = _aboutUsModel.progressList.count;
+        
+        if (  count > 0 && count <4) {
+            return 28;
+        }
+        else{
+            return 8;
+        }
+    }
+    
     return 0.01;
 }
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
 
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    CGFloat count = _aboutUsModel.progressList.count;
+
+    if (section == 3 && self.type == IKCompanyDetailVCTypeAboutUs && count > 0 && count < 4) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = [UIColor whiteColor];
+        
+        UIView *wView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 20)];
+        wView.backgroundColor = [UIColor whiteColor];
+        [view addSubview:wView];
+        
+        UIView *gView = [[UIView alloc] initWithFrame:CGRectMake(0, 20, IKSCREEN_WIDTH, 8)];
+        gView.backgroundColor = IKGeneralLightGray;
+        [view addSubview:gView];
+        
+        return view;
+    }
+    
+    return nil;
 }
 
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
+
+- (void)allButtonClick:(UIButton *)button
+{
+    NSLog(@"allButtonClick:");
+    
+    IKCompanyProgressVC *progress = [[IKCompanyProgressVC alloc] init];
+    progress.progressArray = _aboutUsModel.progressList;
+    [self.navigationController pushViewController:progress animated:YES];
+    
+}
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -560,13 +812,13 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end

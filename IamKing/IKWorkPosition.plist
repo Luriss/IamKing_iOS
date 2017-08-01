@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>101</key>
+	<string>创始人兼CEO</string>
+	<key>102</key>
+	<string>创始人兼执行总裁</string>
+	<key>103</key>
+	<string>CEO</string>
+	<key>104</key>
+	<string>执行总裁</string>
+	<key>105</key>
+	<string>总经理</string>
+	<key>106</key>
+	<string>执行董事</string>
+	<key>107</key>
+	<string>董事长</string>
+	<key>201</key>
+	<string>副总裁</string>
+	<key>202</key>
+	<string>财务总监</string>
+	<key>203</key>
+	<string>人事总监</string>
+	<key>204</key>
+	<string>市场总监</string>
+	<key>205</key>
+	<string>品牌总监</string>
+	<key>206</key>
+	<string>公关总监</string>
+	<key>207</key>
+	<string>技术总监</string>
+	<key>208</key>
+	<string>培训总监</string>
+	<key>209</key>
+	<string>区域总监</string>
+	<key>210</key>
+	<string>教练总监</string>
+	<key>211</key>
+	<string>私教总监</string>
+	<key>212</key>
+	<string>团课总监</string>
+	<key>213</key>
+	<string>营销总监</string>
+	<key>214</key>
+	<string>运营总监</string>
+	<key>215</key>
+	<string>客服总监</string>
+</dict>
+</plist>

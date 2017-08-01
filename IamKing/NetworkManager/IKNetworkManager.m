@@ -54,7 +54,8 @@
 // 关于我们  userCompanyId=330
 #define IKCompanyAboutUsUrl (@"https://www.iamking.com.cn/index.php/Company/getAbout?")
 
-
+// 管理团队
+#define IKCompanyManagerTeamUrl (@"https://www.iamking.com.cn/index.php/CompanyManager/getList?")
 
 @interface IKNetworkManager ()
 
@@ -645,6 +646,7 @@ static IKNetworkManager *_shareInstance;
     model.numberOfAttention = [self getString:[dict objectForKey:@"attentionNum"]];
     model.companyName = [self getString:[dict objectForKey:@"companyName"]];
     model.companyTypeName = [self getString:[dict objectForKey:@"companyTypeName"]];
+    model.companyType = [self getString:[dict objectForKey:@"companyType"]];
     model.setupYear = [NSString stringWithFormat:@"%@年成立",[dict objectForKey:@"createCompanyYear"]];
     model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
     model.isAuthen = [self getBool:[dict objectForKey:@"isApproveOffcial"]];
@@ -662,7 +664,7 @@ static IKNetworkManager *_shareInstance;
 - (void)getCompanyPageAboutUsInfoWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyAboutUsModel *model, BOOL success))callback
 {
     // userCompanyId=323&userId=0
-    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=309",IKCompanyAboutUsUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=292",IKCompanyAboutUsUrl];//,[param objectForKey:@"userCompanyId"]];
     NSLog(@"url = %@",url);
     
     __block id dataResult = nil;
@@ -699,12 +701,14 @@ static IKNetworkManager *_shareInstance;
         return nil;
     }
     
+    NSLog(@"daaaaaaaaa = %@",data);
     IKCompanyAboutUsModel *model = [[IKCompanyAboutUsModel alloc] init];
     
     model.companyID = [self getString:[dict objectForKey:@"user_id"]];
     model.cityName = [self getString:[dict objectForKey:@"cityName"]];
     model.cityID = [self getString:[dict objectForKey:@"cityId"]];
     model.imageArray = (NSArray *)[dict objectForKey:@"imgListFull"];
+    model.workAddress = [self getString:[dict objectForKey:@"address"]];
     model.informationDetail = [self getString:[dict objectForKey:@"informationDetail"]];
     model.location = [self getString:[dict objectForKey:@"location"]];
     model.progressList = (NSArray *)[dict objectForKey:@"progressList"];
@@ -712,6 +716,79 @@ static IKNetworkManager *_shareInstance;
     return model;
 }
 
+
+- (void)getCompanyPageManagerTeamInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    // userCompanyId=292
+    
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=292",IKCompanyManagerTeamUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+                NSLog(@"responseCache = %@",responseCache);
+        NSArray *array = [self dealManagerTeamData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        if (callback && array.count > 0) {
+            callback(array,success);
+        }
+    } success:^(id responseObject) {
+                NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *array = [self dealManagerTeamData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && array.count > 0) {
+                callback(array,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+    
+}
+
+- (NSArray *)dealManagerTeamData:(id)data
+{
+    NSArray *array = (NSArray *)[data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *muArray = [NSMutableArray arrayWithCapacity:array.count];
+    
+    for (id object in array) {
+        if ([object isKindOfClass:[NSDictionary class]]) {
+           
+            NSDictionary *dict = (NSDictionary *)object;
+            IKCompanyManagerTeamModel *model = [[IKCompanyManagerTeamModel alloc] init];
+            model.companyID = [self getString:[dict objectForKey:@"user_id"]];
+            model.headerImageUrl = [self getString:[dict objectForKey:@"header_image"]];
+            model.headerImageName = [self getString:[dict objectForKey:@"header_image_name"]];
+            model.name = [self getString:[dict objectForKey:@"name"]];
+            NSString *key = [self getString:[dict objectForKey:@"work_position"]];
+            model.workPosition = [self getPositionFromPlist:key];
+            model.describe = [self getString:[dict objectForKey:@"describe"]];
+            [muArray addObject:model];
+
+        }
+    }
+    return muArray;
+}
+
+
+- (NSString *)getPositionFromPlist:(NSString *)key
+{
+    NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKWorkPosition" ofType:@"plist"];
+    NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
+    
+    NSLog(@"datadatadatadata = %@",data);
+    return [data objectForKey:key];
+}
 
 
 - (NSString *)timeWithTimeIntervalString:(NSString *)timeInterval

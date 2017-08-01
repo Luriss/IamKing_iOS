@@ -17,6 +17,7 @@
 @interface IKComDetailTypeTableViewCell : UITableViewCell
 
 @property (nonatomic, weak) id<IKComDetailTypeTableViewCellDelegate> delegate;
+@property (nonatomic, copy) NSString *companyType;
 
 
 @end
