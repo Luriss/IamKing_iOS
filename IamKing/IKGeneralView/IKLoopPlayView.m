@@ -169,7 +169,7 @@
     // 默认无线滚动
     _isInfiniteLoop = YES;
     // 默认 UIViewContentModeScaleToFill
-    _pageViewContentMode = UIViewContentModeScaleToFill;
+    _pageViewContentMode = UIViewContentModeScaleAspectFill;
     // 默认不显示
     _pageControlHidden = YES;
     
@@ -260,14 +260,22 @@
     if (!IKArrayIsEmpty(imagesArray)) {
         _imagesArray = [imagesArray copy];
         
-        // 因为默认是无线循环所以此处可以直接设置一个较大的数
-        _infiniteCount = imagesArray.count * Multiple * 2;
-        _totalPageCount = _infiniteCount;
+
+        if (imagesArray.count > 1) {
+            // 因为默认是无线循环所以此处可以直接设置一个较大的数
+            _infiniteCount = imagesArray.count * Multiple * 2;
+            _totalPageCount = _infiniteCount;
+            
+            [self setIsAutoScroll:_isAutoScroll];
+        }
+        else{
+            _totalPageCount = imagesArray.count;
+            [self setIsAutoScroll:NO];
+        }
+        
         _numberOfPages = imagesArray.count;
         self.pageControl.numberOfPages = _numberOfPages;
         self.collectionView.scrollEnabled = YES;
-
-        [self setIsAutoScroll:_isAutoScroll];
     }
 }
 

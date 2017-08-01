@@ -435,6 +435,7 @@
         
         NSLog(@"description = %@",model.description);
         self.companyDetailVc.companyInfoModel = model;
+        
         [self.navigationController pushViewController:self.companyDetailVc animated:YES];
     }
     

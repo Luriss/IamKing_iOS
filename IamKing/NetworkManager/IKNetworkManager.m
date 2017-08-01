@@ -51,7 +51,8 @@
 
 #define IKCompanyDetailInfoUrl (@"https://www.iamking.com.cn/index.php/Company/getInfo?")
 
-
+// 关于我们  userCompanyId=330
+#define IKCompanyAboutUsUrl (@"https://www.iamking.com.cn/index.php/Company/getAbout?")
 
 
 
@@ -644,7 +645,7 @@ static IKNetworkManager *_shareInstance;
     model.numberOfAttention = [self getString:[dict objectForKey:@"attentionNum"]];
     model.companyName = [self getString:[dict objectForKey:@"companyName"]];
     model.companyTypeName = [self getString:[dict objectForKey:@"companyTypeName"]];
-    model.setupYear = [self getString:[dict objectForKey:@"createCompanyYear"]];
+    model.setupYear = [NSString stringWithFormat:@"%@年成立",[dict objectForKey:@"createCompanyYear"]];
     model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
     model.isAuthen = [self getBool:[dict objectForKey:@"isApproveOffcial"]];
     model.nickName = [self getString:[dict objectForKey:@"nickname"]];
@@ -656,6 +657,61 @@ static IKNetworkManager *_shareInstance;
     model.companyID = [self getString:[dict objectForKey:@"userId"]];
     return model;
 }
+
+
+- (void)getCompanyPageAboutUsInfoWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyAboutUsModel *model, BOOL success))callback
+{
+    // userCompanyId=323&userId=0
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=309",IKCompanyAboutUsUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+//        NSLog(@"responseCache = %@",responseCache);
+        IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        if (callback && model) {
+            callback(model,success);
+        }
+    } success:^(id responseObject) {
+//        NSLog(@"responseObject = %@",responseObject);
+        if (![dataResult isEqual:responseObject]) {
+            IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && model) {
+                callback(model,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (IKCompanyAboutUsModel *)dealCompanyAboutUsData:(id)data
+{
+    NSDictionary *dict = (NSDictionary *)[data objectForKey:@"data"];
+    
+    if (dict.allKeys.count == 0) {
+        return nil;
+    }
+    
+    IKCompanyAboutUsModel *model = [[IKCompanyAboutUsModel alloc] init];
+    
+    model.companyID = [self getString:[dict objectForKey:@"user_id"]];
+    model.cityName = [self getString:[dict objectForKey:@"cityName"]];
+    model.cityID = [self getString:[dict objectForKey:@"cityId"]];
+    model.imageArray = (NSArray *)[dict objectForKey:@"imgListFull"];
+    model.informationDetail = [self getString:[dict objectForKey:@"informationDetail"]];
+    model.location = [self getString:[dict objectForKey:@"location"]];
+    model.progressList = (NSArray *)[dict objectForKey:@"progressList"];
+    model.provinceID = [self getString:[dict objectForKey:@"provinceId"]];
+    return model;
+}
+
 
 
 - (NSString *)timeWithTimeIntervalString:(NSString *)timeInterval
@@ -685,6 +741,16 @@ static IKNetworkManager *_shareInstance;
         return NO;
     }
     return YES;
+}
+
+
+- (NSArray *)getArray:(id)object separateString:(NSString *)separate
+{
+    NSString *str = [self getString:object];
+    
+    NSArray *array = [str componentsSeparatedByString:separate];
+    
+    return array;
 }
 
 

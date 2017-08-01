@@ -10,4 +10,8 @@
 
 @interface IKComDetailTopTableViewCell : UITableViewCell
 
+
+- (void)cellAddData:(IKCompanyDetailHeadModel *)model;
+
+
 @end

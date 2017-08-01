@@ -20,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.view.backgroundColor = [UIColor whiteColor];
     self.navigationBar.barTintColor = [UIColor whiteColor];
     self.delegate = self;
     

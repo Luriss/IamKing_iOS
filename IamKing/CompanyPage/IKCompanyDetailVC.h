@@ -10,6 +10,13 @@
 #import "IKCompanyInfoModel.h"
 
 
+typedef NS_ENUM(NSInteger, IKCompanyDetailVCType) {
+    IKCompanyDetailVCTypeAboutUs = 0,
+    IKCompanyDetailVCTypeManagerTeam,
+    IKCompanyDetailVCTypeMultipleShop,
+    IKCompanyDetailVCTypeNeedJob
+};
+
 @interface IKCompanyDetailVC : IKViewController
 
 

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "IKJobDetailModel.h"
 #import "IKCompanyDetailHeadModel.h"
+#import "IKCompanyAboutUsModel.h"
 
 
 // 请求数据接口
@@ -129,5 +130,6 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getCompanyPageCompanyInfoDetailWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyDetailHeadModel *detailModel, BOOL success))callback;
 
+- (void)getCompanyPageAboutUsInfoWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyAboutUsModel *model, BOOL success))callback;
 
 @end

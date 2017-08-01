@@ -166,6 +166,13 @@
 		21E2B59F1F1BA6BF00F9EC14 /* IK_homePageSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E2B59D1F1BA6BF00F9EC14 /* IK_homePageSelected@3x.png */; };
 		21E2B5A11F1BAC2B00F9EC14 /* IK_meSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E2B5A01F1BAC2B00F9EC14 /* IK_meSelected@3x.png */; };
 		21E2B5A31F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 21E2B5A21F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png */; };
+		21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820BE1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m */; };
+		21F820C51F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820C41F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m */; };
+		21F820CB1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820CA1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m */; };
+		21F820CE1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820CD1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m */; };
+		21F820D01F2F32A600DA9EFA /* IK_brand_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820CF1F2F32A600DA9EFA /* IK_brand_blue.png */; };
+		21F820D21F2F32B100DA9EFA /* IK_showMore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820D11F2F32B100DA9EFA /* IK_showMore.png */; };
+		21F820D41F2F4DE500DA9EFA /* IK_closeMore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820D31F2F4DE500DA9EFA /* IK_closeMore.png */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -432,6 +439,17 @@
 		21E2B59D1F1BA6BF00F9EC14 /* IK_homePageSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_homePageSelected@3x.png"; sourceTree = "<group>"; };
 		21E2B5A01F1BAC2B00F9EC14 /* IK_meSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_meSelected@3x.png"; sourceTree = "<group>"; };
 		21E2B5A21F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "IK_findPeopleSelected@3x.png"; sourceTree = "<group>"; };
+		21F820BD1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKComDetailTypeTableViewCell.h; sourceTree = "<group>"; };
+		21F820BE1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKComDetailTypeTableViewCell.m; sourceTree = "<group>"; };
+		21F820C31F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyAboutUsModel.h; sourceTree = "<group>"; };
+		21F820C41F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyAboutUsModel.m; sourceTree = "<group>"; };
+		21F820C91F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKComDetailLoopTableViewCell.h; sourceTree = "<group>"; };
+		21F820CA1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKComDetailLoopTableViewCell.m; sourceTree = "<group>"; };
+		21F820CC1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKComInformationTableViewCell.h; sourceTree = "<group>"; };
+		21F820CD1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKComInformationTableViewCell.m; sourceTree = "<group>"; };
+		21F820CF1F2F32A600DA9EFA /* IK_brand_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_brand_blue.png; sourceTree = "<group>"; };
+		21F820D11F2F32B100DA9EFA /* IK_showMore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_showMore.png; sourceTree = "<group>"; };
+		21F820D31F2F4DE500DA9EFA /* IK_closeMore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_closeMore.png; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -844,6 +862,12 @@
 				21BC61EB1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m */,
 				21BC63881F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.h */,
 				21BC63891F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m */,
+				21F820BD1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.h */,
+				21F820BE1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m */,
+				21F820C91F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.h */,
+				21F820CA1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m */,
+				21F820CC1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.h */,
+				21F820CD1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -853,6 +877,9 @@
 			children = (
 				21BC61E51F2D23F800CE85D9 /* IK_showMore_grey.png */,
 				21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */,
+				21F820CF1F2F32A600DA9EFA /* IK_brand_blue.png */,
+				21F820D11F2F32B100DA9EFA /* IK_showMore.png */,
+				21F820D31F2F4DE500DA9EFA /* IK_closeMore.png */,
 			);
 			path = CompanyPageImage;
 			sourceTree = "<group>";
@@ -860,6 +887,8 @@
 		21BC61F21F2DC4A200CE85D9 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				21F820C31F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.h */,
+				21F820C41F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m */,
 				21BC61F31F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.h */,
 				21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */,
 			);
@@ -1365,11 +1394,13 @@
 				21E2B5A11F1BAC2B00F9EC14 /* IK_meSelected@3x.png in Resources */,
 				21BC61951F2884B600CE85D9 /* IK_education_blue.png in Resources */,
 				21C3AE1C1F171F2F008FC124 /* IK_bg_white.png in Resources */,
+				21F820D01F2F32A600DA9EFA /* IK_brand_blue.png in Resources */,
 				2197CB7E1F1C7F2700F61562 /* IK_MessageSelected@3x.png in Resources */,
 				21D623231F1360F80054D980 /* IK_education.png in Resources */,
 				21C3AE091F15D90B008FC124 /* IKProvinceCity.plist in Resources */,
 				21BC61E01F2D003B00CE85D9 /* IK_xuanzhuan.png in Resources */,
 				21BC619A1F28860000CE85D9 /* IK_jobDetail.png in Resources */,
+				21F820D41F2F4DE500DA9EFA /* IK_closeMore.png in Resources */,
 				2197CBC81F1EF73B00F61562 /* IK_star_solid_grey.png in Resources */,
 				21C3AE391F174650008FC124 /* IK_operationManage.png in Resources */,
 				21BC61A11F2893B600CE85D9 /* IK_certificate.png in Resources */,
@@ -1381,6 +1412,7 @@
 				21BC61921F28755C00CE85D9 /* IK_v.png in Resources */,
 				21D623221F1360F80054D980 /* IK_address_grey.png in Resources */,
 				2199E2581F21ED1C00D43EE1 /* IK_logo_grey.png in Resources */,
+				21F820D21F2F32B100DA9EFA /* IK_showMore.png in Resources */,
 				21BC61B51F2AE4F600CE85D9 /* IK_zan_grey.png in Resources */,
 				21BC61E61F2D23F800CE85D9 /* IK_showMore_grey.png in Resources */,
 				2197CB801F1C88A700F61562 /* IK_back.png in Resources */,
@@ -1504,8 +1536,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				21BC61871F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m in Sources */,
+				21F820C51F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m in Sources */,
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
 				2197CBCB1F1EFDDA00F61562 /* IKSelectModel.m in Sources */,
+				21F820CB1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m in Sources */,
 				210B0DDD1F0DFE4D003FD950 /* IKNavigationController.m in Sources */,
 				2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */,
 				21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */,
@@ -1517,6 +1551,7 @@
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,
 				21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
+				21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				2199E24F1F21A4DF00D43EE1 /* IKHomePageConfig.m in Sources */,
 				21D622F91F10FD6E0054D980 /* IKView.m in Sources */,
@@ -1580,6 +1615,7 @@
 				21BC618C1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m in Sources */,
 				21BC61EF1F2DB48800CE85D9 /* IKCompanyDetailVC.m in Sources */,
 				21D6232F1F138CFE0054D980 /* NSString+StringSize.m in Sources */,
+				21F820CE1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m in Sources */,
 				21BC61E91F2D8CFF00CE85D9 /* IKRecommandCompanyVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

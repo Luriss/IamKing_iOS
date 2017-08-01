@@ -155,8 +155,6 @@
 {
     IKJobTypeModel *model = [self.jobTypeData objectAtIndex:indexPath.row];
     
-    NSLog(@"description = %@",model.description);
-    
     NSMutableArray *childArray = [NSMutableArray arrayWithCapacity:model.childType.count];
     NSMutableArray *sildeArray = [[NSMutableArray alloc] init];
     for (int i = 0; i < model.childType.count; i ++) {

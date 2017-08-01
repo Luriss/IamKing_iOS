@@ -14,8 +14,10 @@
 
 @property(nonatomic,strong)UIView  *approveView;
 @property(nonatomic,strong)UILabel *nickNameLabel;
-@property(nonatomic,strong)UIView *approveImage;
+@property(nonatomic,strong)UIView  *approveImage;
 @property(nonatomic,strong)UILabel *approveLabel;
+@property(nonatomic,strong)UIView  *lineView;
+@property(nonatomic,strong)UILabel *descLabel;
 
 @property(nonatomic,strong)IKImageWordView     *typeView;
 @property(nonatomic,strong)IKImageWordView     *setupView;
@@ -49,13 +51,15 @@
     [self.contentView addSubview:self.addressView];
     [self.contentView addSubview:self.setupView];
     [self.contentView addSubview:self.shopView];
+    [self.contentView addSubview:self.lineView];
+    [self.contentView addSubview:self.descLabel];
 }
 
 
 - (void)layoutSubviews
 {
     [_nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(35);
+        make.top.equalTo(self.contentView.mas_top).offset(25);
         make.centerX.equalTo(self.contentView);
         make.height.mas_equalTo(22);
         make.width.equalTo(self.contentView).multipliedBy(0.8);
@@ -72,30 +76,45 @@
         make.top.equalTo(_approveView.mas_bottom).offset(10);
         make.left.equalTo(self.contentView.mas_left).offset(20);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(80);
+//        make.width.mas_equalTo(typeWidth + 20);
     }];
     
     [_setupView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
         make.left.equalTo(_typeView.mas_right).offset(8);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(80);
+//        make.width.mas_equalTo(80);
     }];
     
     [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
         make.left.equalTo(_setupView.mas_right).offset(8);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(80);
+//        make.width.mas_equalTo(addressWidth + 10);
     }];
     
     [_shopView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
         make.left.equalTo(_addressView.mas_right).offset(8);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(80);
+//        make.width.mas_equalTo(shopWidth + 24);
     }];
-   
+    
+    
+    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_typeView.mas_bottom).offset(20);
+        make.left.equalTo(self.contentView.mas_left).offset(20);
+        make.height.mas_equalTo(1);
+        make.right.equalTo(self.contentView.mas_right).offset(-20);
+    }];
+    
+    [_descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_lineView.mas_bottom).offset(2);
+        make.left.equalTo(self.contentView.mas_left).offset(20);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-2);
+        make.right.equalTo(self.contentView.mas_right).offset(-20);
+    }];
+    
     
     [super layoutSubviews];
 }
@@ -105,10 +124,10 @@
 {
     if (_nickNameLabel == nil) {
         _nickNameLabel = [[UILabel alloc] init];
-        _nickNameLabel.font = [UIFont boldSystemFontOfSize:14.0f];
+        _nickNameLabel.font = [UIFont boldSystemFontOfSize:16.0f];
         _nickNameLabel.textColor = IKMainTitleColor;
         _nickNameLabel.textAlignment = NSTextAlignmentCenter;
-        _nickNameLabel.text = @"鼎盛健身";
+//        _nickNameLabel.text = @"鼎盛健身";
     }
     
     return _nickNameLabel;
@@ -184,7 +203,7 @@
         // 地点
         _typeView = [[IKImageWordView alloc] init];
         [_typeView.imageView setImage:[UIImage imageNamed:@"IK_classify_blue"]];
-        _typeView.label.text = @"俱乐部";
+//        _typeView.label.text = @"俱乐部";
     }
     return _typeView;
 }
@@ -195,7 +214,7 @@
         // 地点
         _addressView = [[IKImageWordView alloc] init];
         [_addressView.imageView setImage:[UIImage imageNamed:@"IK_address_blue"]];
-        _addressView.label.text = @"杭州";
+//        _addressView.label.text = @"杭州";
 
     }
     return _addressView;
@@ -207,7 +226,7 @@
         // 成立时间
         _setupView = [[IKImageWordView alloc] init];
         [_setupView.imageView setImage:[UIImage imageNamed:@"IK_experience_blue"]];
-        _setupView.label.text = @"2017年成立";
+//        _setupView.label.text = @"2017年成立";
     }
     return _setupView;
 }
@@ -219,10 +238,94 @@
         // 店铺数量
         _shopView = [[IKImageWordView alloc] init];
         [_shopView.imageView setImage:[UIImage imageNamed:@"IK_store"]];
-        _shopView.label.text = @"2~5家";
+//        _shopView.label.text = @"2~5家";
     }
     return _shopView;
 }
+
+
+- (UIView *)lineView
+{
+    if (_lineView == nil) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = IKLineColor;
+    }
+    return _lineView;
+}
+
+- (UILabel *)descLabel
+{
+    if (_descLabel == nil) {
+        _descLabel = [[UILabel alloc] init];
+//        _descLabel.text = @"未认证";
+        _descLabel.textColor = IKMainTitleColor;
+        _descLabel.textAlignment = NSTextAlignmentLeft;
+        _descLabel.font = [UIFont systemFontOfSize:13.0f];
+        _descLabel.numberOfLines = 0;
+    }
+    return _descLabel;
+}
+
+- (void)cellAddData:(IKCompanyDetailHeadModel *)model
+{
+    _nickNameLabel.text = model.nickName;
+    
+    if (model.isAuthen) {
+        _approveView.layer.borderColor = IKGeneralBlue.CGColor;
+        _approveImage.backgroundColor = IKGeneralBlue;
+        _approveLabel.text = @"已认证";
+        _approveLabel.textColor = IKGeneralBlue;
+    }
+    
+    
+    self.typeView.label.text = model.companyTypeName;
+    
+    CGFloat typeWidth = [NSString getSizeWithString:model.companyTypeName size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+    
+    typeWidth = (typeWidth > 80)?80:typeWidth;
+    [_typeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_approveView.mas_bottom).offset(10);
+        make.left.equalTo(self.contentView.mas_left).offset(20);
+        make.height.mas_equalTo(20);
+        make.width.mas_equalTo(typeWidth + 20);
+    }];
+    
+    
+    
+    self.setupView.label.text = model.setupYear;
+    [_setupView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_typeView.mas_top);
+        make.left.equalTo(_typeView.mas_right).offset(8);
+        make.height.mas_equalTo(20);
+        make.width.mas_equalTo(80);
+    }];
+    
+    self.addressView.label.text = model.workCity;
+    CGFloat addressWidth = [NSString getSizeWithString:model.workCity size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+    addressWidth = (addressWidth > 70)?70:addressWidth;
+    [_addressView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_typeView.mas_top);
+        make.left.equalTo(_setupView.mas_right).offset(8);
+        make.height.mas_equalTo(20);
+        make.width.mas_equalTo(addressWidth + 10);
+    }];
+    
+    self.shopView.label.text = model.shopName;
+    
+    CGFloat shopWidth = [NSString getSizeWithString:model.shopName size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+    shopWidth = (shopWidth > 70)?70:shopWidth;
+    
+    [_shopView mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_typeView.mas_top);
+        make.left.equalTo(_addressView.mas_right).offset(8);
+        make.height.mas_equalTo(20);
+        make.width.mas_equalTo(shopWidth + 24);
+    }];
+    
+    _descLabel.text = model.companyDescription;
+}
+
+
 
 
 

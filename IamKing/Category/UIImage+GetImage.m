@@ -257,6 +257,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     int boxSize = (int)(blur * 100);
     boxSize -= (boxSize % 2) + 1;
     NSLog(@"boxSize:%i",boxSize);
+    
     //图像处理
     CGImageRef img = image.CGImage;
     //需要引入#import <Accelerate/Accelerate.h>
@@ -291,7 +292,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     outBuffer.rowBytes = CGImageGetBytesPerRow(img);
     
     
-//    // 第三个中间的缓存区,抗锯齿的效果
+    // 第三个中间的缓存区,抗锯齿的效果
 //    void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
 //    vImage_Buffer outBuffer2;
 //    outBuffer2.data = pixelBuffer2;
@@ -303,7 +304,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
 //    error = vImageBoxConvolve_ARGB8888(&outBuffer2, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
 //    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-    
+//
     
     if (error) {
         NSLog(@"error from convolution %ld", error);
