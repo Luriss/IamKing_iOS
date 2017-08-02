@@ -187,6 +187,7 @@
 		21F820FA1F30A89D00DA9EFA /* IK_member_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820F71F30A89D00DA9EFA /* IK_member_blue.png */; };
 		21F820FB1F30A89D00DA9EFA /* IK_square_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820F81F30A89D00DA9EFA /* IK_square_blue.png */; };
 		21F820FE1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */; };
+		21F821011F3191F700DA9EFA /* IKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821001F3191F700DA9EFA /* IKButton.m */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -487,6 +488,8 @@
 		21F820F81F30A89D00DA9EFA /* IK_square_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_square_blue.png; sourceTree = "<group>"; };
 		21F820FC1F30B2CD00DA9EFA /* IKCompanyShopNumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyShopNumModel.h; sourceTree = "<group>"; };
 		21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyShopNumModel.m; sourceTree = "<group>"; };
+		21F820FF1F3191F700DA9EFA /* IKButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKButton.h; sourceTree = "<group>"; };
+		21F821001F3191F700DA9EFA /* IKButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKButton.m; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1248,6 +1251,8 @@
 		21D623001F11CEBE0054D980 /* IKButton */ = {
 			isa = PBXGroup;
 			children = (
+				21F820FF1F3191F700DA9EFA /* IKButton.h */,
+				21F821001F3191F700DA9EFA /* IKButton.m */,
 			);
 			path = IKButton;
 			sourceTree = "<group>";
@@ -1621,6 +1626,7 @@
 				21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				21F820D71F302D0100DA9EFA /* IKCompanyDetailTitleTableViewCell.m in Sources */,
+				21F821011F3191F700DA9EFA /* IKButton.m in Sources */,
 				2199E24F1F21A4DF00D43EE1 /* IKHomePageConfig.m in Sources */,
 				21D622F91F10FD6E0054D980 /* IKView.m in Sources */,
 				21C3AE271F17320C008FC124 /* IKSearchVC.m in Sources */,

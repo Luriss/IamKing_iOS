@@ -12,6 +12,7 @@
 
 #import "IKView.h"
 #import "IKViewController.h"
+#import "IKButton.h"
 
 #import "Masonry.h"
 #import "IKGeneralMacro.h"

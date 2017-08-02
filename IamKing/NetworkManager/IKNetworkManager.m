@@ -612,7 +612,7 @@ static IKNetworkManager *_shareInstance;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-//                NSLog(@"responseCache = %@",responseCache);
+                NSLog(@"responseCache = %@",responseCache);
         IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
 
@@ -620,7 +620,7 @@ static IKNetworkManager *_shareInstance;
             callback(model,success);
         }
     } success:^(id responseObject) {
-//                NSLog(@"responseObject = %@",responseObject);
+                NSLog(@"responseObject = %@",responseObject);
         
         if (![dataResult isEqual:responseObject]) {
             IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseObject];
@@ -658,6 +658,9 @@ static IKNetworkManager *_shareInstance;
     model.nickName = [self getString:[dict objectForKey:@"nickname"]];
     model.shopName = [self getString:[dict objectForKey:@"shopTypeName"]];
     model.numberOfSchool = [self getString:[dict objectForKey:@"schoolNum"]];
+    model.isAppraise = YES;//[self getBool:[dict objectForKey:@"hasAppraise"]];
+    model.isOperate = [self getBool:[dict objectForKey:@"hasOperate"]];
+    model.isPerisher = [self getBool:[dict objectForKey:@"hasPerisher"]];
 
     model.numberOfProduct = [self getString:[dict objectForKey:@"productNum"]];
     model.companyDescription = [self getString:[dict objectForKey:@"brandDescribe"]];

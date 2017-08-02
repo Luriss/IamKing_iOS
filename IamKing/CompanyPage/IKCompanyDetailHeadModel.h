@@ -26,7 +26,11 @@
 @property(nonatomic,copy)NSString     *numberOfAttention;  // 评价
 @property(nonatomic,copy)NSString     *companyDescription;  
 
+
 @property(nonatomic,assign)BOOL        isAuthen;
+@property(nonatomic,assign)BOOL        isAppraise;
+@property(nonatomic,assign)BOOL        isOperate;
+@property(nonatomic,assign)BOOL        isPerisher;
 
 
 - (NSString *)description;

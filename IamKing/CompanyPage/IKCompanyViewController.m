@@ -47,7 +47,8 @@
     self.chooseClassifyIP = [NSIndexPath indexPathForRow:0 inSection:0];
     
     [self initNavigationContent];
-    
+    [self getCompanyInfo];
+
     
 //    [IKNotificationCenter addObserver:self selector:@selector(getCompanyInfo) name:kIKGetCompanyPageVcData object:nil];
     
@@ -58,7 +59,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self getCompanyInfo];
 }
 #pragma mark - InitView
 

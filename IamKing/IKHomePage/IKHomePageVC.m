@@ -147,6 +147,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     [super viewWillDisappear:animated];
     self.sysNavView.alpha = 1.0;
+    self.navigationController.view.backgroundColor = [UIColor whiteColor];
+
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
