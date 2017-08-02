@@ -62,6 +62,12 @@
 // companyType=1&userCompanyId=337
 #define IKGetShopListUrl (@"https://www.iamking.com.cn/index.php/ShopList/getList?")
 
+// type=0&userId=294
+#define IKGetRecommendCompanyListUrl (@"https://www.iamking.com.cn/index.php/Company/getRecommendList?")
+
+
+
+
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -601,6 +607,65 @@ static IKNetworkManager *_shareInstance;
     return backArray;
 }
 
+- (void)getCompanyPageRecommendCompanyListWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    // userCompanyId=323&userId=0
+    NSString *url = [NSString stringWithFormat:@"%@type=0&userId=294",IKGetRecommendCompanyListUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+        NSLog(@"responseCache = %@",responseCache);
+//        NSArray *array = [self dealRecommendCompanyListData:responseCache];
+//        BOOL success = [self requestDataSuccess:responseCache];
+//        
+//        if (callback && array.count>0) {
+//            callback(array,success);
+//        }
+    } success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
+        
+        if (![dataResult isEqual:responseObject]) {
+//            NSArray *array = [self dealRecommendCompanyListData:responseObject];
+//            BOOL success = [self requestDataSuccess:responseObject];
+//            
+//            if (callback && array.count>0) {
+//                callback(array,success);
+//            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealRecommendCompanyListData:(id)data
+{
+    NSArray *array = [data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        
+        NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
+        
+//        model.describe = [self getString:[dict objectForKey:@"brand_describe"]];
+//        model.nickName = [self getString:[dict objectForKey:@"nickname"]];
+//        model.logoImageUrl = [self getString:[dict objectForKey:@"header_image"]];;
+//        model.isOperate = [self getBool:[dict objectForKey:@"operate_id"] ];
+//        model.companyID = [self getString:[dict objectForKey:@"user_id"]];
+        
+//        [backArray addObject:model];
+    }
+    
+    return backArray;
+}
+
 
 - (void)getCompanyPageCompanyInfoDetailWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyDetailHeadModel *detailModel, BOOL success))callback
 {
@@ -612,7 +677,7 @@ static IKNetworkManager *_shareInstance;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-                NSLog(@"responseCache = %@",responseCache);
+//                NSLog(@"responseCache = %@",responseCache);
         IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
 
@@ -620,7 +685,7 @@ static IKNetworkManager *_shareInstance;
             callback(model,success);
         }
     } success:^(id responseObject) {
-                NSLog(@"responseObject = %@",responseObject);
+//                NSLog(@"responseObject = %@",responseObject);
         
         if (![dataResult isEqual:responseObject]) {
             IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseObject];
@@ -658,7 +723,7 @@ static IKNetworkManager *_shareInstance;
     model.nickName = [self getString:[dict objectForKey:@"nickname"]];
     model.shopName = [self getString:[dict objectForKey:@"shopTypeName"]];
     model.numberOfSchool = [self getString:[dict objectForKey:@"schoolNum"]];
-    model.isAppraise = YES;//[self getBool:[dict objectForKey:@"hasAppraise"]];
+    model.isAppraise = [self getBool:[dict objectForKey:@"hasAppraise"]];
     model.isOperate = [self getBool:[dict objectForKey:@"hasOperate"]];
     model.isPerisher = [self getBool:[dict objectForKey:@"hasPerisher"]];
 

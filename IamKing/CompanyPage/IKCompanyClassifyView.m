@@ -139,7 +139,7 @@
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = 45;
-        _tableView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.95];
+        _tableView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.98];
         [self addSubview:_tableView];
     }
     
@@ -180,6 +180,8 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
+    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+    cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     cell.label.text = self.selectData[indexPath.row];
     if (indexPath == self.selectedIndexPath) {
         cell.label.textColor = IKMainTitleColor;

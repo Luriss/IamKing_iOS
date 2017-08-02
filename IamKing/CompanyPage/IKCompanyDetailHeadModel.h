@@ -28,9 +28,9 @@
 
 
 @property(nonatomic,assign)BOOL        isAuthen;
-@property(nonatomic,assign)BOOL        isAppraise;
-@property(nonatomic,assign)BOOL        isOperate;
-@property(nonatomic,assign)BOOL        isPerisher;
+@property(nonatomic,assign)BOOL        isAppraise;  // 评价
+@property(nonatomic,assign)BOOL        isOperate;   // 关注
+@property(nonatomic,assign)BOOL        isPerisher;  // 拉黑
 
 
 - (NSString *)description;

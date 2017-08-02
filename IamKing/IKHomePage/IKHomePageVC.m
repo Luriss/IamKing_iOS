@@ -125,7 +125,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-        
+    
     // 内容视图若有滚动,则设置导航栏透明度95%
     if (_bottomTableView.contentOffset.y > 0) {
         self.sysNavView.alpha = 0.95;
@@ -585,14 +585,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     CGFloat lph = [[IKHomePageConfig shareInstance] getLoopPlayViewHight];
 
     if (scrollView == _bottomTableView) {
-        // 底部的 tableView 滑动时,导航栏设置0.95的透明度.
-        if (offsetY > 0) {
-            NSLog(@"sysNavView = %@",self.sysNavView);
-            self.sysNavView.alpha = 0.95;
-        }
-        else{
-            self.sysNavView.alpha = 1.0;
-        }
         
         // _bottomTableView 拉倒最下面就禁止拉.
         if (offsetY > _bottomTableView.contentSize.height) {
@@ -612,7 +604,6 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             if (offsetY >= (self.lpHeight + IKJobTypeHeaderHeight - 2)) {
                 // 这里不能用 self.lpHeight.很奇怪... 只能用数字
                 _bottomTableView.contentOffset = CGPointMake(0, (lph + IKJobTypeHeaderHeight - 2));
-                _jobTypeView.backgroundColor = [UIColor colorWithWhite:0.95 alpha:0.95];
                 self.jobTableView.showsVerticalScrollIndicator = YES;
                 _bottomTableView.showsVerticalScrollIndicator = NO;
                 isScrollToTop = YES;

@@ -10,4 +10,6 @@
 
 @interface IKRecommandCompanyVC : IKViewController
 
+@property (nonatomic,strong,nullable) NSMutableArray *dataArray;   //
+
 @end

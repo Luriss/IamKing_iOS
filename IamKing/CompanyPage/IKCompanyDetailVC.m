@@ -22,9 +22,10 @@
 #import "IKCompanyNeedJobTableViewCell.h"
 #import "IKCompanyShopTableViewCell.h"
 #import "IKCompanyShopNumModel.h"
+#import "IKAppraiseView.h"
 
 
-@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate>
+@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate>
 {
     CGFloat _imageH;
     CGFloat _infoCellH;
@@ -44,6 +45,7 @@
 @property(nonatomic,strong)UIImageView      *logoImageView;
 @property(nonatomic,strong)UIImage          *bulrImage;
 @property(nonatomic,strong)UILabel          *attentionNum;
+@property(nonatomic,strong)UIView           *appraiseView;
 
 @property(nonatomic,strong)NSArray          *managerTeamArray;
 @property(nonatomic,strong)NSArray          *needJobArray;
@@ -169,11 +171,11 @@
 - (UILabel *)attentionNum
 {
     if (_attentionNum == nil) {
-        _attentionNum = [[UILabel alloc] initWithFrame:CGRectMake(20, -32, 100, 20)];
+        _attentionNum = [[UILabel alloc] initWithFrame:CGRectMake(20, -37, 100, 20)];
         _attentionNum.textColor = [UIColor whiteColor];
         _attentionNum.textAlignment = NSTextAlignmentLeft;
         _attentionNum.font = [UIFont systemFontOfSize:13.0f];
-        _attentionNum.text = @"9999人关注";
+//        _attentionNum.text = @"9999人关注";
     }
     return _attentionNum;
 }
@@ -186,11 +188,55 @@
     if (!button.isClick) {
         button.isClick = YES;
         [button setTitle:@"取消关注" forState:UIControlStateNormal];
+        _attentionNum.text = [NSString stringWithFormat:@"%ld人关注",[_attentionNum.text integerValue]+1];
     }
     else{
         button.isClick = NO;
         [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
+        _attentionNum.text = [NSString stringWithFormat:@"%ld人关注",[_attentionNum.text integerValue]-1];
     }
+}
+
+
+- (UIView *)appraiseView
+{
+    if (_appraiseView == nil) {
+        _appraiseView = [[UIView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH - 110, -78, 90, 60)];
+//        _appraiseView.backgroundColor = [UIColor whiteColor];
+        
+        UIImageView *appraiseImageV = [[UIImageView alloc] initWithFrame:CGRectMake(66, 0, 24, 24)];
+        [appraiseImageV setImage:[UIImage imageNamed:@"IK_appraise_white"]];
+//        appraiseImageV.backgroundColor = [UIColor redColor];
+        [_appraiseView addSubview:appraiseImageV];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 24, 90, 20)];
+        label.text = @"公司评价";
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentRight;
+        label.font = [UIFont systemFontOfSize:13.0f];
+//        label.backgroundColor = [UIColor redColor];
+        [_appraiseView addSubview:label];
+        
+        UITapGestureRecognizer *appraiseTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appraiseViewTap:)];
+        [_appraiseView addGestureRecognizer:appraiseTap];
+    }
+    
+    return _appraiseView;
+}
+
+
+- (void)appraiseViewTap:(UITapGestureRecognizer *)gesture
+{
+    NSLog(@"appraiseViewTap");
+    
+    IKAppraiseView *appraiseView = [[IKAppraiseView alloc] init];
+    [appraiseView show];
+    appraiseView.delegate = self;
+}
+
+- (void)appraiseViewSelectedData:(NSArray *)array
+{
+    NSLog(@"array = %@",array);
 }
 
 - (IKTableView *)bottomTableView
@@ -236,8 +282,8 @@
         _headImageView.backgroundColor = IKGeneralLightGray;
         [self.bottomTableView addSubview:_headImageView];
         
-        [self.bottomTableView insertSubview:self.attentionBtn aboveSubview:self.headImageView];
-
+        [self.bottomTableView insertSubview:self.attentionBtn aboveSubview:_headImageView];
+        [self.bottomTableView insertSubview:self.appraiseView aboveSubview:_headImageView];
     }
     return _headImageView;
 }
@@ -277,7 +323,7 @@
                 });
             }];
             
-            if (_headModel.isAppraise) {
+            if (_headModel.isOperate) {
                 _attentionBtn.isClick = YES;
                 [_attentionBtn setTitle:@"取消关注" forState:UIControlStateNormal];
             }
@@ -285,6 +331,9 @@
                 _attentionBtn.isClick = NO;
                 [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
             }
+            _attentionNum.text = [NSString stringWithFormat:@"%@人关注",_headModel.numberOfAttention];
+            
+            [self addStarToAppraiseView:[_headModel.numberOfAppraise integerValue]];
         }];
         
         [[IKNetworkManager shareInstance] getCompanyPageAboutUsInfoWithParam:dict backData:^(IKCompanyAboutUsModel *model, BOOL success) {
@@ -932,7 +981,20 @@
     }
 }
 
+- (void)addStarToAppraiseView:(NSInteger )evaluate
+{
+    for (NSInteger i = 0; i < 5; i++) {
+        UIImageView *image = [[UIImageView alloc] initWithFrame:CGRectMake(8 + (14 + 3) * i, 44, 14, 14)];
 
+        if (i < evaluate) {
+            [image setImage:[UIImage imageNamed:@"IK_star_solid_red"]];
+        }
+        else{
+            [image setImage:[UIImage imageNamed:@"IK_star_hollow_red"]];
+        }
+        [_appraiseView addSubview:image];
+    }
+}
 
 - (void)companyDetailVcDismissSelf
 {

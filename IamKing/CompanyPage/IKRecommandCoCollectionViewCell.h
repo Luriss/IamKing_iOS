@@ -10,4 +10,6 @@
 
 @interface IKRecommandCoCollectionViewCell : UICollectionViewCell
 
+//- (void)addRecommendCellData:(IKRecommendCompanyModel *)model;
+
 @end

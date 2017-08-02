@@ -31,6 +31,7 @@
 @property(nonatomic,assign)NSInteger         showChooseType;
 @property(nonatomic,strong)UIButton         *chooseBtn;
 @property(nonatomic,strong)NSIndexPath       *chooseClassifyIP;
+@property(nonatomic,copy)NSArray            *recommendArray;
 
 @end
 
@@ -148,6 +149,7 @@
 {
     if (_recomandVc == nil) {
         IKRecommandCompanyVC *vc = [[IKRecommandCompanyVC alloc] init];
+        vc.dataArray = [self.recommendArray mutableCopy];
         _recomandVc = [[IKNavigationController alloc] initWithRootViewController:vc];
     }
     return _recomandVc;
@@ -178,6 +180,10 @@
             self.dataArray = [NSArray arrayWithArray:dataArray];
             [self reloadTableViewSection:1];
         }
+    }];
+    
+    [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
+        self.recommendArray = [NSArray arrayWithArray:dataArray];
     }];
 }
 
@@ -214,7 +220,6 @@
 
 - (void)recommendCompanyButtonCkick:(UIButton *)button
 {
-    
     [self presentViewController:self.recomandVc animated:YES completion:^{
         
     }];

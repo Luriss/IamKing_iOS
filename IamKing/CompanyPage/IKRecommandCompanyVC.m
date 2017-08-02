@@ -12,7 +12,6 @@
 @interface IKRecommandCompanyVC ()<UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
 @property (nonatomic, strong) UICollectionView *collectionView;
-@property (nonatomic,strong,nullable) NSMutableArray *dataArray;   //
 
 @end
 
@@ -107,7 +106,7 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 12;
+    return 12;//self.dataArray.count;
 }
 
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -144,7 +143,9 @@
 {
     IKRecommandCoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"IKRecommandCoCollectionViewCell" forIndexPath:indexPath];
     
-//    cell.titleLabel.text = _tagsData[indexPath.row];
+    if (indexPath.row < self.dataArray.count) {
+//        [cell addRecommendCellData:[self.dataArray objectAtIndex:indexPath.row]];
+    }
     
     return cell;
 }
