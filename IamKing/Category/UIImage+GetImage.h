@@ -46,4 +46,6 @@
 
 + (UIImage *)ct_imageFromImage:(UIImage *)image inRect:(CGRect)rect;
 
+- (UIImage*)rt_tintedImageWithColor:(UIColor*)color;
+-(UIImage*)rt_tintedImageWithColor:(UIColor*)color level:(CGFloat)level;
 @end

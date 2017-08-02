@@ -181,28 +181,38 @@
 
 - (void)startBottomLineAnimation:(CGPoint )point
 {
-//    NSLog(@"xxxx = %@msdadd = %@",[NSValue valueWithCGPoint:_oldButton.center],[NSValue valueWithCGPoint:point]);
-    CABasicAnimation* position = [CABasicAnimation animation];
-    position.duration = 0.1;
-    position.keyPath = @"position.x";
-    position.fromValue = [NSNumber numberWithFloat:_oldButton.center.x]; //[NSValue valueWithCGPoint:_oldButton.center];
-    position.toValue = [NSNumber numberWithFloat:point.x];//[NSValue valueWithCGPoint:point];
-    position.removedOnCompletion = NO;
-    position.fillMode = kCAFillModeForwards;
-    [_lineView.layer addAnimation:position forKey:@"key"];
+    NSLog(@"xxxx = %@msdadd = %@",[NSValue valueWithCGPoint:_oldButton.center],[NSValue valueWithCGPoint:point]);
+//    CABasicAnimation* position = [CABasicAnimation animation];
+//    position.duration = 0.1;
+//    position.keyPath = @"position.x";
+//    position.fromValue = [NSValue valueWithCGPoint:_oldButton.center];
+//    position.toValue = [NSValue valueWithCGPoint:point];
+//    position.removedOnCompletion = NO;
+//    position.fillMode = kCAFillModeForwards;
+//    [_lineView.layer addAnimation:position forKey:@"key"];
 
-    [UIView animateWithDuration:0.1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+//        _lineView.transform = CGAffineTransformMakeTranslation(point.x - 33, 0);
+        
         _lineView.center = CGPointMake(point.x, _lineView.center.y);
+        
     } completion:^(BOOL finished) {
         
     }];
 }
 
 
+- (void)setNeedResetSelectedButton:(BOOL)needResetSelectedButton
+{
+    if (needResetSelectedButton) {
+        [self btnClick:_button1];
+    }
+}
+
 - (void)setCompanyType:(NSString *)companyType
 {
     NSInteger index = [companyType integerValue];
-    
+
     switch (index) {
         case 1:
             [_button3 setTitle:@"连锁门店" forState:UIControlStateNormal];

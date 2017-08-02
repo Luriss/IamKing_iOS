@@ -34,7 +34,7 @@
     
 #if __IPHONE_OS_VERSION_MAX_ALLOWED > __IPHONE_6_1
     
-//    int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
+    //    int bitmapInfo = kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast;
     
 #else
     
@@ -148,24 +148,24 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 {
     //获得图形上下文
     
-//    CGContextRef ctx = UIGraphicsGetCurrentContext();
-//    
-//    CGContextSetFillColorWithColor(ctx, color.CGColor);
-//    
-//    CGContextFillRect(ctx,CGRectMake(0,0,size.width,size.height));
-//    
-//    CGRect rect = CGRectMake(0,0,size.width,size.height);
-//    
-//    CGContextAddEllipseInRect(ctx, rect);
-//    
-//    CGContextClip(ctx);
-//    
-//    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-//    
-//    IKLog(@"ddddd= %@",image);
-//    [image drawInRect:rect];
-//    
-//    UIGraphicsEndImageContext();
+    //    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    //
+    //    CGContextSetFillColorWithColor(ctx, color.CGColor);
+    //
+    //    CGContextFillRect(ctx,CGRectMake(0,0,size.width,size.height));
+    //
+    //    CGRect rect = CGRectMake(0,0,size.width,size.height);
+    //
+    //    CGContextAddEllipseInRect(ctx, rect);
+    //
+    //    CGContextClip(ctx);
+    //
+    //    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    //
+    //    IKLog(@"ddddd= %@",image);
+    //    [image drawInRect:rect];
+    //
+    //    UIGraphicsEndImageContext();
     CGRect rect = CGRectMake(0.0f,0.0f,1.0f,size.height);
     UIGraphicsBeginImageContext(rect.size);
     
@@ -176,8 +176,8 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     
     UIImage*theImage=UIGraphicsGetImageFromCurrentImageContext();UIGraphicsEndImageContext();
     return theImage;
-  
-//    return ;
+    
+    //    return ;
 }
 
 
@@ -229,14 +229,54 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 //        NSLog(@"%f,%f,%f,%f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
 //        CGImageRef outImage = [context createCGImage: result fromRect:ciImage.extent];
 //        UIImage * blurImage = [UIImage imageWithCGImage:outImage];
-//        
+//
 //        dispatch_async(dispatch_get_main_queue(), ^{
 //            coreImgv.image = blurImage;
 //        });
 //    });
-//    
+//
 //}
 
+// Tint: Color
+- (UIImage*)rt_tintedImageWithColor:(UIColor*)color {
+    return [self rt_tintedImageWithColor:color level:1.0f];
+}
+
+// Tint: Color + level
+-(UIImage*)rt_tintedImageWithColor:(UIColor*)color level:(CGFloat)level {
+    CGRect rect = CGRectMake(0.0f, 0.0f, self.size.width, self.size.height);
+    return [self rt_tintedImageWithColor:color rect:rect level:level];
+}
+
+// Tint: Color + Rect
+-(UIImage*)rt_tintedImageWithColor:(UIColor*)color rect:(CGRect)rect {
+    return [self rt_tintedImageWithColor:color rect:rect level:1.0f];
+}
+
+// Tint: Color + Rect + level
+-(UIImage*)rt_tintedImageWithColor:(UIColor*)color rect:(CGRect)rect level:(CGFloat)level {
+    CGRect imageRect = CGRectMake(0.0f, 0.0f, self.size.width, self.size.height);
+    
+    UIGraphicsBeginImageContextWithOptions(imageRect.size, NO, self.scale);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    [self drawInRect:imageRect];
+    
+    CGContextSetFillColorWithColor(ctx, [color CGColor]);
+    CGContextSetAlpha(ctx, level);
+    CGContextSetBlendMode(ctx, kCGBlendModeSourceAtop);
+    CGContextFillRect(ctx, rect);
+    
+    CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
+    UIImage *darkImage = [UIImage imageWithCGImage:imageRef
+                                             scale:self.scale
+                                       orientation:self.imageOrientation];
+    CGImageRelease(imageRef);
+    
+    UIGraphicsEndImageContext();
+    
+    return darkImage;
+}
 
 +(UIImage *)boxblurImage:(UIImage *)image withBlurNumber:(CGFloat)blur
 {
@@ -293,18 +333,18 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     
     
     // 第三个中间的缓存区,抗锯齿的效果
-//    void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
-//    vImage_Buffer outBuffer2;
-//    outBuffer2.data = pixelBuffer2;
-//    outBuffer2.width = CGImageGetWidth(img);
-//    outBuffer2.height = CGImageGetHeight(img);
-//    outBuffer2.rowBytes = CGImageGetBytesPerRow(img);
+    //    void *pixelBuffer2 = malloc(CGImageGetBytesPerRow(img) * CGImageGetHeight(img));
+    //    vImage_Buffer outBuffer2;
+    //    outBuffer2.data = pixelBuffer2;
+    //    outBuffer2.width = CGImageGetWidth(img);
+    //    outBuffer2.height = CGImageGetHeight(img);
+    //    outBuffer2.rowBytes = CGImageGetBytesPerRow(img);
     
     //Convolves a region of interest within an ARGB8888 source image by an implicit M x N kernel that has the effect of a box filter.
     error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-//    error = vImageBoxConvolve_ARGB8888(&outBuffer2, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-//    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-//
+    //    error = vImageBoxConvolve_ARGB8888(&outBuffer2, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    //    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+    //
     
     if (error) {
         NSLog(@"error from convolution %ld", error);
@@ -324,6 +364,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
                                              CGImageGetBitmapInfo(image.CGImage));
     
     //根据上下文，处理过的图片，重新组件
+    
     CGImageRef imageRef = CGBitmapContextCreateImage (ctx);
     UIImage *returnImage = [UIImage imageWithCGImage:imageRef];
     
@@ -332,11 +373,13 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     CGColorSpaceRelease(colorSpace);
     
     free(pixelBuffer);
-//    free(pixelBuffer2);
+    //    free(pixelBuffer2);
     CFRelease(inBitmapData);
     
     //CGColorSpaceRelease(colorSpace);   //多余的释放
     CGImageRelease(imageRef);
+    
+//    returnImage = [self imageWithColor:IKGeneralLightGray];
     
     return returnImage;
 }
@@ -364,6 +407,102 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     return newImage;
 }
 
+
+// 内部方法,核心代码,封装了毛玻璃效果 参数:半径,颜色,色彩饱和度
+- (UIImage *)imageBluredWithRadius:(CGFloat)blurRadius tintColor:(UIColor *)tintColor saturationDeltaFactor:(CGFloat)saturationDeltaFactor maskImage:(UIImage *)maskImage
+{
+    CGRect imageRect = { CGPointZero, self.size };
+    UIImage *effectImage = self;
+    BOOL hasBlur = blurRadius > __FLT_EPSILON__;
+    BOOL hasSaturationChange = fabs(saturationDeltaFactor - 1.) > __FLT_EPSILON__;
+    if (hasBlur || hasSaturationChange){
+        UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+        CGContextRef effectInContext = UIGraphicsGetCurrentContext();
+        CGContextScaleCTM(effectInContext, 1.0, -1.0);
+        CGContextTranslateCTM(effectInContext, 0, -self.size.height);
+        CGContextDrawImage(effectInContext, imageRect, self.CGImage);
+        vImage_Buffer effectInBuffer;
+        effectInBuffer.data = CGBitmapContextGetData(effectInContext);
+        effectInBuffer.width = CGBitmapContextGetWidth(effectInContext);
+        effectInBuffer.height = CGBitmapContextGetHeight(effectInContext);
+        effectInBuffer.rowBytes = CGBitmapContextGetBytesPerRow(effectInContext);
+        UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+        CGContextRef effectOutContext = UIGraphicsGetCurrentContext();
+        vImage_Buffer effectOutBuffer;
+        effectOutBuffer.data = CGBitmapContextGetData(effectOutContext);
+        effectOutBuffer.width = CGBitmapContextGetWidth(effectOutContext);
+        effectOutBuffer.height = CGBitmapContextGetHeight(effectOutContext);
+        effectOutBuffer.rowBytes = CGBitmapContextGetBytesPerRow(effectOutContext);
+        if (hasBlur) {
+            CGFloat inputRadius = blurRadius * [[UIScreen mainScreen] scale];
+            NSUInteger radius = floor(inputRadius * 3. * sqrt(2 * M_PI) / 4 + 0.5);
+            if (radius % 2 != 1) {
+                radius += 1; // force radius to be odd so that the three box-blur methodology works.
+            }
+            vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, (short)radius, (short)radius, 0, kvImageEdgeExtend); vImageBoxConvolve_ARGB8888(&effectOutBuffer, &effectInBuffer, NULL, 0, 0, (short)radius, (short)radius, 0, kvImageEdgeExtend); vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, NULL, 0, 0, (short)radius, (short)radius, 0, kvImageEdgeExtend);
+        }
+        BOOL effectImageBuffersAreSwapped = NO;
+        if (hasSaturationChange) {
+            CGFloat s = saturationDeltaFactor;
+            CGFloat floatingPointSaturationMatrix[] = {
+                0.0722 + 0.9278 * s, 0.0722 - 0.0722 * s, 0.0722 - 0.0722 * s,
+                0,
+                0.7152 - 0.7152 * s, 0.7152 + 0.2848 * s, 0.7152 - 0.7152 * s,
+                0,
+                0.2126 - 0.2126 * s, 0.2126 - 0.2126 * s, 0.2126 + 0.7873 * s,
+                0,
+                0,
+                0,
+                0,
+                1,
+            };
+            const int32_t divisor = 256;
+            NSUInteger matrixSize = sizeof(floatingPointSaturationMatrix)/sizeof(floatingPointSaturationMatrix[0]); int16_t saturationMatrix[matrixSize]; for (NSUInteger i = 0; i < matrixSize; ++i) {
+                saturationMatrix[i] = (int16_t)roundf(floatingPointSaturationMatrix[i] * divisor);
+            }
+            if (hasBlur) {
+                vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
+                effectImageBuffersAreSwapped = YES;
+            }
+            else {
+                vImageMatrixMultiply_ARGB8888(&effectInBuffer, &effectOutBuffer, saturationMatrix, divisor, NULL, NULL, kvImageNoFlags);
+            }
+        }
+        if (!effectImageBuffersAreSwapped)
+            effectImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        if (effectImageBuffersAreSwapped)
+            effectImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    // 开启上下文 用于输出图像
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, [[UIScreen mainScreen] scale]);
+    CGContextRef outputContext = UIGraphicsGetCurrentContext();
+    CGContextScaleCTM(outputContext, 1.0, -1.0);
+    CGContextTranslateCTM(outputContext, 0, -self.size.height);
+    // 开始画底图 CGContextDrawImage(outputContext, imageRect, self.CGImage);
+    // 开始画模糊效果
+    if (hasBlur)
+    {
+        CGContextSaveGState(outputContext);
+        if (maskImage)
+        {
+            CGContextClipToMask(outputContext, imageRect, maskImage.CGImage);
+        } CGContextDrawImage(outputContext, imageRect, effectImage.CGImage);
+        CGContextRestoreGState(outputContext);
+    }
+    // 添加颜色渲染
+    if (tintColor)
+    {
+        CGContextSaveGState(outputContext);
+        CGContextSetFillColorWithColor(outputContext, tintColor.CGColor);
+        CGContextFillRect(outputContext, imageRect);
+        CGContextRestoreGState(outputContext);
+    }
+    // 输出成品,并关闭上下文
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext(); 
+    return outputImage;}
 
 
 @end

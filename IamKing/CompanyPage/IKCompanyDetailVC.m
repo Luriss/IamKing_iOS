@@ -19,7 +19,9 @@
 #import "IKManagerTeamLeftTableViewCell.h"
 #import "IKManagerTeamRightTableViewCell.h"
 #import "IKCompanyManagerTeamModel.h"
-
+#import "IKCompanyNeedJobTableViewCell.h"
+#import "IKCompanyShopTableViewCell.h"
+#import "IKCompanyShopNumModel.h"
 
 
 @interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate>
@@ -32,6 +34,7 @@
 @property(nonatomic,strong)IKScrollView      *navScrollVIew;
 @property(nonatomic,strong)IKCompanyDetailHeadModel      *headModel;
 @property(nonatomic,strong)IKCompanyAboutUsModel      *aboutUsModel;
+
 @property(nonatomic,assign)IKCompanyDetailVCType       type;
 
 @property(nonatomic,strong)UILabel      *titleLabel;
@@ -39,11 +42,15 @@
 @property(nonatomic,strong)UIImageView *navImageView;
 @property(nonatomic,strong)UIImageView *logoImageView;
 @property(nonatomic,strong)UIImage      *bulrImage;
+@property(nonatomic,strong)UIButton      *attentionBtn;
 
 @property(nonatomic,strong)NSArray      *managerTeamArray;
+@property(nonatomic,strong)NSArray      *needJobArray;
+@property(nonatomic,strong)NSArray      *shopTypeArray;
 
 @property(nonatomic,assign)BOOL       needShowMoreBtn;
 @property(nonatomic,assign)BOOL       showMore;
+@property(nonatomic,assign)BOOL       firstComeIn;
 
 
 @end
@@ -64,9 +71,8 @@
     
     [self initNavScrollView];
     [self initLeftBackItem];
-    
+    [self initTitleLabel];
     _imageH = ceilf(IKSCREENH_HEIGHT *0.255);
-    [self initNavTitle];
     // Do any additional setup after loading the view.
 }
 
@@ -106,8 +112,8 @@
     button.frame = CGRectMake(15, 20, 44, 44);
     //    button.backgroundColor = [UIColor redColor];
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 24);
-    [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+    [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
     [self.view insertSubview:button aboveSubview:_navScrollVIew];
 }
@@ -131,6 +137,8 @@
     imageview.userInteractionEnabled = YES;
     _navImageView = imageview;
     _navScrollVIew = scrollView;
+    
+
 }
 
 
@@ -178,7 +186,11 @@
         _headImageView.userInteractionEnabled = YES;
         
         self.bottomTableView.contentInset = UIEdgeInsetsMake(height, 0, 0, 0);
-        [self.bottomTableView addSubview:self.headImageView];
+        [self.bottomTableView addSubview:_headImageView];
+        
+//        UIView *view = [[UIView alloc] initWithFrame:_headImageView.frame];
+//        view.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5];
+//        [self.bottomTableView insertSubview:view aboveSubview:_headImageView];
         
     }
     return _headImageView;
@@ -189,13 +201,14 @@
 {
     if (companyInfoModel) {
         _companyInfoModel = companyInfoModel;
-        
+        _firstComeIn = YES;
         NSDictionary *dict = @{@"userCompanyId":companyInfoModel.companyID};
         
         [[IKNetworkManager shareInstance]getCompanyPageCompanyInfoDetailWithParam:dict backData:^(IKCompanyDetailHeadModel *detailModel, BOOL success) {
             NSLog(@"description = %@",detailModel.description);
             _headModel = detailModel;
-            
+            _titleLabel.text = _headModel.nickName;
+
             self.headImageView.image = nil;
             self.navImageView.image = nil;
             
@@ -203,13 +216,14 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
                     self.logoImageView.image = image;
-                    self.bulrImage = [UIImage boxblurImage:image withBlurNumber:1.2];
-                    self.headImageView.image = self.bulrImage;
-                    self.navImageView.image = self.bulrImage;
+                    self.bulrImage = [UIImage boxblurImage:image withBlurNumber:1.0];
+                    UIImage *okImage = [self.bulrImage rt_tintedImageWithColor:[UIColor blackColor] level:0.2];
+                    self.headImageView.image = okImage;
+                    self.navImageView.image = okImage;
                     
                     [_navScrollVIew addSubview:_navImageView];
-                    _navImageView.hidden = YES;
                     
+                    _navImageView.hidden = YES;
                     [self.bottomTableView reloadData];
                     
                 });
@@ -243,42 +257,67 @@
 }
 
 
-- (void)initNavTitle
+
+
+- (void)initTitleLabel
 {
-    UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - 50, 250, 100, 44)];
-    //    title.backgroundColor = [UIColor redColor];
-    title.text = @"鼎盛健身";
-    title.textColor = IKMainTitleColor;
-    title.textAlignment = NSTextAlignmentCenter;
-    title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    //    self.navigationItem.titleView = title;
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.view.center.x - 50, 20, 100, 44)];
+    _titleLabel.backgroundColor = [UIColor redColor];
+            _titleLabel.text = @"鼎盛健身";
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
+    //        _titleLabel.transform = CGAffineTransformMakeTranslation(0, 44);
+//    _titleLabel.hidden = NO;
     
-    _titleLabel = title;
+    [self.view insertSubview:_titleLabel aboveSubview:_navScrollVIew];
+    
+    NSLog(@"subviews = %@",self.view.subviews);
 }
 
 - (void)typeButtonClick:(UIButton *)button
 {
     NSLog(@"tag = %ld",button.tag);
+    NSDictionary *dict = @{@"userCompanyId":_companyInfoModel.companyID,@"companyType":_headModel.companyType};
+
     switch (button.tag - 1000) {
         case 1:
             self.type = IKCompanyDetailVCTypeAboutUs;
             break;
         case 2:
-            self.type = IKCompanyDetailVCTypeManagerTeam;
         {
+            self.type = IKCompanyDetailVCTypeManagerTeam;
+
             if (IKArrayIsEmpty(self.managerTeamArray)) {
-                [[IKNetworkManager shareInstance] getCompanyPageManagerTeamInfoWithParam:nil backData:^(NSArray *dataArray, BOOL success) {
-                    self.managerTeamArray = dataArray;
+                [[IKNetworkManager shareInstance] getCompanyPageManagerTeamInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
+                    self.managerTeamArray = [NSArray arrayWithArray:dataArray];
                     [self.bottomTableView reloadData];
                 }];
             }
         }
             break;
         case 3:
+        {
             self.type = IKCompanyDetailVCTypeMultipleShop;
+            if (IKArrayIsEmpty(self.shopTypeArray)) {
+                [[IKNetworkManager shareInstance] getCompanyPageShopNumberInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
+                    self.shopTypeArray = [NSArray arrayWithArray:dataArray];
+                    [self.bottomTableView reloadData];
+                }];
+            }
+        }
             break;
         case 4:
+        {
             self.type = IKCompanyDetailVCTypeNeedJob;
+            if (IKArrayIsEmpty(self.needJobArray)) {
+                [[IKNetworkManager shareInstance] getCompanyPageNeedJobInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
+                    self.needJobArray = [NSArray arrayWithArray:dataArray];
+                    [self.bottomTableView reloadData];
+                }];
+            }
+            
+        }
             break;
             
         default:
@@ -400,11 +439,11 @@
                 break;
                 
             case IKCompanyDetailVCTypeNeedJob:{
-                return 40;
+                return (IKSCREEN_WIDTH * 0.2933);
             }
                 break;
             case IKCompanyDetailVCTypeMultipleShop:{
-                return 40;
+                return (IKSCREENH_HEIGHT * 0.18);
             }
             default:
                 break;
@@ -453,16 +492,18 @@
                 
             case IKCompanyDetailVCTypeNeedJob:
             {
+                return self.needJobArray.count;
             }
                 break;
             case IKCompanyDetailVCTypeMultipleShop:
             {
+                return self.shopTypeArray.count;
             }
             default:
                 break;
         }
     }
-    return 2;
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -492,7 +533,11 @@
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         cell.delegate = self;
-        cell.companyType = @"2";
+        cell.companyType = _headModel.companyType;
+        if (_firstComeIn) {
+            cell.needResetSelectedButton = YES;
+            _firstComeIn = NO;
+        }
         return cell;
     }
     else{
@@ -658,14 +703,38 @@
                 break;
             case IKCompanyDetailVCTypeMultipleShop:
             {
-                UITableViewCell *cell = [[UITableViewCell alloc] init];
+                static  NSString *cellId=@"IKCompanyShopTableViewCellId";
+                IKCompanyShopTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKCompanyShopTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                }
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                if (row < self.shopTypeArray.count) {
+                    [cell addCompanyShopCellData:self.shopTypeArray[row]];
+                }
+                
                 return cell;
+                
             }
                 break;
                 
             case IKCompanyDetailVCTypeNeedJob:
             {
-                UITableViewCell *cell = [[UITableViewCell alloc] init];
+                static  NSString *cellId = @"IKCompanyNeedJobTableViewCellId";
+                IKCompanyNeedJobTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                
+                if(cell == nil){
+                    cell = [[IKCompanyNeedJobTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                    
+                }
+                cell.backgroundColor = [UIColor whiteColor];
+                cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+                cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
+                
+                if (indexPath.row < self.needJobArray.count) {
+                    [cell addCellData:self.needJobArray[indexPath.row]];
+                }
                 return cell;
             }
                 break;
@@ -690,8 +759,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (section == 0 || section == 2) {
+    if (section == 0) {
         return 8;
+    }
+    else if (section == 2 && self.type != IKCompanyDetailVCTypeAboutUs){
+        return 0.01;
     }
     else if (section == 3 && self.type == IKCompanyDetailVCTypeAboutUs){
         
@@ -750,6 +822,15 @@
 {
     if (scrollView == _bottomTableView) {
         CGFloat offsetY = scrollView.contentOffset.y;
+        
+        NSLog(@"offsetY = %.0f",offsetY);
+        
+        if (offsetY > -20) {
+            _titleLabel.hidden = NO;
+
+            _titleLabel.transform = CGAffineTransformIdentity;
+        }
+        
         
         // - 144 = 64(nav) + 80 (logo)
         if (offsetY > -144) {

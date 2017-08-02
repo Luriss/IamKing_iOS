@@ -18,6 +18,6 @@
 
 @property (nonatomic, weak) id<IKComDetailTypeTableViewCellDelegate> delegate;
 @property (nonatomic, copy) NSString *companyType;
-
+@property (nonatomic, assign)BOOL needResetSelectedButton;
 
 @end

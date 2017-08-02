@@ -11,7 +11,7 @@
 #import "IKCompanyDetailHeadModel.h"
 #import "IKCompanyAboutUsModel.h"
 #import "IKCompanyManagerTeamModel.h"
-
+#import "IKCompanyShopNumModel.h"
 
 // 请求数据接口
 typedef void(^IKRequestDictData)(NSDictionary *dict,BOOL success);
@@ -134,5 +134,9 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 - (void)getCompanyPageAboutUsInfoWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyAboutUsModel *model, BOOL success))callback;
 
 - (void)getCompanyPageManagerTeamInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getCompanyPageNeedJobInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getCompanyPageShopNumberInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 
 @end

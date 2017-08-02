@@ -1,18 +1,19 @@
 //
-//  IKInfoTableViewCell.m
+//  IKCompanyNeedJobTableViewCell.m
 //  IamKing
 //
-//  Created by Luris on 2017/7/10.
+//  Created by Luris on 2017/8/1.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "IKInfoTableViewCell.h"
+
+#import "IKCompanyNeedJobTableViewCell.h"
 
 #define IKSikllLabelWidth (70)
 
 
 
-@interface IKInfoTableViewCell ()
+@interface IKCompanyNeedJobTableViewCell ()
 
 @property(nonatomic,strong)UIImageView *logoImageView;
 @property(nonatomic,strong)UIImageView *authImageView;
@@ -26,12 +27,14 @@
 @property(nonatomic,strong)UILabel     *skillLabel3;
 @property(nonatomic,strong)UILabel     *introduceLabel;
 @property(nonatomic,strong)UIView      *bottomLine;
+@property(nonatomic,strong)UIView      *maskView;
+@property(nonatomic,strong)UIView      *bgView;
 
 
 @end
 
 
-@implementation IKInfoTableViewCell
+@implementation IKCompanyNeedJobTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -54,7 +57,7 @@
     [self.contentView addSubview:self.logoImageView];
     [self.contentView insertSubview:self.authImageView aboveSubview:self.logoImageView];
     [self.contentView addSubview:self.titleLabel];
-    [self.contentView addSubview:self.salaryLabel];
+    [self.contentView addSubview:self.bgView];
     [self.contentView addSubview:self.addressView];
     [self.contentView addSubview:self.experienceView];
     [self.contentView addSubview:self.educationView];
@@ -63,7 +66,7 @@
     [self.contentView addSubview:self.skillLabel3];
     [self.contentView addSubview:self.introduceLabel];
     [self.contentView addSubview:self.bottomLine];
-
+    [self.contentView insertSubview:self.maskView belowSubview:self.bgView];
 }
 
 
@@ -114,14 +117,37 @@
     if (_salaryLabel == nil) {
         // 薪水
         _salaryLabel = [[UILabel alloc] init];
-        _salaryLabel.textAlignment = NSTextAlignmentCenter;
-        _salaryLabel.layer.cornerRadius = 10;
-        _salaryLabel.layer.masksToBounds = YES;
+//        _salaryLabel.textAlignment = NSTextAlignmentLeft;
+//        _salaryLabel.layer.cornerRadius = 10;
+//        _salaryLabel.layer.masksToBounds = YES;
         _salaryLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
         _salaryLabel.backgroundColor = [IKGeneralRed colorWithAlphaComponent:0.7];
         _salaryLabel.textColor = [UIColor whiteColor];
     }
     return _salaryLabel;
+}
+
+- (UIView *)maskView
+{
+    if (_maskView == nil) {
+        _maskView = [[UIView alloc] init];
+        _maskView.layer.cornerRadius = 10;
+        _maskView.backgroundColor = [IKGeneralRed colorWithAlphaComponent:0.7];
+    }
+    return _maskView;
+}
+- (UIView *)bgView
+{
+    if (_bgView == nil) {
+        _bgView = [[UIView alloc] init];
+        _bgView.backgroundColor = [UIColor whiteColor];
+        [_bgView addSubview:self.salaryLabel];
+        [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(_bgView);
+            make.width.and.height.equalTo(_bgView);
+        }];
+    }
+    return _bgView;
 }
 
 - (IKImageWordView *)addressView
@@ -226,11 +252,11 @@
 - (void)layoutCellSubviews
 {
     __weak typeof (self) weakSelf = self;
-
+    
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(5);
         make.left.equalTo(weakSelf).offset(10);
-//        make.bottom.equalTo(self).offset(-5);
+        //        make.bottom.equalTo(self).offset(-5);
         make.width.and.height.mas_equalTo(weakSelf.bounds.size.height - 10);
     }];
     
@@ -240,11 +266,18 @@
         make.width.and.height.mas_equalTo(36);
     }];
     
-    [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_bgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(weakSelf).offset(8);
-        make.right.equalTo(weakSelf).offset(10);
+        make.right.equalTo(weakSelf);
         make.height.mas_equalTo(20);
-        make.width.mas_equalTo(90);
+        make.width.mas_equalTo(80);
+    }];
+    
+    [_maskView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_bgView.mas_top);
+        make.right.equalTo(_bgView.mas_left).offset(10);
+        make.height.mas_equalTo(20);
+        make.width.mas_equalTo(20);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -265,21 +298,21 @@
 - (void)layoutSubviews
 {
     [self layoutCellSubviews];
-
+    
     [super layoutSubviews];
 }
 
 
 // 设置 cell 卡片样式
-//- (void)setFrame:(CGRect)frame //重写frame.
-//{
-//    frame.origin.x = 10;
-//    frame.origin.y += 5;
-//    frame.size.width -= 20;
-//    frame.size.height -= 10;
-//    
-//    [super setFrame:frame];
-//}
+- (void)setFrame:(CGRect)frame //重写frame.
+{
+    frame.origin.x = 10;
+    frame.origin.y += 5;
+    frame.size.width -= 20;
+    frame.size.height -= 10;
+
+    [super setFrame:frame];
+}
 
 
 
@@ -292,7 +325,14 @@
     
     self.titleLabel.text = model.title;
     self.titleLabel.backgroundColor = [UIColor whiteColor];
-    self.salaryLabel.text = model.salary;
+    
+    NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    style.tailIndent = -20; //设置与尾部的距离
+    style.alignment = NSTextAlignmentRight;//靠右显示
+    
+    self.salaryLabel.attributedText = [[NSAttributedString alloc] initWithString:model.salary attributes:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:IKSubTitleFont],NSParagraphStyleAttributeName:style}];
+    
+//    self.salaryLabel.text = model.salary;
     
     self.addressView.label.text = model.address;
     
@@ -315,7 +355,7 @@
     }];
     
     self.educationView.label.text = model.education;
-
+    
     CGFloat educationWidth = [self getStringWdith:_educationView.label.text fontSize:IKSubTitleFont];
     
     [_educationView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -326,7 +366,7 @@
     
     self.introduceLabel.text = model.introduce;
     self.introduceLabel.backgroundColor = [UIColor whiteColor];
-
+    
     
     if (IKStringIsEmpty(model.skill1) && IKStringIsEmpty(model.skill2) && IKStringIsEmpty(model.skill3)) {
         self.skillLabel1.hidden = YES;
@@ -345,7 +385,7 @@
             self.skillLabel1.hidden = NO;
             self.skillLabel1.text = model.skill1;
             self.skillLabel1.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width1 = [self getStringWdith:self.skillLabel1.text fontSize:12.0f];
             [_skillLabel1 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(_addressView.mas_bottom).offset(3);
@@ -361,7 +401,7 @@
             self.skillLabel2.hidden = NO;
             _skillLabel2.text = model.skill2;
             self.skillLabel2.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width2 = [self getStringWdith:self.skillLabel2.text fontSize:12.0f];
             [_skillLabel2 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);
@@ -377,7 +417,7 @@
             self.skillLabel3.hidden = NO;
             self.skillLabel3.text = model.skill3;
             self.skillLabel3.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width3 = [self getStringWdith:self.skillLabel3.text fontSize:12.0f];
             [_skillLabel3 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);
@@ -414,7 +454,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
+    
     // Configure the view for the selected state
 }
 

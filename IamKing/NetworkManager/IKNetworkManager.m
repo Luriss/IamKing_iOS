@@ -57,6 +57,11 @@
 // 管理团队
 #define IKCompanyManagerTeamUrl (@"https://www.iamking.com.cn/index.php/CompanyManager/getList?")
 
+#define IKCompanyNeedJobUrl (@"https://www.iamking.com.cn/index.php/InviteWork/getListByUserCompanyId?")
+
+// companyType=1&userCompanyId=337
+#define IKGetShopListUrl (@"https://www.iamking.com.cn/index.php/ShopList/getList?")
+
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -664,7 +669,7 @@ static IKNetworkManager *_shareInstance;
 - (void)getCompanyPageAboutUsInfoWithParam:(NSDictionary *)param backData:(void (^)(IKCompanyAboutUsModel *model, BOOL success))callback
 {
     // userCompanyId=323&userId=0
-    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=292",IKCompanyAboutUsUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=%@",IKCompanyAboutUsUrl,[param objectForKey:@"userCompanyId"]];
     NSLog(@"url = %@",url);
     
     __block id dataResult = nil;
@@ -721,14 +726,14 @@ static IKNetworkManager *_shareInstance;
 {
     // userCompanyId=292
     
-    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=292",IKCompanyManagerTeamUrl];//,[param objectForKey:@"userCompanyId"]];
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=%@",IKCompanyManagerTeamUrl,[param objectForKey:@"userCompanyId"]];
     NSLog(@"url = %@",url);
     
     __block id dataResult = nil;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-                NSLog(@"responseCache = %@",responseCache);
+//                NSLog(@"responseCache = %@",responseCache);
         NSArray *array = [self dealManagerTeamData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
         
@@ -736,7 +741,7 @@ static IKNetworkManager *_shareInstance;
             callback(array,success);
         }
     } success:^(id responseObject) {
-                NSLog(@"responseObject = %@",responseObject);
+//                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
             NSArray *array = [self dealManagerTeamData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
@@ -779,6 +784,119 @@ static IKNetworkManager *_shareInstance;
     }
     return muArray;
 }
+
+
+- (void)getCompanyPageNeedJobInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@userCompanyId=%@",IKCompanyNeedJobUrl,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        
+        dataResult = responseCache;
+        NSArray *arr = [self dealHomePageJobInfoData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        if (callback) {
+            callback(arr,success);
+        }
+    } success:^(id responseObject) {
+        
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback) {
+                callback(arr,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (void)getCompanyPageShopNumberInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@companyType=1&userCompanyId=%@",IKGetShopListUrl,[param objectForKey:@"userCompanyId"]];
+    NSLog(@"url = %@",url);
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        NSLog(@"responseCache = %@",responseCache);
+        dataResult = responseCache;
+        NSArray *arr = [self dealShopNumberInfoData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        if (callback) {
+            callback(arr,success);
+        }
+    } success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
+
+        if (![dataResult isEqual:responseObject]) {
+            NSArray *arr = [self dealShopNumberInfoData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback) {
+                callback(arr,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealShopNumberInfoData:(id)data
+{
+    NSArray *array = (NSArray *)[data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    
+    NSMutableArray *muArray = [NSMutableArray arrayWithCapacity:array.count];
+    
+    for (id object in array) {
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            
+            NSDictionary *dict = (NSDictionary *)object;
+            IKCompanyShopNumModel *model = [[IKCompanyShopNumModel alloc] init];
+            model.companyID = [self getString:[dict objectForKey:@"user_company_id"]];
+            model.logoImageUrl = [self getString:[dict objectForKey:@"shop_image_url"]];
+            model.workCity = [self getString:[dict objectForKey:@"address"]];
+            model.name = [self getString:[dict objectForKey:@"name"]];
+            model.area = [NSString stringWithFormat:@"%@㎡",[dict objectForKey:@"area"]];
+            model.workCity = [self getString:[dict objectForKey:@"city_name"]];
+            model.companyType = [self getString:[dict objectForKey:@"company_type"]];
+            model.setupYear = [self getString:[dict objectForKey:@"create_time"]];
+            model.describeDetail = [self getString:[dict objectForKey:@"describe_detail"]];
+            model.describeIntro = [self getString:[dict objectForKey:@"describe_intro"]];
+            model.ID = [self getString:[dict objectForKey:@"id"]];
+            model.inviteIds = [self getString:[dict objectForKey:@"inviteIds"]];
+            model.inviteNum = [NSString stringWithFormat:@"%@个 在招职位",[dict objectForKey:@"inviteNum"]];
+            model.name = [self getString:[dict objectForKey:@"name"]];
+            model.name = [self getString:[dict objectForKey:@"name"]];
+            model.isBusiness = [self getBool:[dict objectForKey:@"is_business"]];
+            model.numberOfMember = [NSString stringWithFormat:@"%@名会员",[dict objectForKey:@"member_num"]];
+            model.provinceid = [self getString:[dict objectForKey:@"province_id"]];
+            model.provinceName = [self getString:[dict objectForKey:@"province_name"]];
+            model.shopType = [self getString:[dict objectForKey:@"shop_type"]];
+            model.status = [self getString:[dict objectForKey:@"status"]];
+            model.numberOfTeach = [self getString:[dict objectForKey:@"teach_num"]];
+            model.updateTime = [self getString:[dict objectForKey:@"update_time"]];
+            model.shopTypeName = [self getString:[dict objectForKey:@"shop_type_name"]];
+            model.shopType = [self getString:[dict objectForKey:@"shop_type"]];
+
+            [muArray addObject:model];
+            
+        }
+    }
+    return muArray;
+}
+
 
 
 - (NSString *)getPositionFromPlist:(NSString *)key

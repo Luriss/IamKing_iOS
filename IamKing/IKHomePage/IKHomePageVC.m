@@ -407,7 +407,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         }
     }
     else{
-        return (IKSCREEN_WIDTH/375)*110;
+        return (IKSCREEN_WIDTH * 0.2933);
     }
     
 }

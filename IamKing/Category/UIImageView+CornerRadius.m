@@ -89,6 +89,59 @@ const char kProcessedImage;
 }
 
 
+- (void)lwb_loadBlurImageWithUrl:(NSString *)urlStr placeHolderImageName:(NSString *)placeHolderStr blur:(CGFloat)blur completed:(void (^)(UIImage *image))completed
+{
+    NSURL *url;
+    
+    UIImage *placeImage = nil;
+    if (placeHolderStr) {
+        placeImage = [UIImage imageNamed:placeHolderStr];
+    }
+    
+    url = [NSURL URLWithString:urlStr];
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        NSString *cacheurlStr = [urlStr stringByAppendingString:@"radiusCache"];
+        UIImage *cacheImage = [[SDImageCache sharedImageCache] imageFromCacheForKey:cacheurlStr];
+        
+        // 从缓存中取出该图片,缓存的图片已做过圆角处理
+        if (cacheImage) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self setImage:cacheImage];
+                if (completed) {
+                    completed(cacheImage);
+                }
+            });
+        }
+        else {
+            // 缓存中没有,调用 SD 下载
+            [self sd_setImageWithURL:url placeholderImage:placeImage completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+                if (!error) {
+                    UIImage *blurImage = [UIImage boxblurImage:image withBlurNumber:blur];
+                    
+                    UIImage *newImage = [blurImage rt_tintedImageWithColor:[UIColor blackColor] level:0.2];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [self setImage:newImage];
+                        if (completed) {
+                            completed(newImage);
+                        }
+                    });
+                    
+                    //清除原有非圆角图片缓存
+                    [[SDImageCache sharedImageCache] removeImageForKey:urlStr withCompletion:^{
+                    }];
+                    
+                    // 保存设置后的圆角图片
+                    [[SDImageCache sharedImageCache] storeImage:newImage forKey:cacheurlStr completion:^{
+                        
+                    }];
+                }
+            }];
+        }
+    });
+}
+
+
 - (void)loadImageWithAnimation:(UIImage *)image
 {
     self.alpha = 0;

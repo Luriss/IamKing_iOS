@@ -22,4 +22,7 @@
  */
 - (void)lwb_loadImageWithUrl:(NSString *)urlStr placeHolderImageName:(NSString *)placeHolderStr radius:(CGFloat)radius;
 
+
+- (void)lwb_loadBlurImageWithUrl:(NSString *)urlStr placeHolderImageName:(NSString *)placeHolderStr blur:(CGFloat)blur completed:(void (^)(UIImage *image))completed;
+
 @end

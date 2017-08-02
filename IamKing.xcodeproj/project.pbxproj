@@ -181,6 +181,12 @@
 		21F820E81F3070B200DA9EFA /* IKManagerTeamRightTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820E71F3070B200DA9EFA /* IKManagerTeamRightTableViewCell.m */; };
 		21F820EB1F30777000DA9EFA /* IKCompanyManagerTeamModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820EA1F30777000DA9EFA /* IKCompanyManagerTeamModel.m */; };
 		21F820EF1F3084E000DA9EFA /* IKWorkPosition.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21F820EE1F3084E000DA9EFA /* IKWorkPosition.plist */; };
+		21F820F21F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820F11F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m */; };
+		21F820F51F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820F41F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m */; };
+		21F820F91F30A89D00DA9EFA /* IK_circle_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820F61F30A89D00DA9EFA /* IK_circle_blue.png */; };
+		21F820FA1F30A89D00DA9EFA /* IK_member_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820F71F30A89D00DA9EFA /* IK_member_blue.png */; };
+		21F820FB1F30A89D00DA9EFA /* IK_square_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F820F81F30A89D00DA9EFA /* IK_square_blue.png */; };
+		21F820FE1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -472,6 +478,15 @@
 		21F820E91F30777000DA9EFA /* IKCompanyManagerTeamModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyManagerTeamModel.h; sourceTree = "<group>"; };
 		21F820EA1F30777000DA9EFA /* IKCompanyManagerTeamModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyManagerTeamModel.m; sourceTree = "<group>"; };
 		21F820EE1F3084E000DA9EFA /* IKWorkPosition.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = IKWorkPosition.plist; sourceTree = "<group>"; };
+		21F820F01F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyNeedJobTableViewCell.h; sourceTree = "<group>"; };
+		21F820F11F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyNeedJobTableViewCell.m; sourceTree = "<group>"; };
+		21F820F31F30A2F900DA9EFA /* IKCompanyShopTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyShopTableViewCell.h; sourceTree = "<group>"; };
+		21F820F41F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyShopTableViewCell.m; sourceTree = "<group>"; };
+		21F820F61F30A89D00DA9EFA /* IK_circle_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_circle_blue.png; sourceTree = "<group>"; };
+		21F820F71F30A89D00DA9EFA /* IK_member_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_member_blue.png; sourceTree = "<group>"; };
+		21F820F81F30A89D00DA9EFA /* IK_square_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_square_blue.png; sourceTree = "<group>"; };
+		21F820FC1F30B2CD00DA9EFA /* IKCompanyShopNumModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyShopNumModel.h; sourceTree = "<group>"; };
+		21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyShopNumModel.m; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -901,6 +916,10 @@
 				21F820E41F306B8900DA9EFA /* IKManagerTeamLeftTableViewCell.m */,
 				21F820E61F3070B200DA9EFA /* IKManagerTeamRightTableViewCell.h */,
 				21F820E71F3070B200DA9EFA /* IKManagerTeamRightTableViewCell.m */,
+				21F820F01F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.h */,
+				21F820F11F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m */,
+				21F820F31F30A2F900DA9EFA /* IKCompanyShopTableViewCell.h */,
+				21F820F41F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -908,6 +927,9 @@
 		21BC61E41F2D233000CE85D9 /* CompanyPageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21F820F61F30A89D00DA9EFA /* IK_circle_blue.png */,
+				21F820F71F30A89D00DA9EFA /* IK_member_blue.png */,
+				21F820F81F30A89D00DA9EFA /* IK_square_blue.png */,
 				21F820D81F302E5200DA9EFA /* IK_flag_blue.png */,
 				21BC61E51F2D23F800CE85D9 /* IK_showMore_grey.png */,
 				21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */,
@@ -927,6 +949,8 @@
 				21F820EA1F30777000DA9EFA /* IKCompanyManagerTeamModel.m */,
 				21BC61F31F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.h */,
 				21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */,
+				21F820FC1F30B2CD00DA9EFA /* IKCompanyShopNumModel.h */,
+				21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1440,6 +1464,7 @@
 				2197CBC81F1EF73B00F61562 /* IK_star_solid_grey.png in Resources */,
 				21C3AE391F174650008FC124 /* IK_operationManage.png in Resources */,
 				21BC61A11F2893B600CE85D9 /* IK_certificate.png in Resources */,
+				21F820FA1F30A89D00DA9EFA /* IK_member_blue.png in Resources */,
 				21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */,
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
 				218AD71A1F209BC300138A68 /* IK_loading.png in Resources */,
@@ -1467,12 +1492,14 @@
 				21C3AE371F174650008FC124 /* IK_bulb.png in Resources */,
 				218AD71C1F20A20100138A68 /* IK_authen.png in Resources */,
 				2197CBB81F1E0C5F00F61562 /* IK_store.png in Resources */,
+				21F820F91F30A89D00DA9EFA /* IK_circle_blue.png in Resources */,
 				210B0DF81F0E3253003FD950 /* IK_cycle.png in Resources */,
 				21BC61A01F2893B600CE85D9 /* IK_assessment.png in Resources */,
 				21D622E51F0F6CCE0054D980 /* IK_more.png in Resources */,
 				21BC61C81F2CE60900CE85D9 /* IK_arrow_right.png in Resources */,
 				21E2B5A31F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png in Resources */,
 				21D622E61F0F6CCE0054D980 /* IK_search.png in Resources */,
+				21F820FB1F30A89D00DA9EFA /* IK_square_blue.png in Resources */,
 				210B0DE51F0E0B56003FD950 /* IK_me@3x.png in Resources */,
 				21C3AE3F1F1746AA008FC124 /* IK_sellPerformance.png in Resources */,
 				21C3AE141F162024008FC124 /* IK_close.png in Resources */,
@@ -1590,6 +1617,7 @@
 				21F820DF1F30601500DA9EFA /* IKCompanyProgressVC.m in Sources */,
 				21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
+				21F820F51F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m in Sources */,
 				21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				21F820D71F302D0100DA9EFA /* IKCompanyDetailTitleTableViewCell.m in Sources */,
@@ -1625,6 +1653,7 @@
 				21BC617C1F2706F900CE85D9 /* IKJobDetailVC.m in Sources */,
 				2197CBAD1F1E06E500F61562 /* IKCompanyInfoModel.m in Sources */,
 				2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */,
+				21F820F21F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m in Sources */,
 				21C3AE2D1F173727008FC124 /* IKTypeTableView.m in Sources */,
 				21BC61831F2733FB00CE85D9 /* IKJobDetailModel.m in Sources */,
 				21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */,
@@ -1652,6 +1681,7 @@
 				21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */,
 				21D622F71F10FD6E0054D980 /* IKScrollView.m in Sources */,
 				21BC61BD1F2B091B00CE85D9 /* IKAlertView.m in Sources */,
+				21F820FE1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m in Sources */,
 				2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */,
 				21C3AE5B1F175615008FC124 /* IKLoopPlayView.m in Sources */,
 				21BC61AE1F29E65000CE85D9 /* IKTipsView.m in Sources */,
