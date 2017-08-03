@@ -18,6 +18,7 @@ extern NSString *const kIKGetMinePageVcData;
 @interface IKTabBarController : UITabBarController
 
 @property(nonatomic,strong)IKTabBar *customTabBar;
+@property(nonatomic,strong)UIView *tabBarTopLine;
 
 - (void)tabBarControllerDidSelectedIndex:(NSInteger )index;
 

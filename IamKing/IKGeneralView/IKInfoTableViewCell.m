@@ -43,6 +43,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self){
+
         [self initSubViews];
     }
     return self;
@@ -118,7 +119,7 @@
         _salaryLabel.layer.cornerRadius = 10;
         _salaryLabel.layer.masksToBounds = YES;
         _salaryLabel.font = [UIFont boldSystemFontOfSize:IKSubTitleFont];
-        _salaryLabel.backgroundColor = [IKGeneralRed colorWithAlphaComponent:0.7];
+        _salaryLabel.layer.backgroundColor = [IKGeneralRed colorWithAlphaComponent:0.7].CGColor;
         _salaryLabel.textColor = [UIColor whiteColor];
     }
     return _salaryLabel;

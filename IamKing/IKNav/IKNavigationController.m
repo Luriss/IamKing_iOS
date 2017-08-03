@@ -23,8 +23,8 @@
     self.view.backgroundColor = [UIColor whiteColor];
 //    self.navigationBar.barTintColor = [UIColor whiteColor];
 //    self.delegate = self;
-    
-    [self.navigationBar setBackgroundImage:[UIImage GetImageWithColor:[UIColor whiteColor] size:CGSizeMake(1, 64)] forBarMetrics:UIBarMetricsDefault];
+//    self.navigationBar.barTintColor = IKGeneralBlue;
+    [self.navigationBar setBackgroundImage:[UIImage GetImageWithColor:IKGeneralBlue size:CGSizeMake(1, 64)] forBarMetrics:UIBarMetricsDefault];
 //    self.navigationBar.alpha = 0.5f;
     [self fineNavigationBottomLine:self.navigationBar];
 

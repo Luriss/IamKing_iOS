@@ -89,7 +89,7 @@
     _searchView.delegate = self;
     _searchView.hiddenColse = NO;
     _searchView.canSearch = YES;
-    _searchView.backgroundColor = [UIColor whiteColor];
+    _searchView.backgroundColor = [UIColor clearColor];
     _searchView.transform = CGAffineTransformMakeTranslation(0, 44);
     [_searchView.searchBar becomeFirstResponder];
     self.navigationItem.titleView = _searchView;

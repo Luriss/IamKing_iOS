@@ -29,7 +29,7 @@
 #define IKColorFromRGB(rgbValue) [UIColor colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 green:((float)((rgbValue & 0xFF00) >> 8))/255.0 blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 
 #define IKGeneralBlue (IKColorFromRGB(0x40c4ff))
-
+#define IKButtonClickColor (IKColorFromRGB(0x00aaee))
 #define IKGeneralLightGray (IKColorFromRGB(0xf2f2f5))
 #define IKGeneralWhite (IKColorFromRGB(0xffffff))
 #define IKGeneralRed (IKColorFromRGB(0xff0000))
@@ -42,7 +42,8 @@
 #define IKLineColor (IKColorFromRGB(0xf2f2f5))
 #define IKDefaultAlpha (0.8f)
 
-#define IKButtonClickBgImage ([UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 30)])
+#define IKButtonClickBgImage ([UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 1)])
+#define IKButtonCkickBlueImage ([UIImage GetImageWithColor:IKButtonClickColor size:CGSizeMake(1, 1)])
 /***********************************Color********************************************/
 
 

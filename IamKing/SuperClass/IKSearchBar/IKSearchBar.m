@@ -24,7 +24,7 @@
 - (void)modifyTextField
 {
     // 替换原有的背景图.
-    [self setBackgroundImage:[UIImage imageNamed:@"IK_bg_white"]];
+    [self setBackgroundImage:[[UIImage alloc] init]];
     // 取消放大镜
     [self setImage:[[UIImage imageNamed:@"IK_search"] resizableImageWithCapInsets:UIEdgeInsetsMake(5, 5, -5, -5) resizingMode:UIImageResizingModeStretch] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
  
@@ -33,7 +33,7 @@
     // 修改搜索框,样式
     if (searchField) {
         [searchField setBackgroundColor:IKSeachBarBgColor];
-        searchField.layer.cornerRadius = 16.0f;
+        searchField.layer.cornerRadius = 15.0f;
         searchField.layer.masksToBounds = YES;
         searchField.textColor= IKMainTitleColor;
 

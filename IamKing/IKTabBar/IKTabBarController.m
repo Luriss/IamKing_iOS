@@ -38,11 +38,11 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
     IKNavigationController *companyNav = [[IKNavigationController alloc] initWithRootViewController:company];
     
     IKMessageViewController *message = [[IKMessageViewController alloc]init];
-    message.view.backgroundColor = [UIColor yellowColor];
+    message.view.backgroundColor = [UIColor whiteColor];
     IKNavigationController *messageNav = [[IKNavigationController alloc] initWithRootViewController:message];
 
     IKMineViewController *mine = [[IKMineViewController alloc]init];
-    mine.view.backgroundColor = [UIColor orangeColor];
+    mine.view.backgroundColor = [UIColor whiteColor];
     IKNavigationController *mineNav = [[IKNavigationController alloc] initWithRootViewController:mine];
 
     
@@ -60,8 +60,12 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
 
     [self.view addSubview:tabBar];
     
-    self.customTabBar = tabBar;
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, rect.origin.y, IKSCREEN_WIDTH, 1)];
+    line.backgroundColor = IKLineColor;
+    [self.view addSubview:line];
     
+    self.customTabBar = tabBar;
+    self.tabBarTopLine = line;
     // Do any additional setup after loading the view.
 }
 

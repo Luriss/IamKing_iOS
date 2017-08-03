@@ -92,10 +92,6 @@ NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageN
     
     if (self) {
         self.backgroundColor = [UIColor whiteColor];
-        
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 1)];
-        line.backgroundColor = IKLineColor;
-        [self addSubview:line];
     }
     
     return self;

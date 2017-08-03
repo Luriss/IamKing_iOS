@@ -13,6 +13,8 @@
 
 @property (nonatomic, strong) UIButton  *button;
 @property (nonatomic, strong) UIView     *bottomLine;
+@property (nonatomic, strong) UIView     *topLine;
+
 @property (nonatomic, strong) UIView     *lineView;
 
 @property (nonatomic, assign)BOOL hadAddSubview;
@@ -49,13 +51,21 @@
 - (void)addLine
 {
     [self addSubview:self.lineView];
-    __weak typeof (self) weakSelf = self;
+    
+    //[self addSubview:self.topLine];
+
     
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf);
-        make.left.and.right.equalTo(weakSelf);
+        make.bottom.equalTo(self);
+        make.left.and.right.equalTo(self);
         make.height.mas_equalTo(1);
     }];
+    
+//    [_topLine mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self);
+//        make.left.and.right.equalTo(self);
+//        make.height.mas_equalTo(1);
+//    }];
 }
 
 
@@ -72,7 +82,7 @@
     }
     
     [self addSubview:self.bottomLine];
-    
+
     __weak typeof (self) weakSelf = self;
 
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -86,6 +96,18 @@
 -(void)setButtonSize:(CGSize)buttonSize
 {
     _buttonSize = buttonSize;
+}
+
+
+
+- (UIView *)topLine
+{
+    if (_topLine == nil) {
+        _topLine = [[UIView alloc] init];
+//        _topLine.layer.cornerRadius = 1.5;
+        _topLine.backgroundColor = IKGeneralLightGray;
+    }
+    return _topLine;
 }
 
 - (UIView *)bottomLine

@@ -137,6 +137,7 @@
 {
     if (_searchBar == nil) {
         _searchBar = [[IKSearchBar alloc] init];
+        _searchBar.backgroundColor = [UIColor clearColor];
 //        _searchBar.placeholder = @" 搜索职位/公司/技能";
         _searchBar.contentMode = UIViewContentModeLeft;
         _searchBar.delegate = self;

@@ -189,7 +189,7 @@
 - (UIView *)approveView
 {
     if (_approveView == nil) {
-        _approveView = [[UILabel alloc] init];
+        _approveView = [[UIView alloc] init];
         _approveView.layer.cornerRadius = 10;
         _approveView.layer.borderColor = IKMainTitleColor.CGColor;
         _approveView.layer.borderWidth = 1.0;

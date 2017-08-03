@@ -230,8 +230,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 54);
     button.titleEdgeInsets = UIEdgeInsetsMake(0, -110, 0, 0);
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-    [button setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 
     button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
     
@@ -257,8 +257,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, -10);
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 20, 14, 34);
     button.titleEdgeInsets = UIEdgeInsetsMake(0, -90, 0, 0);
-    [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-    [button setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
 
     button.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
     [button setTitle:@"分类" forState:UIControlStateNormal];
@@ -458,7 +458,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             cell=[[IKBottomTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.delegate = self;
-//        cell.backgroundColor = [UIColor clearColor];
+        cell.backgroundColor = [UIColor whiteColor];
         if (indexPath.section == 0){
             if (indexPath.row == 0) {
                 cell.isShowSearchView = YES;
@@ -469,8 +469,17 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
                 [_lpView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.top.equalTo(cell.contentView).offset(1);
                     make.left.and.right.equalTo(cell.contentView);
-                    make.bottom.equalTo(cell.contentView).offset(-2);
+                    make.bottom.equalTo(cell.contentView).offset(-1);
                 }];
+                
+//                UIView *line = [[UIView alloc] init];
+//                line.backgroundColor = IKLineColor;
+//                [cell.contentView addSubview:line];
+//                [line mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.bottom.equalTo(cell.contentView.mas_bottom);
+//                    make.left.and.right.equalTo(cell.contentView);
+//                    make.height.mas_equalTo(2);
+//                }];
             }
         }
         else{
@@ -549,7 +558,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (tableView != _bottomTableView) {
-        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
         IKJobInfoModel *model = [self.dataArray objectAtIndex:indexPath.row];
         self.jobDetailVc.jobModel = model;
@@ -601,16 +610,15 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         // 判断职位类型是否滑到顶部
         if (!isScrollToTop) {
             // 职位类型滑到了顶部.
-            if (offsetY >= (self.lpHeight + IKJobTypeHeaderHeight - 2)) {
+            if (offsetY >= (self.lpHeight + IKJobTypeHeaderHeight - 1)) {
                 // 这里不能用 self.lpHeight.很奇怪... 只能用数字
-                _bottomTableView.contentOffset = CGPointMake(0, (lph + IKJobTypeHeaderHeight - 2));
+                _bottomTableView.contentOffset = CGPointMake(0, (lph + IKJobTypeHeaderHeight - 1));
                 self.jobTableView.showsVerticalScrollIndicator = YES;
                 _bottomTableView.showsVerticalScrollIndicator = NO;
                 isScrollToTop = YES;
             }
             else{
                 isScrollToTop = NO;
-                _jobTypeView.backgroundColor = [UIColor whiteColor];
                 [self.jobTableView setContentOffset:CGPointZero];
             }
         }
@@ -618,7 +626,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     
     if (isScrollToTop && _jobTableView.contentOffset.y > 0) {
-        [_bottomTableView setContentOffset:CGPointMake(0,(lph + IKJobTypeHeaderHeight - 2))];
+        [_bottomTableView setContentOffset:CGPointMake(0,(lph + IKJobTypeHeaderHeight - 1))];
         self.jobTableView.showsVerticalScrollIndicator = YES;
     }
     else{
@@ -918,7 +926,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     NSString *cityId = [self getCurrentCityIdFromUserDefault];
 
     // 获取列表信息.
-    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"30",@"type":[NSString stringWithFormat:@"%ld",_tableType]};
+    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"40",@"type":[NSString stringWithFormat:@"%ld",_tableType]};
     
     if (!useCache) {
         [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithoutCacheParam:jobParam backData:^(NSArray *dataArray, BOOL success) {

@@ -18,6 +18,7 @@
 #import "IKSkillTableViewCell.h"
 #import "IKFeedbackTableViewCell.h"
 #import "IKAlertView.h"
+#import "IKCompanyDetailVC.h"
 
 
 @interface IKJobDetailVC ()<UITableViewDelegate,UITableViewDataSource,IKAlertViewDelegate>
@@ -186,11 +187,14 @@
     UIButton *sendButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [sendButton setTitle:@"投递简历" forState:UIControlStateNormal];
     [sendButton setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
+    [sendButton setTitleColor:IKColorFromRGB(0x00aaee) forState:UIControlStateHighlighted];
     sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     sendButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     sendButton.layer.cornerRadius = 6;
     sendButton.layer.borderColor = IKGeneralBlue.CGColor;
     sendButton.layer.borderWidth = 1.0;
+    [sendButton addTarget:self action:@selector(sendResumeClickDown:) forControlEvents:UIControlEventTouchDown];
+
     [sendButton addTarget:self action:@selector(sendResumeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     [bottomView addSubview:sendButton];
     
@@ -208,8 +212,11 @@
     chatButton.titleLabel.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     chatButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     chatButton.layer.cornerRadius = 6;
+    chatButton.layer.masksToBounds = YES;
     chatButton.backgroundColor = IKGeneralBlue;
+    [chatButton setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
     [chatButton addTarget:self action:@selector(chatButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+
     [bottomView addSubview:chatButton];
     
     
@@ -221,9 +228,20 @@
     }];
 }
 
+- (void)sendResumeClickDown:(UIButton *)button
+{
+    button.layer.borderColor = IKColorFromRGB(0x00aaee).CGColor;
+}
+
+- (void)chatButtonClickDown:(UIButton *)button
+{
+    button.backgroundColor = IKColorFromRGB(0x00aaee);
+}
 - (void)sendResumeButtonClick:(UIButton *)button
 {
     NSLog(@"sendButtonClick:");
+    
+    button.layer.borderColor = IKGeneralBlue.CGColor;
     
     IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"测试" message:@"这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息这是测试信息" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
     [alert show];
@@ -238,6 +256,7 @@
 - (void)chatButtonClick:(UIButton *)button
 {
     NSLog(@"chatButtonClick:");
+    button.backgroundColor = IKGeneralBlue;
 }
 
 - (IKNoDataBgView *)noDataBgView
@@ -487,7 +506,9 @@
             if(cell == nil){
                 cell = [[IKJobDetailCompanyTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
             }
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+            cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
             [cell addCompanyCellData:_jobDetailModel.companyInfo];
             return cell;
         }
@@ -705,9 +726,17 @@
 {
     
     if (indexPath.section == 0 && indexPath.row == 1) {
-        UIViewController *v = [[UIViewController alloc] init];
-        v.view.backgroundColor = [UIColor whiteColor];
-        [self.navigationController pushViewController:v animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+//        IKCompanyInfoModel *model = self.dataArray[indexPath.row];
+        
+        NSLog(@"description = %@",_jobDetailModel.description);
+        IKCompanyDetailVC *companyDetail = [[IKCompanyDetailVC alloc] init];
+        
+        IKCompanyInfoModel *companyInfoModel = [[IKCompanyInfoModel alloc] init];
+        companyInfoModel.companyID = [_jobDetailModel.companyInfo objectForKey:@"id"];
+        companyDetail.companyInfoModel = companyInfoModel;
+        [self.navigationController pushViewController:companyDetail animated:YES];
     }
     
 }

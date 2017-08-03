@@ -146,7 +146,7 @@
     bgView.autoresizingMask = UIViewAutoresizingFlexibleHeight|
     UIViewAutoresizingFlexibleWidth;
     bgView.backgroundColor = [UIColor blackColor];
-    bgView.alpha = 0.3f;
+    bgView.alpha = 0.5f;
     bgView.transform = CGAffineTransformMakeScale(4, 4); //防止statusBar没有覆盖到
     [self.view addSubview:bgView];
 }
@@ -321,6 +321,7 @@
     ok.backgroundColor = IKGeneralBlue;
     ok.layer.cornerRadius = 5;
     [ok addTarget:self action:@selector(actionClick:) forControlEvents:UIControlEventTouchUpInside];
+    [ok setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
 
     [self addSubview:ok];
 }
