@@ -88,7 +88,7 @@
     if (_pinImageview == nil) {
         _pinImageview = [[UIImageView alloc] init];
         _pinImageview.image = [UIImage imageNamed:@"IK_detail_pin"];
-        _pinImageview.backgroundColor = [UIColor whiteColor];
+//        _pinImageview.backgroundColor = [UIColor whiteColor];
         _pinImageview.layer.cornerRadius = 11;
     }
     return _pinImageview;

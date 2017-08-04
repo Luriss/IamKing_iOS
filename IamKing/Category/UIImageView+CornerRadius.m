@@ -89,6 +89,27 @@ const char kProcessedImage;
 }
 
 
+- (void)lwb_blurImage:(UIImage *)image completed:(void (^)(UIImage *image))completed
+{
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        CIContext *context = [CIContext contextWithOptions:nil];
+        CIImage *ciImage = [CIImage imageWithCGImage:image.CGImage];
+        CIFilter *filter = [CIFilter filterWithName:@"CIGaussianBlur"];
+        [filter setValue:ciImage forKey:kCIInputImageKey];
+        //设置模糊程度
+        [filter setValue:@30.0f forKey: @"inputRadius"];
+        CIImage *result = [filter valueForKey:kCIOutputImageKey];
+        CGRect frame = [ciImage extent];
+        NSLog(@"%f,%f,%f,%f",frame.origin.x,frame.origin.y,frame.size.width,frame.size.height);
+        CGImageRef outImage = [context createCGImage: result fromRect:ciImage.extent];
+        UIImage * blurImage = [UIImage imageWithCGImage:outImage];
+        dispatch_async(dispatch_get_main_queue(), ^{
+//            self.image = blurImage;
+            
+        });
+    });
+}
+
 - (void)lwb_loadBlurImageWithUrl:(NSString *)urlStr placeHolderImageName:(NSString *)placeHolderStr blur:(CGFloat)blur completed:(void (^)(UIImage *image))completed
 {
     NSURL *url;
@@ -140,6 +161,9 @@ const char kProcessedImage;
         }
     });
 }
+
+
+
 
 
 - (void)loadImageWithAnimation:(UIImage *)image

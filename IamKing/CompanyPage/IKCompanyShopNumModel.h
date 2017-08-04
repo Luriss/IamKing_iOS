@@ -37,5 +37,5 @@
 @property(nonatomic,assign)BOOL        isAuthen;
 @property(nonatomic,assign)BOOL        isBusiness;
 
-
+- (NSString *)description;
 @end

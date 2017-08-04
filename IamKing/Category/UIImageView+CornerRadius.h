@@ -25,4 +25,6 @@
 
 - (void)lwb_loadBlurImageWithUrl:(NSString *)urlStr placeHolderImageName:(NSString *)placeHolderStr blur:(CGFloat)blur completed:(void (^)(UIImage *image))completed;
 
+- (void)lwb_blurImage:(UIImage *)image;
+
 @end

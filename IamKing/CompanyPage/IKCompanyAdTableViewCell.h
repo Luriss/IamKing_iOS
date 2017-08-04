@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface IKCompanyAdTableViewCell : UITableViewCell
+@interface IKCompanyAdTableViewCell : UIView
+
+- (void)addCompanyAdCellData:(NSArray *)array;
+
+- (void)AllStopScrollPage;
+- (void)AllStartScrollPage;
+
 
 @end

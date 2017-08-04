@@ -7,65 +7,63 @@
 //
 
 #import "IKCompanyAdTableViewCell.h"
-#import "IKLoopPlayView.h"
 #import "IKButtonView.h"
+#import "IKCompanyAdView.h"
+#import "IKRollLabel.h"
+#import "IKCompanyRecommendListModel.h"
 
 
 @interface IKCompanyAdTableViewCell ()<IKButtonViewDelegate>
 
-@property(nonatomic,strong)IKLoopPlayView   *lpView1;
-@property(nonatomic,strong)IKLoopPlayView   *lpView2;
-@property(nonatomic,strong)IKLoopPlayView   *lpView3;
+@property(nonatomic,strong)IKCompanyAdView   *lpView1;
+@property(nonatomic,strong)IKCompanyAdView   *lpView2;
+@property(nonatomic,strong)IKCompanyAdView   *lpView3;
+
+@property(nonatomic,strong)IKRollLabel *nameLabel1;
+@property(nonatomic,strong)IKRollLabel *nameLabel2;
+@property(nonatomic,strong)IKRollLabel *nameLabel3;
+
+@property(nonatomic,strong)IKRollLabel *desLabel1;
+@property(nonatomic,strong)IKRollLabel *desLabel2;
+@property(nonatomic,strong)IKRollLabel *desLabel3;
+
 @property(nonatomic,strong)IKButtonView     *exchangeBtn;
-
-@property(nonatomic,strong)UILabel *nameLabel1;
-@property(nonatomic,strong)UILabel *nameLabel2;
-@property(nonatomic,strong)UILabel *nameLabel3;
-
-
-@property(nonatomic,strong)UILabel *desLabel1;
-@property(nonatomic,strong)UILabel *desLabel2;
-@property(nonatomic,strong)UILabel *desLabel3;
 
 @end
 
 
 @implementation IKCompanyAdTableViewCell
 
-- (void)awakeFromNib {
-    [super awakeFromNib];
-    // Initialization code
-}
-
-
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
-    if (self){
+    self = [super initWithFrame:frame];
+    if (self) {
         [self addSubViews];
+
     }
     return self;
 }
 
+
 - (void)addSubViews
 {
-    [self.contentView addSubview:self.lpView1];
-    [self.contentView addSubview:self.lpView2];
-    [self.contentView addSubview:self.lpView3];
+    [self addSubview:self.lpView1];
+    [self addSubview:self.lpView2];
+    [self addSubview:self.lpView3];
     
-    [self.contentView addSubview:self.nameLabel1];
-    [self.contentView addSubview:self.nameLabel2];
-    [self.contentView addSubview:self.nameLabel3];
+    [self addSubview:self.nameLabel1];
+    [self addSubview:self.nameLabel2];
+    [self addSubview:self.nameLabel3];
 
-    [self.contentView addSubview:self.desLabel1];
-    [self.contentView addSubview:self.desLabel2];
-    [self.contentView addSubview:self.desLabel3];
+    [self addSubview:self.desLabel1];
+    [self addSubview:self.desLabel2];
+    [self addSubview:self.desLabel3];
 
-    [self.contentView addSubview:self.exchangeBtn];
+    [self addSubview:self.exchangeBtn];
     
     [_lpView1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(13);
-        make.left.equalTo(self.contentView.mas_left).offset(15);
+        make.top.equalTo(self.mas_top).offset(13);
+        make.left.equalTo(self.mas_left).offset(15);
         make.width.and.height.mas_equalTo(ceilf(IKSCREENH_HEIGHT*0.165));
     }];
     
@@ -124,64 +122,64 @@
     }];
  
     [_exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.contentView.mas_bottom).offset(-20);
-        make.width.equalTo(self.contentView).multipliedBy(0.587);
-        make.height.equalTo(self.contentView).multipliedBy(0.158);
-        make.centerX.equalTo(self.contentView);
+        make.bottom.equalTo(self.mas_bottom).offset(-20);
+        make.width.equalTo(self).multipliedBy(0.587);
+        make.height.equalTo(self).multipliedBy(0.158);
+        make.centerX.equalTo(self);
     }];
     
 }
 
-- (IKLoopPlayView *)lpView1
+- (IKCompanyAdView *)lpView1
 {
     if (_lpView1 == nil) {
-        _lpView1 = [[IKLoopPlayView alloc]init];
-        _lpView1.scrollDirection = IKLPVScrollDirectionVertical;
-        _lpView1.scrollTimeInterval = 4;
-        _lpView1.pageControlHidden = YES;
+        _lpView1 = [[IKCompanyAdView alloc]init];
+        _lpView1.scrollDirection = IKAdVScrollDirectionVertical;
+        _lpView1.scrollTimeInterval = 3;
+        _lpView1.reverseDirection = YES;
+        _lpView1.isAutoScroll = YES;
         _lpView1.layer.cornerRadius = 5;
         _lpView1.layer.borderWidth = 1;
         _lpView1.layer.borderColor = IKLineColor.CGColor;
         _lpView1.layer.masksToBounds = YES;
         _lpView1.backgroundColor = [UIColor redColor];
-        _lpView1.imagesArray = @[@"https://pic.iamking.com.cn/Public/User/headerImage/1501213018_93_359.jpg",@"https://pic.iamking.com.cn/Public/User/headerImage/1501154443_148_986.jpg"];
     }
     
     return _lpView1;
 }
 
-- (IKLoopPlayView *)lpView2
+- (IKCompanyAdView *)lpView2
 {
     if (_lpView2 == nil) {
-        _lpView2 = [[IKLoopPlayView alloc]init];
-        _lpView2.scrollDirection = IKLPVScrollDirectionVertical;
-        _lpView2.scrollTimeInterval = 4;
-        _lpView2.pageControlHidden = YES;
+        _lpView2 = [[IKCompanyAdView alloc]init];
+        _lpView2.scrollDirection = IKAdVScrollDirectionVertical;
+        _lpView2.scrollTimeInterval = 3.5;
+        _lpView2.reverseDirection = YES;
+        _lpView2.isAutoScroll = YES;
         _lpView2.layer.cornerRadius = 5;
         _lpView2.layer.borderWidth = 1;
         _lpView2.layer.borderColor = IKLineColor.CGColor;
         _lpView2.layer.masksToBounds = YES;
         _lpView2.backgroundColor = [UIColor purpleColor];
-        _lpView2.imagesArray = @[@"https://pic.iamking.com.cn/Public/User/headerImage/1501229456_858_653.jpg",@"https://pic.iamking.com.cn/Public/User/headerImage/1501230813_895_169.jpg"];
-
     }
     
     return _lpView2;
 }
 
-- (IKLoopPlayView *)lpView3
+- (IKCompanyAdView *)lpView3
 {
     if (_lpView3 == nil) {
-        _lpView3 = [[IKLoopPlayView alloc]init];
-        _lpView3.scrollDirection = IKLPVScrollDirectionVertical;
+        _lpView3 = [[IKCompanyAdView alloc]init];
+        _lpView3.scrollDirection = IKAdVScrollDirectionVertical;
         _lpView3.scrollTimeInterval = 4;
-        _lpView3.pageControlHidden = YES;
+        _lpView3.reverseDirection = YES;
+        _lpView3.isAutoScroll = YES;
         _lpView3.layer.cornerRadius = 5;
         _lpView3.layer.borderWidth = 1;
         _lpView3.layer.borderColor = IKLineColor.CGColor;
         _lpView3.layer.masksToBounds = YES;
         _lpView3.backgroundColor = [UIColor orangeColor];
-        _lpView3.imagesArray = @[@"https://pic.iamking.com.cn/Public/User/headerImage/1501230813_895_169.jpg",@"https://pic.iamking.com.cn/Public/User/headerImage/1501213018_93_359.jpg"];
+//        _lpView3.imagesArray = @[@"https://pic.iamking.com.cn/Public/User/headerImage/1501230813_895_169.jpg",@"https://pic.iamking.com.cn/Public/User/headerImage/1501213018_93_359.jpg"];
 
     }
     
@@ -189,80 +187,97 @@
 }
 
 
-- (UILabel *)nameLabel1
+- (IKRollLabel *)nameLabel1
 {
     if (_nameLabel1 == nil) {
-        _nameLabel1 = [[UILabel alloc] init];
-        _nameLabel1.textColor = IKMainTitleColor;
-        _nameLabel1.font = [UIFont systemFontOfSize:12.0f];
+        _nameLabel1 = [[IKRollLabel alloc] init];
+        _nameLabel1.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _nameLabel1.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel1.textAlignment = NSTextAlignmentCenter;
-        _nameLabel1.text = @"威尔士健身";
+        _nameLabel1.dataArray = @[@"1",@"2",@"3",@"4",@"5",@"6"];
+        _nameLabel1.reverseDirection = YES;
+        _nameLabel1.scrollTimeInterval = 3;
+        _nameLabel1.labelTextColor = IKMainTitleColor;
     }
     return _nameLabel1;
 }
 
-- (UILabel *)nameLabel2
+- (IKRollLabel *)nameLabel2
 {
     if (_nameLabel2 == nil) {
-        _nameLabel2 = [[UILabel alloc] init];
-        _nameLabel2.textColor = IKMainTitleColor;
-        _nameLabel2.font = [UIFont systemFontOfSize:12.0f];
+        _nameLabel2 = [[IKRollLabel alloc] init];
+        _nameLabel2.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _nameLabel2.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel2.textAlignment = NSTextAlignmentCenter;
-        _nameLabel2.text = @"一兆韦德健身";
+        _nameLabel2.dataArray = @[@"q",@"w",@"e",@"r",@"t",@"y"];
+        _nameLabel2.reverseDirection = YES;
+        _nameLabel2.scrollTimeInterval = 3.5;
+        _nameLabel2.labelTextColor = IKMainTitleColor;
     }
     return _nameLabel2;
 }
 
-- (UILabel *)nameLabel3
+- (IKRollLabel *)nameLabel3
 {
     if (_nameLabel3 == nil) {
-        _nameLabel3 = [[UILabel alloc] init];
-        _nameLabel3.textColor = IKMainTitleColor;
-        _nameLabel3.font = [UIFont systemFontOfSize:12.0f];
+        _nameLabel3 = [[IKRollLabel alloc] init];
+        _nameLabel3.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _nameLabel3.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel3.textAlignment = NSTextAlignmentCenter;
-        _nameLabel3.text = @"Keep";
+        _nameLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+        _nameLabel3.reverseDirection = YES;
+        _nameLabel3.scrollTimeInterval = 4;
+        _nameLabel3.labelTextColor = IKMainTitleColor;
     }
     return _nameLabel3;
 }
 
 
-- (UILabel *)desLabel1
+- (IKRollLabel *)desLabel1
 {
     if (_desLabel1 == nil) {
-        _desLabel1 = [[UILabel alloc] init];
-        _desLabel1.textColor =  IKSubHeadTitleColor;
-        _desLabel1.font = [UIFont systemFontOfSize:11.0f];
+        _desLabel1 = [[IKRollLabel alloc] init];
+        _desLabel1.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _desLabel1.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel1.textAlignment = NSTextAlignmentCenter;
-        _desLabel1.text = @"国内知名健身品牌";
+        _desLabel1.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+        _desLabel1.reverseDirection = YES;
+        _desLabel1.scrollTimeInterval = 3;
+        _desLabel1.labelTextColor = IKSubHeadTitleColor;
     }
     return _desLabel1;
 }
 
 
-- (UILabel *)desLabel2
+- (IKRollLabel *)desLabel2
 {
     if (_desLabel2 == nil) {
-        _desLabel2 = [[UILabel alloc] init];
-        _desLabel2.textColor =  IKSubHeadTitleColor;
-        _desLabel2.font = [UIFont systemFontOfSize:11.0f];
+        _desLabel2 = [[IKRollLabel alloc] init];
+        _desLabel2.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _desLabel2.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel2.textAlignment = NSTextAlignmentCenter;
-        _desLabel2.text = @"国内知名健身品牌";
+        _desLabel2.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+        _desLabel2.reverseDirection = YES;
+        _desLabel2.scrollTimeInterval = 3.5;
+        _desLabel2.labelTextColor = IKSubHeadTitleColor;
     }
     return _desLabel2;
 }
 
-- (UILabel *)desLabel3
+- (IKRollLabel *)desLabel3
 {
     if (_desLabel3 == nil) {
-        _desLabel3 = [[UILabel alloc] init];
-        _desLabel3.textColor =  IKSubHeadTitleColor;
-        _desLabel3.font = [UIFont systemFontOfSize:11.0f];
+        _desLabel3 = [[IKRollLabel alloc] init];
+        _desLabel3.scrollDirection = IKRollLabelScrollDirectionVertical;
+        _desLabel3.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel3.textAlignment = NSTextAlignmentCenter;
-        _desLabel3.text = @"移动健身教练";
+        _desLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+        _desLabel3.reverseDirection = YES;
+        _desLabel3.scrollTimeInterval = 4;
+        _desLabel3.labelTextColor = IKSubHeadTitleColor;
     }
     return _desLabel3;
 }
-
 
 - (IKButtonView *)exchangeBtn
 {
@@ -283,16 +298,101 @@
 {
     NSLog(@"ssssssss = %@",button);
     [_lpView1 scrollToNextPage];
-    [_lpView2 scrollToNextPage];
-    [_lpView3 scrollToNextPage];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_lpView2 scrollToNextPage];
 
+    });
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_lpView3 scrollToNextPage];
+
+    });
+}
+
+
+- (void)addCompanyAdCellData:(NSArray *)array
+{
+    if (array.count == 0) {
+        return;
+    }
+    
+    
+    NSMutableArray *imageA = [NSMutableArray arrayWithCapacity:array.count];
+    NSMutableArray *nameA = [NSMutableArray arrayWithCapacity:array.count];
+    NSMutableArray *descA = [NSMutableArray arrayWithCapacity:array.count];
+
+    for (IKCompanyRecommendListModel *model in array) {
+        
+        [nameA addObject:model.nickName];
+        [imageA addObject:model.logoImageUrl];
+        [descA addObject:model.describe];
+    }
+    
+    _lpView1.imagesArray = imageA;
+    [_lpView1 reloadImageData];
+
+    _nameLabel1.dataArray = nameA;
+    [_nameLabel1 reloadViewData];
+
+    _desLabel1.dataArray = descA;
+    [_desLabel1 reloadViewData];
+
+    _lpView2.imagesArray = imageA;
+    [_lpView2 reloadImageData];
+
+    _nameLabel2.dataArray = nameA;
+    [_nameLabel2 reloadViewData];
+    
+    _desLabel2.dataArray = descA;
+    [_desLabel2 reloadViewData];
+
+    
+    _lpView3.imagesArray = imageA;
+    [_lpView3 reloadImageData];
+
+    _nameLabel3.dataArray = nameA;
+    [_nameLabel3 reloadViewData];
+
+    _desLabel3.dataArray = descA;
+    [_desLabel3 reloadViewData];
+
+    [self AllStartScrollPage];
+}
+
+
+- (void)AllStartScrollPage
+{
+    [_lpView1 startAutoScrollPage];
+    [_nameLabel1 startAutoScrollPage];
+    [_desLabel1 startAutoScrollPage];
+
+    [_lpView2 startAutoScrollPage];
+    [_nameLabel2 startAutoScrollPage];
+    [_desLabel2 startAutoScrollPage];
+
+    [_lpView3 startAutoScrollPage];
+    [_nameLabel3 startAutoScrollPage];
+    [_desLabel3 startAutoScrollPage];
+
+}
+
+
+- (void)AllStopScrollPage
+{
+    [_lpView1 stopAutoScrollPage];
+    [_nameLabel1 stopAutoScrollPage];
+    [_desLabel1 stopAutoScrollPage];
+    
+    [_lpView2 stopAutoScrollPage];
+    [_nameLabel2 stopAutoScrollPage];
+    [_desLabel2 stopAutoScrollPage];
+    
+    [_lpView3 stopAutoScrollPage];
+    [_nameLabel3 stopAutoScrollPage];
+    [_desLabel3 stopAutoScrollPage];
     
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 @end

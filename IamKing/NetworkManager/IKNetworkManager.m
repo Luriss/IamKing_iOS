@@ -13,6 +13,7 @@
 #import "IKProvinceModel.h"
 #import "IKJobTypeModel.h"
 #import "IKCompanyInfoModel.h"
+#import "IKCompanyRecommendListModel.h"
 
 
 // 轮播图请求 url
@@ -618,22 +619,22 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
         NSLog(@"responseCache = %@",responseCache);
-//        NSArray *array = [self dealRecommendCompanyListData:responseCache];
-//        BOOL success = [self requestDataSuccess:responseCache];
-//        
-//        if (callback && array.count>0) {
-//            callback(array,success);
-//        }
+        NSArray *array = [self dealRecommendCompanyListData:responseCache];
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        if (callback && array.count>0) {
+            callback(array,success);
+        }
     } success:^(id responseObject) {
         NSLog(@"responseObject = %@",responseObject);
         
         if (![dataResult isEqual:responseObject]) {
-//            NSArray *array = [self dealRecommendCompanyListData:responseObject];
-//            BOOL success = [self requestDataSuccess:responseObject];
-//            
-//            if (callback && array.count>0) {
-//                callback(array,success);
-//            }
+            NSArray *array = [self dealRecommendCompanyListData:responseObject];
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            if (callback && array.count>0) {
+                callback(array,success);
+            }
         }
     } failure:^(NSError *error) {
         
@@ -653,14 +654,13 @@ static IKNetworkManager *_shareInstance;
     for (int i = 0; i < array.count; i ++) {
         
         NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
-        
-//        model.describe = [self getString:[dict objectForKey:@"brand_describe"]];
-//        model.nickName = [self getString:[dict objectForKey:@"nickname"]];
-//        model.logoImageUrl = [self getString:[dict objectForKey:@"header_image"]];;
-//        model.isOperate = [self getBool:[dict objectForKey:@"operate_id"] ];
-//        model.companyID = [self getString:[dict objectForKey:@"user_id"]];
-        
-//        [backArray addObject:model];
+        IKCompanyRecommendListModel *model = [[IKCompanyRecommendListModel alloc] init];
+        model.describe = [self getString:[dict objectForKey:@"brand_describe"]];
+        model.nickName = [self getString:[dict objectForKey:@"nickname"]];
+        model.logoImageUrl = [self getString:[dict objectForKey:@"header_image"]];;
+        model.isOperate = [self getBool:[dict objectForKey:@"operate_id"] ];
+        model.companyID = [self getString:[dict objectForKey:@"user_id"]];
+        [backArray addObject:model];
     }
     
     return backArray;
@@ -964,6 +964,19 @@ static IKNetworkManager *_shareInstance;
     }
     return muArray;
 }
+
+
+
+- (void)postUserOprateToServer:(NSDictionary *)param
+{
+    [IKNetworkHelper POST:@"https://www.iamking.com.cn/index.php/UserOperate/addUserOperate" parameters:param success:^(id responseObject) {
+        NSLog(@"postUserOprateToServer responseObject = %@",responseObject);
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+
+    }];
+}
+
 
 
 

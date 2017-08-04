@@ -8,6 +8,8 @@
 
 #import "IKRecommandCompanyVC.h"
 #import "IKRecommandCoCollectionViewCell.h"
+#import "IKCompanyDetailVC.h"
+
 
 @interface IKRecommandCompanyVC ()<UICollectionViewDataSource, UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
@@ -106,45 +108,16 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 12;//self.dataArray.count;
+    return self.dataArray.count;
 }
 
-//- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    // 根据文字计算尺寸.
-//    CGFloat w = [self widthForLabel:_tagsData[indexPath.row] fontSize:15];
-//    return CGSizeMake(w, 24);
-//}
-
-
-
-- (CGFloat)widthForLabel:(NSString *)text fontSize:(CGFloat)font
-{
-    // 根据文字计算尺寸.
-    CGRect frame = [text boundingRectWithSize:CGSizeMake(_collectionView.frame.size.width, 24) options:NSStringDrawingUsesFontLeading|NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:font]} context:nil];
-    
-    // item 默认的最小宽度为 40;
-    CGFloat width = frame.size.width + 15;
-    
-    if (width < 40) {
-        width = 40;
-    }
-    
-    // 超过最大宽度显示为最大宽度
-    CGFloat maxWidth = CGRectGetWidth(self.view.bounds) - 20;
-    if (width > maxWidth){
-        width = maxWidth;
-    }
-    
-    return width;
-}
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     IKRecommandCoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"IKRecommandCoCollectionViewCell" forIndexPath:indexPath];
     
     if (indexPath.row < self.dataArray.count) {
-//        [cell addRecommendCellData:[self.dataArray objectAtIndex:indexPath.row]];
+        [cell addRecommendCellData:[self.dataArray objectAtIndex:indexPath.row]];
     }
     
     return cell;
@@ -154,7 +127,16 @@
 {
     IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
     
-    IKRecommandCoCollectionViewCell *cell = (IKRecommandCoCollectionViewCell *)[collectionView cellForItemAtIndexPath:indexPath];
+    IKCompanyRecommendListModel *model = (IKCompanyRecommendListModel *)self.dataArray[indexPath.row];
+    
+    IKCompanyDetailVC *companyDetail = [[IKCompanyDetailVC alloc] init];
+    
+    IKCompanyInfoModel *companyInfoModel = [[IKCompanyInfoModel alloc] init];
+    companyInfoModel.companyID = model.companyID;
+    companyDetail.companyInfoModel = companyInfoModel;
+    
+    [self.navigationController pushViewController:companyDetail animated:YES];
+    
 
 }
 

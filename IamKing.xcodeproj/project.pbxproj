@@ -190,6 +190,12 @@
 		21F821011F3191F700DA9EFA /* IKButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821001F3191F700DA9EFA /* IKButton.m */; };
 		21F821031F319E8000DA9EFA /* IK_appraise_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821021F319E8000DA9EFA /* IK_appraise_white.png */; };
 		21F821071F31A41500DA9EFA /* IKAppraiseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821061F31A41500DA9EFA /* IKAppraiseView.m */; };
+		21F8210C1F32C07600DA9EFA /* IK_graybackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F8210B1F32C07600DA9EFA /* IK_graybackground.png */; };
+		21F8210F1F32C74F00DA9EFA /* IKCompanyRecommendListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F8210E1F32C74F00DA9EFA /* IKCompanyRecommendListModel.m */; };
+		21F821121F32CD9600DA9EFA /* IK_Add_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821101F32CD9600DA9EFA /* IK_Add_white.png */; };
+		21F821131F32CD9600DA9EFA /* IK_correct_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821111F32CD9600DA9EFA /* IK_correct_white.png */; };
+		21F821161F32E1A400DA9EFA /* IKCompanyAdView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821151F32E1A400DA9EFA /* IKCompanyAdView.m */; };
+		21F8211A1F32ECB200DA9EFA /* IKRollLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821191F32ECB200DA9EFA /* IKRollLabel.m */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -495,6 +501,15 @@
 		21F821021F319E8000DA9EFA /* IK_appraise_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_appraise_white.png; sourceTree = "<group>"; };
 		21F821051F31A41500DA9EFA /* IKAppraiseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAppraiseView.h; sourceTree = "<group>"; };
 		21F821061F31A41500DA9EFA /* IKAppraiseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAppraiseView.m; sourceTree = "<group>"; };
+		21F8210B1F32C07600DA9EFA /* IK_graybackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_graybackground.png; sourceTree = "<group>"; };
+		21F8210D1F32C74F00DA9EFA /* IKCompanyRecommendListModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyRecommendListModel.h; sourceTree = "<group>"; };
+		21F8210E1F32C74F00DA9EFA /* IKCompanyRecommendListModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyRecommendListModel.m; sourceTree = "<group>"; };
+		21F821101F32CD9600DA9EFA /* IK_Add_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Add_white.png; sourceTree = "<group>"; };
+		21F821111F32CD9600DA9EFA /* IK_correct_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_correct_white.png; sourceTree = "<group>"; };
+		21F821141F32E1A400DA9EFA /* IKCompanyAdView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCompanyAdView.h; sourceTree = "<group>"; };
+		21F821151F32E1A400DA9EFA /* IKCompanyAdView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCompanyAdView.m; sourceTree = "<group>"; };
+		21F821181F32ECB200DA9EFA /* IKRollLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKRollLabel.h; sourceTree = "<group>"; };
+		21F821191F32ECB200DA9EFA /* IKRollLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKRollLabel.m; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -877,6 +892,8 @@
 				21BC61D81F2CE9BA00CE85D9 /* Cell */,
 				21BC61E11F2D1C4300CE85D9 /* IKCompanyClassifyView.h */,
 				21BC61E21F2D1C4300CE85D9 /* IKCompanyClassifyView.m */,
+				21F821141F32E1A400DA9EFA /* IKCompanyAdView.h */,
+				21F821151F32E1A400DA9EFA /* IKCompanyAdView.m */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -935,6 +952,8 @@
 		21BC61E41F2D233000CE85D9 /* CompanyPageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21F821101F32CD9600DA9EFA /* IK_Add_white.png */,
+				21F821111F32CD9600DA9EFA /* IK_correct_white.png */,
 				21F820F61F30A89D00DA9EFA /* IK_circle_blue.png */,
 				21F820F71F30A89D00DA9EFA /* IK_member_blue.png */,
 				21F820F81F30A89D00DA9EFA /* IK_square_blue.png */,
@@ -960,6 +979,8 @@
 				21BC61F41F2DC4E800CE85D9 /* IKCompanyDetailHeadModel.m */,
 				21F820FC1F30B2CD00DA9EFA /* IKCompanyShopNumModel.h */,
 				21F820FD1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m */,
+				21F8210D1F32C74F00DA9EFA /* IKCompanyRecommendListModel.h */,
+				21F8210E1F32C74F00DA9EFA /* IKCompanyRecommendListModel.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -1057,6 +1078,7 @@
 		21C3AE441F175615008FC124 /* IKGeneralView */ = {
 			isa = PBXGroup;
 			children = (
+				21F821171F32EC5200DA9EFA /* IKRollLabel */,
 				21F821041F31A40000DA9EFA /* IKAppraiseView */,
 				21BC61BA1F2B08F900CE85D9 /* IKAlertView */,
 				21BC61AB1F29E62900CE85D9 /* IKTipsView */,
@@ -1174,6 +1196,7 @@
 			isa = PBXGroup;
 			children = (
 				21BC61B81F2B037D00CE85D9 /* IK_share.png */,
+				21F8210B1F32C07600DA9EFA /* IK_graybackground.png */,
 				21BC61B21F2AE4F600CE85D9 /* IK_zan_blue.png */,
 				21BC61B31F2AE4F600CE85D9 /* IK_zan_grey.png */,
 				21BC61911F28755C00CE85D9 /* IK_v.png */,
@@ -1328,6 +1351,15 @@
 				21F821061F31A41500DA9EFA /* IKAppraiseView.m */,
 			);
 			name = IKAppraiseView;
+			sourceTree = "<group>";
+		};
+		21F821171F32EC5200DA9EFA /* IKRollLabel */ = {
+			isa = PBXGroup;
+			children = (
+				21F821181F32ECB200DA9EFA /* IKRollLabel.h */,
+				21F821191F32ECB200DA9EFA /* IKRollLabel.m */,
+			);
+			name = IKRollLabel;
 			sourceTree = "<group>";
 		};
 		4837E3E442EACAF7D46EE4B7 /* Frameworks */ = {
@@ -1495,6 +1527,7 @@
 				21D623221F1360F80054D980 /* IK_address_grey.png in Resources */,
 				2199E2581F21ED1C00D43EE1 /* IK_logo_grey.png in Resources */,
 				21F820D21F2F32B100DA9EFA /* IK_showMore.png in Resources */,
+				21F821121F32CD9600DA9EFA /* IK_Add_white.png in Resources */,
 				21BC61B51F2AE4F600CE85D9 /* IK_zan_grey.png in Resources */,
 				21BC61E61F2D23F800CE85D9 /* IK_showMore_grey.png in Resources */,
 				2197CB801F1C88A700F61562 /* IK_back.png in Resources */,
@@ -1523,6 +1556,7 @@
 				21D622E61F0F6CCE0054D980 /* IK_search.png in Resources */,
 				21F820FB1F30A89D00DA9EFA /* IK_square_blue.png in Resources */,
 				210B0DE51F0E0B56003FD950 /* IK_me@3x.png in Resources */,
+				21F8210C1F32C07600DA9EFA /* IK_graybackground.png in Resources */,
 				21C3AE3F1F1746AA008FC124 /* IK_sellPerformance.png in Resources */,
 				21C3AE141F162024008FC124 /* IK_close.png in Resources */,
 				21BC61891F282B7800CE85D9 /* IK_detail_pin.png in Resources */,
@@ -1545,6 +1579,7 @@
 				21BC61901F2869C300CE85D9 /* IK_star_solid_red.png in Resources */,
 				21F820D91F302E5200DA9EFA /* IK_flag_blue.png in Resources */,
 				210B0DE21F0E0B56003FD950 /* IK_applyJob@3x.png in Resources */,
+				21F821131F32CD9600DA9EFA /* IK_correct_white.png in Resources */,
 				210B0DF91F0E3253003FD950 /* IK_logo.png in Resources */,
 				210B0D9A1F0DE16D003FD950 /* Main.storyboard in Resources */,
 				21D6231D1F1355610054D980 /* IK_applyJobSelected@3x.png in Resources */,
@@ -1643,6 +1678,7 @@
 				21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				21F820D71F302D0100DA9EFA /* IKCompanyDetailTitleTableViewCell.m in Sources */,
+				21F8211A1F32ECB200DA9EFA /* IKRollLabel.m in Sources */,
 				21F821011F3191F700DA9EFA /* IKButton.m in Sources */,
 				2199E24F1F21A4DF00D43EE1 /* IKHomePageConfig.m in Sources */,
 				21D622F91F10FD6E0054D980 /* IKView.m in Sources */,
@@ -1688,6 +1724,7 @@
 				21BC61DB1F2CE9E200CE85D9 /* IKCompanyAdTableViewCell.m in Sources */,
 				21C3AE581F175615008FC124 /* IKInfoTableView.m in Sources */,
 				21C3AE071F15D31D008FC124 /* IKLocationCell.m in Sources */,
+				21F821161F32E1A400DA9EFA /* IKCompanyAdView.m in Sources */,
 				21C3AE0E1F1616B6008FC124 /* IKMoreTypeVC.m in Sources */,
 				21C3AE5D1F175615008FC124 /* IKSearchView.m in Sources */,
 				21BC61EC1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m in Sources */,
@@ -1708,6 +1745,7 @@
 				21F820FE1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m in Sources */,
 				2197CBBD1F1E2A2600F61562 /* IKChooseCityView.m in Sources */,
 				21C3AE5B1F175615008FC124 /* IKLoopPlayView.m in Sources */,
+				21F8210F1F32C74F00DA9EFA /* IKCompanyRecommendListModel.m in Sources */,
 				21BC61AE1F29E65000CE85D9 /* IKTipsView.m in Sources */,
 				21BC61A41F28980700CE85D9 /* IKRespRequireTableViewCell.m in Sources */,
 				21BC618C1F2843BF00CE85D9 /* IKJobDetailCompanyTableViewCell.m in Sources */,

@@ -142,4 +142,10 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getCompanyPageShopNumberInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 
+
+- (void)postUserOprateToServer:(NSDictionary *)param;
+
+
+
+
 @end

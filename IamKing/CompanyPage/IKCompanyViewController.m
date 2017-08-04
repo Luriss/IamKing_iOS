@@ -19,17 +19,23 @@
 
 
 @interface IKCompanyViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,IKCompanyClassifyViewDelegate>//,IKSearchViewControllerDelegate>
-
+{
+    BOOL        _scrollViewIsDragging;
+    BOOL        _hadAddHeaderView;
+    CGFloat     _tableViewInsetH;
+}
 @property(nonatomic,strong)IKTableView      *bgTableView;
 @property(nonatomic,strong)IKCompanyClassifyView      *classifyView;
-@property(nonatomic,strong)IKNavigationController      *recomandVc;
+@property(nonatomic,strong)IKRecommandCompanyVC      *recomandVc;
 @property(nonatomic,strong)IKCompanyDetailVC      *companyDetailVc;
+@property(nonatomic,strong)IKCompanyAdTableViewCell      *adView;
+
+@property(nonatomic,strong)UIButton         *chooseBtn;
+@property(nonatomic,strong)UIView           *headerView;
 
 @property(nonatomic,assign)NSInteger         dataPage;
-@property(nonatomic,strong)UIView           *headerView;
 @property(nonatomic,copy)NSArray            *dataArray;
 @property(nonatomic,assign)NSInteger         showChooseType;
-@property(nonatomic,strong)UIButton         *chooseBtn;
 @property(nonatomic,strong)NSIndexPath       *chooseClassifyIP;
 @property(nonatomic,copy)NSArray            *recommendArray;
 
@@ -39,10 +45,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    _tableViewInsetH = ceilf(IKSCREENH_HEIGHT * 0.3523)+8 + 44;;
+    _hadAddHeaderView = NO;
+    
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 1)];
     lineView.backgroundColor = IKLineColor;
     [self.view addSubview:lineView];
     
+    [IKNotificationCenter addObserver:self selector:@selector(adViewClick:) name:@"IKAdViewClick" object:nil];
     self.dataPage = 1;
     self.showChooseType = 0;
     self.chooseClassifyIP = [NSIndexPath indexPathForRow:0 inSection:0];
@@ -50,17 +61,38 @@
     [self initNavigationContent];
     [self getCompanyInfo];
 
-    
-//    [IKNotificationCenter addObserver:self selector:@selector(getCompanyInfo) name:kIKGetCompanyPageVcData object:nil];
-    
     [self.view addSubview:self.bgTableView];
+    
+    
     // Do any additional setup after loading the view.
 }
 
-- (void)viewDidAppear:(BOOL)animated
+
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
+    
+    [_adView AllStartScrollPage];
 }
+
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    [_adView AllStopScrollPage];
+}
+
+
+
+- (void)adViewClick:(NSNotification *)noti
+{
+    NSLog(@"noti = %@",noti.userInfo);
+    NSInteger index = [[noti.userInfo objectForKey:@"index"] integerValue];
+    IKCompanyInfoModel *model = self.recommendArray[index];
+    [self goCompanyDeatilViewControllerWithIndex:model];
+}
+
 #pragma mark - InitView
 
 - (void)initNavigationContent
@@ -108,7 +140,7 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"推荐公司";
-    title.textColor = IKMainTitleColor;
+    title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     self.navigationItem.titleView = title;
@@ -119,7 +151,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49) style:UITableViewStylePlain];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT) style:UITableViewStylePlain];
         _bgTableView.backgroundColor = IKGeneralLightGray;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bgTableView.showsVerticalScrollIndicator = YES;
@@ -127,16 +159,116 @@
         _bgTableView.delegate = self;
         _bgTableView.dataSource = self;
         _bgTableView.bounces = NO;
+        
+        _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
+        
+        IKCompanyAdTableViewCell *cell = [[IKCompanyAdTableViewCell alloc] initWithFrame:CGRectMake(0, -_tableViewInsetH, IKSCREEN_WIDTH, _tableViewInsetH-8-44)];
+        cell.backgroundColor = [UIColor whiteColor];
+        [_bgTableView addSubview:cell];
+        _adView = cell;
+    
+        [_bgTableView addSubview:self.headerView];
+        _hadAddHeaderView = YES;
     }
     
     return _bgTableView;
 }
 
 
+- (UIView *)headerView
+{
+    if (_headerView == nil) {
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, -44, IKSCREEN_WIDTH, 44)];
+        _headerView.backgroundColor = [UIColor whiteColor];
+        
+        UIView *view1 = [[UIView alloc] init];
+        view1.backgroundColor = IKMainTitleColor;
+        view1.layer.cornerRadius = 2.5;
+        
+        [_headerView addSubview:view1];
+        
+        [view1 mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_headerView.mas_top).offset(15);
+            make.left.equalTo(_headerView.mas_left).offset(15);
+            make.bottom.equalTo(_headerView.mas_bottom).offset(-15);
+            make.width.mas_equalTo(5);
+        }];
+        
+        
+        UILabel *label = [[UILabel alloc] init];
+        label.tag = 10101;
+        label.text = @"海量健身公司,等你开撩!";
+        label.textColor = IKMainTitleColor;
+        label.font = [UIFont systemFontOfSize:IKSubTitleFont];
+        label.textAlignment = NSTextAlignmentLeft;
+//        label.backgroundColor = [UIColor redColor];
+        [_headerView addSubview:label];
+        
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_headerView.mas_top).offset(14);
+            make.left.equalTo(view1.mas_right).offset(8);
+            make.bottom.equalTo(_headerView.mas_bottom).offset(-14);
+            make.width.equalTo(_headerView.mas_width).multipliedBy(0.5);
+        }];
+        
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button addTarget:self action:@selector(chooseCompanyClassify:) forControlEvents:UIControlEventTouchUpInside];
+        button.frame = CGRectMake(0, 0, 80, 44);
+        button.imageEdgeInsets = UIEdgeInsetsMake(14, 64, 14, 0);
+        button.titleEdgeInsets = UIEdgeInsetsMake(0, -72, 0, 0);
+        button.titleLabel.textAlignment = NSTextAlignmentRight;
+        //        [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+        [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+        [button setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
+        button.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+        button.titleLabel.lineBreakMode =  NSLineBreakByTruncatingTail;
+        [button setTitle:@"全部公司" forState:UIControlStateNormal];
+        
+        UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_showMore_grey"]];
+        [button setImage:[UIImage imageNamed:@"IK_showMore_grey"] forState:UIControlStateNormal];
+        [button setImage:image forState:UIControlStateHighlighted];
+        //        button.userInteractionEnabled = NO;
+        [_headerView addSubview:button];
+        
+        self.chooseBtn = button;
+        
+        [button mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_headerView.mas_top);
+            make.bottom.equalTo(_headerView.mas_bottom);
+            make.right.equalTo(_headerView.mas_right).offset(-15);
+            make.width.mas_equalTo(80);
+        }];
+        
+        
+        UIView *lineView = [[UIView alloc] init];
+        lineView.backgroundColor = IKLineColor;
+        [_headerView addSubview:lineView];
+        
+        [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(_headerView.mas_bottom);
+            make.left.and.right.equalTo(_headerView);
+            make.height.mas_equalTo(1);
+        }];
+        
+        UIView *topLineView = [[UIView alloc] init];
+        topLineView.backgroundColor = IKLineColor;
+        [_headerView addSubview:topLineView];
+        
+        [topLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_headerView.mas_top);
+            make.left.and.right.equalTo(_headerView);
+            make.height.mas_equalTo(1);
+        }];
+
+    }
+    return _headerView;
+}
+
 - (IKCompanyClassifyView *)classifyView
 {
     if (_classifyView == nil) {
-        _classifyView = [[IKCompanyClassifyView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
+        _classifyView = [[IKCompanyClassifyView alloc] initWithFrame:CGRectMake(0, 44, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
         _classifyView.delegate = self;
         _classifyView.selectedIndexPath = self.chooseClassifyIP;
         _classifyView.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(_classifyView.frame));
@@ -145,12 +277,10 @@
     return _classifyView;
 }
 
-- (IKNavigationController *)recomandVc
+- (IKRecommandCompanyVC *)recomandVc
 {
     if (_recomandVc == nil) {
-        IKRecommandCompanyVC *vc = [[IKRecommandCompanyVC alloc] init];
-        vc.dataArray = [self.recommendArray mutableCopy];
-        _recomandVc = [[IKNavigationController alloc] initWithRootViewController:vc];
+        _recomandVc = [[IKRecommandCompanyVC alloc] init];
     }
     return _recomandVc;
 }
@@ -178,12 +308,17 @@
         
         if (dataArray.count > 0) {
             self.dataArray = [NSArray arrayWithArray:dataArray];
-            [self reloadTableViewSection:1];
+            [self.bgTableView reloadData];
+
         }
     }];
     
     [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-        self.recommendArray = [NSArray arrayWithArray:dataArray];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.recommendArray = [NSArray arrayWithArray:dataArray];
+            [_adView addCompanyAdCellData:dataArray];
+        });
     }];
 }
 
@@ -220,7 +355,11 @@
 
 - (void)recommendCompanyButtonCkick:(UIButton *)button
 {
-    [self presentViewController:self.recomandVc animated:YES completion:^{
+    
+    self.recomandVc.dataArray = [self.recommendArray mutableCopy];
+    IKNavigationController *nav = [[IKNavigationController alloc] initWithRootViewController:self.recomandVc];
+    
+    [self presentViewController:nav animated:YES completion:^{
         
     }];
 }
@@ -236,7 +375,8 @@
         button.imageView.transform = CGAffineTransformMakeRotation(M_PI);
         _showChooseType = 1;
         label.text = @"请选择公司类型";
-        
+        _bgTableView.contentOffset = CGPointMake(0, ceilf(IKSCREENH_HEIGHT * 0.3523)+8);
+
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.classifyView.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
@@ -250,7 +390,7 @@
         if (_showChooseType == 1) {
             [button setTitle:@"全部公司" forState:UIControlStateNormal];
         }
-        
+//        _bgTableView.contentOffset = CGPointMake(0, 0);
         button.imageView.transform = CGAffineTransformIdentity;
         label.text = @"海量健身公司,等你开撩!";
         [self.classifyView removeFromSuperview];
@@ -275,195 +415,109 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return  2;
+    return  1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return ceilf(IKSCREENH_HEIGHT * 0.3523);
-    }
-    
     return ceilf(IKSCREENH_HEIGHT * 0.165);
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    if (section == 1) {
-        return 44;
-    }
-    return 0.1;
-}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    if (section == 1) {
-        return 0.1;
-    }
-    return 8;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    if (section == 0) {
+//        return 44;
+//    }
+//    
+//    return 0.01;
+//}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 1;
-    }
-    else{
-        return self.dataArray.count;
-    }
+    return self.dataArray.count;
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        
-        static  NSString *cellId=@"IKCompanyAdTableViewCellId";
-        IKCompanyAdTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell == nil){
-            cell = [[IKCompanyAdTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        return cell;
-    }
-    else{
-        static  NSString *cellId=@"IKCompanyTableViewCellId";
-        IKCompanyTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell == nil)
-        {
-            cell = [[IKCompanyTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            
-        }
-        cell.backgroundColor = [UIColor whiteColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
-        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-        cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
-        
-        [cell addCellData:self.dataArray[indexPath.row]];
-        return cell;
-    }
-}
-
-- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    if (section == 1) {
-        
-        UIView *view = [[UIView alloc] init];
-        view.backgroundColor = [UIColor whiteColor];
-        
-        UIView *view1 = [[UIView alloc] init];
-        view1.backgroundColor = IKMainTitleColor;
-        view1.layer.cornerRadius = 2.5;
-        
-        [view addSubview:view1];
-
-        [view1 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(view.mas_top).offset(15);
-            make.left.equalTo(view.mas_left).offset(15);
-            make.bottom.equalTo(view.mas_bottom).offset(-15);
-            make.width.mas_equalTo(5);
-        }];
-        
-        
-        UILabel *label = [[UILabel alloc] init];
-        label.tag = 10101;
-        label.text = @"海量健身公司,等你开撩!";
-        label.textColor = IKMainTitleColor;
-        label.font = [UIFont systemFontOfSize:IKSubTitleFont];
-        label.textAlignment = NSTextAlignmentLeft;
-        [view addSubview:label];
-        
-        [label mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(view.mas_top).offset(14);
-            make.left.equalTo(view1.mas_right).offset(8);
-            make.bottom.equalTo(view.mas_bottom).offset(-14);
-            make.width.equalTo(view.mas_width).multipliedBy(0.5);
-        }];
-        
-        
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button addTarget:self action:@selector(chooseCompanyClassify:) forControlEvents:UIControlEventTouchUpInside];
-        button.frame = CGRectMake(0, 0, 80, 44);
-        button.imageEdgeInsets = UIEdgeInsetsMake(14, 64, 14, 0);
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, -72, 0, 0);
-        button.titleLabel.textAlignment = NSTextAlignmentRight;
-//        [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
-        [button setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        [button setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
-        button.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-        button.titleLabel.lineBreakMode =  NSLineBreakByTruncatingTail;
-        [button setTitle:@"全部公司" forState:UIControlStateNormal];
-        
-        UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_showMore_grey"]];
-        [button setImage:[UIImage imageNamed:@"IK_showMore_grey"] forState:UIControlStateNormal];
-        [button setImage:image forState:UIControlStateHighlighted];
-        button.userInteractionEnabled = NO;
-        [view addSubview:button];
-        
-        self.chooseBtn = button;
-        
-        [button mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(view.mas_top);
-            make.bottom.equalTo(view.mas_bottom);
-            make.right.equalTo(view.mas_right).offset(-15);
-            make.width.mas_equalTo(80);
-        }];
-        
-        
-        UIView *lineView = [[UIView alloc] init];
-        lineView.backgroundColor = IKLineColor;
-        [view addSubview:lineView];
-        
-        [lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(view.mas_bottom);
-            make.left.and.right.equalTo(view);
-            make.height.mas_equalTo(1);
-        }];
-        
-        _headerView = view;
-
-        return view;
-        
-    }
+    static  NSString *cellId=@"IKCompanyTableViewCellId";
+    IKCompanyTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
     
-    return nil;
+    if(cell == nil)
+    {
+        cell = [[IKCompanyTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        
+    }
+    cell.backgroundColor = [UIColor whiteColor];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
+    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+    cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
+    
+    [cell addCellData:self.dataArray[indexPath.row]];
+    return cell;
 }
+
+//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    if (section == 0) {
+//        return self.headerView;
+//    }
+//    
+//    return nil;
+//}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
-        
-        IKCompanyInfoModel *model = self.dataArray[indexPath.row];
-        
-        NSLog(@"description = %@",model.description);
-        self.companyDetailVc.companyInfoModel = model;
-        
-        [self.navigationController pushViewController:self.companyDetailVc animated:YES];
-    }
+    IKCompanyInfoModel *model = self.dataArray[indexPath.row];
+
+    [self goCompanyDeatilViewControllerWithIndex:model];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+- (void)goCompanyDeatilViewControllerWithIndex:(IKCompanyInfoModel *)model
 {
-    if (scrollView.contentOffset.y > 240) {
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-        [_bgTableView setFrame:CGRectMake(0, 20, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 20 -49)];
-        self.chooseBtn.userInteractionEnabled = YES;
-    }
-    else{
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        [_bgTableView setFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT -49)];
-        self.chooseBtn.userInteractionEnabled = NO;
-    }
-    
-    
+    NSLog(@"description = %@",model.description);
+    self.companyDetailVc.companyInfoModel = model;
+    [self.navigationController pushViewController:self.companyDetailVc animated:YES];
 }
 
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat offsetY = scrollView.contentOffset.y;
+    
+    if (offsetY > -44) {
+        [self.view addSubview:self.headerView];
+        self.headerView.frame = CGRectMake(0, 0, IKSCREEN_WIDTH, 44);
+        _hadAddHeaderView = NO;
+    }
+    else{
+        
+        if (!_hadAddHeaderView) {
+            [_bgTableView addSubview:self.headerView];
+            self.headerView.frame = CGRectMake(0, -44, IKSCREEN_WIDTH, 44);
+            _hadAddHeaderView = YES;
+        }
+    }
+}
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
+{
+    _scrollViewIsDragging = YES;
+}
+
+
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    _scrollViewIsDragging = NO;
+}
 
 
 - (void)didReceiveMemoryWarning {

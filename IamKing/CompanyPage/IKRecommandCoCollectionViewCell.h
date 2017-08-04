@@ -7,9 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IKCompanyRecommendListModel.h"
+
+
 
 @interface IKRecommandCoCollectionViewCell : UICollectionViewCell
 
-//- (void)addRecommendCellData:(IKRecommendCompanyModel *)model;
+- (void)addRecommendCellData:(IKCompanyRecommendListModel *)model;
 
 @end

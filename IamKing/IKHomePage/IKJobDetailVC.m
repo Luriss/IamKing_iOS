@@ -612,7 +612,9 @@
                 if(cell == nil){
                     cell = [[IKWorkAddressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
                 }
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+                cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
                 cell.shopName = _jobDetailModel.shopName;
                 cell.shopAddress = _jobDetailModel.workAddress;
                 return cell;
@@ -646,7 +648,9 @@
                 if(cell == nil){
                     cell = [[IKWorkAddressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
                 }
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+                cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
                 cell.shopName = _jobDetailModel.shopName;
                 cell.shopAddress = _jobDetailModel.workAddress;
                 return cell;
@@ -724,9 +728,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     if (indexPath.section == 0 && indexPath.row == 1) {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
 //        IKCompanyInfoModel *model = self.dataArray[indexPath.row];
         
@@ -737,6 +741,13 @@
         companyInfoModel.companyID = [_jobDetailModel.companyInfo objectForKey:@"id"];
         companyDetail.companyInfoModel = companyInfoModel;
         [self.navigationController pushViewController:companyDetail animated:YES];
+    }
+    else if (indexPath.section == 2 && indexPath.row == 1 && !needShowSkillSection){
+        NSLog(@"hahahahah");
+    }
+    else if (indexPath.section == 3 && indexPath.row == 1 && needShowSkillSection){
+        NSLog(@"hahahahah");
+
     }
     
 }

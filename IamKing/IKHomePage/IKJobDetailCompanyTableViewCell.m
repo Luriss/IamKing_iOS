@@ -20,7 +20,7 @@
 @property(nonatomic,strong)UIView  *jobNumberView;
 @property(nonatomic,strong)UILabel *jobNumberLabel;
 @property(nonatomic,strong)UILabel *approveLabel;
-@property(nonatomic,strong)UIView *approveImage;
+@property(nonatomic,strong)UIImageView *approveImage;
 @property(nonatomic,strong)UIImageView *arrowImageview;
 
 
@@ -165,11 +165,10 @@
     return _approveLabel;
 }
 
-- (UIView *)approveImage
+- (UIImageView *)approveImage
 {
     if (_approveImage == nil) {
-        _approveImage = [[UIView alloc] init];
-        _approveImage.backgroundColor = IKMainTitleColor;
+        _approveImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"IK_graybackground"]];
         _approveImage.layer.cornerRadius = 8;
         _approveImage.layer.masksToBounds = YES;
         
@@ -178,9 +177,9 @@
         
         [imageV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(_approveImage.mas_top).offset(3);
-            make.left.equalTo(_approveImage.mas_left).offset(2);
-            make.right.equalTo(_approveImage.mas_right).offset(-2);
-            make.bottom.equalTo(_approveImage.mas_bottom).offset(-1);
+            make.left.equalTo(_approveImage.mas_left).offset(3);
+            make.right.equalTo(_approveImage.mas_right).offset(-3);
+            make.bottom.equalTo(_approveImage.mas_bottom).offset(-3);
         }];
     }
     return _approveImage;
