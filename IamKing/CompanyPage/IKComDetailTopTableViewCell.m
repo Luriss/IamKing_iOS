@@ -76,28 +76,28 @@
         make.top.equalTo(_approveView.mas_bottom).offset(10);
         make.left.equalTo(self.contentView.mas_left).offset(20);
         make.height.mas_equalTo(20);
-//        make.width.mas_equalTo(typeWidth + 20);
+        make.width.equalTo(self.contentView.mas_width).multipliedBy(0.25);
     }];
     
     [_setupView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_typeView.mas_right).offset(8);
+        make.left.equalTo(_typeView.mas_right).offset(5);
         make.height.mas_equalTo(20);
-//        make.width.mas_equalTo(80);
+        make.width.equalTo(self.contentView.mas_width).multipliedBy(0.23);
     }];
     
     [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_setupView.mas_right).offset(8);
+        make.left.equalTo(_setupView.mas_right);
         make.height.mas_equalTo(20);
-//        make.width.mas_equalTo(addressWidth + 10);
+        make.width.equalTo(self.contentView.mas_width).multipliedBy(0.2);
     }];
     
     [_shopView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_addressView.mas_right).offset(8);
+        make.left.equalTo(_addressView.mas_right);
         make.height.mas_equalTo(20);
-//        make.width.mas_equalTo(shopWidth + 24);
+        make.width.equalTo(self.contentView.mas_width).multipliedBy(0.2);
     }];
     
     
@@ -280,47 +280,47 @@
     
     self.typeView.label.text = model.companyTypeName;
     
-    CGFloat typeWidth = [NSString getSizeWithString:model.companyTypeName size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
-    
-    typeWidth = (typeWidth > 80)?80:typeWidth;
-    [_typeView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_approveView.mas_bottom).offset(10);
-        make.left.equalTo(self.contentView.mas_left).offset(20);
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(typeWidth + 20);
-    }];
+//    CGFloat typeWidth = [NSString getSizeWithString:model.companyTypeName size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+//    
+//    typeWidth = (typeWidth > 80)?80:typeWidth;
+//    [_typeView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_approveView.mas_bottom).offset(10);
+//        make.left.equalTo(self.contentView.mas_left).offset(20);
+//        make.height.mas_equalTo(20);
+//        make.width.mas_equalTo(typeWidth + 20);
+//    }];
     
     
     
     self.setupView.label.text = model.setupYear;
-    [_setupView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_typeView.mas_right).offset(8);
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(80);
-    }];
+//    [_setupView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_typeView.mas_top);
+//        make.left.equalTo(_typeView.mas_right).offset(8);
+//        make.height.mas_equalTo(20);
+//        make.width.mas_equalTo(80);
+//    }];
     
     self.addressView.label.text = model.workCity;
-    CGFloat addressWidth = [NSString getSizeWithString:model.workCity size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
-    addressWidth = (addressWidth > 70)?70:addressWidth;
-    [_addressView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_setupView.mas_right).offset(8);
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(addressWidth + 10);
-    }];
+//    CGFloat addressWidth = [NSString getSizeWithString:model.workCity size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+//    addressWidth = (addressWidth > 70)?70:addressWidth;
+//    [_addressView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_typeView.mas_top);
+//        make.left.equalTo(_setupView.mas_right).offset(8);
+//        make.height.mas_equalTo(20);
+//        make.width.mas_equalTo(addressWidth + 10);
+//    }];
     
     self.shopView.label.text = model.shopName;
     
-    CGFloat shopWidth = [NSString getSizeWithString:model.shopName size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
-    shopWidth = (shopWidth > 70)?70:shopWidth;
-    
-    [_shopView mas_remakeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_typeView.mas_top);
-        make.left.equalTo(_addressView.mas_right).offset(8);
-        make.height.mas_equalTo(20);
-        make.width.mas_equalTo(shopWidth + 24);
-    }];
+//    CGFloat shopWidth = [NSString getSizeWithString:model.shopName size:CGSizeMake(MAXFLOAT, 20) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0]}].width;
+//    shopWidth = (shopWidth > 70)?70:shopWidth;
+//    
+//    [_shopView mas_remakeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(_typeView.mas_top);
+//        make.left.equalTo(_addressView.mas_right).offset(8);
+//        make.height.mas_equalTo(20);
+//        make.width.mas_equalTo(shopWidth + 24);
+//    }];
     
     _descLabel.text = model.companyDescription;
 }

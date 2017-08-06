@@ -926,14 +926,17 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     NSString *cityId = [self getCurrentCityIdFromUserDefault];
 
     // 获取列表信息.
-    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"40",@"type":[NSString stringWithFormat:@"%ld",_tableType]};
+    NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"40",@"type":[NSString stringWithFormat:@"%ld",(long)_tableType]};
     
     if (!useCache) {
         [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithoutCacheParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.dataArray = nil;
                 self.dataArray = [dataArray copy];
+                [self.jobTableView beginUpdates];
                 [self.jobTableView reloadData];
+                [self.jobTableView endUpdates];
+                
                 NSLog(@"getHomePageJobInfoDataWithParam");
                 if (_isRefreshEnd) {
                     [self stopLoadingAnimation];

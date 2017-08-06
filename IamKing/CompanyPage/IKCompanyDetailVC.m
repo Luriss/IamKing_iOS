@@ -7,7 +7,6 @@
 //
 
 #import "IKCompanyDetailVC.h"
-#import "IKTableView.h"
 #import "IKComDetailTopTableViewCell.h"
 #import "IKComDetailTypeTableViewCell.h"
 #import "IKComDetailLoopTableViewCell.h"
@@ -23,6 +22,7 @@
 #import "IKCompanyShopTableViewCell.h"
 #import "IKCompanyShopNumModel.h"
 #import "IKAppraiseView.h"
+#import "IKJobDetailVC.h"
 
 
 @interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate>
@@ -909,7 +909,14 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    if (indexPath.section == 2 && self.type == IKCompanyDetailVCTypeNeedJob) {
+        IKJobInfoModel *model = [self.needJobArray objectAtIndex:indexPath.row];
+        IKJobDetailVC *vc = [[IKJobDetailVC alloc] init];
+        vc.jobModel = model;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (void)allButtonClick:(UIButton *)button

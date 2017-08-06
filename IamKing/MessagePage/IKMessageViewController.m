@@ -8,7 +8,10 @@
 
 #import "IKMessageViewController.h"
 
-@interface IKMessageViewController ()
+@interface IKMessageViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property(nonatomic,strong)IKTableView      *bgTableView;
+
 
 @end
 
@@ -18,6 +21,27 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
+
+
+- (IKTableView *)bgTableView
+{
+    if (_bgTableView == nil) {
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
+        _bgTableView.backgroundColor = IKGeneralLightGray;
+        _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _bgTableView.showsVerticalScrollIndicator = YES;
+        _bgTableView.showsHorizontalScrollIndicator = NO;
+        _bgTableView.delegate = self;
+        _bgTableView.dataSource = self;
+        _bgTableView.bounces = NO;
+    }
+    
+    return _bgTableView;
+}
+
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

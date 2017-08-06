@@ -8,7 +8,6 @@
 
 #import "IKCompanyViewController.h"
 #import "IKCompanyAdTableViewCell.h"
-#import "IKTableView.h"
 #import "IKSearchVC.h"
 #import "IKNetworkManager.h"
 #import "IKCompanyInfoModel.h"
@@ -151,7 +150,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT) style:UITableViewStylePlain];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
         _bgTableView.backgroundColor = IKGeneralLightGray;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bgTableView.showsVerticalScrollIndicator = YES;
