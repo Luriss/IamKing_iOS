@@ -44,6 +44,8 @@
 
 #define IKButtonClickBgImage ([UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 1)])
 #define IKButtonCkickBlueImage ([UIImage GetImageWithColor:IKButtonClickColor size:CGSizeMake(1, 1)])
+#define IKButtonBlueBgImgae ([UIImage GetImageWithColor:IKGeneralBlue size:CGSizeMake(1, 1)])
+
 /***********************************Color********************************************/
 
 

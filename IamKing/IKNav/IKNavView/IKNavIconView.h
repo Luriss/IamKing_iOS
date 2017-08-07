@@ -11,6 +11,6 @@
 @interface IKNavIconView : UIView
 
 
-- (void)ajustFrame;
+//- (void)ajustFrame;
 
 @end
