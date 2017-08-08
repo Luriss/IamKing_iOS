@@ -91,22 +91,24 @@
         [[IKNetworkManager shareInstance] getHomePageJobInfoDetailWithParam:@{@"inviteWorkId":jobModel.jobID} backData:^(IKJobDetailModel *detailModel, BOOL success) {
             NSLog(@"detailModel = %@",detailModel.description);
             
-            _jobDetailModel = detailModel;
-            
-            // 如果有技能标签,则需要增加 section.
-            if (_jobDetailModel.tagsList.count > 0) {
-                needShowSkillSection = YES;
-            }
-            else{
-                needShowSkillSection = NO;
-            }
-            
-            [self.noDataBgView removeFromSuperview];
-            self.noDataBgView = nil;
-            
-            NSLog(@"1111  =%@",_bgTableView);
-            if (_bgTableView == nil) {
-                [self.view insertSubview:self.bgTableView atIndex:0];
+            if (detailModel) {
+                _jobDetailModel = detailModel;
+                
+                // 如果有技能标签,则需要增加 section.
+                if (_jobDetailModel.tagsList.count > 0) {
+                    needShowSkillSection = YES;
+                }
+                else{
+                    needShowSkillSection = NO;
+                }
+                
+                [self.noDataBgView removeFromSuperview];
+                self.noDataBgView = nil;
+                
+                NSLog(@"1111  =%@",_bgTableView);
+                if (_bgTableView == nil) {
+                    [self.view insertSubview:self.bgTableView atIndex:0];
+                }
             }
         }];
     }

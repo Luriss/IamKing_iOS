@@ -18,6 +18,8 @@
 @property(nonatomic,strong)UIImageView *logoImageView;
 @property(nonatomic,strong)UIImageView *authImageView;
 @property(nonatomic,strong)UILabel     *titleLabel;
+@property(nonatomic,strong)UIView  *bottomLineView;
+
 @property(nonatomic,strong)IKImageWordView     *addressView;
 @property(nonatomic,strong)IKImageWordView     *shopTypeView;
 @property(nonatomic,strong)IKImageWordView     *squareView;
@@ -56,20 +58,20 @@
     [self.contentView addSubview:self.squareView];
     [self.contentView addSubview:self.memberView];
     [self.contentView addSubview:self.needjobView];
-
+    [self.contentView addSubview:self.bottomLineView];
     
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView);
-        make.left.equalTo(self.contentView);
-        make.bottom.equalTo(self.contentView);
-        make.width.equalTo(self.contentView).multipliedBy(0.479);
+        make.top.equalTo(self.contentView).offset(6);
+        make.left.equalTo(self.contentView).offset(10);
+        make.bottom.equalTo(self.contentView).offset(-6);
+        make.width.equalTo(self.contentView).multipliedBy(0.408);
     }];
     
     
     [_authImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(-4);
-        make.left.equalTo(self.contentView.mas_left).offset(-4);
-        make.width.and.height.mas_equalTo(ceilf(IKSCREENH_HEIGHT * 0.075));
+        make.top.equalTo(_logoImageView.mas_top);
+        make.left.equalTo(_logoImageView.mas_left);
+        make.width.and.height.mas_equalTo(ceilf(IKSCREENH_HEIGHT * 0.07));
     }];
     
     
@@ -81,7 +83,7 @@
     }];
     
     [_addressView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_titleLabel.mas_bottom).offset(3);
+        make.top.equalTo(_titleLabel.mas_bottom).offset(6);
         make.left.equalTo(_titleLabel.mas_left);
         make.height.mas_equalTo(22);
         make.width.mas_equalTo(70);
@@ -109,16 +111,32 @@
     }];
     
     [_needjobView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.contentView.mas_bottom).offset(-5);
+        make.top.equalTo(_squareView.mas_bottom).offset(6);
         make.left.equalTo(_titleLabel.mas_left);
         make.height.mas_equalTo(25);
         make.width.equalTo(_titleLabel.mas_width);
 
     }];
+    
+    [_bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView.mas_left);
+        make.bottom.equalTo(self.contentView.mas_bottom);
+        make.right.equalTo(self.contentView.mas_right);
+        make.height.mas_equalTo(1);
+    }];
 }
 
 
 #pragma mark - Property
+
+- (UIView *)bottomLineView
+{
+    if (_bottomLineView == nil) {
+        _bottomLineView = [[UIView alloc] init];
+        _bottomLineView.backgroundColor = IKLineColor;
+    }
+    return _bottomLineView;
+}
 
 - (UIImageView *)logoImageView
 {
@@ -127,6 +145,8 @@
         _logoImageView = [[UIImageView alloc] init];
         _logoImageView.contentMode = UIViewContentModeScaleToFill;
         _logoImageView.backgroundColor = IKGeneralLightGray;
+        _logoImageView.layer.cornerRadius = 10;
+        _logoImageView.layer.masksToBounds = YES;
     }
     return _logoImageView;
 }
@@ -137,7 +157,7 @@
     if (_authImageView == nil) {
         _authImageView = [[UIImageView alloc] init];
         _authImageView.contentMode = UIViewContentModeScaleToFill;
-        _authImageView.hidden = YES;
+//        _authImageView.hidden = YES;
     }
     
     return _authImageView;
@@ -216,15 +236,15 @@
 
 
 // 设置 cell 卡片样式
-- (void)setFrame:(CGRect)frame //重写frame.
-{
-    frame.origin.x = 10;
-    frame.origin.y += 7;
-    frame.size.width -= 20;
-    frame.size.height -= 14;
-    
-    [super setFrame:frame];
-}
+//- (void)setFrame:(CGRect)frame //重写frame.
+//{
+//    frame.origin.x = 10;
+//    frame.origin.y += 7;
+//    frame.size.width -= 20;
+//    frame.size.height -= 14;
+//    
+//    [super setFrame:frame];
+//}
 
 
 
@@ -251,9 +271,14 @@
     self.needjobView.label.text = model.inviteNum;
     _needjobView.backgroundColor = [UIColor whiteColor];
 
+    if (model.isBusiness) {
+        [_authImageView setImage:[UIImage imageNamed:@"IK_businessStore"]];
+    }
+    else{
+        [_authImageView setImage:[UIImage imageNamed:@"IK_presellStore"]];
+    }
     
     [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:model.logoImageUrl] completed:nil];
-    _logoImageView.backgroundColor = [UIColor whiteColor];
 
 }
 

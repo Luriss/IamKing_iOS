@@ -411,13 +411,13 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
    
-//    if ([self.delegate respondsToSelector:@selector(infiniteScrollView:didSelectItemAtIndex:)]) {
-//        [self.delegate infiniteScrollView:self didSelectItemAtIndex:self.currentPageIndex];
-//    }
-//    
-//    if (self.scrollViewDidSelectBlock) {
-//        self.scrollViewDidSelectBlock(self,self.currentPageIndex);
-//    }
+    NSLog(@"looooooooop");
+    if ([self.delegate respondsToSelector:@selector(LoopPlayViewDidSelectedImage:)]) {
+        NSInteger index = indexPath.row % self.imagesArray.count;
+        NSString *imageUrl = [self.imagesArray objectAtIndex:index];
+        [self.delegate LoopPlayViewDidSelectedImage:imageUrl];
+    }
+
 }
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {

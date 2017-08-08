@@ -24,7 +24,13 @@
 // 目前只支持4个及以下.
 @property (nonatomic, strong)NSArray *titleArray;
 @property (nonatomic, assign)CGSize buttonSize;
+@property (nonatomic, strong)UIFont *buttonFont;
+@property (nonatomic, assign)CGFloat lineWidth;
+
+
+
 
 - (void)adjustBottomLine:(CGFloat )index;
+
 
 @end

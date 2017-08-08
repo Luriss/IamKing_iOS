@@ -127,7 +127,9 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
  @param param 入参
  @param callback 回调
  */
-- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param useCache:(BOOL)useCache backData:(IKRequestArrayData)callback;
+
+- (void)getCompanyPageMoreCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 
 - (void)getCompanyPageRecommendCompanyListWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 

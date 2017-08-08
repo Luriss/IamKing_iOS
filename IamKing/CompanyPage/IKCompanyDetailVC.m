@@ -23,18 +23,24 @@
 #import "IKCompanyShopNumModel.h"
 #import "IKAppraiseView.h"
 #import "IKJobDetailVC.h"
+#import "IKJobTypeView.h"
+#import "IKInfoTableViewCell.h"
 
 
-@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComDetailTypeTableViewCellDelegate,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate>
+@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate,IKJobTypeViewDelegate>
 {
     CGFloat _imageH;
     CGFloat _infoCellH;
+    
+    BOOL hadAddTypeView;
 }
 
 @property(nonatomic,strong)IKTableView      *bottomTableView;
 @property(nonatomic,strong)IKScrollView      *navScrollVIew;
 @property(nonatomic,strong)IKCompanyDetailHeadModel      *headModel;
 @property(nonatomic,strong)IKCompanyAboutUsModel      *aboutUsModel;
+@property(nonatomic,strong)IKJobTypeView    *jobTypeView;
+@property(nonatomic,strong)IKJobTypeView           *topTypeView;
 
 @property(nonatomic,assign)IKCompanyDetailVCType       type;
 @property(nonatomic,strong)IKButton         *attentionBtn;
@@ -45,11 +51,16 @@
 @property(nonatomic,strong)UIImageView      *logoImageView;
 @property(nonatomic,strong)UIImage          *bulrImage;
 @property(nonatomic,strong)UILabel          *attentionNum;
+@property(nonatomic,strong)UILabel          *attentionNum1;
+@property(nonatomic,strong)UILabel          *attentionNum2; // 折中方法模拟翻页效果
+@property(nonatomic,strong)IKScrollView     *attentionView;
+
 @property(nonatomic,strong)UIView           *appraiseView;
 
 @property(nonatomic,strong)NSArray          *managerTeamArray;
 @property(nonatomic,strong)NSArray          *needJobArray;
 @property(nonatomic,strong)NSArray          *shopTypeArray;
+@property(nonatomic,assign)NSInteger         selectType;
 
 @property(nonatomic,assign)BOOL             needShowMoreBtn;
 @property(nonatomic,assign)BOOL             showMore;
@@ -64,19 +75,22 @@
     [super viewDidLoad];
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
+    
     self.view.backgroundColor = [UIColor whiteColor];
     //    _imageViewH = ceilf(IKSCREENH_HEIGHT *0.255);
     
     self.type = IKCompanyDetailVCTypeAboutUs;
     _showMore = NO;
+    hadAddTypeView = NO;
+    
     
     [self.view addSubview:self.bottomTableView];
-    
-    //
-
     [self initNavScrollView];
     [self initLeftBackItem];
     
+    
+//    [self addTypeView];
+
     _imageH = ceilf(IKSCREENH_HEIGHT *0.255);
     // Do any additional setup after loading the view.
 }
@@ -86,14 +100,11 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
-    self.extendedLayoutIncludesOpaqueBars = NO;
-    self.automaticallyAdjustsScrollViewInsets = YES;
+
 }
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
-    [_topNameLabel removeFromSuperview];
-    _topNameLabel = nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -101,14 +112,18 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    self.extendedLayoutIncludesOpaqueBars = YES;
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    
-    self.bottomTableView.contentOffset = CGPointMake(0, -ceilf(IKSCREENH_HEIGHT *0.255));
-    _showMore = NO;
-    _needShowMoreBtn = NO;
-    self.type = IKCompanyDetailVCTypeAboutUs;
+
 }
+
+
+//- (void)addTypeView
+//{
+//    
+//    IKJobTypeView *newJ = [self.jobTypeView copy];
+//    newJ.frame = CGRectMake(0, 64, IKSCREEN_WIDTH, 44);
+//
+//    [self.view insertSubview:newJ aboveSubview:_bottomTableView];
+//}
 
 - (void)initLeftBackItem
 {
@@ -162,20 +177,93 @@
         _attentionBtn.layer.borderColor = [UIColor whiteColor].CGColor;
         _attentionBtn.layer.borderWidth = 1;
         
-        [self.bottomTableView insertSubview:self.attentionNum aboveSubview:self.headImageView];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(40, -37, 40, 20)];
+        label.textColor = [UIColor whiteColor];
+        label.textAlignment = NSTextAlignmentLeft;
+        label.font = [UIFont systemFontOfSize:13.0f];
+        label.text = @"人关注";
+//        label.backgroundColor = [UIColor yellowColor];
+        [self.bottomTableView  insertSubview:label aboveSubview:self.headImageView];
+        [self.bottomTableView insertSubview:self.attentionView aboveSubview:self.headImageView];
+        
+        [_attentionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_bottomTableView.mas_top).offset(-37);
+            make.left.equalTo(_bottomTableView.mas_left).offset(20);
+            make.height.mas_equalTo(20);
+//            make.width.mas_equalTo(10);
+        }];
+        
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_attentionView);
+            make.left.equalTo(_attentionView.mas_right);
+            make.width.mas_equalTo(40);
+            make.height.mas_equalTo(20);
+        }];
+        
     }
     return _attentionBtn;
+}
+
+- (IKScrollView *)attentionView
+{
+    if (_attentionView == nil) {
+        _attentionView = [[IKScrollView alloc] initWithFrame:CGRectMake(0,0, 10, 20)];
+//        _attentionView.backgroundColor = [UIColor redColor];
+        _attentionView.scrollEnabled = NO;
+        _attentionView.bounces = NO;
+        _attentionView.pagingEnabled = YES;
+        //    scrollView.delegate = self;
+        _attentionView.showsVerticalScrollIndicator = NO;
+        _attentionView.contentSize = CGSizeMake(0, 60);
+
+        [_attentionView addSubview:self.attentionNum2];
+        [_attentionView addSubview:self.attentionNum1];
+        [_attentionView addSubview:self.attentionNum];
+        
+        [_attentionView setContentOffset:CGPointMake(0, 20) animated:NO];
+    }
+        return _attentionView;
+}
+
+
+- (UILabel *)attentionNum2
+{
+    if (_attentionNum2 == nil) {
+        _attentionNum2 = [[UILabel alloc] initWithFrame:CGRectMake(0, 40, 20, 20)];
+        _attentionNum2.textColor = [UIColor whiteColor];
+        _attentionNum2.textAlignment = NSTextAlignmentLeft;
+        _attentionNum2.font = [UIFont systemFontOfSize:13.0f];
+//        _attentionNum2.backgroundColor = [UIColor purpleColor];
+//        _attentionNum2.text = @"3";
+    }
+    return _attentionNum2;
+}
+
+- (UILabel *)attentionNum1
+{
+    if (_attentionNum1 == nil) {
+        _attentionNum1 = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, 20, 20)];
+        _attentionNum1.textColor = [UIColor whiteColor];
+        _attentionNum1.textAlignment = NSTextAlignmentLeft;
+        _attentionNum1.font = [UIFont systemFontOfSize:13.0f];
+//        _attentionNum1.backgroundColor = [UIColor cyanColor];
+//        _attentionNum1.text = @"2";
+    }
+    return _attentionNum1;
 }
 
 
 - (UILabel *)attentionNum
 {
     if (_attentionNum == nil) {
-        _attentionNum = [[UILabel alloc] initWithFrame:CGRectMake(20, -37, 100, 20)];
+        _attentionNum = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         _attentionNum.textColor = [UIColor whiteColor];
         _attentionNum.textAlignment = NSTextAlignmentLeft;
         _attentionNum.font = [UIFont systemFontOfSize:13.0f];
-//        _attentionNum.text = @"9999人关注";
+//        _attentionNum.text = @"1";
+//        _attentionNum.backgroundColor = [UIColor redColor];
+//        _attentionNum.hidden = YES;
     }
     return _attentionNum;
 }
@@ -185,16 +273,20 @@
 - (void)attentionButtonClick:(IKButton *)button
 {
     NSLog(@"attentionButtonClick = %d",button.isClick);
+    
+    CGFloat y = _attentionView.contentOffset.y;
     if (!button.isClick) {
         button.isClick = YES;
         [button setTitle:@"取消关注" forState:UIControlStateNormal];
-        _attentionNum.text = [NSString stringWithFormat:@"%ld人关注",[_attentionNum.text integerValue]+1];
+        y += 20;
     }
     else{
         button.isClick = NO;
         [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
-        _attentionNum.text = [NSString stringWithFormat:@"%ld人关注",[_attentionNum.text integerValue]-1];
+        y -= 20;
     }
+    [_attentionView setContentOffset:CGPointMake(0, y) animated:YES];
+
 }
 
 
@@ -242,7 +334,7 @@
 - (IKTableView *)bottomTableView
 {
     if (_bottomTableView == nil) {
-        _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT) style:UITableViewStylePlain];
+        _bottomTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT) style:UITableViewStyleGrouped];
         _bottomTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bottomTableView.backgroundColor = IKGeneralLightGray;
         _bottomTableView.delegate = self;
@@ -268,6 +360,68 @@
     return _logoImageView;
 }
 
+- (IKJobTypeView *)jobTypeView
+{
+    if (_jobTypeView == nil) {
+        _jobTypeView = [[IKJobTypeView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 44)];
+        _jobTypeView.backgroundColor = [UIColor whiteColor];
+        _jobTypeView.delegate = self;
+        _jobTypeView.buttonFont = [UIFont boldSystemFontOfSize:15.0f];
+        NSString *str = nil;
+        _jobTypeView.lineWidth = 64;
+        
+        switch ([_headModel.companyType integerValue]) {
+            case 1:
+                str = @"连锁门店";
+                break;
+            case 2:
+                str = @"产品服务";
+                break;
+            case 3:
+                str = @"全国校区";
+                break;
+                
+            default:
+                str = @"连锁门店";
+                break;
+        }
+        
+        _jobTypeView.titleArray = @[@"关于我们",@"管理团队",str,@"在招职位"];
+    }
+    return _jobTypeView;
+}
+
+- (IKJobTypeView *)topTypeView
+{
+    if (_topTypeView == nil) {
+        _topTypeView = [[IKJobTypeView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, 44)];
+        _topTypeView.backgroundColor = [UIColor whiteColor];
+        _topTypeView.delegate = self;
+        _topTypeView.buttonFont = [UIFont boldSystemFontOfSize:15.0f];
+        NSString *str = nil;
+        _topTypeView.lineWidth = 64;
+        _topTypeView.hidden = YES;
+        switch ([_headModel.companyType integerValue]) {
+            case 1:
+                str = @"连锁门店";
+                break;
+            case 2:
+                str = @"产品服务";
+                break;
+            case 3:
+                str = @"全国校区";
+                break;
+                
+            default:
+                str = @"连锁门店";
+                break;
+        }
+        
+        _topTypeView.titleArray = @[@"关于我们",@"管理团队",str,@"在招职位"];
+    }
+    return _topTypeView;
+}
+
 - (UIImageView *)headImageView
 {
     if (_headImageView == nil) {
@@ -283,6 +437,7 @@
         [self.bottomTableView addSubview:_headImageView];
         
         [self.bottomTableView insertSubview:self.attentionBtn aboveSubview:_headImageView];
+        
         [self.bottomTableView insertSubview:self.appraiseView aboveSubview:_headImageView];
     }
     return _headImageView;
@@ -299,6 +454,8 @@
         [[IKNetworkManager shareInstance]getCompanyPageCompanyInfoDetailWithParam:dict backData:^(IKCompanyDetailHeadModel *detailModel, BOOL success) {
             NSLog(@"description = %@",detailModel.description);
             _headModel = detailModel;
+            [self.view addSubview:self.topTypeView];
+
             [self.view insertSubview:self.topNameLabel aboveSubview:_navScrollVIew];
             _topNameLabel.text = _headModel.nickName;
             _topNameLabel.hidden = YES;
@@ -323,15 +480,32 @@
                 });
             }];
             
+            CGSize size = [NSString getSizeWithString:_headModel.numberOfAttention size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+            
+            [self.attentionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                make.top.equalTo(_bottomTableView.mas_top).offset(-37);
+                make.left.equalTo(_bottomTableView.mas_left).offset(20);
+                make.height.mas_equalTo(20);
+                make.width.mas_equalTo(size.width-3);
+            }];
+            _attentionNum.frame = CGRectMake(0, 0, size.width-5, 20);
+            _attentionNum1.frame = CGRectMake(0, 20, size.width-5, 20);
+            _attentionNum2.frame = CGRectMake(0, 40, size.width-2, 20);
+
+            _attentionNum1.text = _headModel.numberOfAttention;
+            _attentionNum2.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]+1];
+            _attentionNum.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]-1];
+
             if (_headModel.isOperate) {
                 _attentionBtn.isClick = YES;
                 [_attentionBtn setTitle:@"取消关注" forState:UIControlStateNormal];
+
             }
             else{
                 _attentionBtn.isClick = NO;
                 [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
+
             }
-            _attentionNum.text = [NSString stringWithFormat:@"%@人关注",_headModel.numberOfAttention];
             
             [self addStarToAppraiseView:[_headModel.numberOfAppraise integerValue]];
         }];
@@ -351,8 +525,6 @@
             
             
         }];
-        
-        
     }
 }
 
@@ -379,14 +551,19 @@
     return _topNameLabel;
 }
 
-- (void)typeButtonClick:(UIButton *)button
+- (void)jobTypeViewButtonClick:(UIButton *)button
 {
     NSLog(@"tag = %ld",button.tag);
+    
     NSDictionary *dict = @{@"userCompanyId":_companyInfoModel.companyID,@"companyType":_headModel.companyType};
-
-    switch (button.tag - 1000) {
+    self.selectType = button.tag - 101;
+    
+    switch (button.tag - 100) {
         case 1:
+        {
             self.type = IKCompanyDetailVCTypeAboutUs;
+            [self.bottomTableView reloadData];
+        }
             break;
         case 2:
         {
@@ -397,6 +574,9 @@
                     self.managerTeamArray = [NSArray arrayWithArray:dataArray];
                     [self.bottomTableView reloadData];
                 }];
+            }
+            else{
+                [self.bottomTableView reloadData];
             }
         }
             break;
@@ -409,6 +589,9 @@
                     [self.bottomTableView reloadData];
                 }];
             }
+            else{
+                [self.bottomTableView reloadData];
+            }
         }
             break;
         case 4:
@@ -420,15 +603,20 @@
                     [self.bottomTableView reloadData];
                 }];
             }
-            
-        }
+            else{
+                [self.bottomTableView reloadData];
+            }
             break;
+        }
             
         default:
             break;
     }
     
-    [self.bottomTableView reloadData];
+    
+    if (!self.topTypeView.hidden) {
+        _bottomTableView.contentOffset = CGPointMake(0, 118);
+    }
 }
 
 - (void)showMoreButtonClick:(BOOL)isClickShowMore
@@ -442,13 +630,13 @@
 {
     switch (self.type) {
         case  IKCompanyDetailVCTypeAboutUs:
-            return 5;
+            return 4;
             break;
             
         case  IKCompanyDetailVCTypeManagerTeam:
         case  IKCompanyDetailVCTypeMultipleShop:
         case  IKCompanyDetailVCTypeNeedJob:
-            return 3;
+            return 2;
             break;
             
         default:
@@ -466,16 +654,14 @@
         if (szie.height < 44) {
             return 175;
         }
+    
         return 130 + szie.height + 10;  //  多加10 好看
-    }
-    else if (indexPath.section == 1){
-        return 46;
     }
     else{
         switch (self.type) {
             case IKCompanyDetailVCTypeAboutUs:
             {
-                if (indexPath.section == 2){
+                if (indexPath.section == 1){
                     if (indexPath.row == 0) {
                         return ceilf(IKSCREENH_HEIGHT * 0.2699);
                     }
@@ -509,7 +695,7 @@
                         }
                     }
                 }
-                else if (indexPath.section == 3){
+                else if (indexPath.section == 2){
                     if (indexPath.row == 0) {
                         return ceilf(IKSCREENH_HEIGHT *0.06);
                     }
@@ -557,19 +743,27 @@
     return 120;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        return 44;
+    }
+    return 0.01;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0 || section == 1) {
+    if (section == 0) {
         return 1;
     }
     else{
         switch (self.type) {
             case IKCompanyDetailVCTypeAboutUs:
             {
-                if (section == 2) {
+                if (section == 1) {
                     return 2;
                 }
-                else if (section == 3){
+                else if (section == 2){
                     NSInteger count = _aboutUsModel.progressList.count;
                     
                     if (count>0 && count<4) {
@@ -627,28 +821,11 @@
         [cell cellAddData:_headModel];
         return cell;
     }
-    else if (section == 1){
-        
-        static  NSString *cellId=@"IKComDetailTypeTableViewCellId";
-        IKComDetailTypeTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell == nil){
-            cell = [[IKComDetailTypeTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-        }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.delegate = self;
-        cell.companyType = _headModel.companyType;
-        if (_firstComeIn) {
-            cell.needResetSelectedButton = YES;
-            _firstComeIn = NO;
-        }
-        return cell;
-    }
     else{
         switch (self.type) {
             case IKCompanyDetailVCTypeAboutUs:
             {
-                if (section == 2 ){
+                if (section == 1 ){
                     if (row == 0) {
                         static  NSString *cellId=@"IKComDetailLoopTableViewCellId";
                         IKComDetailLoopTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
@@ -678,7 +855,7 @@
                         return cell;
                     }
                 }
-                else if (section == 3){
+                else if (section == 2){
                     if (row == 0) {
                         static  NSString *cellId=@"IKCompanyDetailTitleTableViewCellId";
                         IKCompanyDetailTitleTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
@@ -825,11 +1002,11 @@
                 
             case IKCompanyDetailVCTypeNeedJob:
             {
-                static  NSString *cellId = @"IKCompanyNeedJobTableViewCellId";
-                IKCompanyNeedJobTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+                static  NSString *cellId = @"IKInfoTableViewCellId";
+                IKInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
                 
                 if(cell == nil){
-                    cell = [[IKCompanyNeedJobTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                    cell = [[IKInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
                     
                 }
                 cell.backgroundColor = [UIColor whiteColor];
@@ -866,10 +1043,10 @@
     if (section == 0) {
         return 8;
     }
-    else if (section == 2 && self.type == IKCompanyDetailVCTypeAboutUs){
+    else if (section == 1 && self.type == IKCompanyDetailVCTypeAboutUs){
         return 8;
     }
-    else if (section == 3 && self.type == IKCompanyDetailVCTypeAboutUs){
+    else if (section == 2 && self.type == IKCompanyDetailVCTypeAboutUs){
         
         CGFloat count = _aboutUsModel.progressList.count;
         
@@ -884,11 +1061,21 @@
     return 0.01;
 }
 
+
+- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 1) {
+        
+        return self.jobTypeView;
+    }
+    return nil;
+}
+
 - (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
     CGFloat count = _aboutUsModel.progressList.count;
 
-    if (section == 3 && self.type == IKCompanyDetailVCTypeAboutUs && count > 0 && count < 4) {
+    if (section == 2 && self.type == IKCompanyDetailVCTypeAboutUs && count > 0 && count < 4) {
         UIView *view = [[UIView alloc] init];
         view.backgroundColor = [UIColor whiteColor];
         
@@ -911,7 +1098,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if (indexPath.section == 2 && self.type == IKCompanyDetailVCTypeNeedJob) {
+    if (indexPath.section == 1 && self.type == IKCompanyDetailVCTypeNeedJob) {
         IKJobInfoModel *model = [self.needJobArray objectAtIndex:indexPath.row];
         IKJobDetailVC *vc = [[IKJobDetailVC alloc] init];
         vc.jobModel = model;
@@ -932,15 +1119,14 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     if (scrollView == _bottomTableView) {
+        
         CGFloat offsetY = scrollView.contentOffset.y;
-        
         NSLog(@"offsetY = %.0f",offsetY);
-        
+
         if (offsetY > -24) {
             _topNameLabel.hidden = NO;
             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 _topNameLabel.transform = CGAffineTransformIdentity;
-
             } completion:^(BOOL finished) {
             
             }];
@@ -949,13 +1135,10 @@
             
             [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
                 _topNameLabel.transform = CGAffineTransformMakeTranslation(0, 44);
-                
             } completion:^(BOOL finished) {
                 _topNameLabel.hidden = YES;
             }];
-
         }
-        
         
         // - 144 = 64(nav) + 80 (logo)
         if (offsetY > -144) {
@@ -964,7 +1147,6 @@
         else{
             _navImageView.hidden = YES;
         }
-        
         
         if (offsetY > -64) {
             _navScrollVIew.contentOffset = CGPointMake(0, _imageH - 64);
@@ -985,7 +1167,21 @@
             currentFrame.size.height = -1*offsetY;
             _headImageView.frame = currentFrame;
         }
+        
+        
+        if (offsetY > 118) {
+            [self.topTypeView adjustBottomLine:_selectType];
+            self.topTypeView.hidden = NO;
+        }
+        else{
+            self.topTypeView.hidden = YES;
+            [self.jobTypeView adjustBottomLine:self.selectType];
+        }
     }
+    
+
+
+    
 }
 
 - (void)addStarToAppraiseView:(NSInteger )evaluate

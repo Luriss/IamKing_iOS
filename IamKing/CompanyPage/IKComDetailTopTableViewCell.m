@@ -8,7 +8,7 @@
 
 #import "IKComDetailTopTableViewCell.h"
 #import "IKImageWordView.h"
-
+#import "IKTipsView.h"
 
 @interface IKComDetailTopTableViewCell ()
 
@@ -23,6 +23,9 @@
 @property(nonatomic,strong)IKImageWordView     *setupView;
 @property(nonatomic,strong)IKImageWordView     *addressView;
 @property(nonatomic,strong)IKImageWordView     *shopView;
+
+@property(nonatomic,copy)NSString *companyName;
+
 
 @end
 
@@ -59,10 +62,10 @@
 - (void)layoutSubviews
 {
     [_nickNameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(25);
+        make.top.equalTo(self.contentView.mas_top).offset(30);
         make.centerX.equalTo(self.contentView);
         make.height.mas_equalTo(22);
-        make.width.equalTo(self.contentView).multipliedBy(0.8);
+//        make.width.equalTo(self.contentView).multipliedBy(0.8);
     }];
     
     [_approveView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -127,7 +130,11 @@
         _nickNameLabel.font = [UIFont boldSystemFontOfSize:16.0f];
         _nickNameLabel.textColor = IKMainTitleColor;
         _nickNameLabel.textAlignment = NSTextAlignmentCenter;
+//        _nickNameLabel.backgroundColor = [UIColor redColor];
 //        _nickNameLabel.text = @"鼎盛健身";
+        _nickNameLabel.userInteractionEnabled = YES;
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(nickNameTap:)];
+        [_nickNameLabel addGestureRecognizer:tap];
     }
     
     return _nickNameLabel;
@@ -269,6 +276,16 @@
 - (void)cellAddData:(IKCompanyDetailHeadModel *)model
 {
     _nickNameLabel.text = model.nickName;
+    self.companyName = model.companyName;
+    
+    CGFloat nickNameWidth = [NSString getSizeWithString:model.nickName size:CGSizeMake(IKSCREEN_WIDTH *0.8, 22) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:16.0f]}].width;
+    [_nickNameLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView.mas_top).offset(30);
+        make.centerX.equalTo(self.contentView);
+        make.height.mas_equalTo(22);
+        make.width.mas_equalTo(nickNameWidth + 40);
+    }];
+    
     
     if (model.isAuthen) {
         _approveView.layer.borderColor = IKGeneralBlue.CGColor;
@@ -326,6 +343,25 @@
 }
 
 
+- (void)nickNameTap:(UITapGestureRecognizer *)tap
+{
+    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+    //获取button在contentView的位置
+    CGRect rect1 = [tap.view convertRect:tap.view.frame fromView:self.contentView];
+    CGRect rect2 = [tap.view convertRect:rect1 toView:window];
+    
+    CGFloat companyNameW = [NSString getSizeWithString:self.companyName size:CGSizeMake(IKSCREEN_WIDTH *0.8, 22) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:12.0f]}].width;
+    
+    [self showTipsWithViewFrame:CGRectMake(rect2.origin.x + rect2.size.width * 0.5, rect2.origin.y, companyNameW + 20, 26) tipsContent:self.companyName];
+}
+
+
+- (void)showTipsWithViewFrame:(CGRect )frame tipsContent:(NSString *)content
+{
+    IKTipsView *tips = [[IKTipsView alloc] initWithFrame:frame arrowDirection:IKTipsArrowDirectionDownCenter bgColor:IKGeneralBlue];
+    tips.tipsContent = content;
+    [tips popView];
+}
 
 
 

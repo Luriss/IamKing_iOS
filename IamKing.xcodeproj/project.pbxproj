@@ -222,6 +222,8 @@
 		21F821651F387AE800DA9EFA /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F8215E1F387AE800DA9EFA /* FLAnimatedImage.m */; };
 		21F821661F387AE800DA9EFA /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821601F387AE800DA9EFA /* FLAnimatedImageView.m */; };
 		21F821671F387AE800DA9EFA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21F821611F387AE800DA9EFA /* Info.plist */; };
+		21F821731F39B98500DA9EFA /* IK_businessStore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821711F39B98500DA9EFA /* IK_businessStore.png */; };
+		21F821741F39B98500DA9EFA /* IK_presellStore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821721F39B98500DA9EFA /* IK_presellStore.png */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -572,6 +574,8 @@
 		21F8215F1F387AE800DA9EFA /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
 		21F821601F387AE800DA9EFA /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		21F821611F387AE800DA9EFA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		21F821711F39B98500DA9EFA /* IK_businessStore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_businessStore.png; sourceTree = "<group>"; };
+		21F821721F39B98500DA9EFA /* IK_presellStore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_presellStore.png; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1025,6 +1029,8 @@
 				21F820F61F30A89D00DA9EFA /* IK_circle_blue.png */,
 				21F820F71F30A89D00DA9EFA /* IK_member_blue.png */,
 				21F820F81F30A89D00DA9EFA /* IK_square_blue.png */,
+				21F821711F39B98500DA9EFA /* IK_businessStore.png */,
+				21F821721F39B98500DA9EFA /* IK_presellStore.png */,
 				21F820D81F302E5200DA9EFA /* IK_flag_blue.png */,
 				21BC61E51F2D23F800CE85D9 /* IK_showMore_grey.png */,
 				21BC638B1F2ECC6300CE85D9 /* IK_classify_blue.png */,
@@ -1726,6 +1732,7 @@
 				21F821461F38455A00DA9EFA /* IK_dealResume.png in Resources */,
 				2197CBB81F1E0C5F00F61562 /* IK_store.png in Resources */,
 				21F820F91F30A89D00DA9EFA /* IK_circle_blue.png in Resources */,
+				21F821741F39B98500DA9EFA /* IK_presellStore.png in Resources */,
 				21F821321F3753BE00DA9EFA /* IK_password.png in Resources */,
 				210B0DF81F0E3253003FD950 /* IK_cycle.png in Resources */,
 				21BC61A01F2893B600CE85D9 /* IK_assessment.png in Resources */,
@@ -1771,6 +1778,7 @@
 				21F821481F38455A00DA9EFA /* IK_setting.png in Resources */,
 				21F8213B1F3801DD00DA9EFA /* IK_classify_gray.png in Resources */,
 				21F8211D1F36A57500DA9EFA /* IK_batchDelete_white.png in Resources */,
+				21F821731F39B98500DA9EFA /* IK_businessStore.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

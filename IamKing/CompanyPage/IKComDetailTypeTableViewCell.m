@@ -15,7 +15,6 @@
 @property (nonatomic, strong) UIButton  *button3;
 @property (nonatomic, strong) UIButton  *button4;
 @property (nonatomic, strong) UIView    *lineView;
-@property (nonatomic, strong) UIView    *bottomView;
 @property (nonatomic, strong) UIButton  *oldButton;
 
 @end
@@ -41,62 +40,49 @@
 
 - (void)initSubViews
 {
-    [self.contentView addSubview:self.bottomView];
-    
-    [_bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.contentView);
-        make.width.and.height.equalTo(self.contentView);
-    }];
-    
-    
-    [_bottomView addSubview:self.button1];
-    [_bottomView addSubview:self.button2];
-    [_bottomView addSubview:self.button3];
-    [_bottomView addSubview:self.button4];
-    [_bottomView addSubview:self.lineView];
+    [self.contentView addSubview:self.button1];
+    [self.contentView addSubview:self.button2];
+    [self.contentView addSubview:self.button3];
+    [self.contentView addSubview:self.button4];
+    [self.contentView addSubview:self.lineView];
 
     self.oldButton = _button1;
     [_button1 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_bottomView);
-        make.left.equalTo(_bottomView.mas_left);
-        make.width.equalTo(_bottomView).multipliedBy(0.25);
+        make.top.and.bottom.equalTo(self.contentView);
+        make.left.equalTo(self.contentView.mas_left);
+        make.width.equalTo(self.contentView).multipliedBy(0.25);
     }];
     
     [_button2 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_bottomView);
+        make.top.and.bottom.equalTo(self.contentView);
         make.left.equalTo(_button1.mas_right);
-        make.width.equalTo(_bottomView).multipliedBy(0.25);
+        make.width.equalTo(self.contentView).multipliedBy(0.25);
     }];
     
     [_button3 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_bottomView);
+        make.top.and.bottom.equalTo(self.contentView);
         make.left.equalTo(_button2.mas_right);
-        make.width.equalTo(_bottomView).multipliedBy(0.25);
+        make.width.equalTo(self.contentView).multipliedBy(0.25);
     }];
     
     [_button4 mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.and.bottom.equalTo(_bottomView);
+        make.top.and.bottom.equalTo(self.contentView);
         make.left.equalTo(_button3.mas_right);
-        make.width.equalTo(_bottomView).multipliedBy(0.25);
+        make.width.equalTo(self.contentView).multipliedBy(0.25);
     }];
     
-    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(_bottomView).offset(-5);
-        make.centerX.equalTo(_button1.mas_centerX);
-        make.height.mas_equalTo(5);
-        make.width.mas_equalTo(66);
-    }];
+//    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.equalTo(self.contentView).offset(-5);
+//        make.centerX.equalTo(_button1.mas_centerX);
+//        make.height.mas_equalTo(3);
+//        make.width.mas_equalTo(66);
+//    }];
 }
 
-- (UIView *)bottomView
+- (void)layoutSubviews
 {
-    if (_bottomView == nil) {
-        _bottomView = [[UIView alloc] init];
-        _bottomView.backgroundColor = [UIColor whiteColor];
-    }
-    return _bottomView;
+    [super layoutSubviews];
 }
-
 
 - (UIButton *)button1
 {
@@ -141,9 +127,9 @@
 - (UIView *)lineView
 {
     if (_lineView == nil) {
-        _lineView = [[UIView alloc] init];
+        _lineView = [[UIView alloc] initWithFrame:CGRectMake(30, self.contentView.frame.size.height - 5, 66, 3)];
         _lineView.backgroundColor = IKGeneralBlue;
-        _lineView.layer.cornerRadius = 2.5;
+        _lineView.layer.cornerRadius = 1.5;
     }
     return _lineView;
 }
@@ -181,24 +167,27 @@
 
 - (void)startBottomLineAnimation:(CGPoint )point
 {
+    
     NSLog(@"xxxx = %@msdadd = %@",[NSValue valueWithCGPoint:_oldButton.center],[NSValue valueWithCGPoint:point]);
-//    CABasicAnimation* position = [CABasicAnimation animation];
-//    position.duration = 0.1;
-//    position.keyPath = @"position.x";
-//    position.fromValue = [NSValue valueWithCGPoint:_oldButton.center];
-//    position.toValue = [NSValue valueWithCGPoint:point];
-//    position.removedOnCompletion = NO;
-//    position.fillMode = kCAFillModeForwards;
-//    [_lineView.layer addAnimation:position forKey:@"key"];
+    
+    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.translation.x"];
+    animation.duration = 0.1;
+//    animation.keyPath = @"position.x";
+    animation.fromValue = [NSNumber numberWithFloat:_oldButton.center.x];
+    animation.toValue = [NSNumber numberWithFloat:point.x];
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeForwards;
+    [_lineView.layer addAnimation:animation forKey:@"key"];
 
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-//        _lineView.transform = CGAffineTransformMakeTranslation(point.x - 33, 0);
-        
-        _lineView.center = CGPointMake(point.x, _lineView.center.y);
-        
-    } completion:^(BOOL finished) {
-        
-    }];
+    NSLog(@"_lineView.frame = %@",[NSValue valueWithCGRect:_lineView.frame]);
+//    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+////        _lineView.transform = CGAffineTransformMakeTranslation(point.x - 33, 0);
+//        
+//        _lineView.center = CGPointMake(point.x, _lineView.center.y);
+//        
+//    } completion:^(BOOL finished) {
+//        
+//    }];
 }
 
 

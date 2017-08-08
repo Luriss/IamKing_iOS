@@ -194,7 +194,7 @@
         _nameLabel1.scrollDirection = IKRollLabelScrollDirectionVertical;
         _nameLabel1.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel1.textAlignment = NSTextAlignmentCenter;
-        _nameLabel1.dataArray = @[@"1",@"2",@"3",@"4",@"5",@"6"];
+//        _nameLabel1.dataArray = @[@"1",@"2",@"3",@"4",@"5",@"6"];
         _nameLabel1.reverseDirection = YES;
         _nameLabel1.scrollTimeInterval = 3;
         _nameLabel1.labelTextColor = IKMainTitleColor;
@@ -209,7 +209,7 @@
         _nameLabel2.scrollDirection = IKRollLabelScrollDirectionVertical;
         _nameLabel2.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel2.textAlignment = NSTextAlignmentCenter;
-        _nameLabel2.dataArray = @[@"q",@"w",@"e",@"r",@"t",@"y"];
+//        _nameLabel2.dataArray = @[@"q",@"w",@"e",@"r",@"t",@"y"];
         _nameLabel2.reverseDirection = YES;
         _nameLabel2.scrollTimeInterval = 3.5;
         _nameLabel2.labelTextColor = IKMainTitleColor;
@@ -224,7 +224,7 @@
         _nameLabel3.scrollDirection = IKRollLabelScrollDirectionVertical;
         _nameLabel3.labelFont = [UIFont systemFontOfSize:12.0f];
         _nameLabel3.textAlignment = NSTextAlignmentCenter;
-        _nameLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+//        _nameLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
         _nameLabel3.reverseDirection = YES;
         _nameLabel3.scrollTimeInterval = 4;
         _nameLabel3.labelTextColor = IKMainTitleColor;
@@ -240,7 +240,7 @@
         _desLabel1.scrollDirection = IKRollLabelScrollDirectionVertical;
         _desLabel1.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel1.textAlignment = NSTextAlignmentCenter;
-        _desLabel1.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+//        _desLabel1.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
         _desLabel1.reverseDirection = YES;
         _desLabel1.scrollTimeInterval = 3;
         _desLabel1.labelTextColor = IKSubHeadTitleColor;
@@ -256,7 +256,7 @@
         _desLabel2.scrollDirection = IKRollLabelScrollDirectionVertical;
         _desLabel2.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel2.textAlignment = NSTextAlignmentCenter;
-        _desLabel2.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+//        _desLabel2.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
         _desLabel2.reverseDirection = YES;
         _desLabel2.scrollTimeInterval = 3.5;
         _desLabel2.labelTextColor = IKSubHeadTitleColor;
@@ -271,7 +271,7 @@
         _desLabel3.scrollDirection = IKRollLabelScrollDirectionVertical;
         _desLabel3.labelFont = [UIFont systemFontOfSize:11.0f];
         _desLabel3.textAlignment = NSTextAlignmentCenter;
-        _desLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
+//        _desLabel3.dataArray = @[@"11",@"12",@"13",@"14",@"15",@"16"];
         _desLabel3.reverseDirection = YES;
         _desLabel3.scrollTimeInterval = 4;
         _desLabel3.labelTextColor = IKSubHeadTitleColor;

@@ -18,6 +18,9 @@
 static NSString * const reuseIdentifier = @"hotCityCollectionViewCellId";
 static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 
+NSString * currentSelectedCityId;
+
+
 @interface IKChooseCityVC ()<IKChooseCityViewDelegate,IKTagsViewDelegate>
 
 @property (nonatomic, strong)IKView *locationInfoView;
@@ -281,6 +284,7 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     NSLog(@"cityName = %@",model.cityName);
     if ([model.cityName isEqualToString:title]) {
         [IKUSERDEFAULT setObject:model.regionID forKey:@"selectedCityId"];
+        currentSelectedCityId = model.regionID;
     }
     
     [IKUSERDEFAULT synchronize];
@@ -306,7 +310,6 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
 {
     IKLog(@"dismissSelfWithCity");
     [self dismissSelf];
-    
     if ([self.delegate respondsToSelector:@selector(locationVcDismissChangeNavButtonTitle:)]) {
         [self.delegate locationVcDismissChangeNavButtonTitle:city];
     }
@@ -319,6 +322,8 @@ static NSString * const headerReuseIdentifier = @"IKCollectionViewHeader";
     [IKUSERDEFAULT setObject:button.titleLabel.text forKey:@"selectedCity"];
     [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
     [IKUSERDEFAULT synchronize];
+    
+    currentSelectedCityId = cityId;
     
     [self dismissSelfWithCity:button.titleLabel.text];
 }

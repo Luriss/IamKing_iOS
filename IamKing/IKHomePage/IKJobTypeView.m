@@ -86,10 +86,10 @@
     __weak typeof (self) weakSelf = self;
 
     [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf).offset(-9);
+        make.bottom.equalTo(weakSelf).offset(-7);
         make.centerX.equalTo(_oldButton);
         make.height.mas_equalTo(3);
-        make.width.mas_equalTo(51);
+        make.width.mas_equalTo(_lineWidth);
     }];
 }
 
@@ -98,6 +98,22 @@
     _buttonSize = buttonSize;
 }
 
+
+- (void)setLineWidth:(CGFloat)lineWidth
+{
+    _lineWidth = lineWidth;
+//    if (lineWidth > 0) {
+//        if (_bottomLine == nil) {
+//            [self addSubview:self.bottomLine];
+//        }
+//        [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.bottom.equalTo(self).offset(-7);
+//            make.centerX.equalTo(_oldButton);
+//            make.height.mas_equalTo(3);
+//            make.width.mas_equalTo(lineWidth);
+//        }];
+//    }
+}
 
 
 - (UIView *)topLine
@@ -129,6 +145,22 @@
     return _lineView;
 }
 
+- (UIFont *)buttonFont
+{
+    if (_buttonFont == nil) {
+        _buttonFont = [UIFont boldSystemFontOfSize:13.0f];
+    }
+    return _buttonFont;
+}
+//- (void)setButtonFont:(UIFont *)buttonFont
+//{
+//    if (buttonFont) {
+//        _buttonFont = buttonFont;
+//    }
+//    else{
+//        _buttonFont = [UIFont boldSystemFontOfSize:13.0f];
+//    }
+//}
 
 - (void)adjustBottomLine:(CGFloat )index
 {
@@ -146,7 +178,7 @@
         [self startBottomLineAnimation:button.center];
         
         [button setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
-        [_oldButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+        [_oldButton setTitleColor:IKMainTitleColor forState:UIControlStateNormal];
         
         if ([self.delegate respondsToSelector:@selector(jobTypeViewButtonClick:)]) {
             [self.delegate jobTypeViewButtonClick:button];
@@ -208,9 +240,10 @@
 - (UIButton *)createButtonWithTitle:(NSString *)title index:(NSInteger )index
 {
     UIButton *job = [UIButton buttonWithType:UIButtonTypeCustom];
-    [job setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
+    [job setTitleColor:IKMainTitleColor forState:UIControlStateNormal];
     job.frame = CGRectMake((index -1)*_buttonSize.width, 0, _buttonSize.width, _buttonSize.height);
-    job.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
+    job.titleLabel.font = self.buttonFont;
+
     [job addTarget:self action:@selector(btnClick:) forControlEvents:UIControlEventTouchUpInside];
     [job setTitle:title forState:UIControlStateNormal];
     job.backgroundColor = [UIColor clearColor];

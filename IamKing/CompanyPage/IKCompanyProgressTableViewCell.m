@@ -7,13 +7,14 @@
 //
 
 #import "IKCompanyProgressTableViewCell.h"
+#import "IKLabel.h"
 
 @interface IKCompanyProgressTableViewCell ()
 
 @property(nonatomic,strong)UILabel *monthLabel;
 @property(nonatomic,strong)UILabel *yearLabel;
 @property(nonatomic,strong)UILabel *nameLabel;
-@property(nonatomic,strong)UILabel *infoLabel;
+@property(nonatomic,strong)IKLabel *infoLabel;
 
 @property(nonatomic,strong)UIView *circleView1;
 @property(nonatomic,strong)UIView  *circleView2;
@@ -90,9 +91,9 @@
     }];
     
     [_infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_nameLabel.mas_bottom);
+        make.top.equalTo(_nameLabel.mas_bottom).offset(2);
         make.left.and.right.equalTo(_nameLabel);
-        make.height.mas_equalTo(20);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-5);
     }];
     
     
@@ -162,13 +163,15 @@
     return _nameLabel;
 }
 
-- (UILabel *)infoLabel
+- (IKLabel *)infoLabel
 {
     if (_infoLabel == nil) {
-        _infoLabel = [[UILabel alloc] init];
+        _infoLabel = [[IKLabel alloc] init];
         _infoLabel.font = [UIFont systemFontOfSize:11.0f];
         _infoLabel.textColor = IKSubHeadTitleColor;
         _infoLabel.textAlignment = NSTextAlignmentLeft;
+        _infoLabel.numberOfLines = 0;
+        _infoLabel.verticalAlignment = IKVerticalAlignmentTop;
 //        _infoLabel.text = @"公司成立";
     }
     

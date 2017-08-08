@@ -16,28 +16,31 @@
 #import "IKRecommandCompanyVC.h"
 #import "IKCompanyDetailVC.h"
 
+extern NSString * currentSelectedCityId;
 
 @interface IKCompanyViewController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,IKCompanyClassifyViewDelegate>//,IKSearchViewControllerDelegate>
 {
-    BOOL        _scrollViewIsDragging;
     BOOL        _hadAddHeaderView;
+    BOOL        _isLoading;
+
     CGFloat     _tableViewInsetH;
 }
 @property(nonatomic,strong)IKTableView      *bgTableView;
 @property(nonatomic,strong)IKCompanyClassifyView      *classifyView;
 @property(nonatomic,strong)IKRecommandCompanyVC      *recomandVc;
-@property(nonatomic,strong)IKCompanyDetailVC      *companyDetailVc;
 @property(nonatomic,strong)IKCompanyAdTableViewCell      *adView;
 
 @property(nonatomic,strong)UIButton         *chooseBtn;
 @property(nonatomic,strong)UIView           *headerView;
 @property(nonatomic,strong)UIImageView      *refreshView;
+@property(nonatomic,strong)UIImageView      *loadMoreView;
 
 @property(nonatomic,assign)NSInteger         dataPage;
 @property(nonatomic,copy)NSArray            *dataArray;
 @property(nonatomic,assign)NSInteger         showChooseType;
 @property(nonatomic,strong)NSIndexPath       *chooseClassifyIP;
 @property(nonatomic,copy)NSArray            *recommendArray;
+//@property(nonatomic,assign)NSInteger          dataPage;
 
 @end
 
@@ -48,18 +51,18 @@
 
     _tableViewInsetH = ceilf(IKSCREENH_HEIGHT * 0.3523)+8 + 44;;
     _hadAddHeaderView = NO;
+    _isLoading = NO;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.frame), 1)];
     lineView.backgroundColor = IKLineColor;
     [self.view addSubview:lineView];
     
-    [IKNotificationCenter addObserver:self selector:@selector(adViewClick:) name:@"IKAdViewClick" object:nil];
     self.dataPage = 1;
     self.showChooseType = 0;
     self.chooseClassifyIP = [NSIndexPath indexPathForRow:0 inSection:0];
     
     [self initNavigationContent];
-    [self getCompanyInfo];
+    [self getCompanyInfoUseCache:YES];
 
     [self.view addSubview:self.bgTableView];
     
@@ -67,18 +70,6 @@
     // Do any additional setup after loading the view.
 }
 
-- (void)addNotification
-{
-    [IKNotificationCenter addObserver:self selector:@selector(cityChangeNeedRefreshData:) name:IKCityChangeNeedRefrshDataKey object:nil];
-}
-
-
-- (void)cityChangeNeedRefreshData:(NSNotification *)notification
-{
-    NSLog(@"cityChangeNeedRefreshData");
-    [self getCompanyInfo];
-
-}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -96,6 +87,24 @@
 }
 
 
+#pragma mark - Notification & Action
+
+- (void)addNotification
+{
+    [IKNotificationCenter addObserver:self selector:@selector(adViewClick:) name:@"IKAdViewClick" object:nil];
+
+    [IKNotificationCenter addObserver:self selector:@selector(cityChangeNeedRefreshData:) name:IKCityChangeNeedRefrshDataKey object:nil];
+}
+
+
+- (void)cityChangeNeedRefreshData:(NSNotification *)notification
+{
+    self.dataPage = 1;
+    NSLog(@"cityChangeNeedRefreshData");
+    [self getCompanyInfoUseCache:YES];
+    
+}
+
 
 - (void)adViewClick:(NSNotification *)noti
 {
@@ -105,7 +114,7 @@
     [self goCompanyDeatilViewControllerWithIndex:model];
 }
 
-#pragma mark - InitView
+#pragma mark - Navigation
 
 - (void)initNavigationContent
 {
@@ -159,6 +168,7 @@
 }
 
 
+#pragma mark - Property
 
 - (IKTableView *)bgTableView
 {
@@ -182,11 +192,11 @@
         [_bgTableView addSubview:self.headerView];
         _hadAddHeaderView = YES;
         
-        UIImageView *imageV1 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 13, -38, 26, 26)];
+        UIImageView *imageV1 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 13, -(_tableViewInsetH + 38), 26, 26)];
         imageV1.image = [UIImage imageNamed:@"IK_logo_grey"];
         [_bgTableView addSubview:imageV1];
         
-        UIImageView *imageV2 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 15, -40, 30, 30)];
+        UIImageView *imageV2 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 15, -(_tableViewInsetH + 40), 30, 30)];
         imageV2.image = [UIImage imageNamed:@"IK_cycle"];
         [_bgTableView addSubview:imageV2];
         
@@ -308,58 +318,8 @@
 }
 
 
-- (IKCompanyDetailVC *)companyDetailVc
-{
-    if (_companyDetailVc == nil) {
-        _companyDetailVc = [[IKCompanyDetailVC alloc] init];
-    }
-    
-    return _companyDetailVc;
-}
 
-- (void)getCompanyInfo
-{
-    NSString *selectedCityId = [IKUSERDEFAULT objectForKey:@"selectedCityId"];
-    
-    if (IKStringIsEmpty(selectedCityId)) {
-        selectedCityId = @"0";
-    }
-    NSDictionary *jobParam = @{@"cityId":selectedCityId,@"pageSize":@"30",@"page":[NSString stringWithFormat:@"%ld",self.dataPage]};
-    
-    [[IKNetworkManager shareInstance] getCompanyPageCompanyInfoWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-        
-        if (dataArray.count > 0) {
-            self.dataArray = [NSArray arrayWithArray:dataArray];
-            [self.bgTableView reloadData];
-
-        }
-    }];
-    
-    [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.recommendArray = [NSArray arrayWithArray:dataArray];
-            [_adView addCompanyAdCellData:dataArray];
-        });
-    }];
-}
-
-
-
-- (void)reloadTableViewSection:(NSInteger )section
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        [UIView performWithoutAnimation:^{
-            [self.bgTableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
-        }];
-    });
-    
-}
-
-
-
-
+#pragma mark - Button Action
 
 - (void)searchButtonClick:(UIButton *)button
 {
@@ -397,7 +357,7 @@
         button.imageView.transform = CGAffineTransformMakeRotation(M_PI);
         _showChooseType = 1;
         label.text = @"请选择公司类型";
-        _bgTableView.contentOffset = CGPointMake(0, ceilf(IKSCREENH_HEIGHT * 0.3523)+8);
+        _bgTableView.contentOffset = CGPointMake(0, -44);
 
         [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.classifyView.transform = CGAffineTransformIdentity;
@@ -412,7 +372,7 @@
         if (_showChooseType == 1) {
             [button setTitle:@"全部公司" forState:UIControlStateNormal];
         }
-//        _bgTableView.contentOffset = CGPointMake(0, 0);
+
         button.imageView.transform = CGAffineTransformIdentity;
         label.text = @"海量健身公司,等你开撩!";
         [self.classifyView removeFromSuperview];
@@ -421,6 +381,9 @@
         _showChooseType = 0;
     }
 }
+
+
+#pragma mark - IKCompanyClassifyViewDelegate
 
 - (void)selectViewDidSelectIndexPath:(NSIndexPath *)indexPath selectContent:(NSString *)select
 {
@@ -446,14 +409,13 @@
 }
 
 
-//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-//{
-//    if (section == 0) {
-//        return 44;
-//    }
-//    
-//    return 0.01;
-//}
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    if (tableView != _bgTableView) {
+        return 30;
+    }
+    return 0.01;
+}
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -482,15 +444,29 @@
     return cell;
 }
 
-//- (nullable UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    if (section == 0) {
-//        return self.headerView;
-//    }
-//    
-//    return nil;
-//}
-
+- (nullable UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    if (self.dataArray.count > 0) {
+        UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(tableView.frame), 30)];
+        //            view.backgroundColor = [UIColor redColor];
+        UIImageView *imageV = [[UIImageView alloc] initWithFrame:CGRectMake(view.center.x - 40, view.center.y - 7.5, 15, 15)];
+        imageV.image = [UIImage imageNamed:@"IK_loading"];
+        
+        [view addSubview:imageV];
+        
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(view.center.x - 20, view.center.y - 10, 100, 20)];
+        label.text = @"玩命加载中...";
+        label.textColor = IKSubHeadTitleColor;
+        label.textAlignment = NSTextAlignmentLeft;
+        label.font = [UIFont systemFontOfSize:12.0f];
+        //        label.backgroundColor = [UIColor redColor];
+        [view addSubview:label];
+        self.loadMoreView = imageV;
+        return view;
+    }
+    return nil;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -505,10 +481,12 @@
 - (void)goCompanyDeatilViewControllerWithIndex:(IKCompanyInfoModel *)model
 {
     NSLog(@"description = %@",model.description);
-    self.companyDetailVc.companyInfoModel = model;
-    [self.navigationController pushViewController:self.companyDetailVc animated:YES];
+    IKCompanyDetailVC *vc = [[IKCompanyDetailVC alloc] init];
+    vc.companyInfoModel = model;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
+#pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
@@ -527,18 +505,144 @@
             _hadAddHeaderView = YES;
         }
     }
+    // 下拉刷新
+    if (offsetY < -_tableViewInsetH) {
+        CGFloat s = offsetY/30;
+        self.refreshView.transform = CGAffineTransformMakeRotation(-2*M_PI*s);
+    }
+    
+    // 显示加载更多.
+    CGFloat th = offsetY + _bgTableView.frame.size.height;
+    NSLog(@"offsetY = %.0f = %.0f",th,_bgTableView.contentSize.height);
+
+    if (th >= _bgTableView.contentSize.height) {
+        CGFloat x = offsetY - (_bgTableView.contentSize.height-_bgTableView.frame.size.height);
+        self.loadMoreView.transform = CGAffineTransformMakeRotation(M_PI*(x/26));
+    }
 }
 
 - (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView
 {
-    _scrollViewIsDragging = YES;
 }
 
 
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    _scrollViewIsDragging = NO;
+    if (scrollView == _bgTableView) {
+        CGFloat offsetY = scrollView.contentOffset.y;
+
+        if (offsetY < - (_tableViewInsetH + 50)) {
+            _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH + 50, 0, 0, 0);
+            _isLoading = YES;
+            [self startRefreshAnimation];
+        }
+        
+        CGFloat offset = offsetY + _bgTableView.frame.size.height;
+        if (offset >= (_bgTableView.contentSize.height + 26)) {
+            if (!_isLoading) {
+                _isLoading = YES;
+                _bgTableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
+                [self startLoadingMoreAnimation];
+            }
+        }
+        else{
+            _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
+        }
+    }
+}
+
+
+#pragma mark - Refresh & LoadingMore
+
+- (void)startRefreshAnimation
+{
+    CABasicAnimation *animation =  [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    
+    //默认是顺时针效果，若将fromValue和toValue的值互换，则为逆时针效果
+    animation.fromValue = [NSNumber numberWithFloat:0.f];
+    animation.toValue =  [NSNumber numberWithFloat: M_PI *2];
+    animation.duration  = 1;
+    animation.autoreverses = NO;
+    animation.fillMode =kCAFillModeForwards;
+    animation.repeatCount = MAXFLOAT; //如果这里想设置成一直自旋转，可以设置为MAXFLOAT，否则设置具体的数值则代表执行多少次
+    [self.refreshView.layer addAnimation:animation forKey:@"companyRefreshData"];
+    _isLoading = YES;
+    [self getCompanyInfoUseCache:NO];
+}
+
+- (void)startLoadingMoreAnimation
+{
+    CABasicAnimation *animation =  [CABasicAnimation animationWithKeyPath:@"transform.rotation.z"];
+    
+    //默认是顺时针效果，若将fromValue和toValue的值互换，则为逆时针效果
+    animation.fromValue = [NSNumber numberWithFloat:0.f];
+    animation.toValue =  [NSNumber numberWithFloat: M_PI *2];
+    animation.duration  = 1;
+    animation.autoreverses = NO;
+    animation.fillMode =kCAFillModeForwards;
+    animation.repeatCount = MAXFLOAT; //如果这里想设置成一直自旋转，可以设置为MAXFLOAT，否则设置具体的数值则代表执行多少次
+    [self.loadMoreView.layer addAnimation:animation forKey:@"companyMoreData"];
+    
+    // 调用接口获取更多数据
+    [self loadMoreCompanyInfo];
+}
+
+- (void)stopLoadingAnimation
+{
+    [self.loadMoreView.layer removeAnimationForKey:@"companyMoreData"];
+    [self.refreshView.layer removeAnimationForKey:@"companyRefreshData"];
+    _isLoading = NO;
+    self.bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
+}
+
+
+
+
+#pragma mark - RequestData
+
+- (void)getCompanyInfoUseCache:(BOOL )useCache
+{
+
+    NSDictionary *jobParam = @{@"cityId":currentSelectedCityId,@"pageSize":@"16",@"page":[NSString stringWithFormat:@"%ld",self.dataPage]};
+    
+    [[IKNetworkManager shareInstance] getCompanyPageCompanyInfoWithParam:jobParam useCache:useCache backData:^(NSArray *dataArray, BOOL success){
+        if (dataArray.count > 0) {
+            self.dataArray = [NSArray arrayWithArray:dataArray];
+            [self.bgTableView reloadData];
+        }
+        
+        if (_isLoading) {
+            [self stopLoadingAnimation];
+        }
+    }];
+    
+    [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.recommendArray = [NSArray arrayWithArray:dataArray];
+            [_adView addCompanyAdCellData:dataArray];
+        });
+    }];
+}
+
+- (void)loadMoreCompanyInfo
+{
+    NSLog(@"currentSelectedCity = %@",currentSelectedCityId);
+    [self stopLoadingAnimation];
+        // 获取列表信息.
+    NSDictionary *companyParam = @{@"cityId":currentSelectedCityId,@"pageSize":@"16",@"page":[NSString stringWithFormat:@"%ld",++_dataPage]};
+    
+    [[IKNetworkManager shareInstance] getCompanyPageMoreCompanyInfoWithParam:companyParam backData:^(NSArray *dataArray, BOOL success) {
+        if (dataArray.count > 0 && success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self stopLoadingAnimation];
+                self.dataArray = [self.dataArray arrayByAddingObjectsFromArray:dataArray];
+                [self.bgTableView reloadData];
+                NSLog(@"self.dataArray.count = %ld,dataArray.count = %ld",self.dataArray.count,dataArray.count);
+            });
+        }
+    }];
 }
 
 

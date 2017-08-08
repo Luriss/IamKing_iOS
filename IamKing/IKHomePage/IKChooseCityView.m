@@ -10,6 +10,8 @@
 #import "IKLocationCell.h"
 #import "IKProvinceModel.h"
 
+extern NSString * currentSelectedCityId;
+
 @interface IKChooseCityView ()<UITableViewDelegate,UITableViewDataSource>
 {
     NSIndexPath  *_oldProvinceIndexPath;
@@ -320,8 +322,9 @@
         NSLog(@"cityId = %@",cityId);
         [IKUSERDEFAULT setObject:self.selectCity forKey:@"selectedCity"];
         [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
-
         [IKUSERDEFAULT synchronize];
+        
+        currentSelectedCityId = cityId;
     }
 }
 

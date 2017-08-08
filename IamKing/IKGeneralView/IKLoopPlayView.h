@@ -9,6 +9,7 @@
 #import "IKView.h"
 
 
+
 typedef NS_ENUM(NSInteger, IKLPVScrollDirection) {
     IKLPVScrollDirectionHorizontal = 0,                 /** 水平滚动*/
     IKLPVScrollDirectionVertical,                       /** 垂直滚动*/
@@ -23,9 +24,16 @@ typedef NS_ENUM(NSInteger, IKPageControlAlignment) {
     IKPageControlAlignmentVerticalButtom,               /** page control 布局 垂直靠底*/
 };
 
+@protocol IKLoopPlayViewDelegate <NSObject>
+
+- (void)LoopPlayViewDidSelectedImage:(NSString *)imageUrl;
+
+@end
+
 
 @interface IKLoopPlayView : IKView
 
+@property (nonatomic, weak) id<IKLoopPlayViewDelegate> delegate;
 
 // 图片数据源
 @property (nonatomic, copy)NSArray *imagesArray;

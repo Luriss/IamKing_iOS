@@ -66,7 +66,8 @@
 // type=0&userId=294
 #define IKGetRecommendCompanyListUrl (@"https://www.iamking.com.cn/index.php/Company/getRecommendList?")
 
-
+//cityId=0&page=2&pageSize=8
+//#define IKCompanyInfoLoadMoreUrl (@"https://www.iamking.com.cn/index.php/User/getUserCompanyList?")
 
 
 @interface IKNetworkManager ()
@@ -289,7 +290,7 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealHotCityData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (callback && arr.count > 0) {
+        if (callback) {
             callback(arr,success);
         }
         
@@ -299,7 +300,7 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealHotCityData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && arr.count > 0) {
+            if (callback) {
                 callback(arr,success);
             }
         }
@@ -341,7 +342,7 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealProviceCityData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (callback && arr.count > 0) {
+        if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
@@ -350,7 +351,7 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealProviceCityData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && arr.count > 0) {
+            if (callback) {
                 callback(arr,success);
             }
         }
@@ -393,7 +394,7 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSArray *arr = [self dealWorkListData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
-        if (callback && arr.count > 0) {
+        if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
@@ -402,7 +403,7 @@ static IKNetworkManager *_shareInstance;
             NSArray *arr = [self dealWorkListData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && arr.count > 0) {
+            if (callback) {
                 callback(arr,success);
             }
         }
@@ -458,7 +459,7 @@ static IKNetworkManager *_shareInstance;
 {
     // cityId=0&&pageSize=8
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@page=%@",IKGetMoreJobListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"],[param objectForKey:@"page"]];
-    NSLog(@"url = %@",url);
+    NSLog(@"uuuuuuuuuurl = %@",url);
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
         NSLog(@"responseObject = %@",responseObject);
 
@@ -484,21 +485,21 @@ static IKNetworkManager *_shareInstance;
 
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-//        NSLog(@"responseCache = %@",responseCache);
+        NSLog(@"responseCache = %@",responseCache);
 
         IKJobDetailModel *model = [self dealJobDetailData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
         
-        if (callback && model) {
+        if (callback) {
             callback(model,success);
         }
     } success:^(id responseObject) {
-//        NSLog(@"responseObject = %@",responseObject);
+        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
             IKJobDetailModel *model = [self dealJobDetailData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && model) {
+            if (callback) {
                 callback(model,success);
             }
         }
@@ -544,35 +545,47 @@ static IKNetworkManager *_shareInstance;
     return model;
 }
 
-- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+- (void)getCompanyPageCompanyInfoWithParam:(NSDictionary *)param useCache:(BOOL)useCache backData:(IKRequestArrayData)callback
 {
     //cityId=0&page=1&pageSize=8
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&page=%@&pageSize=%@",IKCompanyInfoUrl,[param objectForKey:@"cityId"],[param objectForKey:@"page"],[param objectForKey:@"pageSize"]];
-    NSLog(@"url = %@",url);
+    NSLog(@"uuuuuuuuurl = %@",url);
     
     __block id dataResult = nil;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
-        dataResult = responseCache;
-//                NSLog(@"responseCache = %@",responseCache);
-        NSArray *array = [self dealCompanyInfoData:responseCache];
-        BOOL success = [self requestDataSuccess:responseCache];
-        
-        if (callback && array.count > 0) {
-            callback(array,success);
+        if (useCache) {
+            NSLog(@"useCache");
+            dataResult = responseCache;
+            NSArray *array = [self dealCompanyInfoData:responseCache];
+            BOOL success = [self requestDataSuccess:responseCache];
+            
+            if (callback) {
+                callback(array,success);
+            }
         }
     } success:^(id responseObject) {
+        NSLog(@"not useCache");
 //                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
             NSArray *array = [self dealCompanyInfoData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && array.count > 0) {
+            if (callback) {
                 callback(array,success);
             }
         }
     } failure:^(NSError *error) {
         
+    }];
+}
+
+- (void)getCompanyPageMoreCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    [self getCompanyPageCompanyInfoWithParam:param useCache:NO backData:^(NSArray *dataArray, BOOL success) {
+        if (callback) {
+            callback(dataArray,success);
+        }
     }];
 }
 
@@ -618,21 +631,19 @@ static IKNetworkManager *_shareInstance;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-        NSLog(@"responseCache = %@",responseCache);
         NSArray *array = [self dealRecommendCompanyListData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
         
-        if (callback && array.count>0) {
+        if (callback) {
             callback(array,success);
         }
     } success:^(id responseObject) {
-        NSLog(@"responseObject = %@",responseObject);
         
         if (![dataResult isEqual:responseObject]) {
             NSArray *array = [self dealRecommendCompanyListData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && array.count>0) {
+            if (callback) {
                 callback(array,success);
             }
         }
@@ -748,7 +759,7 @@ static IKNetworkManager *_shareInstance;
         IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
         
-        if (callback && model) {
+        if (callback) {
             callback(model,success);
         }
     } success:^(id responseObject) {
@@ -757,7 +768,7 @@ static IKNetworkManager *_shareInstance;
             IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && model) {
+            if (callback) {
                 callback(model,success);
             }
         }
@@ -805,7 +816,7 @@ static IKNetworkManager *_shareInstance;
         NSArray *array = [self dealManagerTeamData:responseCache];
         BOOL success = [self requestDataSuccess:responseCache];
         
-        if (callback && array.count > 0) {
+        if (callback) {
             callback(array,success);
         }
     } success:^(id responseObject) {
@@ -814,7 +825,7 @@ static IKNetworkManager *_shareInstance;
             NSArray *array = [self dealManagerTeamData:responseObject];
             BOOL success = [self requestDataSuccess:responseObject];
             
-            if (callback && array.count > 0) {
+            if (callback) {
                 callback(array,success);
             }
         }
