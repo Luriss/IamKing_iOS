@@ -722,13 +722,13 @@
                             NSLog(@"indexPath.row = %ld",indexPath.row);
                             if (row < _aboutUsModel.progressList.count) {
                                 if (row == 1) {
-                                    [cell addProgressCellData:_aboutUsModel.progressList[1] showVerTopLine:NO showVerBottomLine:YES];
+                                    [cell addProgressCellData:_aboutUsModel.progressList[0] showVerTopLine:NO showVerBottomLine:YES];
                                 }
                                 else if (row == 3){
-                                    [cell addProgressCellData:_aboutUsModel.progressList[3] showVerTopLine:YES showVerBottomLine:NO];
+                                    [cell addProgressCellData:_aboutUsModel.progressList[2] showVerTopLine:YES showVerBottomLine:NO];
                                 }
                                 else{
-                                    [cell addProgressCellData:_aboutUsModel.progressList[2] showVerTopLine:YES showVerBottomLine:YES];
+                                    [cell addProgressCellData:_aboutUsModel.progressList[1] showVerTopLine:YES showVerBottomLine:YES];
                                 }
                             }
                             return cell;

@@ -28,34 +28,17 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [IKNotificationCenter addObserver:self selector:@selector(refreshTabBarItems) name:@"IKRefreshTabBarItems" object:nil];
     CGRect rect = self.tabBar.frame;
     [self.tabBar removeFromSuperview];  //移除TabBarController自带的下部的条
 
-    IKHomePageVC *homePage = [[IKHomePageVC alloc]init];
-    IKNavigationController *homePageNav = [[IKNavigationController alloc] initWithRootViewController:homePage];
-    
-    IKCompanyViewController *company = [[IKCompanyViewController alloc]init];
-    IKNavigationController *companyNav = [[IKNavigationController alloc] initWithRootViewController:company];
-    
-    IKMessageViewController *message = [[IKMessageViewController alloc]init];
-    message.view.backgroundColor = [UIColor whiteColor];
-    IKNavigationController *messageNav = [[IKNavigationController alloc] initWithRootViewController:message];
+    [self viewAddChildViewController:NO];
 
-    IKMineViewController *mine = [[IKMineViewController alloc]init];
-    mine.view.backgroundColor = [UIColor whiteColor];
-    IKNavigationController *mineNav = [[IKNavigationController alloc] initWithRootViewController:mine];
-
-    
-    [self addChildViewController:homePageNav];
-    [self addChildViewController:companyNav];
-    [self addChildViewController:messageNav];
-    [self addChildViewController:mineNav];
-    
     [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
     [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
     IKTabBar *tabBar = [[IKTabBar alloc] initWithFrame:rect];
-    
+    tabBar.defaultSelected = 0;
     tabBar.tabBarItemAttributes = @[@{kIKTabBarItemTitle:@"职位", kIKTabBarItemNormalImageName: @"IK_applyJob", kIKLTabBarItemSelectedImageName: @"IK_applyJobSelected"},@{kIKTabBarItemTitle : @"公司", kIKTabBarItemNormalImageName : @"IK_homePage", kIKLTabBarItemSelectedImageName : @"IK_homePageSelected"}, @{kIKTabBarItemTitle:@"消息", kIKTabBarItemNormalImageName:@"IK_Message", kIKLTabBarItemSelectedImageName:@"IK_MessageSelected"}, @{kIKTabBarItemTitle : @"我", kIKTabBarItemNormalImageName:@"IK_me", kIKLTabBarItemSelectedImageName:@"IK_meSelected"}];
 
     [self.view addSubview:tabBar];
@@ -67,6 +50,54 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
     self.customTabBar = tabBar;
     self.tabBarTopLine = line;
     // Do any additional setup after loading the view.
+}
+
+
+- (void)viewAddChildViewController:(BOOL)isCompany
+{
+    IKHomePageVC *homePage = [[IKHomePageVC alloc]init];
+    IKNavigationController *homePageNav = [[IKNavigationController alloc] initWithRootViewController:homePage];
+    
+    IKCompanyViewController *company = [[IKCompanyViewController alloc]init];
+    IKNavigationController *companyNav = [[IKNavigationController alloc] initWithRootViewController:company];
+    
+    IKMessageViewController *message = [[IKMessageViewController alloc]init];
+    message.view.backgroundColor = [UIColor whiteColor];
+    IKNavigationController *messageNav = [[IKNavigationController alloc] initWithRootViewController:message];
+    
+    IKMineViewController *mine = [[IKMineViewController alloc]init];
+    mine.view.backgroundColor = [UIColor whiteColor];
+    IKNavigationController *mineNav = [[IKNavigationController alloc] initWithRootViewController:mine];
+
+    if (isCompany) {
+        UIViewController *vc = [[UIViewController alloc] init];
+        vc.view.backgroundColor = [UIColor redColor];
+        
+        [self setViewControllers:@[homePageNav,companyNav,messageNav,vc,mineNav]];
+    }
+    else{
+        [self setViewControllers:@[homePageNav,companyNav,messageNav,mineNav]];
+    }
+    
+}
+
+
+
+
+- (void)refreshTabBarItems
+{
+    for (UIView *view in self.customTabBar.subviews) {
+        [view removeFromSuperview];
+    }
+    
+    NSLog(@"viewControllers = %@",self.viewControllers);
+
+    [self viewAddChildViewController:YES];
+    
+    self.customTabBar.defaultSelected = 4;
+    self.customTabBar.tabBarItemAttributes = @[@{kIKTabBarItemTitle:@"职位", kIKTabBarItemNormalImageName: @"IK_applyJob", kIKLTabBarItemSelectedImageName: @"IK_applyJobSelected"},@{kIKTabBarItemTitle : @"公司", kIKTabBarItemNormalImageName : @"IK_homePage", kIKLTabBarItemSelectedImageName : @"IK_homePageSelected"}, @{kIKTabBarItemTitle:@"消息", kIKTabBarItemNormalImageName:@"IK_Message", kIKLTabBarItemSelectedImageName:@"IK_MessageSelected"}, @{kIKTabBarItemTitle : @"人才", kIKTabBarItemNormalImageName:@"IK_me", kIKLTabBarItemSelectedImageName:@"IK_meSelected"},@{kIKTabBarItemTitle : @"我", kIKTabBarItemNormalImageName:@"IK_me", kIKLTabBarItemSelectedImageName:@"IK_meSelected"}];
+    
+    [self.customTabBar selectedDefaultItem:4];
 }
 
 - (void)tabBarControllerDidSelectedIndex:(NSInteger)index

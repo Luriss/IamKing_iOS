@@ -14,6 +14,10 @@ extern NSString *const kIKLTabBarItemSelectedImageName;
 
 @interface IKTabBar : UIView
 
+@property (nonatomic, assign) NSInteger defaultSelected;
 @property (nonatomic, copy) NSArray<NSDictionary *> *tabBarItemAttributes;
+
+
+- (void)selectedDefaultItem:(NSInteger )index;
 
 @end

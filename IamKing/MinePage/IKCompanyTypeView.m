@@ -1,15 +1,16 @@
 //
-//  IKCompanyClassifyView.m
+//  IKCompanyTypeView.m
 //  IamKing
 //
-//  Created by Luris on 2017/7/30.
+//  Created by Luris on 2017/8/7.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "IKCompanyClassifyView.h"
+#import "IKCompanyTypeView.h"
 
 
-@interface IKCompanyClassifyCell : UITableViewCell
+
+@interface IKCompanyTypeViewCell : UITableViewCell
 
 @property (nonatomic, strong)UILabel *label;
 @property (nonatomic, strong)UIView *lineView;
@@ -18,7 +19,7 @@
 @end
 
 
-@implementation IKCompanyClassifyCell
+@implementation IKCompanyTypeViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -83,7 +84,7 @@
 @end
 
 
-@interface IKCompanyClassifyView ()<UITableViewDelegate,UITableViewDataSource>
+@interface IKCompanyTypeView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, strong)UITableView *tableView;
 @property (nonatomic,copy)NSArray *selectData;
@@ -91,7 +92,7 @@
 
 @end
 
-@implementation IKCompanyClassifyView
+@implementation IKCompanyTypeView
 
 - (instancetype)init
 {
@@ -118,36 +119,32 @@
 
 - (void)addSubViews
 {
-    self.selectData = @[@"全部公司",@"俱乐部",@"工作室",@"瑜伽馆",@"培训学院",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
-    self.backgroundColor = [UIColor clearColor];
+    self.selectData = @[@"俱乐部",@"工作室",@"瑜伽馆",@"培训学院",@"器械设备",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
+//    self.backgroundColor = [UIColor clearColor];
+    
     [self addSubview:self.tableView];
-    
-    
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetHeight(self.tableView.frame), CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds)-CGRectGetHeight(self.tableView.frame))];
-    
-    view.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-    
-    [self addSubview:view];
 }
 
 - (UITableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), 45 * self.selectData.count) style:UITableViewStylePlain];
+        
+        _tableView = [[UITableView alloc] initWithFrame:self.bounds style:UITableViewStylePlain];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.scrollEnabled = NO;
+        _tableView.scrollEnabled = YES;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        _tableView.rowHeight = 45;
-        _tableView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.98];
+        _tableView.rowHeight = 35;
+        _tableView.bounces = NO;
+        _tableView.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0.98];
     }
-    
+    NSLog(@"fraaaaaa = %@",[NSValue valueWithCGRect:_tableView.frame]);
     return _tableView;
 }
 
 
 
-- (void)setDelegate:(id<IKCompanyClassifyViewDelegate>)delegate
+- (void)setDelegate:(id<IKCompanyTypeViewDelegate>)delegate
 {
     _delegate = delegate;
 }
@@ -170,21 +167,19 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static  NSString *cellId = @"IKCompanyClassifyCellId";
-    IKCompanyClassifyCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    static  NSString *cellId = @"IKCompanyTypeViewCellId";
+    IKCompanyTypeViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
     
     if(cell == nil){
-        cell = [[IKCompanyClassifyCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+        cell = [[IKCompanyTypeViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.backgroundColor = [UIColor clearColor];
+    cell.backgroundColor = [UIColor whiteColor];
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     cell.label.text = self.selectData[indexPath.row];
-    if (indexPath == self.selectedIndexPath) {
-        cell.label.textColor = IKMainTitleColor;
-    }
+
     return cell;
 }
 
@@ -192,12 +187,12 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    IKCompanyClassifyCell *cell = (IKCompanyClassifyCell *)[tableView cellForRowAtIndexPath:indexPath];
+    IKCompanyTypeViewCell *cell = (IKCompanyTypeViewCell *)[tableView cellForRowAtIndexPath:indexPath];
     
     NSString *select = cell.label.text;
     
-    if ([self.delegate respondsToSelector:@selector(selectViewDidSelectIndexPath:selectContent:)]) {
-        [self.delegate selectViewDidSelectIndexPath:indexPath selectContent:select];
+    if ([self.delegate respondsToSelector:@selector(selectCompanyTypeViewDidSelectIndexPath:selectContent:)]) {
+        [self.delegate selectCompanyTypeViewDidSelectIndexPath:indexPath selectContent:select];
     }
 }
 

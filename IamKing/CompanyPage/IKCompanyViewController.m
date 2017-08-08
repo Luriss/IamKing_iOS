@@ -31,6 +31,7 @@
 
 @property(nonatomic,strong)UIButton         *chooseBtn;
 @property(nonatomic,strong)UIView           *headerView;
+@property(nonatomic,strong)UIImageView      *refreshView;
 
 @property(nonatomic,assign)NSInteger         dataPage;
 @property(nonatomic,copy)NSArray            *dataArray;
@@ -62,10 +63,22 @@
 
     [self.view addSubview:self.bgTableView];
     
-    
+    [self addNotification];
     // Do any additional setup after loading the view.
 }
 
+- (void)addNotification
+{
+    [IKNotificationCenter addObserver:self selector:@selector(cityChangeNeedRefreshData:) name:IKCityChangeNeedRefrshDataKey object:nil];
+}
+
+
+- (void)cityChangeNeedRefreshData:(NSNotification *)notification
+{
+    NSLog(@"cityChangeNeedRefreshData");
+    [self getCompanyInfo];
+
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -157,7 +170,7 @@
         _bgTableView.showsHorizontalScrollIndicator = NO;
         _bgTableView.delegate = self;
         _bgTableView.dataSource = self;
-        _bgTableView.bounces = NO;
+        _bgTableView.bounces = YES;
         
         _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
         
@@ -168,6 +181,16 @@
     
         [_bgTableView addSubview:self.headerView];
         _hadAddHeaderView = YES;
+        
+        UIImageView *imageV1 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 13, -38, 26, 26)];
+        imageV1.image = [UIImage imageNamed:@"IK_logo_grey"];
+        [_bgTableView addSubview:imageV1];
+        
+        UIImageView *imageV2 = [[UIImageView alloc] initWithFrame:CGRectMake(IKSCREEN_WIDTH * 0.5 - 15, -40, 30, 30)];
+        imageV2.image = [UIImage imageNamed:@"IK_cycle"];
+        [_bgTableView addSubview:imageV2];
+        
+        self.refreshView = imageV2;
     }
     
     return _bgTableView;
@@ -301,7 +324,7 @@
     if (IKStringIsEmpty(selectedCityId)) {
         selectedCityId = @"0";
     }
-        NSDictionary *jobParam = @{@"cityId":selectedCityId,@"pageSize":@"8",@"page":[NSString stringWithFormat:@"%ld",self.dataPage]};
+    NSDictionary *jobParam = @{@"cityId":selectedCityId,@"pageSize":@"30",@"page":[NSString stringWithFormat:@"%ld",self.dataPage]};
     
     [[IKNetworkManager shareInstance] getCompanyPageCompanyInfoWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
         

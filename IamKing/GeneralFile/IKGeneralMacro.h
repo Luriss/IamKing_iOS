@@ -127,6 +127,11 @@
 
 /***********************************AnimationTime**********************************/
 
+/***********************************Key**********************************/
+#define IKLoginSccuessKey (@"IKLoginSccuessKey")
+#define IKVersionTypeKey (@"IKVersionTypeKey")    // 1 代表公司 ,0 代表个人
+#define IKCityChangeNeedRefrshDataKey (@"IKCityChangeNeedRefrshDataKey")
 
+/***********************************Key**********************************/
 
 #endif /* IKGeneralMacro_h */

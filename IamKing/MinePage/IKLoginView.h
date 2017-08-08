@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, IKLoginViewLoginType) {
 @protocol IKLoginViewDelegate <NSObject>
 
 - (void)loginViewRefreshFrameWithType:(IKLoginViewLoginType)loginType;
-
+- (void)loginViewLoginButtonClick;
 @end
 
 

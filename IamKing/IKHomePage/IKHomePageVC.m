@@ -784,8 +784,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     self.selectedTableView = button.tag-100;
     _tableType = self.selectedTableView - 1;
     [_bottomScrollView setContentOffset:CGPointMake((self.selectedTableView-1)*IKSCREEN_WIDTH, 0) animated:YES];
-    [self getJobInfoTableViewDataUseCache:YES];
-    
+    [self getJobInfoTableViewDataUseCache:NO];
 }
 
 - (void)searchViewCellStartSearch
@@ -813,6 +812,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
 - (void)locationVcDismissChangeNavButtonTitle:(NSString *)title
 {
+    [IKNotificationCenter postNotificationName:IKCityChangeNeedRefrshDataKey object:nil];
     UIButton *btn = (UIButton *)_leftBarBtn.customView;
     [btn setTitle:title forState:UIControlStateNormal];
     _navRightBtnHadClick = NO;

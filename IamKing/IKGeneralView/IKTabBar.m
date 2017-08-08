@@ -127,6 +127,16 @@ NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageN
     [self setSelectedIndex:sender.tag];
 }
 
+- (void)setDefaultSelected:(NSInteger)defaultSelected
+{
+    _defaultSelected = defaultSelected;
+}
+
+- (void)selectedDefaultItem:(NSInteger )index
+{
+    [self setSelectedIndex:index];
+}
+
 #pragma mark - Setter
 
 - (void)setTabBarItemAttributes:(NSArray<NSDictionary *> *)tabBarItemAttributes {
@@ -149,7 +159,7 @@ NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageN
             
             IKTabBarItem *tabBarItem = [self tabBarItemWithFrame:frame title:itemDict[kIKTabBarItemTitle] normalImageName:itemDict[kIKTabBarItemNormalImageName] selectedImageName:itemDict[kIKLTabBarItemSelectedImageName]];
             
-            if (itemTag == 0) {
+            if (itemTag == _defaultSelected) {
                 tabBarItem.selected = YES;
                 tabBarItem.backgroundColor = IKGeneralLightGray;
             }
