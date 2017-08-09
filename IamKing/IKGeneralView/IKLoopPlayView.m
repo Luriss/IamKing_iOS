@@ -412,10 +412,9 @@
 {
    
     NSLog(@"looooooooop");
-    if ([self.delegate respondsToSelector:@selector(LoopPlayViewDidSelectedImage:)]) {
+    if ([self.delegate respondsToSelector:@selector(LoopPlayViewDidSelectedIndex: allImage:)]) {
         NSInteger index = indexPath.row % self.imagesArray.count;
-        NSString *imageUrl = [self.imagesArray objectAtIndex:index];
-        [self.delegate LoopPlayViewDidSelectedImage:imageUrl];
+        [self.delegate LoopPlayViewDidSelectedIndex:index allImage:self.imagesArray];
     }
 
 }

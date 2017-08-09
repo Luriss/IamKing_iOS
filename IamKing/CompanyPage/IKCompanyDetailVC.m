@@ -25,6 +25,8 @@
 #import "IKJobDetailVC.h"
 #import "IKJobTypeView.h"
 #import "IKInfoTableViewCell.h"
+#import "IKLoopImageViewController.h"
+#import "IKTeamDeatilView.h"
 
 
 @interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate,IKJobTypeViewDelegate>
@@ -89,11 +91,32 @@
     [self initLeftBackItem];
     
     
-//    [self addTypeView];
+    [self addNotification];
 
     _imageH = ceilf(IKSCREENH_HEIGHT *0.255);
     // Do any additional setup after loading the view.
 }
+
+
+- (void)addNotification
+{
+    [IKNotificationCenter addObserver:self selector:@selector(loopImageSelected:) name:IKCompanyLoopImageSelectedKey object:nil];
+}
+
+
+- (void)loopImageSelected:(NSNotification *)notifiation
+{
+    NSLog(@"uuuuuu = %@ ,%@",[notifiation.userInfo objectForKey:@"index"],[notifiation.userInfo objectForKey:@"allImage"]);
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        IKLoopImageViewController *loop = [[IKLoopImageViewController alloc] init];
+        
+        loop.imageArray = [notifiation.userInfo objectForKey:@"allImage"];
+        loop.selectedIndex = [notifiation.userInfo objectForKey:@"index"];
+        [self.navigationController pushViewController:loop animated:NO];
+    });
+}
+
 
 - (void)viewWillDisappear:(BOOL)animated
 {
@@ -1098,11 +1121,39 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if (indexPath.section == 1 && self.type == IKCompanyDetailVCTypeNeedJob) {
-        IKJobInfoModel *model = [self.needJobArray objectAtIndex:indexPath.row];
-        IKJobDetailVC *vc = [[IKJobDetailVC alloc] init];
-        vc.jobModel = model;
-        [self.navigationController pushViewController:vc animated:YES];
+    if (indexPath.section == 1) {
+        
+        switch (self.type) {
+            case IKCompanyDetailVCTypeNeedJob:
+            {
+                IKJobInfoModel *model = [self.needJobArray objectAtIndex:indexPath.row];
+                IKJobDetailVC *vc = [[IKJobDetailVC alloc] init];
+                vc.jobModel = model;
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+            case IKCompanyDetailVCTypeAboutUs:
+            {
+            
+            }
+                break;
+            case IKCompanyDetailVCTypeManagerTeam:
+            {
+                IKCompanyManagerTeamModel *model = [self.managerTeamArray objectAtIndex:indexPath.row];
+                NSLog(@"hhhahahahahaha");
+                
+                IKTeamDeatilView *deatil = [[IKTeamDeatilView alloc] initWithName:model.name message:model.describe position:model.workPosition];
+                [deatil show];
+            }
+                break;
+            case IKCompanyDetailVCTypeMultipleShop:
+            {
+                
+            }
+                break;
+            default:
+                break;
+        }
     }
 }
 

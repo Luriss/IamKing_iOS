@@ -461,7 +461,7 @@ static IKNetworkManager *_shareInstance;
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@page=%@",IKGetMoreJobListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"],[param objectForKey:@"page"]];
     NSLog(@"uuuuuuuuuurl = %@",url);
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
-        NSLog(@"responseObject = %@",responseObject);
+//        NSLog(@"responseObject = %@",responseObject);
 
         NSArray *arr = [self dealHomePageJobInfoData:responseObject];
         BOOL success = [self requestDataSuccess:responseObject];
@@ -996,7 +996,6 @@ static IKNetworkManager *_shareInstance;
     NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"IKWorkPosition" ofType:@"plist"];
     NSMutableDictionary *data = [[NSMutableDictionary alloc] initWithContentsOfFile:plistPath];
     
-    NSLog(@"datadatadatadata = %@",data);
     return [data objectForKey:key];
 }
 

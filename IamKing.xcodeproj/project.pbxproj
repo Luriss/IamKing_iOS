@@ -224,6 +224,9 @@
 		21F821671F387AE800DA9EFA /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 21F821611F387AE800DA9EFA /* Info.plist */; };
 		21F821731F39B98500DA9EFA /* IK_businessStore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821711F39B98500DA9EFA /* IK_businessStore.png */; };
 		21F821741F39B98500DA9EFA /* IK_presellStore.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F821721F39B98500DA9EFA /* IK_presellStore.png */; };
+		21F821771F39C48600DA9EFA /* IKLoopImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F821761F39C48600DA9EFA /* IKLoopImageViewController.m */; };
+		21F8217B1F3AB02500DA9EFA /* IKTeamDeatilView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21F8217A1F3AB02500DA9EFA /* IKTeamDeatilView.m */; };
+		21F8217D1F3ABCCA00DA9EFA /* IK_close_white.png in Resources */ = {isa = PBXBuildFile; fileRef = 21F8217C1F3ABCCA00DA9EFA /* IK_close_white.png */; };
 		B2CAFEE30B367CBEFE951D85 /* Pods_IamKing.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E48124199822055D49273C25 /* Pods_IamKing.framework */; };
 /* End PBXBuildFile section */
 
@@ -576,6 +579,11 @@
 		21F821611F387AE800DA9EFA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		21F821711F39B98500DA9EFA /* IK_businessStore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_businessStore.png; sourceTree = "<group>"; };
 		21F821721F39B98500DA9EFA /* IK_presellStore.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_presellStore.png; sourceTree = "<group>"; };
+		21F821751F39C48600DA9EFA /* IKLoopImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKLoopImageViewController.h; sourceTree = "<group>"; };
+		21F821761F39C48600DA9EFA /* IKLoopImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKLoopImageViewController.m; sourceTree = "<group>"; };
+		21F821791F3AB02500DA9EFA /* IKTeamDeatilView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKTeamDeatilView.h; sourceTree = "<group>"; };
+		21F8217A1F3AB02500DA9EFA /* IKTeamDeatilView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKTeamDeatilView.m; sourceTree = "<group>"; };
+		21F8217C1F3ABCCA00DA9EFA /* IK_close_white.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_close_white.png; sourceTree = "<group>"; };
 		E0E2DA5E64516B9028E1BC9A /* Pods-IamKing.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IamKing.release.xcconfig"; path = "Pods/Target Support Files/Pods-IamKing/Pods-IamKing.release.xcconfig"; sourceTree = "<group>"; };
 		E48124199822055D49273C25 /* Pods_IamKing.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IamKing.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -950,6 +958,8 @@
 				21BC61EE1F2DB48800CE85D9 /* IKCompanyDetailVC.m */,
 				21F820DD1F30601500DA9EFA /* IKCompanyProgressVC.h */,
 				21F820DE1F30601500DA9EFA /* IKCompanyProgressVC.m */,
+				21F821751F39C48600DA9EFA /* IKLoopImageViewController.h */,
+				21F821761F39C48600DA9EFA /* IKLoopImageViewController.m */,
 			);
 			name = CompanyPage;
 			sourceTree = "<group>";
@@ -1153,6 +1163,7 @@
 		21C3AE441F175615008FC124 /* IKGeneralView */ = {
 			isa = PBXGroup;
 			children = (
+				21F821781F3AAFF400DA9EFA /* IKTeamDeatilView */,
 				21F821171F32EC5200DA9EFA /* IKRollLabel */,
 				21F821041F31A40000DA9EFA /* IKAppraiseView */,
 				21BC61BA1F2B08F900CE85D9 /* IKAlertView */,
@@ -1295,6 +1306,7 @@
 				21C3AE3D1F1746AA008FC124 /* IK_sellPerformance.png */,
 				21C3AE191F171EC0008FC124 /* IK_bg.png */,
 				21C3AE131F162024008FC124 /* IK_close.png */,
+				21F8217C1F3ABCCA00DA9EFA /* IK_close_white.png */,
 				21D6230F1F132B660054D980 /* IK_exchange.png */,
 				21D622E31F0F6CCE0054D980 /* IK_more.png */,
 				21C3AE1B1F171F2F008FC124 /* IK_bg_white.png */,
@@ -1537,6 +1549,15 @@
 			path = FLAnimatedImage;
 			sourceTree = "<group>";
 		};
+		21F821781F3AAFF400DA9EFA /* IKTeamDeatilView */ = {
+			isa = PBXGroup;
+			children = (
+				21F821791F3AB02500DA9EFA /* IKTeamDeatilView.h */,
+				21F8217A1F3AB02500DA9EFA /* IKTeamDeatilView.m */,
+			);
+			name = IKTeamDeatilView;
+			sourceTree = "<group>";
+		};
 		4837E3E442EACAF7D46EE4B7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -1754,6 +1775,7 @@
 				2197CBB61F1E0C5F00F61562 /* IK_star_solid.png in Resources */,
 				21F8214E1F38476300DA9EFA /* IK_myResume.png in Resources */,
 				21F821671F387AE800DA9EFA /* Info.plist in Resources */,
+				21F8217D1F3ABCCA00DA9EFA /* IK_close_white.png in Resources */,
 				21C3AE1A1F171EC0008FC124 /* IK_bg.png in Resources */,
 				2197CBB71F1E0C5F00F61562 /* IK_star_hollow.png in Resources */,
 				21BC61B41F2AE4F600CE85D9 /* IK_zan_blue.png in Resources */,
@@ -1918,8 +1940,10 @@
 				2141222B1F18D08F00062A2F /* IKJobTypeView.m in Sources */,
 				21C3AE591F175615008FC124 /* IKInfoTableViewCell.m in Sources */,
 				21F821071F31A41500DA9EFA /* IKAppraiseView.m in Sources */,
+				21F821771F39C48600DA9EFA /* IKLoopImageViewController.m in Sources */,
 				210B0D941F0DE16D003FD950 /* AppDelegate.m in Sources */,
 				21BC61DB1F2CE9E200CE85D9 /* IKCompanyAdTableViewCell.m in Sources */,
+				21F8217B1F3AB02500DA9EFA /* IKTeamDeatilView.m in Sources */,
 				21F821521F384CA000DA9EFA /* IKSettingTableViewCell.m in Sources */,
 				21C3AE581F175615008FC124 /* IKInfoTableView.m in Sources */,
 				21C3AE071F15D31D008FC124 /* IKLocationCell.m in Sources */,

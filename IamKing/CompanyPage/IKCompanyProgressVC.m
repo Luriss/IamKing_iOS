@@ -36,8 +36,8 @@
     [button addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
-    [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+    [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     
@@ -52,7 +52,7 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"发展历程";
-    title.textColor = IKMainTitleColor;
+    title.textColor = IKGeneralWhite;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     self.navigationItem.titleView = title;
@@ -67,7 +67,7 @@
     tableView.delegate = self;
     tableView.bounces = NO;
     tableView.dataSource = self;
-    tableView.rowHeight = ceilf(IKSCREENH_HEIGHT * 0.12);
+//    tableView.rowHeight = ceilf(IKSCREENH_HEIGHT * 0.12);
     tableView.backgroundColor = IKGeneralLightGray;
     [self.view addSubview:tableView];
 }
@@ -83,6 +83,22 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.progressArray.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *dict = [self.progressArray objectAtIndex:indexPath.row];
+    NSString *desc = [dict objectForKey:@"describe"];
+    
+    CGSize szie = [NSString getSizeWithString:desc size:CGSizeMake(IKSCREEN_WIDTH *0.64, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:11.0f]}];
+    
+    CGFloat h = szie.height + 45;
+    
+    if (h < ceilf(IKSCREENH_HEIGHT * 0.1)) {
+        return ceilf(IKSCREENH_HEIGHT * 0.1);
+    }
+    
+    return h;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

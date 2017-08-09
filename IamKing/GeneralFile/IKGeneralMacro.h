@@ -131,6 +131,7 @@
 #define IKLoginSccuessKey (@"IKLoginSccuessKey")
 #define IKVersionTypeKey (@"IKVersionTypeKey")    // 1 代表公司 ,0 代表个人
 #define IKCityChangeNeedRefrshDataKey (@"IKCityChangeNeedRefrshDataKey")
+#define IKCompanyLoopImageSelectedKey (@"IKCompanyLoopImageSelectedKey")
 
 /***********************************Key**********************************/
 

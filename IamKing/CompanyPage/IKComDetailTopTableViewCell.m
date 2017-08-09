@@ -292,6 +292,7 @@
         _approveImage.backgroundColor = IKGeneralBlue;
         _approveLabel.text = @"已认证";
         _approveLabel.textColor = IKGeneralBlue;
+        _nickNameLabel.textColor = IKGeneralBlue;
     }
     
     

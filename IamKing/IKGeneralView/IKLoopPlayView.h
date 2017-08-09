@@ -26,7 +26,7 @@ typedef NS_ENUM(NSInteger, IKPageControlAlignment) {
 
 @protocol IKLoopPlayViewDelegate <NSObject>
 
-- (void)LoopPlayViewDidSelectedImage:(NSString *)imageUrl;
+- (void)LoopPlayViewDidSelectedIndex:(NSInteger )index allImage:(NSArray *)imageArray;
 
 @end
 

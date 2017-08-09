@@ -9,7 +9,7 @@
 #import "IKComDetailLoopTableViewCell.h"
 #import "IKLoopPlayView.h"
 
-@interface IKComDetailLoopTableViewCell ()
+@interface IKComDetailLoopTableViewCell ()<IKLoopPlayViewDelegate>
 
 @property(nonatomic,strong)IKLoopPlayView   *lpView;
 
@@ -50,6 +50,7 @@
         _lpView.scrollDirection = IKLPVScrollDirectionHorizontal;
         _lpView.scrollTimeInterval = 4;
         _lpView.pageControlHidden = NO;
+        _lpView.delegate = self;
     }
     return _lpView;
 }
@@ -62,6 +63,13 @@
         self.lpView.imagesArray = imageArray;
         [self.lpView reloadImageData];
     }
+}
+
+
+- (void)LoopPlayViewDidSelectedIndex:(NSInteger)index allImage:(NSArray *)imageArray
+{
+    [IKNotificationCenter postNotificationName:IKCompanyLoopImageSelectedKey object:nil userInfo:@{@"index":[NSString stringWithFormat:@"%ld",index],@"allImage":imageArray}];
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

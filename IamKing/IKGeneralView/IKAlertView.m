@@ -82,7 +82,6 @@
 
 @property (nonatomic, strong) UIWindow *alertWindow;
 @property (nonatomic, strong) NSMutableArray *showArray;
-@property (nonatomic, strong) UIView *bgView;
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSArray *buttons;
