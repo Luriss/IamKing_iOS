@@ -307,7 +307,7 @@
     [cancel setTitle:@"取消" forState:UIControlStateNormal];
     [cancel setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
     cancel.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-    cancel.layer.cornerRadius = 5;
+    cancel.layer.cornerRadius = 6;
     cancel.layer.borderColor = IKGeneralBlue.CGColor;
     cancel.layer.borderWidth = 1;
     [cancel addTarget:self action:@selector(hideShowingAlertView) forControlEvents:UIControlEventTouchUpInside];
@@ -319,7 +319,7 @@
     [ok setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     ok.titleLabel.font = [UIFont systemFontOfSize:15.0f];
     ok.backgroundColor = IKGeneralBlue;
-    ok.layer.cornerRadius = 5;
+    ok.layer.cornerRadius = 6;
     [ok addTarget:self action:@selector(actionClick:) forControlEvents:UIControlEventTouchUpInside];
     [ok setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
 
@@ -389,7 +389,7 @@
         _tipLabel.textColor = [UIColor whiteColor];
         _tipLabel.font = [UIFont systemFontOfSize:13.0f];
         _tipLabel.textAlignment = NSTextAlignmentCenter;
-        _tipLabel.layer.cornerRadius = 5;
+        _tipLabel.layer.cornerRadius = 6;
         _tipLabel.layer.masksToBounds = YES;
         _tipLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.9];
         _tipLabel.hidden = YES;

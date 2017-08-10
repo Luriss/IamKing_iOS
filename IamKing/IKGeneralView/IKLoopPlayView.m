@@ -298,6 +298,9 @@
     if (isAutoScroll) {
         [self setupTimer];
     }
+    else{
+        [self invalidateTimer];
+    }
 }
 
 
@@ -411,7 +414,6 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
    
-    NSLog(@"looooooooop");
     if ([self.delegate respondsToSelector:@selector(LoopPlayViewDidSelectedIndex: allImage:)]) {
         NSInteger index = indexPath.row % self.imagesArray.count;
         [self.delegate LoopPlayViewDidSelectedIndex:index allImage:self.imagesArray];
@@ -421,8 +423,11 @@
 
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {
     
-    _pageControl.currentPage = (indexPath.row % 5);
-    [self setupTimer];
+    _pageControl.currentPage = (indexPath.row % self.imagesArray.count);
+
+    if (_isAutoScroll) {
+        [self setupTimer];
+    }
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
@@ -519,7 +524,7 @@
         NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(nextPageX,_flowLayout.itemSize.height * 0.5)];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:hasScrollAnimation];
         if (!_pageControlHidden) {
-            _pageControl.currentPage = (indexPath.row % 5);
+            _pageControl.currentPage = (indexPath.row % self.imagesArray.count);
         }
     }
     else {
@@ -546,7 +551,7 @@
         NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:CGPointMake(_flowLayout.itemSize.width * 0.5, nextPageY)];
         [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:hasScrollAnimation];
         if (!_pageControlHidden) {
-            _pageControl.currentPage = (indexPath.row % 5);
+            _pageControl.currentPage = (indexPath.row % self.imagesArray.count);
         }
     }
 }

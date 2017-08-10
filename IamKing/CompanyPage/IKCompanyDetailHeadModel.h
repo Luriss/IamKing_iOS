@@ -25,6 +25,7 @@
 @property(nonatomic,copy)NSString     *numberOfAppraise;  // 评价
 @property(nonatomic,copy)NSString     *numberOfAttention;  // 评价
 @property(nonatomic,copy)NSString     *companyDescription;  
+@property(nonatomic,copy)NSString     *errorMsg;
 
 
 @property(nonatomic,assign)BOOL        isAuthen;

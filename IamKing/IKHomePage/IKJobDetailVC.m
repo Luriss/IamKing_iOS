@@ -54,9 +54,9 @@
     
     // no data bg view.
     NSLog(@"_bgTableView = %@",_bgTableView);
-    if (_bgTableView == nil) {
-        [self.view addSubview:self.noDataBgView];
-    }
+//    if (_bgTableView == nil) {
+//        [self.view addSubview:self.noDataBgView];
+//    }
 }
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -90,26 +90,38 @@
         // 获取职位详情信息
         [[IKNetworkManager shareInstance] getHomePageJobInfoDetailWithParam:@{@"inviteWorkId":jobModel.jobID} backData:^(IKJobDetailModel *detailModel, BOOL success) {
             NSLog(@"detailModel = %@",detailModel.description);
-            
-            if (detailModel) {
-                _jobDetailModel = detailModel;
-                
-                // 如果有技能标签,则需要增加 section.
-                if (_jobDetailModel.tagsList.count > 0) {
-                    needShowSkillSection = YES;
-                }
-                else{
-                    needShowSkillSection = NO;
-                }
-                
-                [self.noDataBgView removeFromSuperview];
-                self.noDataBgView = nil;
-                
-                NSLog(@"1111  =%@",_bgTableView);
-                if (_bgTableView == nil) {
-                    [self.view insertSubview:self.bgTableView atIndex:0];
+
+            [self.noDataBgView removeFromSuperview];
+            self.noDataBgView = nil;
+//
+            if (success) {
+                if (detailModel) {
+                    _jobDetailModel = detailModel;
+                    
+                    // 如果有技能标签,则需要增加 section.
+                    if (_jobDetailModel.tagsList.count > 0) {
+                        needShowSkillSection = YES;
+                    }
+                    else{
+                        needShowSkillSection = NO;
+                    }
+                    
+                    NSLog(@"1111  =%@",_bgTableView);
+                    if (_bgTableView == nil) {
+                        [self.view insertSubview:self.bgTableView atIndex:0];
+                    }
                 }
             }
+            else{
+
+                NSString *str = [NSString stringWithFormat:@"%@,即将退出",detailModel.errorMsg];
+                [LRToastView showTosatWithText:str inView:self.view];
+                
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self backButtonClick:nil];
+                });
+            }
+            
         }];
     }
 }
@@ -119,7 +131,7 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"职位详情";
-    title.textColor = IKMainTitleColor;
+    title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     self.navigationItem.titleView = title;
@@ -134,8 +146,8 @@
     [button addTarget:self action:@selector(backButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
-    [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+    [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
     

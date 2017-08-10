@@ -20,6 +20,7 @@
 @property(nonatomic,copy)NSString     *informationDetail;
 @property(nonatomic,copy)NSString     *location;
 @property(nonatomic,copy)NSArray      *progressList;
+@property(nonatomic,copy)NSString     *errorMsg;
 
 - (NSString *)description;
 

@@ -119,7 +119,7 @@
     if (_logoImage == nil) {
         _logoImage = [[UIImageView alloc] init];
         _logoImage.backgroundColor = [UIColor redColor];
-        _logoImage.layer.cornerRadius = 5;
+        _logoImage.layer.cornerRadius = 6;
         _logoImage.layer.masksToBounds = YES;
     }
     return _logoImage;

@@ -58,6 +58,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 @property(nonatomic,strong)IKScrollView     *bottomScrollView;
 @property(nonatomic,strong)IKTableView      *bottomTableView;
 @property (nonatomic,strong)IKTableView     *jobTableView;
+@property (nonatomic,strong)IKTableView     *hotJobTableView;
+
 @property(nonatomic,strong)IKJobTypeView    *jobTypeView;
 @property(nonatomic,strong)IKLoopPlayView   *lpView;
 @property(nonatomic,strong)IKJobDetailVC    *jobDetailVc;
@@ -108,8 +110,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     [self requestHomePageAllData];
     
-//    [self testData];
-        // 初始化导航栏内容
+    //    [self testData];
+    // 初始化导航栏内容
     [self initNavigationContent];
     
     [self initLoopPlayView];
@@ -132,7 +134,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     if (_bottomTableView.contentOffset.y > 0) {
         self.sysNavView.alpha = 0.95;
     }
-
+    
     // 视图显示开始轮播
     [self startLoopPlayView];
     
@@ -150,7 +152,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     [super viewWillDisappear:animated];
     self.sysNavView.alpha = 1.0;
     self.navigationController.view.backgroundColor = [UIColor whiteColor];
-
+    
 }
 -(void)viewDidDisappear:(BOOL)animated
 {
@@ -158,7 +160,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     // 视图消失,停止轮播
     [self stopLoopPlayView];
-
+    
 }
 
 
@@ -234,7 +236,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
-
+    
     button.titleLabel.font = [UIFont boldSystemFontOfSize:12.0f];
     
     NSString *cityStr = [IKUSERDEFAULT objectForKey:@"selectedCity"];
@@ -246,7 +248,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_Address"]];
     [button setImage:[UIImage imageNamed:@"IK_Address"] forState:UIControlStateNormal];
     [button setImage:image forState:UIControlStateHighlighted];
-
+    
     _leftBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
 }
 
@@ -261,14 +263,14 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     button.titleEdgeInsets = UIEdgeInsetsMake(0, -90, 0, 0);
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button setTitleColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8] forState:UIControlStateHighlighted];
-
+    
     button.titleLabel.font = [UIFont boldSystemFontOfSize:14.0f];
     [button setTitle:@"分类" forState:UIControlStateNormal];
     
     UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_classify"]];
     [button setImage:[UIImage imageNamed:@"IK_classify"] forState:UIControlStateNormal];
     [button setImage:image forState:UIControlStateHighlighted];
-
+    
     _rightBarBtn = [[UIBarButtonItem alloc]initWithCustomView:button];
 }
 
@@ -277,7 +279,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)setNavigationContent
 {
     IKLog(@"self.navigationController = %@",self.navigationController);
-
+    
     
     self.navigationItem.rightBarButtonItem = _rightBarBtn;
     self.navigationItem.leftBarButtonItem = _leftBarBtn;
@@ -364,6 +366,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 }
 
 
+- (void)initHotJobTableView
+{
+}
 
 #pragma mark - Stop & Start LoopPlayView
 
@@ -474,14 +479,14 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
                     make.bottom.equalTo(cell.contentView).offset(-1);
                 }];
                 
-//                UIView *line = [[UIView alloc] init];
-//                line.backgroundColor = IKLineColor;
-//                [cell.contentView addSubview:line];
-//                [line mas_makeConstraints:^(MASConstraintMaker *make) {
-//                    make.bottom.equalTo(cell.contentView.mas_bottom);
-//                    make.left.and.right.equalTo(cell.contentView);
-//                    make.height.mas_equalTo(2);
-//                }];
+                //                UIView *line = [[UIView alloc] init];
+                //                line.backgroundColor = IKLineColor;
+                //                [cell.contentView addSubview:line];
+                //                [line mas_makeConstraints:^(MASConstraintMaker *make) {
+                //                    make.bottom.equalTo(cell.contentView.mas_bottom);
+                //                    make.left.and.right.equalTo(cell.contentView);
+                //                    make.height.mas_equalTo(2);
+                //                }];
             }
         }
         else{
@@ -566,7 +571,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     if (tableView != _bottomTableView) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
+        
         IKJobInfoModel *model = [self.dataArray objectAtIndex:indexPath.row];
         self.jobDetailVc.jobModel = model;
         [self.navigationController pushViewController:self.jobDetailVc animated:YES];
@@ -585,9 +590,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 // scrollView 已经滑动
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-
+    
     CGFloat offsetY = scrollView.contentOffset.y;
-
+    
     // 判断是上下滑还是左右滑.
     CGPoint point = [scrollView.panGestureRecognizer translationInView:scrollView];
     if ((fabs(point.x) + 5)<fabs(point.y)) {
@@ -599,7 +604,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     }
     
     CGFloat lph = [[IKHomePageConfig shareInstance] getLoopPlayViewHight];
-
+    
     if (scrollView == _bottomTableView) {
         
         // _bottomTableView 拉倒最下面就禁止拉.
@@ -607,7 +612,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
             [_bottomTableView setContentOffset:CGPointMake(0, _bottomTableView.contentSize.height)];
         }
         
-//        NSLog(@"scrollView.contentOffset.y = %.0f",scrollView.contentOffset.y);
+        //        NSLog(@"scrollView.contentOffset.y = %.0f",scrollView.contentOffset.y);
         
         if (offsetY < 0) {
             CGFloat s = offsetY/30;
@@ -663,7 +668,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     //    NSLog(@"scrollViewWillBeginDragging");
-//    self.tableFooterView.hidden = NO;
+    //    self.tableFooterView.hidden = NO;
 }
 
 // scrollView 结束拖动
@@ -672,7 +677,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     NSLog(@"scrollViewDidEndDragging");
     
     _bottomScrollView.scrollEnabled = YES;
-
+    
     
     if (scrollView == _bottomTableView) {
         if (scrollView.contentOffset.y < -45) {
@@ -776,9 +781,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)refeshHomePageData
 {
     [self getLoopPlayViewDataUseCache:NO];
-
+    
     [self getJobInfoTableViewDataUseCache:NO];
-
+    
     
 }
 
@@ -882,15 +887,24 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     // 获取省市信息.
     [[IKNetworkManager shareInstance] getHomePageProvinceCityDataWithBackData:^(NSArray *dataArray, BOOL success) {
-        
-        self.provinceCityData = dataArray;
+        if (success) {
+            self.provinceCityData = dataArray;
+        }
+        else{
+            [LRToastView showTosatWithText:dataArray.firstObject inView:self.view dismissAfterDelay:1];
+        }
     }];
     
     
     // 获取工作类型.
     [[IKNetworkManager shareInstance] getHomePageWorkListDataWithBackData:^(NSArray *dataArray, BOOL success) {
         
-        self.jobTypeData = dataArray;
+        if (success) {
+            self.jobTypeData = dataArray;
+        }
+        else{
+            [LRToastView showTosatWithText:dataArray.firstObject inView:self.view dismissAfterDelay:1];
+        }
     }];
 }
 
@@ -900,19 +914,20 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     if (useCache) {
         // 轮播图
         [[IKNetworkManager shareInstance] getHomePageLoopPlayImageData:^(NSDictionary *dict, BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (success) {
+            if (success) {
+                dispatch_async(dispatch_get_main_queue(), ^{
                     _lpView.imagesArray = [dict objectForKey:@"imageUrlArray"];
                     NSLog(@"_lpView.imagesArray = %@",_lpView.imagesArray);
                     [_lpView reloadImageData];
-                }
-            });
+                });
+            }
         }];
     }
     else{
         [[IKNetworkManager shareInstance] getHomePageLoopPlayImageDataWithoutCache:^(NSDictionary *dict, BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if (success) {
+            if (success) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
                     _lpView.imagesArray = [dict objectForKey:@"imageUrlArray"];
                     [_lpView reloadImageData];
                     NSLog(@"getHomePageLoopPlayImageDataWithoutCache");
@@ -922,8 +937,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
                     else{
                         _isRefreshEnd = YES;
                     }
-                }
-            });
+                    
+                });
+            }
         }];
     }
 }
@@ -932,34 +948,41 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 - (void)getJobInfoTableViewDataUseCache:(BOOL)useCache
 {
     NSString *cityId = [self getCurrentCityIdFromUserDefault];
-
+    
     // 获取列表信息.
     NSDictionary *jobParam = @{@"cityId":cityId,@"pageSize":@"40",@"type":[NSString stringWithFormat:@"%ld",(long)_tableType]};
     
     if (!useCache) {
         [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithoutCacheParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.dataArray = [dataArray copy];
-                [self.jobTableView reloadData];
-                
-                NSLog(@"getHomePageJobInfoDataWithParam");
-                if (_isRefreshEnd) {
-                    [self stopLoadingAnimation];
-                }
-                else{
-                    _isRefreshEnd = YES;
-                }
-            });
+            if (success) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.dataArray = [dataArray copy];
+                    [self.jobTableView reloadData];
+                    
+                    NSLog(@"getHomePageJobInfoDataWithParam");
+                    if (_isRefreshEnd) {
+                        [self stopLoadingAnimation];
+                    }
+                    else{
+                        _isRefreshEnd = YES;
+                    }
+                });
+            }
+            else{
+                [self stopLoadingAnimation];
+            }
         }];
     }
     else{
         [[IKNetworkManager shareInstance] getHomePageJobInfoDataWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.dataArray = nil;
-                self.dataArray = [dataArray copy];
-                [self.jobTableView reloadData];
-
-            });
+            if (success) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.dataArray = nil;
+                    self.dataArray = [dataArray copy];
+                    [self.jobTableView reloadData];
+                    
+                });
+            }
         }];
     }
 }
@@ -980,9 +1003,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
                 self.dataArray = [self.dataArray arrayByAddingObjectsFromArray:dataArray];
                 [self.jobTableView reloadData];
             });
-            
         }
-
+        
     }];
 }
 
@@ -997,7 +1019,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
         currentSelectedCityId = selectedCityId;
     }
     return currentSelectedCityId;
-
+    
 }
 
 

@@ -27,9 +27,11 @@
 #import "IKInfoTableViewCell.h"
 #import "IKLoopImageViewController.h"
 #import "IKTeamDeatilView.h"
+#import "IKShopDetailView.h"
+#import "IKShopListViewController.h"
 
 
-@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate,IKJobTypeViewDelegate>
+@interface IKCompanyDetailVC ()<UIScrollViewDelegate,UITableViewDelegate,UITableViewDataSource,IKComInformationTableViewCellDelegate,IKAppraiseViewDelegate,IKJobTypeViewDelegate,IKShopDetailViewDelegate>
 {
     CGFloat _imageH;
     CGFloat _infoCellH;
@@ -393,6 +395,7 @@
         NSString *str = nil;
         _jobTypeView.lineWidth = 64;
         
+        NSLog(@"_headModel.companyType = %@",_headModel.companyType);
         switch ([_headModel.companyType integerValue]) {
             case 1:
                 str = @"连锁门店";
@@ -476,61 +479,70 @@
         
         [[IKNetworkManager shareInstance]getCompanyPageCompanyInfoDetailWithParam:dict backData:^(IKCompanyDetailHeadModel *detailModel, BOOL success) {
             NSLog(@"description = %@",detailModel.description);
-            _headModel = detailModel;
-            [self.view addSubview:self.topTypeView];
-
-            [self.view insertSubview:self.topNameLabel aboveSubview:_navScrollVIew];
-            _topNameLabel.text = _headModel.nickName;
-            _topNameLabel.hidden = YES;
-            
-            self.headImageView.image = nil;
-            self.navImageView.image = nil;
-            
-            [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:detailModel.logoImageUrl ] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                _headModel = detailModel;
+                [self.view addSubview:self.topTypeView];
+                
+                [self.view insertSubview:self.topNameLabel aboveSubview:_navScrollVIew];
+                _topNameLabel.text = _headModel.nickName;
+                _topNameLabel.hidden = YES;
+                
+                self.headImageView.image = nil;
+                self.navImageView.image = nil;
+                
+                [self.logoImageView sd_setImageWithURL:[NSURL URLWithString:detailModel.logoImageUrl ] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        
+                        self.logoImageView.image = image;
+                        self.bulrImage = [UIImage boxblurImage:image withBlurNumber:1.0];
+                        UIImage *okImage = [self.bulrImage rt_tintedImageWithColor:[UIColor blackColor] level:0.2];
+                        self.headImageView.image = okImage;
+                        self.navImageView.image = okImage;
+                        
+                        [_navScrollVIew addSubview:_navImageView];
+                        
+                        _navImageView.hidden = YES;
+                        [self.bottomTableView reloadData];
+                        
+                    });
+                }];
+                
+                CGSize size = [NSString getSizeWithString:_headModel.numberOfAttention size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
+                
+                [self.attentionView mas_remakeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(_bottomTableView.mas_top).offset(-37);
+                    make.left.equalTo(_bottomTableView.mas_left).offset(20);
+                    make.height.mas_equalTo(20);
+                    make.width.mas_equalTo(size.width-3);
+                }];
+                _attentionNum.frame = CGRectMake(0, 0, size.width-5, 20);
+                _attentionNum1.frame = CGRectMake(0, 20, size.width-5, 20);
+                _attentionNum2.frame = CGRectMake(0, 40, size.width-2, 20);
+                
+                _attentionNum1.text = _headModel.numberOfAttention;
+                _attentionNum2.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]+1];
+                _attentionNum.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]-1];
+                
+                if (_headModel.isOperate) {
+                    _attentionBtn.isClick = YES;
+                    [_attentionBtn setTitle:@"取消关注" forState:UIControlStateNormal];
                     
-                    self.logoImageView.image = image;
-                    self.bulrImage = [UIImage boxblurImage:image withBlurNumber:1.0];
-                    UIImage *okImage = [self.bulrImage rt_tintedImageWithColor:[UIColor blackColor] level:0.2];
-                    self.headImageView.image = okImage;
-                    self.navImageView.image = okImage;
+                }
+                else{
+                    _attentionBtn.isClick = NO;
+                    [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
                     
-                    [_navScrollVIew addSubview:_navImageView];
-                    
-                    _navImageView.hidden = YES;
-                    [self.bottomTableView reloadData];
-                    
-                });
-            }];
-            
-            CGSize size = [NSString getSizeWithString:_headModel.numberOfAttention size:CGSizeMake(100, 20) attribute:@{NSFontAttributeName:[UIFont systemFontOfSize:13.0f]}];
-            
-            [self.attentionView mas_remakeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(_bottomTableView.mas_top).offset(-37);
-                make.left.equalTo(_bottomTableView.mas_left).offset(20);
-                make.height.mas_equalTo(20);
-                make.width.mas_equalTo(size.width-3);
-            }];
-            _attentionNum.frame = CGRectMake(0, 0, size.width-5, 20);
-            _attentionNum1.frame = CGRectMake(0, 20, size.width-5, 20);
-            _attentionNum2.frame = CGRectMake(0, 40, size.width-2, 20);
-
-            _attentionNum1.text = _headModel.numberOfAttention;
-            _attentionNum2.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]+1];
-            _attentionNum.text = [NSString stringWithFormat:@"%ld",[_headModel.numberOfAttention integerValue]-1];
-
-            if (_headModel.isOperate) {
-                _attentionBtn.isClick = YES;
-                [_attentionBtn setTitle:@"取消关注" forState:UIControlStateNormal];
-
+                }
+                
+                [self addStarToAppraiseView:[_headModel.numberOfAppraise integerValue]];
             }
             else{
-                _attentionBtn.isClick = NO;
-                [_attentionBtn setTitle:@"关注" forState:UIControlStateNormal];
-
+                NSString *str = @"很抱歉,获取公司信息失败,即将退出";
+                [LRToastView showTosatWithText:str inView:self.view dismissAfterDelay:1];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self companyDetailVcDismissSelf];
+                });
             }
-            
-            [self addStarToAppraiseView:[_headModel.numberOfAppraise integerValue]];
         }];
         
         [[IKNetworkManager shareInstance] getCompanyPageAboutUsInfoWithParam:dict backData:^(IKCompanyAboutUsModel *model, BOOL success) {
@@ -544,9 +556,9 @@
                     }];
                 });
             }
-            
-            
-            
+            else{
+                [LRToastView showTosatWithText:model.errorMsg inView:self.view dismissAfterDelay:1];
+            }
         }];
     }
 }
@@ -594,8 +606,13 @@
 
             if (IKArrayIsEmpty(self.managerTeamArray)) {
                 [[IKNetworkManager shareInstance] getCompanyPageManagerTeamInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
-                    self.managerTeamArray = [NSArray arrayWithArray:dataArray];
-                    [self.bottomTableView reloadData];
+                    if (success) {
+                        self.managerTeamArray = [NSArray arrayWithArray:dataArray];
+                        [self.bottomTableView reloadData];
+                    }
+                    else{
+                        [LRToastView showTosatWithText:dataArray.firstObject inView:self.view dismissAfterDelay:1];
+                    }
                 }];
             }
             else{
@@ -608,8 +625,13 @@
             self.type = IKCompanyDetailVCTypeMultipleShop;
             if (IKArrayIsEmpty(self.shopTypeArray)) {
                 [[IKNetworkManager shareInstance] getCompanyPageShopNumberInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
-                    self.shopTypeArray = [NSArray arrayWithArray:dataArray];
-                    [self.bottomTableView reloadData];
+                    if (success) {
+                        self.shopTypeArray = [NSArray arrayWithArray:dataArray];
+                        [self.bottomTableView reloadData];
+                    }
+                    else{
+                        [LRToastView showTosatWithText:dataArray.firstObject inView:self.view dismissAfterDelay:1];
+                    }
                 }];
             }
             else{
@@ -622,8 +644,13 @@
             self.type = IKCompanyDetailVCTypeNeedJob;
             if (IKArrayIsEmpty(self.needJobArray)) {
                 [[IKNetworkManager shareInstance] getCompanyPageNeedJobInfoWithParam:dict backData:^(NSArray *dataArray, BOOL success) {
-                    self.needJobArray = [NSArray arrayWithArray:dataArray];
-                    [self.bottomTableView reloadData];
+                    if (success) {
+                        self.needJobArray = [NSArray arrayWithArray:dataArray];
+                        [self.bottomTableView reloadData];
+                    }
+                    else{
+                        [LRToastView showTosatWithText:dataArray.firstObject inView:self.view dismissAfterDelay:1];
+                    }
                 }];
             }
             else{
@@ -672,13 +699,18 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        CGSize szie = [NSString getSizeWithString:_headModel.companyDescription size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:13.0f]}];
+        
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:3];
+        
+        NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSParagraphStyleAttributeName:paragraphStyle};
+        CGSize szie = [NSString getSizeWithString:_headModel.companyDescription size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:attributes];
         NSLog(@"size.height = %.0f",szie.height);
         if (szie.height < 44) {
-            return 175;
+            return 205;
         }
     
-        return 130 + szie.height + 10;  //  多加10 好看
+        return 130 + szie.height + 40;  //  多加10 好看
     }
     else{
         switch (self.type) {
@@ -689,7 +721,13 @@
                         return ceilf(IKSCREENH_HEIGHT * 0.2699);
                     }
                     else{
-                        CGSize szie = [NSString getSizeWithString:_aboutUsModel.informationDetail size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont systemFontOfSize:13.0f]}];
+                        
+                        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                        [paragraphStyle setLineSpacing:3];
+                        
+                        NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSParagraphStyleAttributeName:paragraphStyle};
+                        
+                        CGSize szie = [NSString getSizeWithString:_aboutUsModel.informationDetail size:CGSizeMake(IKSCREEN_WIDTH *0.893, MAXFLOAT) attribute:attributes];
                         
                         CGFloat titleH = ceilf(IKSCREENH_HEIGHT *0.06);
                         
@@ -897,7 +935,7 @@
                         [allButton setTitle:@"全部历程" forState:UIControlStateNormal];
                         [allButton setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
                         allButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-                        allButton.layer.cornerRadius = 5;
+                        allButton.layer.cornerRadius = 6;
                         allButton.layer.borderColor = IKGeneralBlue.CGColor;
                         allButton.layer.borderWidth = 1;
                         [allButton addTarget:self action:@selector(allButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -919,7 +957,6 @@
                                 cell = [[IKCompanyProgressTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
                             }
                             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                            NSLog(@"indexPath.row = %ld",indexPath.row);
                             if (row < _aboutUsModel.progressList.count) {
                                 if (row == 1) {
                                     [cell addProgressCellData:_aboutUsModel.progressList[0] showVerTopLine:NO showVerBottomLine:YES];
@@ -1149,6 +1186,24 @@
             case IKCompanyDetailVCTypeMultipleShop:
             {
                 
+                switch ([_headModel.companyType integerValue]) {
+                    case 1:
+                    {
+                        IKShopDetailView *detail = [[IKShopDetailView alloc] initWithShopDetailModel:[self.shopTypeArray objectAtIndex:indexPath.row]];
+                        detail.delegate = self;
+                        [detail show];
+                        break;
+                    }
+                    case 2:
+
+                        break;
+                    case 3:
+
+                        break;
+                        
+                    default:
+                        break;
+                }
             }
                 break;
             default:
@@ -1156,6 +1211,18 @@
         }
     }
 }
+
+- (void)showShopListWithShopID:(NSString *)shopId companyID:(NSString *)companyID
+{
+    NSLog(@"shopId = %@",shopId);
+    
+    IKShopListViewController *shopList = [[IKShopListViewController alloc] init];
+    
+    shopList.dataDict = @{@"shopId":shopId,@"companyId":companyID};
+    
+    [self.navigationController pushViewController:shopList animated:YES];
+}
+
 
 - (void)allButtonClick:(UIButton *)button
 {

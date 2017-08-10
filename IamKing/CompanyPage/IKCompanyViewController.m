@@ -359,7 +359,7 @@ extern NSString * currentSelectedCityId;
         label.text = @"请选择公司类型";
         _bgTableView.contentOffset = CGPointMake(0, -44);
 
-        [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        [UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
             self.classifyView.transform = CGAffineTransformIdentity;
         } completion:^(BOOL finished) {
             
@@ -607,9 +607,12 @@ extern NSString * currentSelectedCityId;
     NSDictionary *jobParam = @{@"cityId":currentSelectedCityId,@"pageSize":@"16",@"page":[NSString stringWithFormat:@"%ld",self.dataPage]};
     
     [[IKNetworkManager shareInstance] getCompanyPageCompanyInfoWithParam:jobParam useCache:useCache backData:^(NSArray *dataArray, BOOL success){
-        if (dataArray.count > 0) {
+        if (success) {
             self.dataArray = [NSArray arrayWithArray:dataArray];
             [self.bgTableView reloadData];
+        }
+        else{
+            
         }
         
         if (_isLoading) {
@@ -618,11 +621,13 @@ extern NSString * currentSelectedCityId;
     }];
     
     [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.recommendArray = [NSArray arrayWithArray:dataArray];
+                [_adView addCompanyAdCellData:dataArray];
+            });
+        }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.recommendArray = [NSArray arrayWithArray:dataArray];
-            [_adView addCompanyAdCellData:dataArray];
-        });
     }];
 }
 

@@ -216,8 +216,8 @@
 {
     if (_imageV == nil) {
         _imageV = [[UIImageView alloc] init];
-        _imageV.layer.cornerRadius = 5;
-//        _imageV.backgroundColor = [UIColor redColor];
+        _imageV.layer.cornerRadius = 6;
+        _imageV.backgroundColor = IKGeneralLightGray;
     }
     return _imageV;
 }
@@ -432,7 +432,13 @@
 - (void)addFeedbackCellData:(NSDictionary *)dict
 {
     [_imageV lwb_loadImageWithUrl:[[dict objectForKey:@"userInfo"] objectForKey:@"headerImage"] placeHolderImageName:nil radius:5];
-    [_nameLabel setText:[[dict objectForKey:@"userInfo"] objectForKey:@"name"]];
+    NSString *name = [[dict objectForKey:@"userInfo"] objectForKey:@"name"];
+    
+    if ([name isKindOfClass:[NSNull class]]) {
+        name = @"无名氏";
+    }
+    [_nameLabel setText:name];
+
     
     _timeLabel.text = [self dealTime:[dict objectForKey:@"create_time"]];
     _zanNumberLabel.text = [dict objectForKey:@"like_num"];

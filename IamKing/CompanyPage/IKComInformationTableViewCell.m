@@ -66,9 +66,17 @@
     _bottomLineView.frame = CGRectMake(20, 39, IKSCREEN_WIDTH - 40, 1);
 
     
+    if (IKStringIsNotEmpty(_content)) {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        [paragraphStyle setLineSpacing:3];
+        
+        NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSParagraphStyleAttributeName:paragraphStyle};
+        _contentLabel.attributedText = [[NSAttributedString alloc] initWithString:_content attributes:attributes];
+    }
+    else{
+        _contentLabel.text = _content;
+    }
     
-    _contentLabel.text = _content;
-
     if (_needShowMoreBtn) {
         _showMoreBtn.frame = CGRectMake(IKSCREEN_WIDTH - 70, 0, 50, 40);
         _showMoreBtn.hidden = NO;
@@ -127,7 +135,7 @@
     if (_contentLabel == nil) {
         _contentLabel = [[UILabel alloc] init];
         _contentLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
-        _contentLabel.textColor = IKSubHeadTitleColor;
+        _contentLabel.textColor = IKMainTitleColor;
         _contentLabel.textAlignment = NSTextAlignmentLeft;
         _contentLabel.numberOfLines = 0;
         _contentLabel.frame = CGRectMake(20, 42, 335, 122);
@@ -218,13 +226,6 @@
 
 }
 
-
-- (void)setContent:(NSString *)content
-{
-    if (IKStringIsNotEmpty(content)) {
-        _contentLabel.text = content;
-    }
-}
 
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

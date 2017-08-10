@@ -120,7 +120,7 @@
         _logoView.backgroundColor = IKGeneralLightGray;
         _logoView.layer.borderColor = IKGeneralLightGray.CGColor;
         _logoView.layer.borderWidth = 1;
-        _logoView.layer.cornerRadius = 5;
+        _logoView.layer.cornerRadius = 6;
         _logoView.layer.masksToBounds = YES;
     }
     return _logoView;
@@ -208,6 +208,8 @@
             _timeNumLabel.text = @"昨天";
             _msgNumberLabel.text = @"66";
             _bottomLine.hidden = YES;
+            [_logoView setImage:[UIImage imageNamed:@"IK_messageofficial"]];
+
             break;
         }
         case IKMessageNoticeTableViewCellTypeInterested:
@@ -220,6 +222,7 @@
 //            _msgNumberLabel.text = @"66";
             _msgNumberLabel.layer.backgroundColor = [UIColor clearColor].CGColor;
             _bottomLine.hidden = YES;
+            [_logoView setImage:[UIImage imageNamed:@"IK_messageinterest"]];
 
             break;
         }

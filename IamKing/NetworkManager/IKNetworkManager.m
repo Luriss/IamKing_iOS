@@ -69,6 +69,8 @@
 //cityId=0&page=2&pageSize=8
 //#define IKCompanyInfoLoadMoreUrl (@"https://www.iamking.com.cn/index.php/User/getUserCompanyList?")
 
+//shopId=127&userCompanyId=292
+#define IKCompanyShopListUrl  (@"https://www.iamking.com.cn/index.php/ShopList/getInviteListByShopId?")
 
 @interface IKNetworkManager ()
 
@@ -127,8 +129,16 @@ static IKNetworkManager *_shareInstance;
 - (void)getHomePageLoopPlayImageDataWithoutCache:(IKRequestDictData)callback
 {
     [IKNetworkHelper GET:IKGetLoopPlayUrl parameters:nil responseCache:nil success:^(id responseObject) {
-        NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseObject];
         BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSDictionary *dict = nil;
+        if (success) {
+            dict = [self dealHomePageLoopPlayImageData:responseObject];
+        }
+        else{
+            dict = @{@"errmsg":[responseObject objectForKey:@"errmsg"]};
+        }
+        
         if (callback) {
             callback(dict,success);
         }
@@ -144,16 +154,32 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:IKGetLoopPlayUrl parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
 
+        BOOL success = [self requestDataSuccess:responseCache];
+
+        NSDictionary *dict = nil;
+        if (success) {
+            dict = [self dealHomePageLoopPlayImageData:responseCache];
+        }
+        else{
+            dict = @{@"errmsg":[responseCache objectForKey:@"errmsg"]};
+        }
         if (callback) {
-            NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseCache];
-            BOOL success = [self requestDataSuccess:responseCache];
             callback(dict,success);
         }
     } success:^(id responseObject) {
         
         if (![dataResult isEqual:responseObject]) {
-            NSDictionary *dict = [self dealHomePageLoopPlayImageData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSDictionary *dict = nil;
+            if (success) {
+                dict = [self dealHomePageLoopPlayImageData:responseObject];
+            }
+            else{
+                dict = @{@"errmsg":[responseObject objectForKey:@"errmsg"]};
+            }
+            
             if (callback) {
                 callback(dict,success);
             }
@@ -190,8 +216,16 @@ static IKNetworkManager *_shareInstance;
     NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&type=%@",IKRecommendListUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"type"]];
     
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
-        NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+
         BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
         
         if (callback) {
             callback(arr,success);
@@ -210,16 +244,33 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         
         dataResult = responseCache;
-        NSArray *arr = [self dealHomePageJobInfoData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
         if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
         
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            if (success) {
+                arr = [self dealHomePageJobInfoData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(arr,success);
@@ -239,6 +290,7 @@ static IKNetworkManager *_shareInstance;
         return nil;
     }
     
+    NSLog(@"array = %@",array);
     NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
     for (int i = 0; i < array.count; i ++) {
         IKJobInfoModel *model = [[IKJobInfoModel alloc] init];
@@ -251,10 +303,15 @@ static IKNetworkManager *_shareInstance;
         model.experience = [dict objectForKey:@"work_experience_name"];
         model.title = [dict objectForKey:@"work_name"];
         model.jobID = [dict objectForKey:@"id"];
-        NSDictionary *userDict = (NSDictionary *)[dict objectForKey:@"userCompany"];
-        model.logoImageUrl = [userDict objectForKey:@"headerImage"];
-        model.introduce = [userDict objectForKey:@"brand_describe"];
-        model.isAuthen = [[userDict objectForKey:@"is_approve_offcial"] boolValue];
+        
+        if ([[dict objectForKey:@"userCompany"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *userDict = (NSDictionary *)[dict objectForKey:@"userCompany"];
+            NSLog(@"userDict = %@",userDict);
+            model.logoImageUrl = [userDict objectForKey:@"headerImage"];
+            model.introduce = [userDict objectForKey:@"brand_describe"];
+            model.isAuthen = [[userDict objectForKey:@"is_approve_offcial"] boolValue];
+        }
+        
         
         NSArray *tagsArr = (NSArray *)[dict objectForKey:@"tagList"];
         
@@ -288,8 +345,17 @@ static IKNetworkManager *_shareInstance;
 //        NSLog(@"responseCache = %@",responseCache);
         
         dataResult = responseCache;
-        NSArray *arr = [self dealHotCityData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHotCityData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
         if (callback) {
             callback(arr,success);
         }
@@ -297,8 +363,16 @@ static IKNetworkManager *_shareInstance;
     } success:^(id responseObject) {
 //        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealHotCityData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            if (success) {
+                arr = [self dealHotCityData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(arr,success);
@@ -340,16 +414,33 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:IKProvinceCityListUrl parameters:nil responseCache:^(id responseCache) {
 //        NSLog(@"responseCache = %@",responseCache);
         dataResult = responseCache;
-        NSArray *arr = [self dealProviceCityData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealProviceCityData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+
         if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
 //        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealProviceCityData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            if (success) {
+                arr = [self dealProviceCityData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(arr,success);
@@ -392,16 +483,33 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:IKWorkListUrl parameters:nil responseCache:^(id responseCache) {
 //                NSLog(@"responseCache = %@",responseCache);
         dataResult = responseCache;
-        NSArray *arr = [self dealWorkListData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealWorkListData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
         if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
 //                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealWorkListData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            if (success) {
+                arr = [self dealWorkListData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(arr,success);
@@ -463,8 +571,16 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
 //        NSLog(@"responseObject = %@",responseObject);
 
-        NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+
         BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
         
         if (callback) {
             callback(arr,success);
@@ -487,17 +603,36 @@ static IKNetworkManager *_shareInstance;
         dataResult = responseCache;
         NSLog(@"responseCache = %@",responseCache);
 
-        IKJobDetailModel *model = [self dealJobDetailData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
         
+        IKJobDetailModel *model = nil;
+        
+        if (success) {
+            model = [self dealJobDetailData:responseCache];
+        }
+        else{
+            model = [[IKJobDetailModel alloc] init];
+            model.errorMsg = [self getString:[responseCache objectForKey:@"errmsg"]];
+        }
         if (callback) {
             callback(model,success);
         }
     } success:^(id responseObject) {
         NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            IKJobDetailModel *model = [self dealJobDetailData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            IKJobDetailModel *model = nil;
+            
+            if (success) {
+                model = [self dealJobDetailData:responseObject];
+            }
+            else{
+                model = [[IKJobDetailModel alloc] init];
+                model.errorMsg = [self getString:[responseObject objectForKey:@"errmsg"]];
+            }
             
             if (callback) {
                 callback(model,success);
@@ -511,6 +646,7 @@ static IKNetworkManager *_shareInstance;
 
 - (IKJobDetailModel *)dealJobDetailData:(id)data
 {
+    
     NSDictionary *dict = (NSDictionary *)[data objectForKey:@"data"];
     
     if (dict.allKeys.count == 0) {
@@ -557,8 +693,17 @@ static IKNetworkManager *_shareInstance;
         if (useCache) {
             NSLog(@"useCache");
             dataResult = responseCache;
-            NSArray *array = [self dealCompanyInfoData:responseCache];
+
             BOOL success = [self requestDataSuccess:responseCache];
+            
+            NSArray *array = nil;
+            
+            if (success) {
+                array = [self dealCompanyInfoData:responseCache];
+            }
+            else{
+                array = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(array,success);
@@ -568,8 +713,17 @@ static IKNetworkManager *_shareInstance;
         NSLog(@"not useCache");
 //                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            NSArray *array = [self dealCompanyInfoData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *array = nil;
+            
+            if (success) {
+                array = [self dealCompanyInfoData:responseObject];
+            }
+            else{
+                array = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(array,success);
@@ -631,8 +785,17 @@ static IKNetworkManager *_shareInstance;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
-        NSArray *array = [self dealRecommendCompanyListData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *array = nil;
+        
+        if (success) {
+            array = [self dealRecommendCompanyListData:responseCache];
+        }
+        else{
+            array = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
         
         if (callback) {
             callback(array,success);
@@ -640,8 +803,17 @@ static IKNetworkManager *_shareInstance;
     } success:^(id responseObject) {
         
         if (![dataResult isEqual:responseObject]) {
-            NSArray *array = [self dealRecommendCompanyListData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *array = nil;
+            
+            if (success) {
+                array = [self dealRecommendCompanyListData:responseObject];
+            }
+            else{
+                array = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(array,success);
@@ -689,9 +861,19 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
 //                NSLog(@"responseCache = %@",responseCache);
-        IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
 
+        IKCompanyDetailHeadModel *model = nil;
+        
+        if (success) {
+            model = [self dealCompanyInfoDetailData:responseCache];
+        }
+        else{
+            model = [[IKCompanyDetailHeadModel alloc] init];
+            model.errorMsg = [self getString:[responseCache objectForKey:@"errmsg"]];
+        }
+        
         if (callback && model) {
             callback(model,success);
         }
@@ -699,8 +881,18 @@ static IKNetworkManager *_shareInstance;
 //                NSLog(@"responseObject = %@",responseObject);
         
         if (![dataResult isEqual:responseObject]) {
-            IKCompanyDetailHeadModel *model = [self dealCompanyInfoDetailData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            IKCompanyDetailHeadModel *model = nil;
+            
+            if (success) {
+                model = [self dealCompanyInfoDetailData:responseObject];
+            }
+            else{
+                model = [[IKCompanyDetailHeadModel alloc] init];
+                model.errorMsg = [self getString:[responseObject objectForKey:@"errmsg"]];
+            }
             
             if (callback && model) {
                 callback(model,success);
@@ -756,8 +948,18 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
 //        NSLog(@"responseCache = %@",responseCache);
-        IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        IKCompanyAboutUsModel *model = nil;
+        
+        if (success) {
+            model = [self dealCompanyAboutUsData:responseCache];
+        }
+        else{
+            model = [[IKCompanyAboutUsModel alloc] init];
+            model.errorMsg = [self getString:[responseCache objectForKey:@"errmsg"]];
+        }
         
         if (callback) {
             callback(model,success);
@@ -765,8 +967,18 @@ static IKNetworkManager *_shareInstance;
     } success:^(id responseObject) {
 //        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            IKCompanyAboutUsModel *model = [self dealCompanyAboutUsData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            IKCompanyAboutUsModel *model = nil;
+            
+            if (success) {
+                model = [self dealCompanyAboutUsData:responseObject];
+            }
+            else{
+                model = [[IKCompanyAboutUsModel alloc] init];
+                model.errorMsg = [self getString:[responseObject objectForKey:@"errmsg"]];
+            }
             
             if (callback) {
                 callback(model,success);
@@ -813,8 +1025,17 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         dataResult = responseCache;
 //                NSLog(@"responseCache = %@",responseCache);
-        NSArray *array = [self dealManagerTeamData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *array = nil;
+        
+        if (success) {
+            array = [self dealManagerTeamData:responseCache];
+        }
+        else{
+            array = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
         
         if (callback) {
             callback(array,success);
@@ -822,8 +1043,17 @@ static IKNetworkManager *_shareInstance;
     } success:^(id responseObject) {
 //                NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
-            NSArray *array = [self dealManagerTeamData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *array = nil;
+            
+            if (success) {
+                array = [self dealManagerTeamData:responseObject];
+            }
+            else{
+                array = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(array,success);
@@ -875,17 +1105,35 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         
         dataResult = responseCache;
-        NSArray *arr = [self dealHomePageJobInfoData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
         if (callback) {
             callback(arr,success);
         }
     } success:^(id responseObject) {
         
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealHomePageJobInfoData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
             
+            NSArray *arr = nil;
+            
+            if (success) {
+                arr = [self dealHomePageJobInfoData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             if (callback) {
                 callback(arr,success);
             }
@@ -906,8 +1154,18 @@ static IKNetworkManager *_shareInstance;
     [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
         NSLog(@"responseCache = %@",responseCache);
         dataResult = responseCache;
-        NSArray *arr = [self dealShopNumberInfoData:responseCache];
+
         BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        
+        if (success) {
+            arr = [self dealShopNumberInfoData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
         if (callback) {
             callback(arr,success);
         }
@@ -915,8 +1173,17 @@ static IKNetworkManager *_shareInstance;
         NSLog(@"responseObject = %@",responseObject);
 
         if (![dataResult isEqual:responseObject]) {
-            NSArray *arr = [self dealShopNumberInfoData:responseObject];
+
             BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            
+            if (success) {
+                arr = [self dealShopNumberInfoData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
             
             if (callback) {
                 callback(arr,success);
@@ -968,7 +1235,7 @@ static IKNetworkManager *_shareInstance;
             model.updateTime = [self getString:[dict objectForKey:@"update_time"]];
             model.shopTypeName = [self getString:[dict objectForKey:@"shop_type_name"]];
             model.shopType = [self getString:[dict objectForKey:@"shop_type"]];
-
+            model.allShopImages = [dict objectForKey:@"shopImageListFull"];
             [muArray addObject:model];
             
         }
@@ -977,6 +1244,53 @@ static IKNetworkManager *_shareInstance;
 }
 
 
+- (void)getCompanyPageShopListInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@shopId=%@&userCompanyId=%@",IKCompanyShopListUrl,[param objectForKey:@"shopId"],[param objectForKey:@"companyId"]];
+    
+    __block id dataResult = nil;
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        
+        dataResult = responseCache;
+
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *arr = nil;
+        
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseCache];
+        }
+        else{
+            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+        }
+        
+        if (callback) {
+            callback(arr,success);
+        }
+    } success:^(id responseObject) {
+        
+        if (![dataResult isEqual:responseObject]) {
+
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *arr = nil;
+            
+            if (success) {
+                arr = [self dealHomePageJobInfoData:responseObject];
+            }
+            else{
+                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+            }
+            
+            if (callback) {
+                callback(arr,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 - (void)postUserOprateToServer:(NSDictionary *)param
 {

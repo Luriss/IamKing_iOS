@@ -183,7 +183,7 @@
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     cell.label.text = self.selectData[indexPath.row];
     if (indexPath == self.selectedIndexPath) {
-        cell.label.textColor = IKMainTitleColor;
+        cell.label.textColor = IKGeneralBlue;
     }
     return cell;
 }

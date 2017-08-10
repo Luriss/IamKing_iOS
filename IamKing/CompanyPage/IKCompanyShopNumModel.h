@@ -33,6 +33,7 @@
 @property(nonatomic,copy)NSString     *ID;
 @property(nonatomic,copy)NSString     *inviteIds;
 @property(nonatomic,copy)NSString     *inviteNum;
+@property(nonatomic,copy)NSArray      *allShopImages;
 
 @property(nonatomic,assign)BOOL        isAuthen;
 @property(nonatomic,assign)BOOL        isBusiness;

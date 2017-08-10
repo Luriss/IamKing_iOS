@@ -20,6 +20,8 @@
 
 @property(nonatomic, strong)IKLoginView *loginView;
 @property(nonatomic, strong)UITableView *tableView;
+@property(nonatomic, strong)UIImageView *logoImageView;
+
 @property(nonatomic, copy)NSArray       *imageNameArray;
 @property(nonatomic, copy)NSArray       *titleArray;
 @property(nonatomic, copy)NSString      *loginStatus;
@@ -33,8 +35,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.extendedLayoutIncludesOpaqueBars = YES;
-    self.automaticallyAdjustsScrollViewInsets = NO;
+//    self.extendedLayoutIncludesOpaqueBars = YES;
+//    self.automaticallyAdjustsScrollViewInsets = NO;
     
     _oldLoginViewCenterY = 0;
 
@@ -60,11 +62,7 @@
 {
     [super viewWillAppear:animated];
     
-    _loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
-
-    if ([_loginStatus isEqualToString:@"1"]) {
-        [self.navigationController setNavigationBarHidden:YES animated:NO];
-    }
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -127,17 +125,30 @@
 
 - (void)initLoginView
 {
+    
     CGFloat w = ceilf(IKSCREEN_WIDTH * 0.893);
     CGFloat h = ceilf(IKSCREENH_HEIGHT * 0.435);
-    IKLoginView *loginView = [[IKLoginView alloc] initWithFrame:CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5) - 100, w, h)];
-
+    IKLoginView *loginView = [[IKLoginView alloc] initWithFrame:CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5), w, h)];
+//    loginView.backgroundColor = [UIColor redColor];
     loginView.delegate = self;
     [self.view addSubview:loginView];
     
     _oldLoginViewCenterY = loginView.center.y;
     _loginView = loginView;
+    
+    [self.view addSubview:self.logoImageView];
+    
+    _logoImageView.frame = CGRectMake(loginView.center.x - 57.5, loginView.frame.origin.y - 65, 115, 65);
 }
 
+- (UIImageView *)logoImageView
+{
+    if (_logoImageView == nil) {
+        _logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 115, 65)];
+        [_logoImageView setImage:[UIImage imageNamed:@"IK_loginLogo"]];
+    }
+    return _logoImageView;
+}
 
 #pragma mark - UITableViewDelegate,UITableViewDataSource
 
@@ -214,16 +225,19 @@
         {
             CGFloat w = ceilf(IKSCREEN_WIDTH * 0.893);
             CGFloat h = ceilf(IKSCREENH_HEIGHT * 0.503);
-            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5) - 100, w, h);
+            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5), w, h);
             _oldLoginViewCenterY = _loginView.center.y;
+            _logoImageView.frame = CGRectMake(_loginView.center.x - 57.5, _loginView.frame.origin.y - 65, 115, 65);
             break;
         }
         case IKLoginViewLoginTypeRegisterFindPerson:
         {
             CGFloat w = ceilf(IKSCREEN_WIDTH * 0.893);
             CGFloat h = ceilf(IKSCREENH_HEIGHT * 0.6);
-            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5) - 100, w, h);
+            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5), w, h);
             _oldLoginViewCenterY = _loginView.center.y;
+            _logoImageView.frame = CGRectMake(_loginView.center.x - 57.5, _loginView.frame.origin.y - 65, 115, 65);
+
             break;
         }
             break;
@@ -232,8 +246,10 @@
         {
             CGFloat w = ceilf(IKSCREEN_WIDTH * 0.893);
             CGFloat h = ceilf(IKSCREENH_HEIGHT * 0.435);
-            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5) - 100, w, h);
+            _loginView.frame = CGRectMake(self.view.center.x - (w * 0.5), self.view.center.y - (h*0.5), w, h);
             _oldLoginViewCenterY = _loginView.center.y;
+            _logoImageView.frame = CGRectMake(_loginView.center.x - 57.5, _loginView.frame.origin.y - 65, 115, 65);
+
             break;
         }
 
@@ -247,7 +263,6 @@
     _loginView.hidden = YES;
     [_loginView removeFromSuperview];
     _loginView = nil;
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
     [self addTableView];
 }
 
@@ -270,6 +285,7 @@
             [UIView setAnimationBeginsFromCurrentState:YES];
             [UIView setAnimationCurve:[curve intValue]];
             _loginView.center = CGPointMake(_loginView.center.x, _loginView.center.y - 50);
+            _logoImageView.frame = CGRectMake(_loginView.center.x - 57.5, _loginView.frame.origin.y - 65, 115, 65);
         }];
     }
 }
@@ -287,6 +303,7 @@
             [UIView setAnimationBeginsFromCurrentState:YES];
             [UIView setAnimationCurve:[curve intValue]];
             _loginView.center = CGPointMake(_loginView.center.x,_oldLoginViewCenterY);
+            _logoImageView.frame = CGRectMake(_loginView.center.x - 57.5, _loginView.frame.origin.y - 65, 115, 65);
         }];
     }
 }

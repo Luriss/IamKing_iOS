@@ -99,7 +99,7 @@
 {
     if (_imageV == nil) {
         _imageV = [[UIImageView alloc]init];
-        _imageV.layer.cornerRadius = 5;
+        _imageV.layer.cornerRadius = 6;
         _imageV.layer.borderWidth = 1;
         _imageV.layer.borderColor = IKLineColor.CGColor;
         _imageV.layer.masksToBounds = YES;

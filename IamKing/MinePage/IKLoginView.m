@@ -83,11 +83,12 @@
     if (_phoneTextfield == nil) {
         _phoneTextfield = [[IKTextField alloc] initWithFrame:CGRectMake(22, 40, CGRectGetWidth(self.frame) - 44, 40)];
         _phoneTextfield.backgroundColor = IKGeneralLightGray;
-        _phoneTextfield.layer.cornerRadius = 5;
+        _phoneTextfield.layer.cornerRadius = 6;
         _phoneTextfield.placeholder = @" 请输入手机号码";
         _phoneTextfield.clearButtonMode = UITextFieldViewModeWhileEditing;
         _phoneTextfield.keyboardType = UIKeyboardTypePhonePad;
         _phoneTextfield.delegate = self;
+        _phoneTextfield.textColor = IKMainTitleColor;
         
         UIImageView *phoneImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [phoneImage setImage:[UIImage imageNamed:@"IK_phone_grey"]];
@@ -103,12 +104,13 @@
     if (_passwordTextfield == nil) {
         _passwordTextfield = [[IKTextField alloc] initWithFrame:CGRectMake(22, _totalH + 10, CGRectGetWidth(self.frame) - 44, 40)];
         _passwordTextfield.backgroundColor = IKGeneralLightGray;
-        _passwordTextfield.layer.cornerRadius = 5;
+        _passwordTextfield.layer.cornerRadius = 6;
         _passwordTextfield.placeholder = @" 请输入密码";
         _passwordTextfield.secureTextEntry = YES;
         _passwordTextfield.clearButtonMode = UITextFieldViewModeWhileEditing;
         _passwordTextfield.delegate = self;
         _passwordTextfield.returnKeyType = UIReturnKeyDone;
+        _passwordTextfield.textColor = IKMainTitleColor;
         
         UIImageView *passwordImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [passwordImage setImage:[UIImage imageNamed:@"IK_password"]];
@@ -129,10 +131,10 @@
         _loginButton.frame = CGRectMake(22, _totalH + 20, CGRectGetWidth(self.frame) - 44, 40);
         [_loginButton setTitle:@"登录" forState:UIControlStateNormal];
         [_loginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _loginButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        _loginButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [_loginButton setBackgroundImage:IKButtonBlueBgImgae forState:UIControlStateNormal];
         [_loginButton setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
-        _loginButton.layer.cornerRadius = 5;
+        _loginButton.layer.cornerRadius = 6;
         _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 
@@ -146,14 +148,13 @@
 {
     if (_wxLoginButton == nil) {
         _wxLoginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _wxLoginButton.backgroundColor = IKGeneralBlue;
         _wxLoginButton.frame = CGRectMake(22, _totalH + 15, CGRectGetWidth(self.frame) - 44, 40);
         [_wxLoginButton setTitle:@"微信快捷登录" forState:UIControlStateNormal];
         [_wxLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _wxLoginButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-        [_wxLoginButton setBackgroundImage:IKButtonBlueBgImgae forState:UIControlStateNormal];
-        [_wxLoginButton setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
-        _wxLoginButton.layer.cornerRadius = 5;
+        _wxLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        [_wxLoginButton setBackgroundImage:[UIImage GetImageWithColor:ikGeneralGreen size:CGSizeMake(1, 1)] forState:UIControlStateNormal];
+        [_wxLoginButton setBackgroundImage:[UIImage GetImageWithColor:IKColorFromRGB(0x1aab05) size:CGSizeMake(1, 1)] forState:UIControlStateHighlighted];
+        _wxLoginButton.layer.cornerRadius = 6;
         _wxLoginButton.layer.masksToBounds = YES;
         
         _totalH += 55;
@@ -167,11 +168,11 @@
 {
     if (_registerAccount == nil) {
         _registerAccount = [IKButton buttonWithType:UIButtonTypeCustom];
-        _registerAccount.frame = CGRectMake(22, _totalH + 15, 80, 20);
-        [_registerAccount setTitle:@"注册账号" forState:UIControlStateNormal];
+        _registerAccount.frame = CGRectMake(22, _totalH + 20, 80, 20);
+        [_registerAccount setTitle:@"注册帐号" forState:UIControlStateNormal];
         [_registerAccount setTitleColor: IKMainTitleColor forState:UIControlStateNormal];
         _registerAccount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _registerAccount.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+        _registerAccount.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         [_registerAccount addTarget:self action:@selector(registerAccountClick:) forControlEvents:UIControlEventTouchUpInside];
 
     }
@@ -186,8 +187,8 @@
         _findJob.frame = CGRectMake(22, _registerTotalH + 10, w, 40);
         [_findJob setTitle:@"找工作" forState:UIControlStateNormal];
         [_findJob setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        _findJob.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-        _findJob.layer.cornerRadius = 5;
+        _findJob.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        _findJob.layer.cornerRadius = 6;
         _findJob.layer.masksToBounds = YES;
         _findJob.layer.borderColor = IKSubHeadTitleColor.CGColor;
         _findJob.layer.borderWidth = 1.0f;
@@ -207,8 +208,8 @@
         _findPerson.frame = CGRectMake(_findJob.frame.size.width + 22 + 30, _findJob.frame.origin.y, w, 40);
         [_findPerson setTitle:@"招人" forState:UIControlStateNormal];
         [_findPerson setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        _findPerson.titleLabel.font = [UIFont systemFontOfSize:15.0f];
-        _findPerson.layer.cornerRadius = 5;
+        _findPerson.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        _findPerson.layer.cornerRadius = 6;
         _findPerson.layer.masksToBounds = YES;
         _findPerson.layer.borderColor = IKSubHeadTitleColor.CGColor;
         _findPerson.layer.borderWidth = 1.0f;
@@ -227,10 +228,10 @@
         _registerButton.frame = CGRectMake(22, _registerTotalH + 20, CGRectGetWidth(self.frame) - 44, 40);
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _registerButton.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        _registerButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [_registerButton setBackgroundImage:IKButtonBlueBgImgae forState:UIControlStateNormal];
         [_registerButton setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
-        _registerButton.layer.cornerRadius = 5;
+        _registerButton.layer.cornerRadius = 6;
         _registerButton.layer.masksToBounds = YES;
         
         _registerTotalH += 60;
@@ -243,11 +244,11 @@
 {
     if (_paLoginButton == nil) {
         _paLoginButton = [IKButton buttonWithType:UIButtonTypeCustom];
-        _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 15, 80, 20);
-        [_paLoginButton setTitle:@"手机登陆" forState:UIControlStateNormal];
+        _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 20, 80, 20);
+        [_paLoginButton setTitle:@"手机登录" forState:UIControlStateNormal];
         [_paLoginButton setTitleColor: IKMainTitleColor forState:UIControlStateNormal];
         _paLoginButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
-        _paLoginButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
+        _paLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         
         [_paLoginButton addTarget:self action:@selector(paLoginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -259,11 +260,12 @@
     if (_verifyTextfield == nil) {
         _verifyTextfield = [[IKTextField alloc] initWithFrame:CGRectMake(22, _passwordTextfield.frame.origin.y, ceilf(CGRectGetWidth(self.frame) * 0.48), 40)];
         _verifyTextfield.backgroundColor = IKGeneralLightGray;
-        _verifyTextfield.layer.cornerRadius = 5;
+        _verifyTextfield.layer.cornerRadius = 6;
         _verifyTextfield.placeholder = @" 验证码";
         _verifyTextfield.clearButtonMode = UITextFieldViewModeWhileEditing;
         _verifyTextfield.keyboardType = UIKeyboardTypePhonePad;
         _verifyTextfield.delegate = self;
+        _verifyTextfield.textColor = IKMainTitleColor;
         
         UIImageView *passwordImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         [passwordImage setImage:[UIImage imageNamed:@"IK_verify_gray"]];
@@ -285,10 +287,10 @@
         _getVerifyCodeBtn.frame = CGRectMake(x, _verifyTextfield.frame.origin.y,CGRectGetWidth(self.frame) - x - 22, 40);
         [_getVerifyCodeBtn setTitle:@"获取" forState:UIControlStateNormal];
         [_getVerifyCodeBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _getVerifyCodeBtn.titleLabel.font = [UIFont systemFontOfSize:15.0f];
+        _getVerifyCodeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
         [_getVerifyCodeBtn setBackgroundImage:IKButtonBlueBgImgae forState:UIControlStateNormal];
         [_getVerifyCodeBtn setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
-        _getVerifyCodeBtn.layer.cornerRadius = 5;
+        _getVerifyCodeBtn.layer.cornerRadius = 6;
         _getVerifyCodeBtn.layer.masksToBounds = YES;
         //        [_loginButton addTarget:self action:@selector(paLoginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -307,7 +309,7 @@
         [_chooseTypeBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
         _chooseTypeBtn.titleLabel.font = [UIFont systemFontOfSize:16.0f];
         _chooseTypeBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _chooseTypeBtn.layer.cornerRadius = 5;
+        _chooseTypeBtn.layer.cornerRadius = 6;
         _chooseTypeBtn.layer.masksToBounds = YES;
         CGFloat w = CGRectGetWidth(_chooseTypeBtn.frame);
         _chooseTypeBtn.imageEdgeInsets = UIEdgeInsetsMake(10, 10, 10, w - 30);
@@ -325,7 +327,7 @@
         CGFloat y = _chooseTypeBtn.frame.origin.y + _chooseTypeBtn.frame.size.height;
         _classifyView = [[IKCompanyTypeView alloc] initWithFrame:CGRectMake(22, y, _chooseTypeBtn.frame.size.width, 140)];
         _classifyView.backgroundColor = [UIColor redColor];
-        _classifyView.layer.cornerRadius = 5;
+        _classifyView.layer.cornerRadius = 6;
         _classifyView.layer.masksToBounds = YES;
         _classifyView.layer.borderColor = IKGeneralLightGray.CGColor;
         _classifyView.layer.borderWidth = 1;
@@ -338,16 +340,20 @@
 
 - (void)loginButtonClick:(UIButton *)button
 {
-    [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
-    [IKUSERDEFAULT setObject:@"0" forKey:IKVersionTypeKey];
-    [IKUSERDEFAULT synchronize];
+    if (_phoneTextfield.text.length < 1) {
+        [LRToastView showTosatWithText:@"请输入手机号码" inView:self.superview];
+    }
+    
+//    [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
+//    [IKUSERDEFAULT setObject:@"0" forKey:IKVersionTypeKey];
+//    [IKUSERDEFAULT synchronize];
     
     
 //    [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
     
-    if ([self.delegate respondsToSelector:@selector(loginViewLoginButtonClick)]) {
-        [self.delegate loginViewLoginButtonClick];
-    }
+//    if ([self.delegate respondsToSelector:@selector(loginViewLoginButtonClick)]) {
+//        [self.delegate loginViewLoginButtonClick];
+//    }
 }
 
 
@@ -383,19 +389,19 @@
     _findPerson.hidden = YES;
     _registerButton.hidden = YES;
     _chooseTypeBtn.hidden = YES;
-    _registerAccount.frame = CGRectMake(22, _totalH + 15, 80, 20);
-    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 15, 80, 20);
+    _registerAccount.frame = CGRectMake(22, _totalH + 20, 80, 20);
+    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 20, 80, 20);
     _registerAccount.isClick = NO;
-    [_registerAccount setTitle:@"注册账号" forState:UIControlStateNormal];
+    [_registerAccount setTitle:@"注册帐号" forState:UIControlStateNormal];
 
     if (!button.isClick) {
-        [button setTitle:@"账号登陆" forState:UIControlStateNormal];
+        [button setTitle:@"帐号登录" forState:UIControlStateNormal];
         button.isClick = YES;
         
         [self phoneLoginAjustFrame];
     }
     else{
-        [button setTitle:@"手机登陆" forState:UIControlStateNormal];
+        [button setTitle:@"手机登录" forState:UIControlStateNormal];
         button.isClick = NO;
         _passwordTextfield.hidden = NO;
         self.verifyTextfield.hidden = YES;
@@ -405,6 +411,10 @@
     }
     
     [self textFieldNeedResignFirstResponder];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [_phoneTextfield becomeFirstResponder];
+    });
 }
 
 - (void)registerAccountClick:(IKButton *)button
@@ -416,7 +426,7 @@
             [self.delegate loginViewRefreshFrameWithType:IKLoginViewLoginTypeRegisterFindJob];
         }
         
-        [button setTitle:@"登陆账号" forState:UIControlStateNormal];
+        [button setTitle:@"登录帐号" forState:UIControlStateNormal];
         button.isClick = YES;
 
         [self registerAjustFrame];
@@ -431,7 +441,7 @@
         if ([self.delegate respondsToSelector:@selector(loginViewRefreshFrameWithType:)]) {
             [self.delegate loginViewRefreshFrameWithType:IKLoginViewLoginTypeAccount];
         }
-        [button setTitle:@"注册账号" forState:UIControlStateNormal];
+        [button setTitle:@"注册帐号" forState:UIControlStateNormal];
         button.isClick = NO;
         [self accountLoginAjustFrame];
     }
@@ -490,8 +500,8 @@
     CGFloat y = _chooseTypeBtn.frame.origin.y + _chooseTypeBtn.frame.size.height;
     _registerButton.frame = CGRectMake(22, y + 10, CGRectGetWidth(self.frame) - 44, 40);
     
-    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, y + 50 + 15, 80, 20);
-    _registerAccount.frame = CGRectMake(22, y + 50 + 15, 80, 20);
+    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, y + 50 + 20, 80, 20);
+    _registerAccount.frame = CGRectMake(22, y + 50 + 20, 80, 20);
 }
 
 - (void)registerAjustFrame
@@ -555,8 +565,8 @@
     _findJob.hidden = YES;
     _findPerson.hidden = YES;
     self.registerButton.hidden = YES;
-    _registerAccount.frame = CGRectMake(22, _totalH + 15, 80, 20);
-    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 15, 80, 20);
+    _registerAccount.frame = CGRectMake(22, _totalH + 20, 80, 20);
+    _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 20, 80, 20);
 }
 
 
@@ -602,7 +612,7 @@
     NSLog(@"select = %@",select);
     
     [_chooseTypeBtn setTitle:select forState:UIControlStateNormal];
-    [_chooseTypeBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_chooseTypeBtn setTitleColor:IKMainTitleColor forState:UIControlStateNormal];
     
     _classifyView.hidden = YES;
     _chooseTypeBtn.isClick = NO;

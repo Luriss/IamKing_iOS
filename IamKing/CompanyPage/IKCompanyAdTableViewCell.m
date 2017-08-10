@@ -138,7 +138,7 @@
         _lpView1.scrollTimeInterval = 3;
         _lpView1.reverseDirection = YES;
         _lpView1.isAutoScroll = YES;
-        _lpView1.layer.cornerRadius = 5;
+        _lpView1.layer.cornerRadius = 6;
         _lpView1.layer.borderWidth = 1;
         _lpView1.layer.borderColor = IKLineColor.CGColor;
         _lpView1.layer.masksToBounds = YES;
@@ -156,7 +156,7 @@
         _lpView2.scrollTimeInterval = 3.5;
         _lpView2.reverseDirection = YES;
         _lpView2.isAutoScroll = YES;
-        _lpView2.layer.cornerRadius = 5;
+        _lpView2.layer.cornerRadius = 6;
         _lpView2.layer.borderWidth = 1;
         _lpView2.layer.borderColor = IKLineColor.CGColor;
         _lpView2.layer.masksToBounds = YES;
@@ -174,7 +174,7 @@
         _lpView3.scrollTimeInterval = 4;
         _lpView3.reverseDirection = YES;
         _lpView3.isAutoScroll = YES;
-        _lpView3.layer.cornerRadius = 5;
+        _lpView3.layer.cornerRadius = 6;
         _lpView3.layer.borderWidth = 1;
         _lpView3.layer.borderColor = IKLineColor.CGColor;
         _lpView3.layer.masksToBounds = YES;

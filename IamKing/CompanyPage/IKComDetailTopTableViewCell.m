@@ -105,16 +105,16 @@
     
     
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_typeView.mas_bottom).offset(20);
+        make.top.equalTo(_typeView.mas_bottom).offset(10);
         make.left.equalTo(self.contentView.mas_left).offset(20);
         make.height.mas_equalTo(1);
         make.right.equalTo(self.contentView.mas_right).offset(-20);
     }];
     
     [_descLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_lineView.mas_bottom).offset(2);
+        make.top.equalTo(_lineView.mas_bottom).offset(10);
         make.left.equalTo(self.contentView.mas_left).offset(20);
-        make.bottom.equalTo(self.contentView.mas_bottom).offset(-2);
+        make.bottom.equalTo(self.contentView.mas_bottom).offset(-10);
         make.right.equalTo(self.contentView.mas_right).offset(-20);
     }];
     
@@ -340,7 +340,16 @@
 //        make.width.mas_equalTo(shopWidth + 24);
 //    }];
     
-    _descLabel.text = model.companyDescription;
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    [paragraphStyle setLineSpacing:3];
+    
+    NSDictionary *attributes = @{NSFontAttributeName:[UIFont systemFontOfSize:13.0f],NSParagraphStyleAttributeName:paragraphStyle};
+    if (IKStringIsNotEmpty(model.companyDescription)) {
+        _descLabel.attributedText = [[NSAttributedString alloc] initWithString:model.companyDescription attributes:attributes];
+    }
+    else{
+        _descLabel.text = model.companyDescription;
+    }
 }
 
 

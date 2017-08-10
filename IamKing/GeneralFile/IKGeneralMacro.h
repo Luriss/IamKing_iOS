@@ -33,7 +33,7 @@
 #define IKGeneralLightGray (IKColorFromRGB(0xf2f2f5))
 #define IKGeneralWhite (IKColorFromRGB(0xffffff))
 #define IKGeneralRed (IKColorFromRGB(0xff0000))
-
+#define ikGeneralGreen (IKColorFromRGB(0x21bd0a))  
 #define IKMainTitleColor   (IKColorFromRGB(0x707070))
 #define IKSubHeadTitleColor   (IKColorFromRGB(0xaaaaaa))
 #define IKPlaceHolderColor (IKColorFromRGB(0xbabac0))

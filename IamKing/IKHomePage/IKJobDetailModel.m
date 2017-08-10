@@ -13,7 +13,7 @@
 
 - (NSString *)description
 {
-    NSString *str = [NSString stringWithFormat:@"_jobID = %@,_jobName = %@,_logoImageUrl = %@,_companyName = %@,_salary = %@,_workCity = %@,_workAddress = %@,_experience = %@,_education = %@,_feedback = %@,_responsibility = %@,_require = %@,_shopName = %@,_tagsList = %@,_temptation = %@,_companyInfo = %@,_releaseTime = %@,_numberOfSection = %.0f",_jobID,_jobName,_logoImageUrl,_companyName,_salary,_workCity,_workAddress,_experience,_education,_feedback,_responsibility,_require,_shopName,_tagsList,_temptation,_companyInfo,_releaseTime,_numberOfSection];
+    NSString *str = [NSString stringWithFormat:@"_jobID = %@,_jobName = %@,_logoImageUrl = %@,_companyName = %@,_salary = %@,_workCity = %@,_workAddress = %@,_experience = %@,_education = %@,_feedback = %@,_responsibility = %@,_require = %@,_shopName = %@,_tagsList = %@,_temptation = %@,_companyInfo = %@,_releaseTime = %@,_numberOfSection = %.0f,_errorMsg = %@",_jobID,_jobName,_logoImageUrl,_companyName,_salary,_workCity,_workAddress,_experience,_education,_feedback,_responsibility,_require,_shopName,_tagsList,_temptation,_companyInfo,_releaseTime,_numberOfSection,_errorMsg];
     
     return str;
     

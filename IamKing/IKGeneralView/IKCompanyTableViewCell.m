@@ -75,7 +75,7 @@
         _logoImageView.contentMode = UIViewContentModeScaleToFill;
         _logoImageView.layer.borderWidth = 1.0;
         _logoImageView.layer.borderColor = IKGeneralLightGray.CGColor;
-        _logoImageView.layer.cornerRadius = 5;
+        _logoImageView.layer.cornerRadius = 6;
     }
     return _logoImageView;
 }

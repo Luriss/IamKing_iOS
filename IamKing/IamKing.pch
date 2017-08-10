@@ -26,6 +26,7 @@
 #import "UIImageView+WebCache.h"
 #import "IKNetworkManager.h"
 #import "IKTableView.h"
+#import "LRToastView.h"
 
 
 // category

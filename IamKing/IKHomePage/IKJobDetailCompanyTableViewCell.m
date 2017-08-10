@@ -144,7 +144,7 @@
     if (_headerImageview == nil) {
         _headerImageview = [[UIImageView alloc] init];
         _headerImageview.backgroundColor = IKGeneralLightGray;
-        _headerImageview.layer.cornerRadius = 5;
+        _headerImageview.layer.cornerRadius = 6;
         _headerImageview.layer.masksToBounds = YES;
         _headerImageview.layer.borderColor = IKGeneralLightGray.CGColor;
         _headerImageview.layer.borderWidth = 1;

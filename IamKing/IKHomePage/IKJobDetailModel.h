@@ -29,6 +29,7 @@
 @property(nonatomic,copy)NSDictionary *companyInfo;
 @property(nonatomic,copy)NSString     *releaseTime;
 @property(nonatomic,assign)CGFloat     numberOfSection;
+@property(nonatomic,copy)NSString     *errorMsg;
 
 @property(nonatomic,assign)BOOL        isAuthen;
 

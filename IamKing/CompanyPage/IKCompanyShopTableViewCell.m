@@ -145,7 +145,7 @@
         _logoImageView = [[UIImageView alloc] init];
         _logoImageView.contentMode = UIViewContentModeScaleToFill;
         _logoImageView.backgroundColor = IKGeneralLightGray;
-        _logoImageView.layer.cornerRadius = 10;
+        _logoImageView.layer.cornerRadius = 6;
         _logoImageView.layer.masksToBounds = YES;
     }
     return _logoImageView;

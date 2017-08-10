@@ -165,7 +165,7 @@
     CGFloat height = 0;
     
     //self
-    self.layer.cornerRadius = 10;
+    self.layer.cornerRadius = 6;
     self.layer.masksToBounds = YES;
     self.backgroundColor = [UIColor clearColor];
     

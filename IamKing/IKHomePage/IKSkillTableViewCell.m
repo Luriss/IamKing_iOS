@@ -384,7 +384,7 @@
 {
     [self.contentView addSubview:self.skill1];
     
-    NSString *str = [NSString stringWithFormat:@"qweeeeeeeeeeeeeee%@",[dict objectForKey:@"name"]];
+    NSString *str = [dict objectForKey:@"name"];
     [self.skill1 setTitle:str forState:UIControlStateNormal];
     
     CGFloat w = [NSString getSizeWithString:str size:CGSizeMake(MAXFLOAT, 16) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:11.0f]}].width;
@@ -523,7 +523,7 @@
 - (void)addSkillThreeWithData:(NSDictionary *)dict
 {
     [self.contentView addSubview:self.skill3];
-    NSString *str = [NSString stringWithFormat:@"qweeeeeeeeeeeeeee%@",[dict objectForKey:@"name"]];
+    NSString *str = [dict objectForKey:@"name"];
     
     [self.skill3 setTitle:str forState:UIControlStateNormal];
     
