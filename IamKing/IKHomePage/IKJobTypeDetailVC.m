@@ -126,10 +126,10 @@
     [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
-    [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+    [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationView.leftButton = button;
 }
 
 
@@ -138,10 +138,10 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"健身教练";
-    title.textColor = IKMainTitleColor;
+    title.textColor = IKGeneralWhite;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
 }
 
 - (void)setDelegate:(id<IKJobTypeDetailVCDelegate>)delegate
@@ -159,7 +159,7 @@
 
 - (void)initTypeClassify
 {
-    _slideView = [[IKSlideView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 50)];
+    _slideView = [[IKSlideView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), 50)];
     _slideView.backgroundColor = IKGeneralLightGray;
     _slideView.delegate = self;
     _slideView.data = _silderData;
@@ -177,7 +177,7 @@
     layout.minimumLineSpacing = 20.0f; //行间距
     layout.sectionInset = UIEdgeInsetsMake(20.0f, 15.0f, 20.0f, 15.0f);
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 50, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-115) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 114, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-115) collectionViewLayout:layout];
     _collectionView.tag = 101;
     _collectionView.bounces = YES;
     _collectionView.showsHorizontalScrollIndicator = NO;

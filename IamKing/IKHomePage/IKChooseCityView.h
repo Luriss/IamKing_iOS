@@ -10,7 +10,7 @@
 
 @protocol IKChooseCityViewDelegate <NSObject>
 
-- (void)chooseCityViewSelectedCity:(NSString *)city;
+- (void)chooseCityViewSelectedCity:(NSString *)city cityId:(NSString *)cityId;
 
 @end
 
@@ -18,6 +18,7 @@
 
 @property (nonatomic, weak) id<IKChooseCityViewDelegate> delegate;
 @property (nonatomic,copy)NSArray *baseProvinceData;
+@property (nonatomic,assign)BOOL  isFromSearch;
 
 
 @end

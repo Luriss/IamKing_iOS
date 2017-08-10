@@ -19,7 +19,8 @@
 - (void)searchViewCloseButtonClick;
 - (void)searchViewStartSearch;
 - (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar;
-
+//- (void)searchViewTextDidEndEditing:(nullable NSString *)editString;
+//- (void)searchViewTextDidChange:(nullable NSString *)changeString;
 
 @end
 

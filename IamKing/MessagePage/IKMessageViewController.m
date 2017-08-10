@@ -71,7 +71,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
         _bgTableView.backgroundColor = IKGeneralLightGray;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bgTableView.showsVerticalScrollIndicator = YES;

@@ -40,9 +40,6 @@
     [self initNavTitle];
     
     [self initBottomView];
-    UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
-    view.backgroundColor = IKLineColor;
-    [self.view addSubview:view];
     
 
     // Do any additional setup after loading the view.
@@ -134,7 +131,7 @@
     title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
     
 }
 
@@ -149,9 +146,9 @@
     [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationView.leftButton = button;
     
-    // 返回
+    // 分享
     UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [shareBtn addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     shareBtn.frame = CGRectMake(0, 00, 44, 44);
@@ -159,7 +156,9 @@
     [shareBtn setImage:[UIImage imageNamed:@"IK_share"] forState:UIControlStateNormal];
     [shareBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_share"] forState:UIControlStateHighlighted];
     
-    // 返回
+    self.navigationView.right2Button = shareBtn;
+    
+    // 收藏
     UIButton *favBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [favBtn addTarget:self action:@selector(favButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     favBtn.frame = CGRectMake(0, 00, 44, 44);
@@ -167,9 +166,7 @@
     [favBtn setImage:[UIImage imageNamed:@"IK_star_hollow_grey"] forState:UIControlStateNormal];
     [favBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_star_hollow_grey"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:favBtn],[[UIBarButtonItem alloc] initWithCustomView:shareBtn]];
-
-    
+    self.navigationView.rightButton = favBtn;
 }
 
 - (void)shareButtonClick:(UIButton *)button
@@ -284,7 +281,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStyleGrouped];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStyleGrouped];
         _bgTableView.backgroundColor = IKGeneralLightGray;
 //        _bgTableView.sectionFooterHeight = 1.0;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

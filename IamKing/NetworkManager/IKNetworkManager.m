@@ -72,6 +72,15 @@
 //shopId=127&userCompanyId=292
 #define IKCompanyShopListUrl  (@"https://www.iamking.com.cn/index.php/ShopList/getInviteListByShopId?")
 
+// 搜索工作
+//cityId=0&companyType=0&page=1&pageSize=8&salaryType=0&str=%E7%A7%81%E6%95%99%E7%BB%8F%E7%90%86&workExperienceType=0
+#define IKWorkSearchUrl (@"https://www.iamking.com.cn/index.php/InviteWork/searchByWorkName?")
+
+// 搜索公司
+// appraiseLevel=0&businessType=0&cityId=0&companyType=0&page=1&pageSize=8&shopType=0&str=%E7%A7%81%E6%95%99%E7%BB%8F%E7%90%86
+
+#define IKCompanySearchUrl (@"https://www.iamking.com.cn/index.php/User/searchByName?")
+
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -290,7 +299,6 @@ static IKNetworkManager *_shareInstance;
         return nil;
     }
     
-    NSLog(@"array = %@",array);
     NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
     for (int i = 0; i < array.count; i ++) {
         IKJobInfoModel *model = [[IKJobInfoModel alloc] init];
@@ -306,7 +314,6 @@ static IKNetworkManager *_shareInstance;
         
         if ([[dict objectForKey:@"userCompany"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *userDict = (NSDictionary *)[dict objectForKey:@"userCompany"];
-            NSLog(@"userDict = %@",userDict);
             model.logoImageUrl = [userDict objectForKey:@"headerImage"];
             model.introduce = [userDict objectForKey:@"brand_describe"];
             model.isAuthen = [[userDict objectForKey:@"is_approve_offcial"] boolValue];
@@ -364,6 +371,9 @@ static IKNetworkManager *_shareInstance;
 //        NSLog(@"responseObject = %@",responseObject);
         if (![dataResult isEqual:responseObject]) {
 
+            [IKUSERDEFAULT setObject:responseObject forKey:@"IKHotCityData"];
+            [IKUSERDEFAULT synchronize];
+            
             BOOL success = [self requestDataSuccess:responseObject];
             
             NSArray *arr = nil;
@@ -412,7 +422,7 @@ static IKNetworkManager *_shareInstance;
     __block id dataResult = nil;
 
     [IKNetworkHelper GET:IKProvinceCityListUrl parameters:nil responseCache:^(id responseCache) {
-//        NSLog(@"responseCache = %@",responseCache);
+        NSLog(@"ProvinceCity responseCache = %@",responseCache);
         dataResult = responseCache;
 
         BOOL success = [self requestDataSuccess:responseCache];
@@ -429,7 +439,10 @@ static IKNetworkManager *_shareInstance;
             callback(arr,success);
         }
     } success:^(id responseObject) {
-//        NSLog(@"responseObject = %@",responseObject);
+
+        [IKUSERDEFAULT setObject:responseObject forKey:@"IKProvinceCityData"];
+        [IKUSERDEFAULT synchronize];
+        
         if (![dataResult isEqual:responseObject]) {
 
             BOOL success = [self requestDataSuccess:responseObject];
@@ -474,6 +487,21 @@ static IKNetworkManager *_shareInstance;
     return reArray;
 }
 
+
+- (void)getHotCityDataAndProvinceDataFromChahe:(void (^)(NSArray *hotCity,NSArray *province))callback
+{
+    id hotCityData = [IKUSERDEFAULT objectForKey:@"IKHotCityData"];
+    
+    NSArray *hotArr = [self dealHotCityData:hotCityData];
+    
+    id provinceData = [IKUSERDEFAULT objectForKey:@"IKProvinceCityData"];
+    
+    NSArray *provinceArr = [self dealProviceCityData:provinceData];
+    
+    if (callback) {
+        callback(hotArr,provinceArr);
+    }
+}
 
 
 - (void)getHomePageWorkListDataWithBackData:(IKRequestArrayData)callback
@@ -1303,6 +1331,62 @@ static IKNetworkManager *_shareInstance;
 }
 
 
+- (void)getSearchPageJobInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&companyType=%@&page=%@&salaryType=%@&str=%@&workExperienceType=%@",IKWorkSearchUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"companyType"],[param objectForKey:@"page"],[param objectForKey:@"salaryType"],[param objectForKey:@"searchString"],[param objectForKey:@"workExperienceType"]];
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject 22 = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        NSLog(@"arr = %@",arr);
+        if (callback) {
+            callback(arr,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (void)getSearchPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@cityId=%@&pageSize=%@&companyType=%@&page=%@&appraiseLevel=%@&str=%@&businessType=%@&shopType=%@",IKCompanySearchUrl,[param objectForKey:@"cityId"],[param objectForKey:@"pageSize"],[param objectForKey:@"companyType"],[param objectForKey:@"page"],[param objectForKey:@"appraiseLevel"],[param objectForKey:@"searchString"],[param objectForKey:@"businessType"],[param objectForKey:@"businessTyshopTypepe"]];
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject 22 = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealCompanyInfoData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        NSLog(@"arr = %@",arr);
+        if (callback) {
+            callback(arr,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
 
 
 - (NSString *)getPositionFromPlist:(NSString *)key

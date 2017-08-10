@@ -173,7 +173,7 @@ extern NSString * currentSelectedCityId;
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 49-64) style:UITableViewStylePlain];
         _bgTableView.backgroundColor = IKGeneralLightGray;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _bgTableView.showsVerticalScrollIndicator = YES;
@@ -300,7 +300,7 @@ extern NSString * currentSelectedCityId;
 - (IKCompanyClassifyView *)classifyView
 {
     if (_classifyView == nil) {
-        _classifyView = [[IKCompanyClassifyView alloc] initWithFrame:CGRectMake(0, 44, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
+        _classifyView = [[IKCompanyClassifyView alloc] initWithFrame:CGRectMake(0, 108, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
         _classifyView.delegate = self;
         _classifyView.selectedIndexPath = self.chooseClassifyIP;
         _classifyView.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(_classifyView.frame));
@@ -494,7 +494,7 @@ extern NSString * currentSelectedCityId;
     
     if (offsetY > -44) {
         [self.view addSubview:self.headerView];
-        self.headerView.frame = CGRectMake(0, 0, IKSCREEN_WIDTH, 44);
+        self.headerView.frame = CGRectMake(0, 64, IKSCREEN_WIDTH, 44);
         _hadAddHeaderView = NO;
     }
     else{

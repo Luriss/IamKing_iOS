@@ -132,21 +132,21 @@ NSString * currentSelectedCityId;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 0, 60, 44);
-    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 44);
-    [button setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_close"] forState:UIControlStateHighlighted];
+    button.imageEdgeInsets = UIEdgeInsetsMake(7, 0, 7, 30);
+    [button setImage:[UIImage imageNamed:@"IK_close_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_close_white"] forState:UIControlStateHighlighted];
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationView.leftButton = button;
     
     
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"城市切换";
-    title.textColor = IKMainTitleColor;
+    title.textColor = IKGeneralWhite;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
     
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
     
     UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 1)];
     lineView.backgroundColor = IKLineColor;
@@ -171,7 +171,7 @@ NSString * currentSelectedCityId;
     
     [_locationInfoView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(weakSelf.view);
-        make.top.equalTo(weakSelf.view).offset(1);
+        make.top.equalTo(weakSelf.view).offset(64);
         make.height.mas_equalTo(0.137*IKSCREENH_HEIGHT);
     }];
     
@@ -267,7 +267,7 @@ NSString * currentSelectedCityId;
 }
 
 
-- (void)chooseCityViewSelectedCity:(NSString *)city
+- (void)chooseCityViewSelectedCity:(NSString *)city cityId:(NSString *)cityId
 {
     IKLog(@"chooseCityViewSelectedCity");
     

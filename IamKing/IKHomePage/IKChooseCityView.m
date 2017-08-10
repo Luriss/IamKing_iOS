@@ -314,17 +314,21 @@ extern NSString * currentSelectedCityId;
         _oldCityIndexPath = indexPath;
         self.selectCity = [self.cityData objectAtIndex:indexPath.row];
 
-        if ([self.delegate respondsToSelector:@selector(chooseCityViewSelectedCity:)]) {
-            [self.delegate chooseCityViewSelectedCity:self.selectCity];
-        }
-        
         NSString *cityId = [self.cityIdDict objectForKey:self.selectCity];
         NSLog(@"cityId = %@",cityId);
-        [IKUSERDEFAULT setObject:self.selectCity forKey:@"selectedCity"];
-        [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
-        [IKUSERDEFAULT synchronize];
         
-        currentSelectedCityId = cityId;
+        if (!self.isFromSearch) {
+            [IKUSERDEFAULT setObject:self.selectCity forKey:@"selectedCity"];
+            [IKUSERDEFAULT setObject:cityId forKey:@"selectedCityId"];
+            [IKUSERDEFAULT synchronize];
+            
+            currentSelectedCityId = cityId;
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(chooseCityViewSelectedCity: cityId:)]) {
+            [self.delegate chooseCityViewSelectedCity:self.selectCity cityId:cityId];
+        }
+        
     }
 }
 

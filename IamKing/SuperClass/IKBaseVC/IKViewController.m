@@ -12,7 +12,6 @@
 @interface IKViewController ()
 @property(nonatomic,strong)UIImageView *shadowImage;
 @property(nonatomic,strong)IKTabBarController *tabBarVc;
-
 @end
 
 @implementation IKViewController
@@ -21,7 +20,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.view.backgroundColor = [UIColor whiteColor];
+    self.extendedLayoutIncludesOpaqueBars = YES;
+    self.automaticallyAdjustsScrollViewInsets = NO;
     
+    [self.view insertSubview:self.navigationView atIndex:100];
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     NSLog(@"tabBarController = %@",self.tabBarController);
 }
@@ -30,6 +32,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
     
     [self setTabBarHideOrShow];
     
@@ -56,6 +60,18 @@
     [super viewDidDisappear:animated];
     self.shadowImage.hidden = NO;
 }
+
+- (IKNavigationView *)navigationView
+{
+    if (_navigationView == nil) {
+        _navigationView = [[IKNavigationView alloc] init];
+        _navigationView.frame = CGRectMake(0, 0, IKSCREEN_WIDTH, 64);
+    }
+    
+    return _navigationView;
+}
+
+
 
 - (void)fineNavigationBottomLine:(UIView *)view
 {

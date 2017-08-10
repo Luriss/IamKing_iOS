@@ -121,8 +121,8 @@
 //        _closeBtn.backgroundColor = [UIColor clearColor];
 //        [_closeBtn setImage:[UIImage imageNamed:@"IK_close"] forState:UIControlStateNormal];
         [_closeBtn setTitle:@"取消 " forState:UIControlStateNormal];
-        [_closeBtn setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
-        [_closeBtn setTitleColor:[IKSubHeadTitleColor colorWithAlphaComponent:IKDefaultAlpha] forState:UIControlStateHighlighted];
+        [_closeBtn setTitleColor:IKGeneralWhite forState:UIControlStateNormal];
+        [_closeBtn setTitleColor:[IKGeneralWhite colorWithAlphaComponent:IKDefaultAlpha] forState:UIControlStateHighlighted];
 
         _closeBtn.titleLabel.font = [UIFont boldSystemFontOfSize:14];
         [_closeBtn addTarget:self action:@selector(closeButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -194,10 +194,24 @@
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
 {
-    NSLog(@"searchBarTextDidBeginEditing");
+    NSLog(@"searchBarTextDidBeginEditing = %@",searchBar.text);
     
 }
 
+- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+    NSLog(@"searchBarTextDidEndEditing = %@",searchBar.text);
+//    if ([self.delegate respondsToSelector:@selector(searchViewTextDidEndEditing:)]) {
+//        [self.delegate searchViewTextDidEndEditing:searchBar.text];
+//    }
+}
+
+
+- (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    NSLog(@"textDidChange = %@  searchText = %@",searchBar.text,searchText);
+    
+}
 - (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
 {
     if ([self.delegate respondsToSelector:@selector(searchViewSearchBarSearchButtonClicked:)]) {

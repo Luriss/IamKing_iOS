@@ -41,10 +41,6 @@
     
     [self initTypeTableView];
     
-    IKView *view = [[IKView alloc] initWithFrame:CGRectMake(15, 0, IKSCREEN_WIDTH - 30, 1)];
-    view.backgroundColor = IKLineColor;
-    [self.view addSubview:view];
-    
 //    [self initTypeDetailView];
     
     // Do any additional setup after loading the view.
@@ -77,7 +73,7 @@
     [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationView.leftButton = button;
 }
 
 
@@ -89,13 +85,13 @@
     title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
 }
 
 
 - (void)initTypeTableView
 {
-    _typeTableView = [[IKTypeTableView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1200+100)];
+    _typeTableView = [[IKTypeTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, 1200+100)];
     _typeTableView.delegate = self;
     
     [self.view addSubview:_typeTableView];
@@ -103,7 +99,7 @@
     __weak typeof (self) weakSelf = self;
 
     [_typeTableView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.view).offset(1);
+        make.top.equalTo(weakSelf.view).offset(64);
         make.left.and.bottom.and.right.equalTo(weakSelf.view);
     }];
 }

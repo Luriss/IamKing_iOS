@@ -177,7 +177,6 @@
         cell = [[IKCompanyClassifyCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         
     }
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.backgroundColor = [UIColor clearColor];
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;

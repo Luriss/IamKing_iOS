@@ -14,12 +14,6 @@
 #import "IKSelectModel.h"
 
 
-typedef NS_ENUM(NSInteger, IKSelectedType) {
-    IKSelectedTypeJob = 0,                  /** 职位 */
-    IKSelectedTypeCompany,                  /** 公司 */
-};
-
-
 
 
 @interface IKSearchResultView ()<UITableViewDelegate,UITableViewDataSource,IKChooseCityViewDelegate,IKSelectViewDelegate>
@@ -27,8 +21,8 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 @property(nonatomic,strong)IKView *topView;
 @property(nonatomic,strong)IKView *jcView;
 @property(nonatomic,strong)IKView *subTypeView;
-@property(nonatomic,strong)UIButton *jobButton;
-@property(nonatomic,strong)UIButton *companyButton;
+@property(nonatomic,strong)IKButton *jobButton;
+@property(nonatomic,strong)IKButton *companyButton;
 @property(nonatomic,strong)IKView *jcBtnSelectedView;
 @property(nonatomic,strong)UIButton *button1;
 @property(nonatomic,strong)UIButton *button2;
@@ -46,6 +40,7 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 @property(nonatomic,strong)IKSelectModel *selectedModel;
 
 @property(nonatomic,strong)UIView *oldSelectView;
+@property(nonatomic,strong)UIImageView *noDataView;
 
 @end
 
@@ -221,10 +216,10 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     return _subTypeView;
 }
 
-- (UIButton *)jobButton
+- (IKButton *)jobButton
 {
     if (_jobButton == nil) {
-        _jobButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _jobButton = [IKButton buttonWithType:UIButtonTypeCustom];
         [_jobButton setTitle:@"职位" forState:UIControlStateNormal];
         [_jobButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _jobButton.titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
@@ -235,14 +230,14 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 }
 
 
-- (UIButton *)companyButton
+- (IKButton *)companyButton
 {
     if (_companyButton == nil) {
-        _companyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _companyButton = [IKButton buttonWithType:UIButtonTypeCustom];
         [_companyButton setTitle:@"公司" forState:UIControlStateNormal];
         [_companyButton setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
         _companyButton.titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
-        [_companyButton addTarget:self action:@selector(jcButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_companyButton addTarget:self action:@selector(companyButtonClick:) forControlEvents:UIControlEventTouchUpInside];
 
     }
     
@@ -404,8 +399,42 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     return stView;
 }
 
+
+- (UIImageView *)noDataView
+{
+    if (_noDataView == nil) {
+        _noDataView = [[UIImageView alloc] initWithFrame:CGRectMake(self.center.x - 50, self.center.y - 130, 100, 108)];
+        [_noDataView setImage:[UIImage imageNamed:@"IK_noShop"]];
+        [self insertSubview:_noDataView belowSubview:_topView];
+
+    }
+    return _noDataView;
+}
+
+- (void)setJobDataArray:(NSArray *)jobDataArray
+{
+    if (IKArrayIsNotEmpty(jobDataArray)) {
+        
+        self.noDataView.hidden = YES;
+        _jobDataArray = jobDataArray;
+        self.tableView.hidden = NO;
+    }
+    else{
+        self.noDataView.hidden = NO;
+
+        self.tableView.hidden = YES;
+    }
+}
+
+
+
 - (void)subTypeButtonClick:(UIButton *)button
 {
+    if ([self.delegate respondsToSelector:@selector(searchResultViewClickHideKeyBorad)]) {
+        [self.delegate searchResultViewClickHideKeyBorad];
+    }
+    
+    
     if (self.selectedType == IKSelectedTypeJob) {
         if (button == _button1) {
             if (self.selectedSubType != IKSelectedSubTypeJobAddress) {
@@ -500,18 +529,28 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 
 - (void)showCityChooseView
 {
-    IKChooseCityView *choose = [[IKChooseCityView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
-    choose.tag = 10001;
-    choose.delegate = self;
-    choose.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(choose.frame));
-    [self insertSubview:choose belowSubview:_topView];
-    
-
-    [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        choose.transform = CGAffineTransformIdentity;
-    } completion:^(BOOL finished) {
-        [self resetOldSelectedView:choose];
+    [[IKNetworkManager shareInstance] getHotCityDataAndProvinceDataFromChahe:^(NSArray *hotCity, NSArray *province) {
+        NSLog(@"hotCity = %@,province = %@",hotCity,province);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            IKChooseCityView *choose = [[IKChooseCityView alloc] initWithFrame:CGRectMake(0, 80, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - 80)];
+            choose.tag = 10001;
+            choose.delegate = self;
+            choose.baseProvinceData = province;
+            choose.isFromSearch = YES;
+            choose.transform = CGAffineTransformMakeTranslation(0, -CGRectGetHeight(choose.frame));
+            [self insertSubview:choose belowSubview:_topView];
+            
+            
+            [UIView animateWithDuration:0.2 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+                choose.transform = CGAffineTransformIdentity;
+            } completion:^(BOOL finished) {
+                [self resetOldSelectedView:choose];
+            }];
+            
+        });
     }];
+        
     
 }
 
@@ -540,9 +579,13 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     }
 }
 
-- (void)chooseCityViewSelectedCity:(NSString *)city
+- (void)chooseCityViewSelectedCity:(NSString *)city cityId:(NSString *)cityId
 {
     [self resetOldSelectedView:nil];
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewdidSelectJobType:selectIndex:)]) {
+        [self.delegate searchResultViewdidSelectJobType:self.selectedSubType selectIndex:[cityId integerValue]];
+    }
     
 }
 
@@ -566,19 +609,42 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 }
 
 
-- (void)jcButtonClick:(UIButton *)button
+- (void)jcButtonClick:(IKButton *)button
 {
-
-    [self resetOldSelectedView:nil];
-    
-    if (button == _companyButton) {
-        [self setCompanyTypeSelectedChangeTitle];
-        [self startSelectedViewAnimation:_jobButton.center endPoint:_companyButton.center];
-    }
-    else{
+    if (!button.isClick) {
+        [self resetOldSelectedView:nil];
         [self setJobTypeSelectedChangeTitle];
         [self startSelectedViewAnimation:_companyButton.center endPoint:_jobButton.center];
+        button.isClick = YES;
+        _companyButton.isClick = NO;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewClickHideKeyBorad)]) {
+        [self.delegate searchResultViewClickHideKeyBorad];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewSelectType:)]) {
+        [self.delegate searchResultViewSelectType:IKSelectedTypeJob];
+    }
+}
 
+
+- (void)companyButtonClick:(IKButton *)button
+{
+    if (!button.isClick) {
+        [self resetOldSelectedView:nil];
+        [self setCompanyTypeSelectedChangeTitle];
+        [self startSelectedViewAnimation:_jobButton.center endPoint:_companyButton.center];
+        button.isClick = YES;
+        _jobButton.isClick = NO;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewClickHideKeyBorad)]) {
+        [self.delegate searchResultViewClickHideKeyBorad];
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewSelectType:)]) {
+        [self.delegate searchResultViewSelectType:IKSelectedTypeCompany];
     }
 }
 
@@ -610,16 +676,6 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
     [_button3 setTitle:@"直营加盟" forState:UIControlStateNormal];
     [_button4 setTitle:@"公司评价" forState:UIControlStateNormal];
     
-    IKCompanyInfoModel  *model = [[IKCompanyInfoModel alloc] init];
-    model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg";
-    model.title = @"高级营销总监";
-    model.evaluate = 3;
-    model.address = @"杭州";
-    model.setupTime = @"2010年成立";
-    model.numberOfStore = @"6~10家店";
-    model.introduce = @"时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.";
-    model.numberOfJob = @"10个 在招职位";
-    self.companyModel = model;
     [self.tableView reloadData];
 }
 
@@ -646,6 +702,12 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 
 - (void)selectViewDidSelectIndexPath:(NSIndexPath *)indexPath selectContent:(NSString *)select
 {
+    NSLog(@"select = %@",select);
+    
+    if ([self.delegate respondsToSelector:@selector(searchResultViewdidSelectJobType:selectIndex:)]) {
+        [self.delegate searchResultViewdidSelectJobType:self.selectedSubType selectIndex:indexPath.row];
+    }
+    
     switch (self.selectedSubType) {
         case IKSelectedSubTypeJobAddress:
             break;
@@ -695,32 +757,30 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.selectedType == IKSelectedTypeJob) {
-        return 3;
+        return self.jobDataArray.count;
     }
     else{
-        return 4;
+        return self.compDataArray.count;
     }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (self.selectedType == IKSelectedTypeJob) {
-        static  NSString *cellId=@"IKInfoCellId";
-        IKInfoTableViewCell *cell=[tableView dequeueReusableCellWithIdentifier:cellId];
+        static  NSString *cellId = @"IKInfoCellId";
+        IKInfoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
-        if(cell==nil)
-        {
-            cell=[[IKInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            
+        if(cell == nil){
+            cell = [[IKInfoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.backgroundColor = [UIColor whiteColor];
-        cell.selectionStyle = UITableViewCellSelectionStyleGray;
+        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
+        cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
         
-        if (indexPath.row == 1 || indexPath.row == 3) {
-            _jobModel.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg";
+        if (indexPath.row < self.jobDataArray.count) {
+            [cell addCellData:[self.jobDataArray objectAtIndex:indexPath.row]];
         }
         
-        [cell addCellData:_jobModel];
         return cell;
     }
     else{
@@ -735,12 +795,9 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
         cell.backgroundColor = [UIColor whiteColor];
         cell.selectionStyle = UITableViewCellSelectionStyleGray;
         
-        if (indexPath.row == 1 || indexPath.row == 3) {
-            _companyModel.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646649_1456498410838_800x600.jpg";
-            _companyModel.evaluate = 2;
+        if (indexPath.row < self.compDataArray.count) {
+            [cell addCellData:self.compDataArray[indexPath.row]];
         }
-        
-        [cell addCellData:_companyModel];
         return cell;
     }
 }
@@ -749,7 +806,18 @@ typedef NS_ENUM(NSInteger, IKSelectedType) {
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    if (self.selectedType == IKSelectedTypeJob){
+        if ([self.delegate respondsToSelector:@selector(searchResultViewdidSelectJobWithModel:)]) {
+            [self.delegate searchResultViewdidSelectJobWithModel:[self.jobDataArray objectAtIndex:indexPath.row]];
+        }
+    }
+    else{
+        if ([self.delegate respondsToSelector:@selector(searchResultViewdidSelectJobWithModel:)]) {
+            [self.delegate searchResultViewdidSelectCompanyWithModel:[self.compDataArray objectAtIndex:indexPath.row]];
+        }
+    }
 }
 
 

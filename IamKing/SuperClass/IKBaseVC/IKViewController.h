@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "IKNavigationView.h"
 
 @interface IKViewController : UIViewController
+
+@property(nonatomic,strong)IKNavigationView *navigationView;
 
 
 - (void)showTabBar;

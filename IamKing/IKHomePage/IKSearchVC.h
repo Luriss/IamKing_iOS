@@ -23,6 +23,8 @@
 @property (nonatomic, strong)NSString *searchText;
 @property (nonatomic, assign)BOOL *hideBottomView;
 
+@property (nonatomic,copy)NSArray *baseProvinceData;
+
 
 - (void)showSearchResultViewWithSearchText:(NSString *)searchText withID:(NSString *)textID;
 

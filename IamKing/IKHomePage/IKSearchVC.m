@@ -11,16 +11,24 @@
 #import "IKJobInfoModel.h"
 #import "IKTagsView.h"
 #import "IKImageWordView.h"
+#import "IKJobDetailVC.h"
+#import "IKCompanyDetailVC.h"
 
 
-@interface IKSearchVC ()<IKSearchViewDelegate,IKTagsViewDelegate,UIScrollViewDelegate>
+extern NSString * currentSelectedCityId;
+
+@interface IKSearchVC ()<IKSearchViewDelegate,IKTagsViewDelegate,UIScrollViewDelegate,IKSearchResultViewDelegate>
 {
     IKSearchResultView    *_searchResultView;
 }
 
 @property (nonatomic,strong)IKSearchView *searchView;
 @property (nonatomic,strong)UIScrollView * scrollView;
-
+@property (nonatomic,strong)UIView *navView;
+@property (nonatomic,copy)NSString *currentSearchText;
+@property (nonatomic, nonnull ,strong)NSMutableDictionary *mutableJobDict;
+@property (nonatomic, nonnull ,strong)NSMutableDictionary *mutableCompDict;
+@property (nonatomic, assign)IKSelectedType selectType;
 
 @end
 
@@ -29,34 +37,58 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.navigationView.hidden = YES;
+    self.selectType = IKSelectedTypeJob;
+    
+    [self initNavView];
+    
+    
     [self initSearchView];
     
-    _scrollView = [[UIScrollView alloc] initWithFrame:self.view.bounds];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, self.view.bounds.size.height - 64)];
     _scrollView.delegate = self;
     _scrollView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:_scrollView];
 
     [self initTagsView];
 
-    _searchResultView = [[IKSearchResultView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
+    _searchResultView = [[IKSearchResultView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64)];
     _searchResultView.backgroundColor = [UIColor whiteColor];
-    
-    IKJobInfoModel  *model = [[IKJobInfoModel alloc] init];
-    model.logoImageUrl = @"http://img.pconline.com.cn/images/upload/upc/tx/wallpaper/1602/26/c0/18646722_1456498424671_800x600.jpg";
-    model.title = @"高级营销总监";
-    model.salary = @"13~18k";
-    model.address = @"杭州";
-    model.experience = @"6~8年";
-    model.education = @"本科";
-    model.skill1 = @"销售能手好";
-    model.skill2 = @"NAFC";
-    model.skill3 = @"形象好";
-    model.introduce = @"时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.时尚连锁健身俱乐部品牌,致力于提供超乎想象的健身运动体验.在江浙沪,拥有36家直营店铺.";
-    
-    _searchResultView.jobModel = model;
     _searchResultView.hidden = YES;
-    [self.view addSubview:_searchResultView];
+    _searchResultView.delegate = self;
+    
+    [self.view insertSubview:_searchResultView belowSubview:_navView];
     // Do any additional setup after loading the view.
+}
+
+
+- (NSMutableDictionary *)mutableJobDict
+{
+    if (_mutableJobDict == nil) {
+        _mutableJobDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:currentSelectedCityId,@"cityId",@"16",@"pageSize",@"",@"searchString",@"0",@"companyType",@"1",@"page",@"0",@"salaryType",@"0",@"workExperienceType", nil];
+    }
+    return _mutableJobDict;
+}
+
+
+- (NSMutableDictionary *)mutableCompDict
+{
+    if (_mutableCompDict == nil) {
+        _mutableCompDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:currentSelectedCityId,@"cityId",@"16",@"pageSize",@"",@"searchString",@"0",@"companyType",@"1",@"page",@"0",@"businessType",@"0",@"appraiseLevel",@"0",@"shopType", nil];
+    }
+    return _mutableCompDict;
+}
+
+
+
+- (void)initNavView
+{
+    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 64)];
+    navView.backgroundColor = IKGeneralBlue;
+    [self.view addSubview:navView];
+    
+    _navView = navView;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -85,15 +117,15 @@
 
 - (void)initSearchView
 {
-    _searchView = [[IKSearchView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.view.bounds), 44)];
+    _searchView = [[IKSearchView alloc] initWithFrame:CGRectMake(0, 20, CGRectGetWidth(self.view.bounds), 44)];
     _searchView.delegate = self;
     _searchView.hiddenColse = NO;
     _searchView.canSearch = YES;
     _searchView.backgroundColor = [UIColor clearColor];
     _searchView.transform = CGAffineTransformMakeTranslation(0, 44);
     [_searchView.searchBar becomeFirstResponder];
-    self.navigationItem.titleView = _searchView;
 
+    [_navView addSubview:_searchView];
 }
 
 - (void)initTagsView
@@ -201,8 +233,112 @@
         [_searchView.searchBar resignFirstResponder];
     }
 }
-#pragma mark -  IKSearchViewDelegate
 
+
+#pragma mark -  IKSearchResultViewDelegate
+
+- (void)searchResultViewClickHideKeyBorad
+{
+    [_searchView.searchBar resignFirstResponder];
+}
+
+
+- (void)searchResultViewSelectType:(IKSelectedType)type
+{
+    self.selectType = type;
+    
+    if (type == IKSelectedTypeJob) {
+        [self getSearchJobResult:self.mutableJobDict];
+    }
+    else{
+        [self getSearchCompanytResult:self.mutableCompDict];
+    }
+}
+
+
+- (void)searchResultViewdidSelectJobWithModel:(IKJobInfoModel *)model
+{
+    IKJobDetailVC *deatail = [[IKJobDetailVC alloc] init];
+    deatail.jobModel = model;
+    [self.navigationController pushViewController:deatail animated:YES];
+}
+
+
+- (void)searchResultViewdidSelectCompanyWithModel:(IKCompanyInfoModel *)model
+{
+    IKCompanyDetailVC *vc = [[IKCompanyDetailVC alloc] init];
+    vc.companyInfoModel = model;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+
+- (void)searchResultViewdidSelectJobType:(IKSelectedSubType)type selectIndex:(NSInteger )index
+{
+    NSLog(@"type = %ld,selectStr = %ld",type,index);
+    
+    switch (type) {
+        case IKSelectedSubTypeJobAddress:
+        {
+            [self.mutableJobDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"cityId"];
+        }
+            break;
+            
+        case IKSelectedSubTypeJobCompanyType:
+        {
+            [self.mutableJobDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"companyType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeJobSalary:
+        {
+            [self.mutableJobDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"salaryType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeJobExperience:
+        {
+            [self.mutableJobDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"workExperienceType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeCompanyType:
+        {
+            [self.mutableCompDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"companyType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeCompanyNumberOfStore:
+        {
+            [self.mutableCompDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"shopType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeCompanyDirectlyToJoin:
+        {
+            [self.mutableCompDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"businessType"];
+        }
+            break;
+            
+        case IKSelectedSubTypeCompanyEvaluation:
+        {
+            [self.mutableCompDict setObject:[NSString stringWithFormat:@"%ld",index] forKey:@"appraiseLevel"];
+        }
+            break;
+            
+        default:
+            break;
+    }
+
+    
+    if (self.selectType == IKSelectedTypeJob) {
+        [self getSearchJobResult:self.mutableJobDict];
+    }
+    else{
+        [self getSearchCompanytResult:self.mutableCompDict];
+    }
+}
+
+#pragma mark -  IKSearchViewDelegate
 
 - (void)searchViewCloseButtonClick
 {
@@ -224,21 +360,33 @@
 
 - (void)searchViewSearchBarSearchButtonClicked:(nullable UISearchBar *)searchBar
 {
-    IKLog(@"searchViewSearchBarSearchButtonClicked");
-    
+    IKLog(@"searchViewSearchBarSearchButtonClicked = %@",searchBar.text);
+    self.currentSearchText = searchBar.text;
+
     [self showSearchResultView];
+    [self.mutableJobDict setObject:self.currentSearchText forKey:@"searchString"];
+    [self.mutableCompDict setObject:self.currentSearchText forKey:@"searchString"];
+    
+    [self getSearchJobResult:self.mutableJobDict];
 }
 
 
 - (void)tagViewDidSelectedTagWithTitle:(NSString *)title  selectedIndex:(NSUInteger)index
 {
-    [self showSearchResultViewWithSearchText:title withID:nil];
+    [self.mutableJobDict setObject:title forKey:@"searchString"];
+    [self.mutableCompDict setObject:title forKey:@"searchString"];
+
+    self.currentSearchText = title;
+    [self showSearchResultView];
+    
+    _searchView.searchBar.text = title;
+    [self getSearchJobResult:self.mutableJobDict];
 }
 
 - (void)showSearchResultViewWithSearchText:(NSString *)searchText withID:(NSString *)textID
 {
     _searchView.searchBar.text = searchText;
-    
+    self.currentSearchText = searchText;
     [self showSearchResultView];
 }
 
@@ -247,12 +395,40 @@
     if (_searchResultView.hidden) {
         _searchResultView.hidden = NO;
     }
-    else{
-        [_searchResultView reloadData];
-    }
+    
+    _scrollView.hidden = YES;
     [_searchView.searchBar resignFirstResponder];
 
 }
+
+
+- (void)getSearchJobResult:(NSDictionary *)param
+{
+    NSLog(@"param ====== %@",param);
+    [[IKNetworkManager shareInstance] getSearchPageJobInfoWithParam:param backData:^(NSArray *dataArray, BOOL success) {
+        
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _searchResultView.jobDataArray = [dataArray copy];
+                [_searchResultView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)getSearchCompanytResult:(NSDictionary *)param
+{
+    [[IKNetworkManager shareInstance] getSearchPageCompanyInfoWithParam:param backData:^(NSArray *dataArray, BOOL success) {
+        
+        if (success) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _searchResultView.compDataArray = [dataArray copy];
+                [_searchResultView reloadData];
+            });
+        }
+    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

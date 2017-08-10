@@ -146,10 +146,15 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getCompanyPageShopListInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 
+- (void)getSearchPageJobInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getSearchPageCompanyInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
 
 - (void)postUserOprateToServer:(NSDictionary *)param;
 
 
+- (void)getHotCityDataAndProvinceDataFromChahe:(void (^)(NSArray *hotCity,NSArray *province))callback;
 
 
 @end

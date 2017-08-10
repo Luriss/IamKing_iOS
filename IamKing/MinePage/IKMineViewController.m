@@ -38,6 +38,8 @@
 //    self.extendedLayoutIncludesOpaqueBars = YES;
 //    self.automaticallyAdjustsScrollViewInsets = NO;
     
+    self.navigationView.hidden = YES;
+    
     _oldLoginViewCenterY = 0;
 
     _loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
@@ -62,14 +64,14 @@
 {
     [super viewWillAppear:animated];
     
-    [self.navigationController setNavigationBarHidden:YES animated:NO];
+//    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
+//    [self.navigationController setNavigationBarHidden:NO animated:NO];
 
 }
 
