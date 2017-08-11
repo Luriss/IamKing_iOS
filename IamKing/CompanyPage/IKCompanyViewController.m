@@ -130,13 +130,13 @@ extern NSString * currentSelectedCityId;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     [button addTarget:self action:@selector(searchButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(10, 20, 70, 44);
-    button.imageEdgeInsets = UIEdgeInsetsMake(14, 0, 14, 54);
+    button.imageEdgeInsets = UIEdgeInsetsMake(14, 5, 14, 49);
     
-    UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_search"]];
-    [button setImage:[UIImage imageNamed:@"IK_search"] forState:UIControlStateNormal];
+    UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_search_white"]];
+    [button setImage:[UIImage imageNamed:@"IK_search_white"] forState:UIControlStateNormal];
     [button setImage:image forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationView.leftButton = button;
 }
 
 - (void)createLeftBarItem
@@ -147,11 +147,11 @@ extern NSString * currentSelectedCityId;
     button.frame = CGRectMake(0, 0, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(14, 54, 14, 0);
     
-    UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_arrow_right"]];
-    [button setImage:[UIImage imageNamed:@"IK_arrow_right"] forState:UIControlStateNormal];
+    UIImage *image =[UIImage imageByApplyingAlpha:0.8 image:[UIImage imageNamed:@"IK_arrow_right_white"]];
+    [button setImage:[UIImage imageNamed:@"IK_arrow_right_white"] forState:UIControlStateNormal];
     [button setImage:image forState:UIControlStateHighlighted];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:button];
+    self.navigationView.rightButton = button;
 }
 
 
@@ -164,7 +164,7 @@ extern NSString * currentSelectedCityId;
     title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
 }
 
 
@@ -435,7 +435,6 @@ extern NSString * currentSelectedCityId;
         
     }
     cell.backgroundColor = [UIColor whiteColor];
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
@@ -491,7 +490,8 @@ extern NSString * currentSelectedCityId;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat offsetY = scrollView.contentOffset.y;
-    
+    NSLog(@"offsetY = %.0f ",offsetY);
+
     if (offsetY > -44) {
         [self.view addSubview:self.headerView];
         self.headerView.frame = CGRectMake(0, 64, IKSCREEN_WIDTH, 44);
@@ -513,7 +513,6 @@ extern NSString * currentSelectedCityId;
     
     // 显示加载更多.
     CGFloat th = offsetY + _bgTableView.frame.size.height;
-    NSLog(@"offsetY = %.0f = %.0f",th,_bgTableView.contentSize.height);
 
     if (th >= _bgTableView.contentSize.height) {
         CGFloat x = offsetY - (_bgTableView.contentSize.height-_bgTableView.frame.size.height);
@@ -532,6 +531,7 @@ extern NSString * currentSelectedCityId;
     if (scrollView == _bgTableView) {
         CGFloat offsetY = scrollView.contentOffset.y;
 
+        NSLog(@"offsetY, _tableViewInsetH == %.0f,==== %.0f",offsetY, _tableViewInsetH);
         if (offsetY < - (_tableViewInsetH + 50)) {
             _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH + 50, 0, 0, 0);
             _isLoading = YES;
@@ -545,9 +545,6 @@ extern NSString * currentSelectedCityId;
                 _bgTableView.contentInset = UIEdgeInsetsMake(0, 0, 30, 0);
                 [self startLoadingMoreAnimation];
             }
-        }
-        else{
-            _bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
         }
     }
 }
@@ -588,10 +585,20 @@ extern NSString * currentSelectedCityId;
     [self loadMoreCompanyInfo];
 }
 
+
+- (void)stopRefrshAnimation
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.refreshView.layer removeAnimationForKey:@"companyRefreshData"];
+        _isLoading = NO;
+        self.bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
+        [self.bgTableView reloadData];
+    });
+}
+
 - (void)stopLoadingAnimation
 {
     [self.loadMoreView.layer removeAnimationForKey:@"companyMoreData"];
-    [self.refreshView.layer removeAnimationForKey:@"companyRefreshData"];
     _isLoading = NO;
     self.bgTableView.contentInset = UIEdgeInsetsMake(_tableViewInsetH, 0, 0, 0);
 }
@@ -609,15 +616,16 @@ extern NSString * currentSelectedCityId;
     [[IKNetworkManager shareInstance] getCompanyPageCompanyInfoWithParam:jobParam useCache:useCache backData:^(NSArray *dataArray, BOOL success){
         if (success) {
             self.dataArray = [NSArray arrayWithArray:dataArray];
-            [self.bgTableView reloadData];
-        }
-        else{
+            
+            if (_isLoading) {
+                [self stopRefrshAnimation];
+            }
+            else{
+                [self.bgTableView reloadData];
+            }
             
         }
         
-        if (_isLoading) {
-            [self stopLoadingAnimation];
-        }
     }];
     
     [[IKNetworkManager shareInstance] getCompanyPageRecommendCompanyListWithParam:jobParam backData:^(NSArray *dataArray, BOOL success) {
@@ -634,7 +642,6 @@ extern NSString * currentSelectedCityId;
 - (void)loadMoreCompanyInfo
 {
     NSLog(@"currentSelectedCity = %@",currentSelectedCityId);
-    [self stopLoadingAnimation];
         // 获取列表信息.
     NSDictionary *companyParam = @{@"cityId":currentSelectedCityId,@"pageSize":@"16",@"page":[NSString stringWithFormat:@"%ld",++_dataPage]};
     
@@ -643,9 +650,12 @@ extern NSString * currentSelectedCityId;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self stopLoadingAnimation];
                 self.dataArray = [self.dataArray arrayByAddingObjectsFromArray:dataArray];
-                [self.bgTableView reloadData];
+                [_bgTableView reloadData];
                 NSLog(@"self.dataArray.count = %ld,dataArray.count = %ld",self.dataArray.count,dataArray.count);
             });
+        }
+        else{
+            --_dataPage;
         }
     }];
 }

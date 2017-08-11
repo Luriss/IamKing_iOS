@@ -611,7 +611,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 {
     
     CGFloat offsetY = scrollView.contentOffset.y;
-    
+    NSLog(@"offsetY = %.0f",offsetY);
     // 判断是上下滑还是左右滑.
     CGPoint point = [scrollView.panGestureRecognizer translationInView:scrollView];
     if ((fabs(point.x) + 5)<fabs(point.y)) {

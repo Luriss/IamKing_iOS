@@ -153,7 +153,7 @@
 //        _showMoreBtn.backgroundColor = [UIColor cyanColor];
         _showMoreBtn.imageEdgeInsets = UIEdgeInsetsMake(14, 4, 10, 30);
         _showMoreBtn.titleEdgeInsets = UIEdgeInsetsMake(4, -42, 0, 0);
-        [_showMoreBtn setImage:[UIImage imageNamed:@"IK_showMore"] forState:UIControlStateNormal];
+        [_showMoreBtn setImage:[UIImage imageNamed:@"IK_showMore_blue"] forState:UIControlStateNormal];
         [_showMoreBtn setTitle:@"展开" forState:UIControlStateNormal];
         [_showMoreBtn setTitleColor:IKGeneralBlue forState:UIControlStateNormal];
         _showMoreBtn.titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];

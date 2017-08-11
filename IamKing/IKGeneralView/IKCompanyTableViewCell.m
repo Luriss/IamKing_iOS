@@ -72,7 +72,7 @@
     if (_logoImageView == nil) {
         // 头像
         _logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height - 10, self.bounds.size.height - 10)];
-        _logoImageView.contentMode = UIViewContentModeScaleToFill;
+        _logoImageView.contentMode = UIViewContentModeScaleAspectFit;
         _logoImageView.backgroundColor = IKGeneralLightGray;
         _logoImageView.layer.borderWidth = 1.0;
         _logoImageView.layer.borderColor = IKGeneralLightGray.CGColor;

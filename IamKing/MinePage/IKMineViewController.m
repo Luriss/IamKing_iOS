@@ -11,6 +11,8 @@
 #import "IKLoginView.h"
 #import "IKSettingTableViewCell.h"
 #import "IKSettingHeaderTableViewCell.h"
+#import "IKSettingViewController.h"
+
 
 @interface IKMineViewController ()<IKLoginViewDelegate,UITableViewDelegate,UITableViewDataSource>
 {
@@ -186,7 +188,7 @@
             cell = [[IKSettingHeaderTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
             
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         cell.backgroundColor = [UIColor whiteColor];
         cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
         cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
@@ -214,6 +216,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    if (indexPath.row == self.titleArray.count) {
+        IKSettingViewController *mySetting = [[IKSettingViewController alloc] init];
+        [self.navigationController pushViewController:mySetting animated:YES];
+    }
     
 }
 

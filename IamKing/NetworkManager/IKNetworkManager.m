@@ -1276,44 +1276,21 @@ static IKNetworkManager *_shareInstance;
 {
     NSString *url = [NSString stringWithFormat:@"%@shopId=%@&userCompanyId=%@",IKCompanyShopListUrl,[param objectForKey:@"shopId"],[param objectForKey:@"companyId"]];
     
-    __block id dataResult = nil;
-    
-    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
-        
-        dataResult = responseCache;
-
-        BOOL success = [self requestDataSuccess:responseCache];
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
         
         NSArray *arr = nil;
         
         if (success) {
-            arr = [self dealHomePageJobInfoData:responseCache];
+            arr = [self dealHomePageJobInfoData:responseObject];
         }
         else{
-            arr = @[[self getString:[responseCache objectForKey:@"errmsg"]]];
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
         }
         
         if (callback) {
             callback(arr,success);
-        }
-    } success:^(id responseObject) {
-        
-        if (![dataResult isEqual:responseObject]) {
-
-            BOOL success = [self requestDataSuccess:responseObject];
-            
-            NSArray *arr = nil;
-            
-            if (success) {
-                arr = [self dealHomePageJobInfoData:responseObject];
-            }
-            else{
-                arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
-            }
-            
-            if (callback) {
-                callback(arr,success);
-            }
         }
     } failure:^(NSError *error) {
         

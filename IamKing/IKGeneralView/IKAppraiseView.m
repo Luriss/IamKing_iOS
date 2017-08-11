@@ -275,7 +275,7 @@
     [self addSubview:titleLabel];
     
     //分割线
-    UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(10,CGRectGetHeight(titleLabel.frame) , selfH-20, 1)];
+    UIView *seperator = [[UIView alloc] initWithFrame:CGRectMake(10,CGRectGetHeight(titleLabel.frame) , selfW-20, 1)];
     seperator.backgroundColor = IKLineColor;
     [self addSubview:seperator];
     

@@ -124,6 +124,7 @@
 {
     [super viewWillDisappear:animated];
     
+    _bottomTableView.scrollEnabled = NO;
 //    [self.navigationController setNavigationBarHidden:NO animated:NO];
 
 }
@@ -135,7 +136,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    _bottomTableView.scrollEnabled = YES;
+
 //    [self.navigationController setNavigationBarHidden:YES animated:NO];
 
 }

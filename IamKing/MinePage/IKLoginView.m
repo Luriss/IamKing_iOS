@@ -340,20 +340,20 @@
 
 - (void)loginButtonClick:(UIButton *)button
 {
-    if (_phoneTextfield.text.length < 1) {
+    if (_phoneTextfield.text.length != 11 ) {
         [LRToastView showTosatWithText:@"请输入手机号码" inView:self.superview];
     }
     
-//    [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
-//    [IKUSERDEFAULT setObject:@"0" forKey:IKVersionTypeKey];
-//    [IKUSERDEFAULT synchronize];
+    [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
+    [IKUSERDEFAULT setObject:@"0" forKey:IKVersionTypeKey];
+    [IKUSERDEFAULT synchronize];
     
     
-//    [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
+    [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
     
-//    if ([self.delegate respondsToSelector:@selector(loginViewLoginButtonClick)]) {
-//        [self.delegate loginViewLoginButtonClick];
-//    }
+    if ([self.delegate respondsToSelector:@selector(loginViewLoginButtonClick)]) {
+        [self.delegate loginViewLoginButtonClick];
+    }
 }
 
 

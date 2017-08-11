@@ -50,14 +50,22 @@
     [super viewWillAppear:animated];
     
     // no data bg view.
-    NSLog(@"_bgTableView = %@",_bgTableView);
-//    if (_bgTableView == nil) {
-//        [self.view addSubview:self.noDataBgView];
-//    }
+    NSLog(@"viewWillAppear = %@",_bgTableView);
+    _bgTableView.scrollEnabled = YES;
 }
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+}
+
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    NSLog(@"viewWillDisappear = ");
+    
+    _bgTableView.scrollEnabled = NO;
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -148,36 +156,43 @@
     
     self.navigationView.leftButton = button;
     
-    // 分享
-    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [shareBtn addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    shareBtn.frame = CGRectMake(0, 00, 44, 44);
-    shareBtn.imageEdgeInsets = UIEdgeInsetsMake(11, 35, 11, -13);
-    [shareBtn setImage:[UIImage imageNamed:@"IK_share"] forState:UIControlStateNormal];
-    [shareBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_share"] forState:UIControlStateHighlighted];
-    
-    self.navigationView.right2Button = shareBtn;
-    
     // 收藏
     UIButton *favBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [favBtn addTarget:self action:@selector(favButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     favBtn.frame = CGRectMake(0, 00, 44, 44);
-    favBtn.imageEdgeInsets = UIEdgeInsetsMake(11, 20, 11, 2);
-    [favBtn setImage:[UIImage imageNamed:@"IK_star_hollow_grey"] forState:UIControlStateNormal];
-    [favBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_star_hollow_grey"] forState:UIControlStateHighlighted];
+    favBtn.imageEdgeInsets = UIEdgeInsetsMake(11, 10, 11, 12);
+    [favBtn setImage:[UIImage imageNamed:@"IK_star_hollow_White"] forState:UIControlStateNormal];
+    [favBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_star_hollow_White"] forState:UIControlStateHighlighted];
     
     self.navigationView.rightButton = favBtn;
+    
+    
+    // 分享
+    UIButton *shareBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [shareBtn addTarget:self action:@selector(shareButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    shareBtn.frame = CGRectMake(0, 00, 44, 44);
+    shareBtn.imageEdgeInsets = UIEdgeInsetsMake(12, 22, 10, 0);
+    [shareBtn setImage:[UIImage imageNamed:@"IK_share_white"] forState:UIControlStateNormal];
+    [shareBtn setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_share"] forState:UIControlStateHighlighted];
+    
+    self.navigationView.right2Button = shareBtn;
+    
+    
 }
 
 - (void)shareButtonClick:(UIButton *)button
 {
     NSLog(@"shareButtonClick");
+    
+    [LRToastView showTosatWithText:@"敬请期待" inView:self.view];
 }
 
 
 - (void)favButtonClick:(UIButton *)button
 {
     NSLog(@"favButtonClick");
+    [LRToastView showTosatWithText:@"敬请期待" inView:self.view];
+
 }
 
 
@@ -281,7 +296,7 @@
 - (IKTableView *)bgTableView
 {
     if (_bgTableView == nil) {
-        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStyleGrouped];
+        _bgTableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64 - 50) style:UITableViewStyleGrouped];
         _bgTableView.backgroundColor = IKGeneralLightGray;
 //        _bgTableView.sectionFooterHeight = 1.0;
         _bgTableView.separatorStyle = UITableViewCellSeparatorStyleNone;

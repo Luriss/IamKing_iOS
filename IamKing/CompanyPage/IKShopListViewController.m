@@ -45,7 +45,7 @@
     [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationView.leftButton = button;
 }
 
 - (void)initNavTitle
@@ -56,29 +56,29 @@
     title.textColor = [UIColor whiteColor];
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
 }
 
 - (void)setDataDict:(NSDictionary *)dataDict
 {
+    NSLog(@"dataDict = %@",dataDict);
     if (IKDictIsNotEmpty(dataDict)) {
         NSString *shopID = [dataDict objectForKey:@"shopId"];
         NSString *companyID = [dataDict objectForKey:@"companyId"];
         
-        if (IKStringIsEmpty(shopID) || IKStringIsEmpty(companyID)) {
-            [self initNoShopBg];
-        }
-        else{
-            [[IKNetworkManager shareInstance] getCompanyPageShopListInfoWithParam:dataDict backData:^(NSArray *dataArray, BOOL success) {
-                if (success) {
-                    self.dataArray = [NSArray arrayWithArray:dataArray];
-                    [self.view addSubview:self.tableView];
-                }
-                else{
+        [[IKNetworkManager shareInstance] getCompanyPageShopListInfoWithParam:dataDict backData:^(NSArray *dataArray, BOOL success) {
+            if (success) {
+                self.dataArray = [NSArray arrayWithArray:dataArray];
+                [self.view addSubview:self.tableView];
+                
+                if (dataArray.count == 0) {
                     [self initNoShopBg];
                 }
-            }];
-        }
+            }
+            else{
+                [self initNoShopBg];
+            }
+        }];
     }
 }
 
@@ -98,7 +98,7 @@
 - (IKTableView *)tableView
 {
     if (_tableView == nil) {
-        _tableView = [[IKTableView alloc] initWithFrame:self.view.bounds style:UITableViewStylePlain];
+        _tableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 64) style:UITableViewStylePlain];
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.scrollEnabled = YES;
         _tableView.delegate = self;

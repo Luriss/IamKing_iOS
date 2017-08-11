@@ -39,12 +39,7 @@
     [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
     [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
-    
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
-    line.backgroundColor = IKLineColor;
-    
-    [self.view addSubview:line];
+    self.navigationView.leftButton = button;
 }
 
 - (void)initNavTitle
@@ -55,13 +50,13 @@
     title.textColor = IKGeneralWhite;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
+    self.navigationView.titleView = title;
     
 }
 
 - (void)initTableView
 {
-    IKTableView *tableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 1, IKSCREEN_WIDTH,IKSCREENH_HEIGHT - 64) style:UITableViewStylePlain];
+    IKTableView *tableView = [[IKTableView alloc] initWithFrame:CGRectMake(0, 64, IKSCREEN_WIDTH,IKSCREENH_HEIGHT - 64) style:UITableViewStylePlain];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     tableView.scrollEnabled = YES;
     tableView.delegate = self;

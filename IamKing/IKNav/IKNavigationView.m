@@ -68,7 +68,9 @@
 {
     if (right2Button) {
         _right2Button = right2Button;
-        
+        right2Button.frame = CGRectMake(CGRectGetWidth(self.frame) - CGRectGetWidth(_rightButton.frame) - CGRectGetWidth(right2Button.frame) - 10, 20, CGRectGetWidth(right2Button.frame), CGRectGetHeight(right2Button.frame));
+//        right2Button.backgroundColor = [UIColor purpleColor];
+
         [self addSubview:right2Button];
     }
 }

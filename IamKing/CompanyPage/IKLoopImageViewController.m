@@ -100,6 +100,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationView.hidden = YES;
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.view.backgroundColor = [UIColor blackColor];
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(popVc)];

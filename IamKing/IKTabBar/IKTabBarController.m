@@ -34,8 +34,8 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
 
     [self viewAddChildViewController:NO];
 
-    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
-    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
+//    [[UITabBar appearance] setBackgroundImage:[[UIImage alloc] init]];
+//    [[UITabBar appearance] setShadowImage:[[UIImage alloc] init]];
     
     IKTabBar *tabBar = [[IKTabBar alloc] initWithFrame:rect];
     tabBar.defaultSelected = 0;
@@ -62,11 +62,9 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
     IKNavigationController *companyNav = [[IKNavigationController alloc] initWithRootViewController:company];
     
     IKMessageViewController *message = [[IKMessageViewController alloc]init];
-    message.view.backgroundColor = [UIColor whiteColor];
     IKNavigationController *messageNav = [[IKNavigationController alloc] initWithRootViewController:message];
     
     IKMineViewController *mine = [[IKMineViewController alloc]init];
-    mine.view.backgroundColor = [UIColor whiteColor];
     IKNavigationController *mineNav = [[IKNavigationController alloc] initWithRootViewController:mine];
 
     if (isCompany) {

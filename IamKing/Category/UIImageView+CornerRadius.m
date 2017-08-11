@@ -168,10 +168,10 @@ const char kProcessedImage;
 
 - (void)loadImageWithAnimation:(UIImage *)image
 {
-    self.alpha = 0;
+//    self.alpha = 0;
     [UIView transitionWithView:self duration:IKLoadImageTime options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
         [self setImage:image];
-        self.alpha = 1.0;
+//        self.alpha = 1.0;
     }completion:NULL];
 }
 

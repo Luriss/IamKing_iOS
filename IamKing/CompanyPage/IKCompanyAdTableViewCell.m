@@ -124,7 +124,7 @@
     [_exchangeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.mas_bottom).offset(-20);
         make.width.equalTo(self).multipliedBy(0.587);
-        make.height.equalTo(self).multipliedBy(0.158);
+        make.height.mas_equalTo(44);
         make.centerX.equalTo(self);
     }];
     
@@ -284,7 +284,7 @@
     if (_exchangeBtn == nil) {
         _exchangeBtn = [[IKButtonView alloc] init];
         _exchangeBtn.title = @"换一换";
-        _exchangeBtn.cornerRadius = 16;
+        _exchangeBtn.cornerRadius = 22;
         _exchangeBtn.borderColor = IKMainTitleColor;
         _exchangeBtn.borderWidth = 1;
         _exchangeBtn.delegate = self;

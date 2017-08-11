@@ -26,7 +26,6 @@
 
     [self initCollectionView];
     
-    
     // Do any additional setup after loading the view.
 }
 
@@ -45,10 +44,10 @@
     [button addTarget:self action:@selector(recommandVcDismissSelf) forControlEvents:UIControlEventTouchUpInside];
     button.frame = CGRectMake(0, 00, 70, 44);
     button.imageEdgeInsets = UIEdgeInsetsMake(12, 0, 12, 50);
-    [button setImage:[UIImage imageNamed:@"IK_back"] forState:UIControlStateNormal];
-    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back"] forState:UIControlStateHighlighted];
+    [button setImage:[UIImage imageNamed:@"IK_back_white"] forState:UIControlStateNormal];
+    [button setImage:[UIImage getImageApplyingAlpha:IKDefaultAlpha imageName:@"IK_back_white"] forState:UIControlStateHighlighted];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:button];
+    self.navigationView.leftButton = button;
 }
 
 
@@ -57,14 +56,10 @@
     UILabel *title = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     //    title.backgroundColor = [UIColor redColor];
     title.text = @"推荐公司";
-    title.textColor = IKMainTitleColor;
+    title.textColor = IKGeneralWhite;
     title.textAlignment = NSTextAlignmentCenter;
     title.font = [UIFont boldSystemFontOfSize:IKMainTitleFont];
-    self.navigationItem.titleView = title;
-    
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
-    lineView.backgroundColor = IKLineColor;
-    [self.view addSubview:lineView];
+    self.navigationView.titleView = title;
 }
 
 - (void)recommandVcDismissSelf
@@ -84,7 +79,7 @@
     layout.minimumLineSpacing = 13.0f; //行间距
     layout.sectionInset = UIEdgeInsetsMake(0.0f, 15.0f, 30.0f, 15.0f);
     
-    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 1, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-64) collectionViewLayout:layout];
+    _collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds)-64) collectionViewLayout:layout];
     _collectionView.tag = 101;
     _collectionView.bounces = YES;
     _collectionView.showsHorizontalScrollIndicator = YES;

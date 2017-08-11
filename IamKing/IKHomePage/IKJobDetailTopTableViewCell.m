@@ -242,7 +242,7 @@
     
     _temptationLabel.text = detailModel.temptation;
     
-    CGFloat temptationH = [NSString getSizeWithString:detailModel.temptation size:CGSizeMake(CGRectGetWidth(self.contentView.bounds)*0.87, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f]}].height;
+    CGFloat temptationH = [NSString getSizeWithString:detailModel.temptation size:CGSizeMake(IKSCREEN_WIDTH*0.87, MAXFLOAT) attribute:@{NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f]}].height;
     
     NSLog(@"temptationH = %.0f",temptationH);
     
