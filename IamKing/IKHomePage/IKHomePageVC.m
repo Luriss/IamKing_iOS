@@ -220,6 +220,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     // logo
     _navLogoView = [[IKNavIconView alloc]initWithFrame:CGRectMake(0, 0, 100, 44)];
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappp:)];
+    [_navLogoView addGestureRecognizer:tap];
+    
     self.navigationView.titleView = _navLogoView;
     
     [self createRightBarItem];
@@ -227,6 +230,11 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     [self createLeftBarItem];
 //    [self setNavigationContent];
     
+}
+
+- (void)tappp:(UITapGestureRecognizer *)tap
+{
+    [_bottomTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (void)createRightBarItem
@@ -302,6 +310,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     _bottomTableView.delegate = self;
     _bottomTableView.dataSource = self;
     _bottomTableView.bounces = YES;
+
     [self.view addSubview:_bottomTableView];
     
     

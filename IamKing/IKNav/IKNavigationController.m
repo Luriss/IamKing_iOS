@@ -20,6 +20,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.delegate = self;
     self.view.backgroundColor = [UIColor whiteColor];
 //    self.navigationBar.barTintColor = [UIColor whiteColor];
 //    self.delegate = self;
@@ -36,6 +37,9 @@
 {
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    
+    NSLog(@"self.tabBarController = %@",self.tabBarController);
+    
     self.shadowImage.hidden = YES;
 }
 
@@ -64,6 +68,15 @@
     }
 }
 
+
+
+- (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    if (self.viewControllers.count >= 1) {
+        viewController.hidesBottomBarWhenPushed = YES;
+    }
+    [super pushViewController:viewController animated:animated];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

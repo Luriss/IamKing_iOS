@@ -9,27 +9,27 @@
 #import "IKMineViewController.h"
 #import "IKNavIconView.h"
 #import "IKLoginView.h"
-#import "IKSettingTableViewCell.h"
-#import "IKSettingHeaderTableViewCell.h"
 #import "IKSettingViewController.h"
+#import "IKSettingView.h"
+#import "IKAttentionCompanyVc.h"
+#import "IKCollectionJobVc.h"
+#import "IKJobResumeVc.h"
+#import "IKJobProcessVc.h"
+#import "IKIntroduceVc.h"
 
 
-@interface IKMineViewController ()<IKLoginViewDelegate,UITableViewDelegate,UITableViewDataSource>
+extern NSString * loginUserType;
+extern NSString * loginUserId;
+
+
+@interface IKMineViewController ()<IKLoginViewDelegate,IKSettingViewDelegate>
 {
     CGFloat _oldLoginViewCenterY;
 }
 
 
 @property(nonatomic, strong)IKLoginView *loginView;
-@property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)UIImageView *logoImageView;
-
-@property(nonatomic, copy)NSArray       *imageNameArray;
-@property(nonatomic, copy)NSArray       *titleArray;
-@property(nonatomic, copy)NSString      *loginStatus;
-
-@property(nonatomic, assign)BOOL         isCompanyVersion;
-
 
 @end
 
@@ -44,10 +44,14 @@
     
     _oldLoginViewCenterY = 0;
 
-    _loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
-
-    if ([_loginStatus isEqualToString:@"1"]) {
-        [self addTableView];
+    NSString *loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
+    NSDictionary *dict = [IKUSERDEFAULT objectForKey:IKLoginSaveDataKey];
+    NSLog(@"dict = %@",dict);
+    loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
+    loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+    
+    if ([loginStatus isEqualToString:@"1"]) {
+        [self addTableViewWithDict:dict];
     }
     else{
         [self initNavLogo];
@@ -78,47 +82,18 @@
 }
 
 
-- (void)setResourceData
+
+- (void)addTableViewWithDict:(NSDictionary *)dict
 {
-    NSString *versionType = [IKUSERDEFAULT objectForKey:IKVersionTypeKey];
-
-    if ([versionType isEqualToString:@"1"]) {
-        self.imageNameArray = @[@"IK_dealResume",@"IK_managerJob",@"IK_star_hollow_grey",@"IK_companyInfo",@"IK_companyconfirm",@"IK_setting"];
-        self.titleArray = @[@"简历处理",@"职位管理",@"收藏简历",@"公司信息",@"公司认证",@"我的设置"];
-        _isCompanyVersion = YES;
-    }
-    else{
-        self.imageNameArray = @[@"IK_myResume",@"IK_jobprocess",@"IK_star_hollow_grey",@"IK_companyInfo",@"IK_setting"];
-        self.titleArray = @[@"我的简历",@"求职进度",@"收藏职位",@"关注公司",@"我的设置"];
-        _isCompanyVersion = NO;
-
-    }
-    
+    IKSettingView *settingView = [[IKSettingView alloc] initWithFrame:CGRectMake(0, -5, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 50)];
+    settingView.delegate = self;
+    settingView.dictionary = dict;
+//    settingView.backgroundColor = [UIColor redColor];
+    [self.view addSubview:settingView];
 }
 
 
- - (void)addTableView
-{
-    [self setResourceData];
-    [self.view addSubview:self.tableView];
-    
-}
 
-
-- (UITableView *)tableView
-{
-    if (_tableView == nil) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, -5, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 50) style:UITableViewStylePlain];
-        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-        _tableView.scrollEnabled = YES;
-        _tableView.delegate = self;
-        _tableView.dataSource = self;
-        _tableView.showsVerticalScrollIndicator = YES;
-        _tableView.contentInset = UIEdgeInsetsMake(-20, 0, 0, 0);
-//        _tableView.bounces = NO;
-    }
-    return _tableView;
-}
 
 - (void)initNavLogo
 {
@@ -154,79 +129,62 @@
     return _logoImageView;
 }
 
-#pragma mark - UITableViewDelegate,UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+#pragma - mark IKSettingViewDelegate
+
+- (void)tableViewDidSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 1;
-}
+    NSLog(@"indexPath = %@",indexPath);
 
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    
-    return self.titleArray.count + 1;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0) {
-        return 300;
-    }
-    else{
-        return 55;
-    }
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.row == 0) {
-        static  NSString *cellId = @"IKSettingHeaderTableViewCellId";
-        IKSettingHeaderTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell == nil){
-            cell = [[IKSettingHeaderTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            
+    switch (indexPath.row) {
+        case 0:
+        {
+            IKIntroduceVc *introduce = [[IKIntroduceVc alloc] init];
+            [self.navigationController pushViewController:introduce animated:YES];
+            break;
         }
-
-        cell.backgroundColor = [UIColor whiteColor];
-        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-        cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
-        
-        return cell;
-    }
-    else{
-        static  NSString *cellId = @"IKSettingTableViewCellId";
-        IKSettingTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
-        
-        if(cell == nil){
-            cell = [[IKSettingTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
-            
+        case 1:
+        {
+            IKJobResumeVc *jobResume = [[IKJobResumeVc alloc] init];
+            [self.navigationController pushViewController:jobResume animated:YES];
+            break;
         }
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.backgroundColor = [UIColor whiteColor];
-        cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
-        cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
-        [cell settingCellAddData:self.titleArray[indexPath.row - 1] imageName:self.imageNameArray[indexPath.row - 1]];
-        return cell;
+        case 2:
+        {
+            IKJobProcessVc *jobProcess = [[IKJobProcessVc alloc] init];
+            [self.navigationController pushViewController:jobProcess animated:YES];
+            break;
+        }
+        case 3:
+        {
+            IKCollectionJobVc *collection = [[IKCollectionJobVc alloc] init];
+            [self.navigationController pushViewController:collection animated:YES];
+            break;
+        }
+        case 4:
+        {
+            IKAttentionCompanyVc *attention = [[IKAttentionCompanyVc alloc] init];
+            [self.navigationController pushViewController:attention animated:YES];
+            break;
+        }
+        case 5:
+        {
+            IKSettingViewController *mySetting = [[IKSettingViewController alloc] init];
+            [self.navigationController pushViewController:mySetting animated:YES];
+            break;
+        }
+            
+        default:
+            break;
     }
-    
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-    
-    if (indexPath.row == self.titleArray.count) {
-        IKSettingViewController *mySetting = [[IKSettingViewController alloc] init];
-        [self.navigationController pushViewController:mySetting animated:YES];
-    }
-    
-}
+//- (void)settingViewRightArrowClick
+//{
+//    NSLog(@"settingViewRightArrowClick");
+//}
 
 
-#pragma - mark IKLoginViewDelegate
 
 - (void)loginViewRefreshFrameWithType:(IKLoginViewLoginType)loginType
 {
@@ -268,12 +226,12 @@
     }
 }
 
-- (void)loginViewLoginButtonClick
+- (void)loginViewLoginSuccess:(NSDictionary *)dict
 {
     _loginView.hidden = YES;
     [_loginView removeFromSuperview];
     _loginView = nil;
-    [self addTableView];
+    [self addTableViewWithDict:dict];
 }
 
 
@@ -323,8 +281,6 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
     UITouch *touch = touches.anyObject;
-    NSLog(@"touch = %@",touch.view);
-    
     if (![touch.view isKindOfClass:[UITextField class]]) {
         [_loginView textFieldNeedResignFirstResponder];
     }

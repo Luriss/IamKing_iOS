@@ -16,8 +16,8 @@
 
 @property (nonatomic, strong)UILabel *label;
 @property (nonatomic, strong)UIImageView *logoImage;
-@property (nonatomic, strong)UIImageView *arrowImage;
 @property (nonatomic, strong)UIView *lineView;
+@property (nonatomic, strong)UIImageView *sexImage;
 
 
 @end
@@ -34,60 +34,56 @@
 }
 
 
-- (void)initWaveView
-{
-    // 读取gif图片数据 注意:传入nil参数可能有警告
-    FLAnimatedImageView *imgView = [[FLAnimatedImageView alloc] init];
-    imgView.contentMode = UIViewContentModeScaleAspectFit;
-    NSURL *imgUrl = [[NSBundle mainBundle] URLForResource:@"IK_wave" withExtension:@"gif"];
-    NSData *imageData = [NSData dataWithContentsOfURL:imgUrl];
-    imgView.backgroundColor = [UIColor clearColor];
-    imgView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:imageData];
-    [self.contentView addSubview:imgView];
-    [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.left.and.right.equalTo(self.contentView);
-        make.height.mas_equalTo(ceilf(IKSCREENH_HEIGHT *0.225));
-    }];
- 
-}
-
-
 - (void)initSubViews
 {
-    [self initWaveView];
-
-    [self.contentView addSubview:self.label];
-    [self.contentView addSubview:self.lineView];
-    [self.contentView addSubview:self.logoImage];
-    [self.contentView addSubview:self.arrowImage];
+    dispatch_async(dispatch_get_main_queue(), ^{
         
-    [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(self.contentView.mas_bottom);
-        make.left.and.right.equalTo(self.contentView);
-        make.height.mas_equalTo(1);
-    }];
-    
-    [_logoImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(self.contentView.mas_centerX);
-        make.centerY.equalTo(self.contentView.mas_centerY).offset(-15);
-        make.width.and.height.mas_equalTo(80);
-    }];
-    
-    [_arrowImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(self.contentView.mas_right).offset(-20);
-        make.centerY.equalTo(self.contentView.mas_centerY);
-        make.width.and.height.mas_equalTo(18);
-    }];
-    
-    
-    
-    [_label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top);
-        make.left.equalTo(_logoImage.mas_right).offset(24);
-        make.right.equalTo(_arrowImage.mas_left).offset(-5);
-        make.bottom.equalTo(self.contentView.mas_bottom);
-    }];
+        // 读取gif图片数据 注意:传入nil参数可能有警告
+        FLAnimatedImageView *imgView = [[FLAnimatedImageView alloc] init];
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+        NSURL *imgUrl = [[NSBundle mainBundle] URLForResource:@"IK_wave" withExtension:@"gif"];
+        NSData *imageData = [NSData dataWithContentsOfURL:imgUrl];
+        imgView.backgroundColor = [UIColor clearColor];
+        imgView.animatedImage = [FLAnimatedImage animatedImageWithGIFData:imageData];
+        [self.contentView addSubview:imgView];
+        [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView.mas_top);
+            make.left.and.right.equalTo(self.contentView);
+            make.height.mas_equalTo(ceilf(IKSCREENH_HEIGHT *0.225));
+        }];
+        
+        
+        [self.contentView addSubview:self.label];
+        [self.contentView addSubview:self.lineView];
+        [self.contentView addSubview:self.logoImage];
+        [self.contentView addSubview:self.sexImage];
+
+        [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.contentView.mas_bottom);
+            make.left.and.right.equalTo(self.contentView);
+            make.height.mas_equalTo(1);
+        }];
+        
+        [_logoImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(self.contentView.mas_centerX);
+            make.centerY.equalTo(imgView.mas_bottom);
+            make.width.and.height.mas_equalTo(80);
+        }];
+        
+        
+        [_label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(_logoImage.mas_bottom).offset(10);
+            make.left.equalTo(self.contentView.mas_left).offset(20);
+            make.height.mas_equalTo(30);
+            make.right.equalTo(_logoImage.mas_centerX).offset(4);
+        }];
+        
+        [_sexImage mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(_label.mas_centerY);
+            make.left.equalTo(_label.mas_right).offset(5);
+            make.width.height.mas_equalTo(20);
+        }];
+    });
 }
 
 
@@ -96,9 +92,10 @@
 {
     if (_label == nil) {
         _label = [[UILabel alloc] init];
-        _label.font = [UIFont systemFontOfSize:15.0f];
-        _label.textColor = IKMainTitleColor;
-        _label.textAlignment = NSTextAlignmentLeft;
+        _label.font = [UIFont boldSystemFontOfSize:16.0f];
+        _label.textColor = IKGeneralBlue;
+        _label.textAlignment = NSTextAlignmentRight;
+//        _label.backgroundColor = [UIColor purpleColor];
     }
     return _label;
 }
@@ -118,27 +115,37 @@
 {
     if (_logoImage == nil) {
         _logoImage = [[UIImageView alloc] init];
-        _logoImage.backgroundColor = [UIColor redColor];
+        _logoImage.backgroundColor = IKGeneralLightGray;
         _logoImage.layer.cornerRadius = 6;
         _logoImage.layer.masksToBounds = YES;
     }
     return _logoImage;
 }
 
-- (UIImageView *)arrowImage
+- (UIImageView *)sexImage
 {
-    if (_arrowImage == nil) {
-        _arrowImage = [[UIImageView alloc] init];
-        [_arrowImage setImage:[UIImage imageNamed:@"IK_arrow_right"]];
+    if (_sexImage == nil) {
+        _sexImage = [[UIImageView alloc] init];
+//        _sexImage.backgroundColor = IKGeneralLightGray;
     }
-    return _arrowImage;
+    return _sexImage;
 }
 
 
-- (void)settingCellAddData:(NSString *)title imageName:(NSString *)image
+- (void)addSettingHeaderTableViewCellData:(NSDictionary *)dict
 {
-    [_logoImage setImage:[UIImage imageNamed:image]];
-    _label.text = title;
+    NSLog(@"addSettingHeaderTableViewCellData = %@",dict);
+    NSString *imageStr = [dict objectForKey:@"headerImage"];
+    NSArray *arr = [imageStr componentsSeparatedByString:@"http"];
+    NSString *newImageUrl = [NSString stringWithFormat:@"http%@",arr.lastObject];
+
+    [self.logoImage sd_setImageWithURL:[NSURL URLWithString:newImageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        NSLog(@"image = %@,error = %@ imageURL = %@",image,error,imageURL);
+    }];
+    
+    self.label.text = [dict objectForKey:@"nickname"];
+
+    [self.sexImage setImage:[UIImage imageNamed:@"IK_male"]];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

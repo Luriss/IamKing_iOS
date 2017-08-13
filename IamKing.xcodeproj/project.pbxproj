@@ -150,6 +150,25 @@
 		21D052F61F3C709300200AFA /* IKSettingNomalTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D052F51F3C709300200AFA /* IKSettingNomalTableViewCell.m */; };
 		21D052F81F3C754E00200AFA /* IK_loginout_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D052F71F3C754E00200AFA /* IK_loginout_red.png */; };
 		21D052FB1F3C799300200AFA /* IKAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D052FA1F3C799300200AFA /* IKAccountViewController.m */; };
+		21D052FF1F3D4A9600200AFA /* LRTabBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D052FE1F3D4A9600200AFA /* LRTabBar.m */; };
+		21D053031F3D658E00200AFA /* IKSettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053021F3D658E00200AFA /* IKSettingView.m */; };
+		21D053061F3D7B0700200AFA /* IKAttentionCompanyVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053051F3D7B0700200AFA /* IKAttentionCompanyVc.m */; };
+		21D053091F3D7B6C00200AFA /* IKCollectionJobVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053081F3D7B6C00200AFA /* IKCollectionJobVc.m */; };
+		21D0530C1F3D7BC700200AFA /* IKJobResumeVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0530B1F3D7BC700200AFA /* IKJobResumeVc.m */; };
+		21D0530F1F3D7C9300200AFA /* IKJobProcessVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0530E1F3D7C9300200AFA /* IKJobProcessVc.m */; };
+		21D053121F3D7D8600200AFA /* IKIntroduceVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053111F3D7D8600200AFA /* IKIntroduceVc.m */; };
+		21D0531A1F3D826D00200AFA /* IK_kingBg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 21D053191F3D826D00200AFA /* IK_kingBg.jpg */; };
+		21D0531C1F3D829200200AFA /* IK_kingLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D0531B1F3D829200200AFA /* IK_kingLogo.png */; };
+		21D0531F1F3D8FE400200AFA /* IKContactUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0531E1F3D8FE400200AFA /* IKContactUsViewController.m */; };
+		21D053221F3DA1DD00200AFA /* IKFeedbackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053211F3DA1DD00200AFA /* IKFeedbackViewController.m */; };
+		21D053261F3DA4FA00200AFA /* IK_contactUs.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053231F3DA4FA00200AFA /* IK_contactUs.png */; };
+		21D053271F3DA4FA00200AFA /* IK_contactInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053241F3DA4FA00200AFA /* IK_contactInfo.png */; };
+		21D053281F3DA4FA00200AFA /* IK_thankyou.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053251F3DA4FA00200AFA /* IK_thankyou.png */; };
+		21D0532A1F3DAB2B00200AFA /* IK_Feedback_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053291F3DAB2B00200AFA /* IK_Feedback_blue.png */; };
+		21D0532C1F3DBB7100200AFA /* IK_feedback_ok.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D0532B1F3DBB7100200AFA /* IK_feedback_ok.png */; };
+		21D0532F1F3DBFE200200AFA /* IKGeneralTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0532E1F3DBFE200200AFA /* IKGeneralTool.m */; };
+		21D053321F3DD24300200AFA /* IK_male.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053301F3DD24300200AFA /* IK_male.png */; };
+		21D053331F3DD24300200AFA /* IK_female.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053311F3DD24300200AFA /* IK_female.png */; };
 		21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622CD1F0E5C6E0054D980 /* IK_Address.png */; };
 		21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D622E01F0F31E30054D980 /* IKSlideView.m */; };
 		21D622E51F0F6CCE0054D980 /* IK_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622E31F0F6CCE0054D980 /* IK_more.png */; };
@@ -493,6 +512,35 @@
 		21D052F71F3C754E00200AFA /* IK_loginout_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_loginout_red.png; sourceTree = "<group>"; };
 		21D052F91F3C799300200AFA /* IKAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAccountViewController.h; sourceTree = "<group>"; };
 		21D052FA1F3C799300200AFA /* IKAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAccountViewController.m; sourceTree = "<group>"; };
+		21D052FD1F3D4A9600200AFA /* LRTabBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LRTabBar.h; sourceTree = "<group>"; };
+		21D052FE1F3D4A9600200AFA /* LRTabBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LRTabBar.m; sourceTree = "<group>"; };
+		21D053011F3D658E00200AFA /* IKSettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSettingView.h; sourceTree = "<group>"; };
+		21D053021F3D658E00200AFA /* IKSettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSettingView.m; sourceTree = "<group>"; };
+		21D053041F3D7B0700200AFA /* IKAttentionCompanyVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAttentionCompanyVc.h; sourceTree = "<group>"; };
+		21D053051F3D7B0700200AFA /* IKAttentionCompanyVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAttentionCompanyVc.m; sourceTree = "<group>"; };
+		21D053071F3D7B6C00200AFA /* IKCollectionJobVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKCollectionJobVc.h; sourceTree = "<group>"; };
+		21D053081F3D7B6C00200AFA /* IKCollectionJobVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKCollectionJobVc.m; sourceTree = "<group>"; };
+		21D0530A1F3D7BC700200AFA /* IKJobResumeVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobResumeVc.h; sourceTree = "<group>"; };
+		21D0530B1F3D7BC700200AFA /* IKJobResumeVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobResumeVc.m; sourceTree = "<group>"; };
+		21D0530D1F3D7C9300200AFA /* IKJobProcessVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKJobProcessVc.h; sourceTree = "<group>"; };
+		21D0530E1F3D7C9300200AFA /* IKJobProcessVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKJobProcessVc.m; sourceTree = "<group>"; };
+		21D053101F3D7D8600200AFA /* IKIntroduceVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKIntroduceVc.h; sourceTree = "<group>"; };
+		21D053111F3D7D8600200AFA /* IKIntroduceVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKIntroduceVc.m; sourceTree = "<group>"; };
+		21D053191F3D826D00200AFA /* IK_kingBg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = IK_kingBg.jpg; sourceTree = "<group>"; };
+		21D0531B1F3D829200200AFA /* IK_kingLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_kingLogo.png; sourceTree = "<group>"; };
+		21D0531D1F3D8FE400200AFA /* IKContactUsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKContactUsViewController.h; sourceTree = "<group>"; };
+		21D0531E1F3D8FE400200AFA /* IKContactUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKContactUsViewController.m; sourceTree = "<group>"; };
+		21D053201F3DA1DD00200AFA /* IKFeedbackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKFeedbackViewController.h; sourceTree = "<group>"; };
+		21D053211F3DA1DD00200AFA /* IKFeedbackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKFeedbackViewController.m; sourceTree = "<group>"; };
+		21D053231F3DA4FA00200AFA /* IK_contactUs.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_contactUs.png; sourceTree = "<group>"; };
+		21D053241F3DA4FA00200AFA /* IK_contactInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_contactInfo.png; sourceTree = "<group>"; };
+		21D053251F3DA4FA00200AFA /* IK_thankyou.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_thankyou.png; sourceTree = "<group>"; };
+		21D053291F3DAB2B00200AFA /* IK_Feedback_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Feedback_blue.png; sourceTree = "<group>"; };
+		21D0532B1F3DBB7100200AFA /* IK_feedback_ok.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_feedback_ok.png; sourceTree = "<group>"; };
+		21D0532D1F3DBFE200200AFA /* IKGeneralTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKGeneralTool.h; sourceTree = "<group>"; };
+		21D0532E1F3DBFE200200AFA /* IKGeneralTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKGeneralTool.m; sourceTree = "<group>"; };
+		21D053301F3DD24300200AFA /* IK_male.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_male.png; sourceTree = "<group>"; };
+		21D053311F3DD24300200AFA /* IK_female.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_female.png; sourceTree = "<group>"; };
 		21D622CD1F0E5C6E0054D980 /* IK_Address.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Address.png; sourceTree = "<group>"; };
 		21D622D51F0F21320054D980 /* IamKing.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IamKing.pch; path = ../IamKing.pch; sourceTree = "<group>"; };
 		21D622D81F0F246D0054D980 /* IKGeneralMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKGeneralMacro.h; sourceTree = "<group>"; };
@@ -1057,14 +1105,17 @@
 		21BC61D41F2CE70D00CE85D9 /* MinePage */ = {
 			isa = PBXGroup;
 			children = (
+				21D053181F3D80D400200AFA /* Introduce */,
+				21D053171F3D80C000200AFA /* JobProcess */,
+				21D053161F3D80B100200AFA /* JobResume */,
+				21D053151F3D809500200AFA /* Collectionjob */,
+				21D053141F3D807600200AFA /* AttentionCompany */,
+				21D053131F3D805A00200AFA /* MySetting */,
+				21D053001F3D653500200AFA /* IKSettingView */,
 				21F8214F1F384C7B00DA9EFA /* Cell */,
 				21F821271F37484700DA9EFA /* IKLoginView */,
 				21BC61D51F2CE73900CE85D9 /* IKMineViewController.h */,
 				21BC61D61F2CE73900CE85D9 /* IKMineViewController.m */,
-				21D052F11F3C6E5100200AFA /* IKSettingViewController.h */,
-				21D052F21F3C6E5100200AFA /* IKSettingViewController.m */,
-				21D052F91F3C799300200AFA /* IKAccountViewController.h */,
-				21D052FA1F3C799300200AFA /* IKAccountViewController.m */,
 			);
 			path = MinePage;
 			sourceTree = "<group>";
@@ -1228,6 +1279,7 @@
 		21C3AE441F175615008FC124 /* IKGeneralView */ = {
 			isa = PBXGroup;
 			children = (
+				21D052FC1F3D4A2C00200AFA /* LRTabBar */,
 				21F8219C1F3B035000DA9EFA /* IKToastView */,
 				21F821781F3AAFF400DA9EFA /* IKTeamDeatilView */,
 				21F821171F32EC5200DA9EFA /* IKRollLabel */,
@@ -1307,6 +1359,84 @@
 			name = IKSearchView;
 			sourceTree = "<group>";
 		};
+		21D052FC1F3D4A2C00200AFA /* LRTabBar */ = {
+			isa = PBXGroup;
+			children = (
+				21D052FD1F3D4A9600200AFA /* LRTabBar.h */,
+				21D052FE1F3D4A9600200AFA /* LRTabBar.m */,
+			);
+			name = LRTabBar;
+			sourceTree = "<group>";
+		};
+		21D053001F3D653500200AFA /* IKSettingView */ = {
+			isa = PBXGroup;
+			children = (
+				21D053011F3D658E00200AFA /* IKSettingView.h */,
+				21D053021F3D658E00200AFA /* IKSettingView.m */,
+			);
+			name = IKSettingView;
+			sourceTree = "<group>";
+		};
+		21D053131F3D805A00200AFA /* MySetting */ = {
+			isa = PBXGroup;
+			children = (
+				21D052F11F3C6E5100200AFA /* IKSettingViewController.h */,
+				21D052F21F3C6E5100200AFA /* IKSettingViewController.m */,
+				21D052F91F3C799300200AFA /* IKAccountViewController.h */,
+				21D052FA1F3C799300200AFA /* IKAccountViewController.m */,
+				21D0531D1F3D8FE400200AFA /* IKContactUsViewController.h */,
+				21D0531E1F3D8FE400200AFA /* IKContactUsViewController.m */,
+				21D053201F3DA1DD00200AFA /* IKFeedbackViewController.h */,
+				21D053211F3DA1DD00200AFA /* IKFeedbackViewController.m */,
+			);
+			name = MySetting;
+			sourceTree = "<group>";
+		};
+		21D053141F3D807600200AFA /* AttentionCompany */ = {
+			isa = PBXGroup;
+			children = (
+				21D053041F3D7B0700200AFA /* IKAttentionCompanyVc.h */,
+				21D053051F3D7B0700200AFA /* IKAttentionCompanyVc.m */,
+			);
+			name = AttentionCompany;
+			sourceTree = "<group>";
+		};
+		21D053151F3D809500200AFA /* Collectionjob */ = {
+			isa = PBXGroup;
+			children = (
+				21D053071F3D7B6C00200AFA /* IKCollectionJobVc.h */,
+				21D053081F3D7B6C00200AFA /* IKCollectionJobVc.m */,
+			);
+			name = Collectionjob;
+			sourceTree = "<group>";
+		};
+		21D053161F3D80B100200AFA /* JobResume */ = {
+			isa = PBXGroup;
+			children = (
+				21D0530A1F3D7BC700200AFA /* IKJobResumeVc.h */,
+				21D0530B1F3D7BC700200AFA /* IKJobResumeVc.m */,
+			);
+			name = JobResume;
+			sourceTree = "<group>";
+		};
+		21D053171F3D80C000200AFA /* JobProcess */ = {
+			isa = PBXGroup;
+			children = (
+				21D0530D1F3D7C9300200AFA /* IKJobProcessVc.h */,
+				21D0530E1F3D7C9300200AFA /* IKJobProcessVc.m */,
+			);
+			name = JobProcess;
+			sourceTree = "<group>";
+		};
+		21D053181F3D80D400200AFA /* Introduce */ = {
+			isa = PBXGroup;
+			children = (
+				21D053101F3D7D8600200AFA /* IKIntroduceVc.h */,
+				21D053111F3D7D8600200AFA /* IKIntroduceVc.m */,
+			);
+			name = Introduce;
+			sourceTree = "<group>";
+		};
 		21D622D61F0F23350054D980 /* IKGeneralFile */ = {
 			isa = PBXGroup;
 			children = (
@@ -1314,6 +1444,8 @@
 				21D622D51F0F21320054D980 /* IamKing.pch */,
 				21F821991F3AFF5400DA9EFA /* IKMD5Tool.h */,
 				21F8219A1F3AFF5400DA9EFA /* IKMD5Tool.m */,
+				21D0532D1F3DBFE200200AFA /* IKGeneralTool.h */,
+				21D0532E1F3DBFE200200AFA /* IKGeneralTool.m */,
 			);
 			name = IKGeneralFile;
 			path = GeneralFile;
@@ -1580,6 +1712,15 @@
 		21F8212F1F37536900DA9EFA /* MinePageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21D053301F3DD24300200AFA /* IK_male.png */,
+				21D053311F3DD24300200AFA /* IK_female.png */,
+				21D0532B1F3DBB7100200AFA /* IK_feedback_ok.png */,
+				21D053291F3DAB2B00200AFA /* IK_Feedback_blue.png */,
+				21D053231F3DA4FA00200AFA /* IK_contactUs.png */,
+				21D053241F3DA4FA00200AFA /* IK_contactInfo.png */,
+				21D053251F3DA4FA00200AFA /* IK_thankyou.png */,
+				21D053191F3D826D00200AFA /* IK_kingBg.jpg */,
+				21D0531B1F3D829200200AFA /* IK_kingLogo.png */,
 				21F821591F38757700DA9EFA /* IK_wave.gif */,
 				21F8213F1F38455A00DA9EFA /* IK_companyconfirm.png */,
 				21F821401F38455A00DA9EFA /* IK_companyInfo.png */,
@@ -1817,6 +1958,7 @@
 			files = (
 				2197CBB91F1E0C5F00F61562 /* IK_time_blue.png in Resources */,
 				21F821AE1F3B25D800DA9EFA /* icon_66.png in Resources */,
+				21D053271F3DA4FA00200AFA /* IK_contactInfo.png in Resources */,
 				21BC61961F2884B600CE85D9 /* IK_experience_blue.png in Resources */,
 				21E2B5A11F1BAC2B00F9EC14 /* IK_meSelected@3x.png in Resources */,
 				21BC61951F2884B600CE85D9 /* IK_education_blue.png in Resources */,
@@ -1826,6 +1968,7 @@
 				21D623231F1360F80054D980 /* IK_education.png in Resources */,
 				21D052F81F3C754E00200AFA /* IK_loginout_red.png in Resources */,
 				21C3AE091F15D90B008FC124 /* IKProvinceCity.plist in Resources */,
+				21D0531A1F3D826D00200AFA /* IK_kingBg.jpg in Resources */,
 				21F821391F376D7300DA9EFA /* IK_verify_gray.png in Resources */,
 				21F821AB1F3B25D800DA9EFA /* icon_120.png in Resources */,
 				21BC61E01F2D003B00CE85D9 /* IK_xuanzhuan.png in Resources */,
@@ -1839,6 +1982,7 @@
 				21F821331F3753BE00DA9EFA /* IK_phone_grey.png in Resources */,
 				21F820FA1F30A89D00DA9EFA /* IK_member_blue.png in Resources */,
 				21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */,
+				21D0532A1F3DAB2B00200AFA /* IK_Feedback_blue.png in Resources */,
 				21F821B01F3B25D800DA9EFA /* AppStore-1024px.png in Resources */,
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
 				218AD71A1F209BC300138A68 /* IK_loading.png in Resources */,
@@ -1867,6 +2011,7 @@
 				21F821871F3AF6EF00DA9EFA /* IK_noShop.png in Resources */,
 				21D623101F132B660054D980 /* IK_exchange.png in Resources */,
 				21BC618F1F2869C300CE85D9 /* IK_star_hollow_red.png in Resources */,
+				21D053281F3DA4FA00200AFA /* IK_thankyou.png in Resources */,
 				21BC61F11F2DC2FC00CE85D9 /* IK_back_white.png in Resources */,
 				2197CBC61F1EF73B00F61562 /* IK_star_hollow_grey.png in Resources */,
 				21C3AE3B1F174650008FC124 /* IK_trainTeacher.png in Resources */,
@@ -1888,14 +2033,18 @@
 				21BC61C81F2CE60900CE85D9 /* IK_arrow_right.png in Resources */,
 				21E2B5A31F1BAC6700F9EC14 /* IK_findPeopleSelected@3x.png in Resources */,
 				21D622E61F0F6CCE0054D980 /* IK_search.png in Resources */,
+				21D053261F3DA4FA00200AFA /* IK_contactUs.png in Resources */,
 				21F820FB1F30A89D00DA9EFA /* IK_square_blue.png in Resources */,
 				210B0DE51F0E0B56003FD950 /* IK_me@3x.png in Resources */,
 				21F821AD1F3B25D800DA9EFA /* icon_44.png in Resources */,
 				21D052EA1F3C549F00200AFA /* IK_share_white.png in Resources */,
 				21F8210C1F32C07600DA9EFA /* IK_graybackground.png in Resources */,
+				21D053331F3DD24300200AFA /* IK_female.png in Resources */,
 				21C3AE3F1F1746AA008FC124 /* IK_sellPerformance.png in Resources */,
+				21D053321F3DD24300200AFA /* IK_male.png in Resources */,
 				21C3AE141F162024008FC124 /* IK_close.png in Resources */,
 				21BC61891F282B7800CE85D9 /* IK_detail_pin.png in Resources */,
+				21D0532C1F3DBB7100200AFA /* IK_feedback_ok.png in Resources */,
 				21F821951F3AF6FB00DA9EFA /* IK_messageinterest.png in Resources */,
 				21F821361F3757DB00DA9EFA /* IK_buttonBg_blue_click.png in Resources */,
 				21F821AA1F3B25D800DA9EFA /* icon_75.png in Resources */,
@@ -1929,6 +2078,7 @@
 				210B0DF91F0E3253003FD950 /* IK_logo.png in Resources */,
 				210B0D9A1F0DE16D003FD950 /* Main.storyboard in Resources */,
 				21D6231D1F1355610054D980 /* IK_applyJobSelected@3x.png in Resources */,
+				21D0531C1F3D829200200AFA /* IK_kingLogo.png in Resources */,
 				21E2B59E1F1BA6BF00F9EC14 /* IK_homePage@3x.png in Resources */,
 				2197CBB51F1E0C5F00F61562 /* IK_job_blue.png in Resources */,
 				21F821481F38455A00DA9EFA /* IK_setting.png in Resources */,
@@ -2010,11 +2160,13 @@
 			files = (
 				21BC61871F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m in Sources */,
 				21F820C51F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m in Sources */,
+				21D053121F3D7D8600200AFA /* IKIntroduceVc.m in Sources */,
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
 				2197CBCB1F1EFDDA00F61562 /* IKSelectModel.m in Sources */,
 				21F820CB1F2F2B0700DA9EFA /* IKComDetailLoopTableViewCell.m in Sources */,
 				210B0DDD1F0DFE4D003FD950 /* IKNavigationController.m in Sources */,
 				2197CB831F1C8D5200F61562 /* IKJobTypeDetailVC.m in Sources */,
+				21D052FF1F3D4A9600200AFA /* LRTabBar.m in Sources */,
 				21F821581F385EA100DA9EFA /* IKSettingHeaderTableViewCell.m in Sources */,
 				21F8212A1F37487600DA9EFA /* IKLoginView.m in Sources */,
 				21E2B5971F1B1EA700F9EC14 /* IKTableView.m in Sources */,
@@ -2024,16 +2176,20 @@
 				21F8219F1F3B038B00DA9EFA /* LRToastView.m in Sources */,
 				218AD7181F208C0F00138A68 /* LRPageControl.m in Sources */,
 				21BC61D71F2CE73900CE85D9 /* IKMineViewController.m in Sources */,
+				21D0531F1F3D8FE400200AFA /* IKContactUsViewController.m in Sources */,
 				21BC638A1F2EC9AC00CE85D9 /* IKComDetailTopTableViewCell.m in Sources */,
 				21C3ADF51F14A352008FC124 /* IKNetworkHelper.m in Sources */,
 				21F820DF1F30601500DA9EFA /* IKCompanyProgressVC.m in Sources */,
 				21BC61B11F2A2FB600CE85D9 /* IKFeedbackTableViewCell.m in Sources */,
 				21C3AE181F162963008FC124 /* IKSearchBar.m in Sources */,
+				21D0530F1F3D7C9300200AFA /* IKJobProcessVc.m in Sources */,
+				21D053091F3D7B6C00200AFA /* IKCollectionJobVc.m in Sources */,
 				21F820F51F30A2F900DA9EFA /* IKCompanyShopTableViewCell.m in Sources */,
 				21F820BF1F2F0CE900DA9EFA /* IKComDetailTypeTableViewCell.m in Sources */,
 				21C3AE561F175615008FC124 /* IKButtonView.m in Sources */,
 				21F8219B1F3AFF5400DA9EFA /* IKMD5Tool.m in Sources */,
 				21F820D71F302D0100DA9EFA /* IKCompanyDetailTitleTableViewCell.m in Sources */,
+				21D053031F3D658E00200AFA /* IKSettingView.m in Sources */,
 				21F8211A1F32ECB200DA9EFA /* IKRollLabel.m in Sources */,
 				21F821221F36AAC800DA9EFA /* IKMessageNoticeTableViewCell.m in Sources */,
 				21F821011F3191F700DA9EFA /* IKButton.m in Sources */,
@@ -2053,6 +2209,7 @@
 				21F820E51F306B8900DA9EFA /* IKManagerTeamLeftTableViewCell.m in Sources */,
 				21BC61C41F2CDE6C00CE85D9 /* IKCompanyViewController.m in Sources */,
 				21BC61D31F2CE6F200CE85D9 /* IKMessageViewController.m in Sources */,
+				21D0532F1F3DBFE200200AFA /* IKGeneralTool.m in Sources */,
 				21F8213E1F38117000DA9EFA /* IKCompanyTypeView.m in Sources */,
 				21F820EB1F30777000DA9EFA /* IKCompanyManagerTeamModel.m in Sources */,
 				21BC619D1F288EE100CE85D9 /* IKDetailTitleTableViewCell.m in Sources */,
@@ -2063,6 +2220,7 @@
 				210B0DF01F0E1756003FD950 /* IKHomePageVC.m in Sources */,
 				21BC61751F25A77700CE85D9 /* IKJobTypeModel.m in Sources */,
 				21BC61A71F297AA500CE85D9 /* IKWorkAddressTableViewCell.m in Sources */,
+				21D053061F3D7B0700200AFA /* IKAttentionCompanyVc.m in Sources */,
 				21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */,
 				21BC61E31F2D1C4300CE85D9 /* IKCompanyClassifyView.m in Sources */,
 				2197CBAA1F1E058100F61562 /* IKCompanyTableViewCell.m in Sources */,
@@ -2071,6 +2229,7 @@
 				21BC617C1F2706F900CE85D9 /* IKJobDetailVC.m in Sources */,
 				2197CBAD1F1E06E500F61562 /* IKCompanyInfoModel.m in Sources */,
 				2197CBC01F1E3F1000F61562 /* IKSelectView.m in Sources */,
+				21D0530C1F3D7BC700200AFA /* IKJobResumeVc.m in Sources */,
 				21F820F21F3098ED00DA9EFA /* IKCompanyNeedJobTableViewCell.m in Sources */,
 				21C3AE2D1F173727008FC124 /* IKTypeTableView.m in Sources */,
 				21BC61831F2733FB00CE85D9 /* IKJobDetailModel.m in Sources */,
@@ -2093,6 +2252,7 @@
 				21C3AE0E1F1616B6008FC124 /* IKMoreTypeVC.m in Sources */,
 				21C3AE5D1F175615008FC124 /* IKSearchView.m in Sources */,
 				21BC61EC1F2D8E1200CE85D9 /* IKRecommandCoCollectionViewCell.m in Sources */,
+				21D053221F3DA1DD00200AFA /* IKFeedbackViewController.m in Sources */,
 				21C3ADFB1F14CA3A008FC124 /* IKChooseCityVC.m in Sources */,
 				21BC61711F25931E00CE85D9 /* IKProvinceModel.m in Sources */,
 				21BC616E1F25896300CE85D9 /* IKHotCityModel.m in Sources */,

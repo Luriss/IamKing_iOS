@@ -16,7 +16,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        _backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.9];
+        _backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
         _textFont = [UIFont systemFontOfSize:14.0f];
         _textColor = [UIColor whiteColor];
         _maxWidth = IKSCREEN_WIDTH * 0.5;

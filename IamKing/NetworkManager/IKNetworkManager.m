@@ -81,6 +81,17 @@
 
 #define IKCompanySearchUrl (@"https://www.iamking.com.cn/index.php/User/searchByName?")
 
+// 反馈数据
+#define IKFeedbackUrl (@"https://www.iamking.com.cn/index.php/Feedback/add")
+
+// 登陆
+//accessToken=&account=18658393976&openId=&passwd=eabd8ce9404507aa8c22714d3f5eada9&userType=0,1
+
+#define IKLoginUrl (@"https://www.iamking.com.cn/index.php/User/login?")
+
+
+
+
 @interface IKNetworkManager ()
 
 @property(nonatomic,strong)NSDateFormatter *dataFormatter;
@@ -422,7 +433,6 @@ static IKNetworkManager *_shareInstance;
     __block id dataResult = nil;
 
     [IKNetworkHelper GET:IKProvinceCityListUrl parameters:nil responseCache:^(id responseCache) {
-        NSLog(@"ProvinceCity responseCache = %@",responseCache);
         dataResult = responseCache;
 
         BOOL success = [self requestDataSuccess:responseCache];
@@ -1297,15 +1307,6 @@ static IKNetworkManager *_shareInstance;
     }];
 }
 
-- (void)postUserOprateToServer:(NSDictionary *)param
-{
-    [IKNetworkHelper POST:@"https://www.iamking.com.cn/index.php/UserOperate/addUserOperate" parameters:param success:^(id responseObject) {
-        NSLog(@"postUserOprateToServer responseObject = %@",responseObject);
-    } failure:^(NSError *error) {
-        NSLog(@"error = %@",error);
-
-    }];
-}
 
 
 - (void)getSearchPageJobInfoWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
@@ -1364,6 +1365,61 @@ static IKNetworkManager *_shareInstance;
         
     }];
 }
+
+
+- (void)getLoginInfoWithParam:(NSDictionary *)param backData:(void (^)(NSDictionary *dict, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@accessToken=%@&account=%@&openId=%@&passwd=%@&userType=0,1",IKLoginUrl,[param objectForKey:@"accessToken"],[param objectForKey:@"account"],[param objectForKey:@"openId"],[param objectForKey:@"passwd"]];
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject 22 = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+
+        if (callback) {
+            callback([responseObject objectForKey:@"data"],success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+/*************** POST ***************************************************************/
+
+
+- (void)postUserOprateToServer:(NSDictionary *)param
+{
+    [IKNetworkHelper POST:@"https://www.iamking.com.cn/index.php/UserOperate/addUserOperate" parameters:param success:^(id responseObject) {
+        NSLog(@"postUserOprateToServer responseObject = %@",responseObject);
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+        
+    }];
+}
+
+
+- (void)postFeedbackDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback
+{
+    [IKNetworkHelper POST:IKFeedbackUrl parameters:param success:^(id responseObject) {
+        NSLog(@"postFeedbackDataToServer responseObject = %@",responseObject);
+        
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback(success,[responseObject objectForKey:@"errmsg"]);
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+        
+    }];
+}
+
+/*************** POST ***************************************************************/
+
 
 
 - (NSString *)getPositionFromPlist:(NSString *)key

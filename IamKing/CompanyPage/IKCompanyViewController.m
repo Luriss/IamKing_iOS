@@ -364,11 +364,10 @@ extern NSString * currentSelectedCityId;
         } completion:^(BOOL finished) {
             
         }];
-        
-        [self hideTabBar];
+
     }
     else{
-        [self showTabBar];
+
         if (_showChooseType == 1) {
             [button setTitle:@"全部公司" forState:UIControlStateNormal];
         }

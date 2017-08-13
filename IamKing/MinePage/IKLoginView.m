@@ -9,13 +9,17 @@
 #import "IKLoginView.h"
 #import "IKTextField.h"
 #import "IKCompanyTypeView.h"
+#import "IKGeneralTool.h"
+#import "IKMD5Tool.h"
 
+NSString * loginUserType;
+NSString * loginUserId;
 
 @interface IKLoginView ()<IKCompanyTypeViewDelegate,UITextFieldDelegate>
 {
     CGFloat _totalH;
     CGFloat _registerTotalH;
-
+    
 }
 
 @property (nonatomic, strong) IKTextField     *phoneTextfield;
@@ -42,7 +46,7 @@
 {
     self = [super initWithFrame:CGRectMake(20, 0, IKSCREEN_WIDTH - 40, 300)];
     if (self) {
-
+        
     }
     return self;
 }
@@ -137,7 +141,7 @@
         _loginButton.layer.cornerRadius = 6;
         _loginButton.layer.masksToBounds = YES;
         [_loginButton addTarget:self action:@selector(loginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-
+        
         _totalH += 60;
     }
     return _loginButton;
@@ -174,7 +178,7 @@
         _registerAccount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         _registerAccount.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
         [_registerAccount addTarget:self action:@selector(registerAccountClick:) forControlEvents:UIControlEventTouchUpInside];
-
+        
     }
     return _registerAccount;
 }
@@ -193,14 +197,14 @@
         _findJob.layer.borderColor = IKSubHeadTitleColor.CGColor;
         _findJob.layer.borderWidth = 1.0f;
         [_findJob addTarget:self action:@selector(findJobButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-
+        
         _registerTotalH += 50;
     }
     return _findJob;
 }
 
 
- - (IKButton *)findPerson
+- (IKButton *)findPerson
 {
     if (_findPerson == nil) {
         CGFloat w = (CGRectGetWidth(self.frame) - 44)*0.5 - 15;
@@ -215,7 +219,7 @@
         _findPerson.layer.borderWidth = 1.0f;
         
         [_findPerson addTarget:self action:@selector(findPersonButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-
+        
     }
     return _findPerson;
 }
@@ -224,7 +228,7 @@
 {
     if (_registerButton == nil) {
         _registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-
+        
         _registerButton.frame = CGRectMake(22, _registerTotalH + 20, CGRectGetWidth(self.frame) - 44, 40);
         [_registerButton setTitle:@"注册" forState:UIControlStateNormal];
         [_registerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -271,7 +275,7 @@
         [passwordImage setImage:[UIImage imageNamed:@"IK_verify_gray"]];
         _verifyTextfield.leftViewMode = UITextFieldViewModeAlways;
         _verifyTextfield.leftView = passwordImage;
-    
+        
     }
     return _verifyTextfield;
 }
@@ -341,18 +345,49 @@
 - (void)loginButtonClick:(UIButton *)button
 {
     if (_phoneTextfield.text.length != 11 ) {
-        [LRToastView showTosatWithText:@"请输入手机号码" inView:self.superview];
+        [LRToastView showTosatWithText:@"请输入正确的手机号码" inView:self.superview];
     }
-    
-    [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
-    [IKUSERDEFAULT setObject:@"0" forKey:IKVersionTypeKey];
-    [IKUSERDEFAULT synchronize];
-    
-    
-    [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
-    
-    if ([self.delegate respondsToSelector:@selector(loginViewLoginButtonClick)]) {
-        [self.delegate loginViewLoginButtonClick];
+    else{
+        BOOL isPhoneNumber = [IKGeneralTool validateContactNumber:_phoneTextfield.text];
+        
+        if (!isPhoneNumber) {
+            [LRToastView showTosatWithText:@"请输入正确的手机号码" inView:self.superview];
+        }
+        else{
+            BOOL passwordLegal = [IKGeneralTool validatePassWordLegal:_passwordTextfield.text];
+            
+            if (!passwordLegal) {
+                [LRToastView showTosatWithText:@"请输入6~16位长度的密码" inView:self.superview];
+            }
+            else{
+                NSString *newPassword = [IKMD5Tool MD5ForLower32Bate:_passwordTextfield.text];
+                NSLog(@"newPassword = %@",newPassword);
+                
+                [[IKNetworkManager shareInstance] getLoginInfoWithParam:@{@"accessToken":@"",@"account":_phoneTextfield.text,@"openId":@"",@"passwd":newPassword} backData:^(NSDictionary *dict, BOOL success) {
+                    if (success) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [IKUSERDEFAULT setObject:dict forKey:IKLoginSaveDataKey];
+                            
+                            loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
+                            loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+                            
+                            [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
+                            [IKUSERDEFAULT synchronize];
+                            
+                            
+                            if ([loginUserType isEqualToString:@"0"]) {
+                                [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
+                            }
+                            
+                            if ([self.delegate respondsToSelector:@selector(loginViewLoginSuccess:)]) {
+                                [self.delegate loginViewLoginSuccess:dict];
+                            }
+                            
+                        });
+                    }
+                }];
+            }
+        }
     }
 }
 
@@ -393,7 +428,7 @@
     _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, _totalH + 20, 80, 20);
     _registerAccount.isClick = NO;
     [_registerAccount setTitle:@"注册帐号" forState:UIControlStateNormal];
-
+    
     if (!button.isClick) {
         [button setTitle:@"帐号登录" forState:UIControlStateNormal];
         button.isClick = YES;
@@ -428,7 +463,7 @@
         
         [button setTitle:@"登录帐号" forState:UIControlStateNormal];
         button.isClick = YES;
-
+        
         [self registerAjustFrame];
         
         [_findJob setTitleColor:IKSubHeadTitleColor forState:UIControlStateNormal];
@@ -462,7 +497,7 @@
     if ([self.delegate respondsToSelector:@selector(loginViewRefreshFrameWithType:)]) {
         [self.delegate loginViewRefreshFrameWithType:IKLoginViewLoginTypeRegisterFindJob];
     }
-
+    
     [self registerAjustFrame];
     [self textFieldNeedResignFirstResponder];
 }
@@ -547,11 +582,11 @@
     CGFloat reBtnY = self.findJob.frame.origin.y + self.findJob.frame.size.height;
     
     _registerButton.frame = CGRectMake(22, reBtnY + 20, CGRectGetWidth(self.frame) - 44, 40);
-
+    
     CGFloat buttonY = reBtnY + 60 + 15;
     _paLoginButton.frame = CGRectMake(CGRectGetWidth(self.frame) - 102, buttonY, 80, 20);
     _registerAccount.frame = CGRectMake(22, buttonY, 80, 20);
-
+    
 }
 
 
@@ -623,7 +658,7 @@
 
 //- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 //{
-//    
+//
 //}
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField
@@ -641,7 +676,7 @@
 
 //- (BOOL)textFieldShouldEndEditing:(UITextField *)textField
 //{
-//    
+//
 //}
 
 
@@ -658,11 +693,11 @@
 }
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
 
 @end

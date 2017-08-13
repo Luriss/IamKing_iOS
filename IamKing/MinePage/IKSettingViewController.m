@@ -9,6 +9,8 @@
 #import "IKSettingViewController.h"
 #import "IKSettingNomalTableViewCell.h"
 #import "IKAccountViewController.h"
+#import "IKContactUsViewController.h"
+#import "IKFeedbackViewController.h"
 
 
 
@@ -255,19 +257,24 @@
         if (indexPath.row == 0) {
             
         }
-        else if (indexPath.row == 1) {
+        else{
             IKAccountViewController *account = [[IKAccountViewController alloc] init];
             [self.navigationController pushViewController:account animated:YES];
         }
     }
     else if (section == 1){
-        
+        if (indexPath.row == 0) {
+            IKFeedbackViewController *feedback = [[IKFeedbackViewController alloc] init];
+            [self.navigationController pushViewController:feedback animated:YES];
+        }
+        else{
+            IKContactUsViewController *contactUs = [[IKContactUsViewController alloc] init];
+            [self.navigationController pushViewController:contactUs animated:YES];
+        }
     }
     else{
         
-    }
-    
-    
+    }    
 }
 
 - (void)backButtonClick:(UIButton *)button

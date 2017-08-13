@@ -43,8 +43,8 @@
 #define IKDefaultAlpha (0.8f)
 
 #define IKButtonClickBgImage ([UIImage GetImageWithColor:IKLineColor size:CGSizeMake(1, 1)])
-#define IKButtonCkickBlueImage ([UIImage GetImageWithColor:IKButtonClickColor size:CGSizeMake(1, 1)])
-#define IKButtonBlueBgImgae ([UIImage GetImageWithColor:IKGeneralBlue size:CGSizeMake(1, 1)])
+#define IKButtonCkickBlueImage ([UIImage GetImageWithColor:IKButtonClickColor size:CGSizeMake(10, 1)])
+#define IKButtonBlueBgImgae ([UIImage GetImageWithColor:IKGeneralBlue size:CGSizeMake(10, 1)])
 
 /***********************************Color********************************************/
 
@@ -129,6 +129,8 @@
 
 /***********************************Key**********************************/
 #define IKLoginSccuessKey (@"IKLoginSccuessKey")
+#define IKLoginSaveDataKey (@"IKLoginSaveDataKey")
+
 #define IKVersionTypeKey (@"IKVersionTypeKey")    // 1 代表公司 ,0 代表个人
 #define IKCityChangeNeedRefrshDataKey (@"IKCityChangeNeedRefrshDataKey")
 #define IKCompanyLoopImageSelectedKey (@"IKCompanyLoopImageSelectedKey")

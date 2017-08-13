@@ -48,6 +48,49 @@
     [self.contentView addSubview:self.bottomLine];
     
     self.arrowView.transform = CGAffineTransformMakeRotation(M_PI);
+    
+    __weak typeof (self) weakSelf = self;
+    
+    [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(weakSelf.contentView).offset(23);
+        make.centerY.equalTo(weakSelf.contentView);
+        make.width.and.height.mas_equalTo(25);
+    }];
+    
+    
+    [_arrowView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(_logoImageView);
+        make.width.and.height.mas_equalTo(20);
+        make.right.equalTo(weakSelf.contentView).offset(-20);
+    }];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(weakSelf.contentView).offset(20);
+        make.left.equalTo(_logoImageView.mas_right).offset(13);
+        make.height.mas_equalTo(20);
+        make.right.equalTo(_arrowView.mas_left).offset(-5);
+    }];
+    
+    CGFloat va = 0;
+    
+    if (iPhone5SE) {
+        va = 10;
+    }
+    else{
+        va = 20;
+    }
+    [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(weakSelf.contentView).offset(-va);
+        make.left.and.right.and.height.equalTo(_titleLabel);
+    }];
+    
+    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(weakSelf.contentView).offset(1);
+        make.left.equalTo(weakSelf.contentView).offset(15);
+        make.right.equalTo(weakSelf.contentView).offset(-15);
+        make.height.mas_equalTo(1);
+    }];
+    
 }
 
 
@@ -109,51 +152,6 @@
         _bottomLine.backgroundColor = IKLineColor;
     }
     return _bottomLine;
-}
-
-- (void)layoutCellSubviews
-{
-    __weak typeof (self) weakSelf = self;
-
-    [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(weakSelf.contentView).offset(23);
-        make.centerY.equalTo(weakSelf.contentView);
-        make.width.and.height.mas_equalTo(25);
-    }];
-    
-    
-    [_arrowView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(_logoImageView);
-        make.width.and.height.mas_equalTo(20);
-        make.right.equalTo(weakSelf.contentView).offset(-20);
-    }];
-    
-    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf.contentView).offset(20);
-        make.left.equalTo(_logoImageView.mas_right).offset(13);
-        make.height.mas_equalTo(20);
-        make.right.equalTo(_arrowView.mas_left).offset(-5);
-    }];
-    
-    [_introduceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf.contentView).offset(-20);
-        make.left.and.right.and.height.equalTo(_titleLabel);
-    }];
-    
-    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(weakSelf.contentView).offset(1);
-        make.left.equalTo(weakSelf.contentView).offset(15);
-        make.right.equalTo(weakSelf.contentView).offset(-15);
-        make.height.mas_equalTo(1);
-    }];
-}
-
-
-- (void)layoutSubviews
-{
-    [self layoutCellSubviews];
-    
-    [super layoutSubviews];
 }
 
 

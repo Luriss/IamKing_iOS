@@ -75,11 +75,13 @@
     if (_logoImageView == nil) {
         // 头像
         _logoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.height - 10, self.bounds.size.height - 10)];
-        _logoImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _logoImageView.contentMode = UIViewContentModeScaleToFill;
         _logoImageView.backgroundColor = IKGeneralLightGray;
         _logoImageView.layer.borderWidth = 1.0;
         _logoImageView.layer.borderColor = IKGeneralLightGray.CGColor;
-        _logoImageView.layer.cornerRadius = 6;
+        _logoImageView.layer.cornerRadius = 5;
+//        _logoImageView.clipsToBounds = YES;
+//        _logoImageView.layer.masksToBounds = YES;
     }
     return _logoImageView;
 }
@@ -287,7 +289,7 @@
 
 - (void)addCellData:(IKJobInfoModel *)model
 {
-    [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:5.0];
+    [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:6.0];
     
     self.logoImageView.backgroundColor = [UIColor whiteColor];
     self.authImageView.hidden = !model.isAuthen;

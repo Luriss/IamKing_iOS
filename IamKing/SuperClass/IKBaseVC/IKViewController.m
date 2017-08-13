@@ -24,6 +24,9 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     
     [self.view insertSubview:self.navigationView atIndex:100];
+    
+    [self.view bringSubviewToFront:self.navigationView];
+    
     self.navigationController.interactivePopGestureRecognizer.delegate = (id)self;
     NSLog(@"tabBarController = %@",self.tabBarController);
 }
@@ -34,8 +37,6 @@
     [super viewWillAppear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
-    
-    [self setTabBarHideOrShow];
     
     NSLog(@"self = %@",self);
     
@@ -84,55 +85,6 @@
     for (UIView *subview in view.subviews) {
         [self fineNavigationBottomLine:subview];
     }
-}
-
-
-- (void)setTabBarHideOrShow
-{
-    NSString *selfClass = NSStringFromClass([self class]);
-    if ([selfClass isEqualToString:@"IKHomePageVC"] ||
-        [selfClass isEqualToString:@"IKCompanyViewController"] ||
-        [selfClass isEqualToString:@"IKMineViewController"] ||
-        [selfClass isEqualToString:@"IKMessageViewController"])
-    {
-        NSLog(@"tabBarController 1 = %@",self.tabBarController);
-        [self showTabBar];
-    }
-    else{
-        [self hideTabBar];
-    }
-}
-
-
-- (void)showTabBar
-{
-    [self showOrHideTabBar:YES];
-}
-
-
-- (void)hideTabBar
-{
-    [self showOrHideTabBar:NO];
-}
-
-- (void)showOrHideTabBar:(BOOL )isShow
-{
-    // 影藏底部的tabbar。
-    IKTabBarController *tabBarController = nil;
-    
-    if ([self.tabBarController isKindOfClass:[IKTabBarController class]]) {
-        tabBarController = (IKTabBarController *)self.tabBarController;
-    }
-    else{
-        UIWindow *keyWindow = [[[UIApplication sharedApplication] delegate] window];
-        UIViewController *vc = keyWindow.rootViewController;
-        if ([vc isKindOfClass:[IKTabBarController class]] ) {
-            tabBarController = (IKTabBarController *)vc;
-        }
-    }
-    
-    tabBarController.customTabBar.hidden = !isShow ;
-    tabBarController.tabBarTopLine.hidden = !isShow;
 }
 
 

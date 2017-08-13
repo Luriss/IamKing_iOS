@@ -14,8 +14,4 @@
 @property(nonatomic,strong)IKNavigationView *navigationView;
 
 
-- (void)showTabBar;
-
-- (void)hideTabBar;
-
 @end

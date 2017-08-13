@@ -117,7 +117,7 @@ NSString *const kIKLTabBarItemSelectedImageName = @"kIKLTabBarItemSelectedImageN
     if ([vc isKindOfClass:[IKTabBarController class]] ) {
         IKTabBarController *tabBarController = (IKTabBarController *)vc;
         tabBarController.selectedIndex = index;
-        [tabBarController tabBarControllerDidSelectedIndex:index];
+//        [tabBarController tabBarControllerDidSelectedIndex:index];
     }
 }
 

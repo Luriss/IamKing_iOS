@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "IKTabBar.h"
+#import "LRTabBar.h"
 
 extern NSString *const kIKGetHomePageVcData;
 extern NSString *const kIKGetCompanyPageVcData;
@@ -17,9 +18,9 @@ extern NSString *const kIKGetMinePageVcData;
 
 @interface IKTabBarController : UITabBarController
 
-@property(nonatomic,strong)IKTabBar *customTabBar;
+@property(nonatomic,strong)LRTabBar *customTabBar;
 @property(nonatomic,strong)UIView *tabBarTopLine;
 
-- (void)tabBarControllerDidSelectedIndex:(NSInteger )index;
+//- (void)tabBarControllerDidSelectedIndex:(NSInteger )index;
 
 @end

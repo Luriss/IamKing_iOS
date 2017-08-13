@@ -10,4 +10,8 @@
 
 @interface IKSettingHeaderTableViewCell : UITableViewCell
 
+
+- (void)addSettingHeaderTableViewCellData:(NSDictionary *)dict;
+
+
 @end
