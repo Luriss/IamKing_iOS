@@ -158,9 +158,27 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getLoginInfoWithParam:(NSDictionary *)param backData:(void (^)(NSDictionary *dict, BOOL success))callback;
 
+- (void)getLoginInfoWithVerifyCodeParam:(NSDictionary *)param backData:(void (^)(NSDictionary *dict, BOOL success))callback;
+
+- (void)getChangePhoneNumberVerifyCode:(NSDictionary *)param backData:(void (^)(NSString *verifyCode, BOOL success))callback;
+
+- (void)getBlackListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getAttentionCompanyListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getCollectionJobListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getJobProcessDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 /*************** POST *************/
 
 - (void)postUserOprateToServer:(NSDictionary *)param;
 - (void)postFeedbackDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
+
+- (void)postDeleteBlackListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
+
+- (void)postCancelAttentionListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
+
+- (void)postCancelCollectionListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
+
 
 @end

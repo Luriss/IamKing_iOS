@@ -34,7 +34,8 @@
     [self.contentView addSubview:self.label];
     [self.contentView addSubview:self.lineView];
     [self.contentView addSubview:self.arrowImage];
-    
+    [self.contentView addSubview:self.psLabel];
+
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.equalTo(self.contentView.mas_bottom);
         make.left.and.right.equalTo(self.contentView);
@@ -53,8 +54,14 @@
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top);
         make.left.equalTo(self.contentView .mas_left).offset(20);
-        make.right.equalTo(_arrowImage.mas_left).offset(-5);
+        make.width.mas_equalTo(120);
         make.bottom.equalTo(self.contentView.mas_bottom);
+    }];
+    
+    [_psLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.and.bottom.equalTo(self.contentView);
+        make.left.equalTo(_label.mas_right).offset(5);
+        make.right.equalTo(_arrowImage.mas_left).offset(-5);
     }];
 }
 
@@ -67,10 +74,23 @@
         _label.font = [UIFont systemFontOfSize:13.0f];
         _label.textColor = IKSubHeadTitleColor;
         _label.textAlignment = NSTextAlignmentLeft;
+//        _label.backgroundColor = [UIColor redColor];
     }
     return _label;
 }
 
+- (UILabel *)psLabel
+{
+    if (_psLabel == nil) {
+        _psLabel = [[UILabel alloc] init];
+        _psLabel.font = [UIFont systemFontOfSize:13.0f];
+        _psLabel.textColor = IKSubHeadTitleColor;
+        _psLabel.textAlignment = NSTextAlignmentRight;
+//        _psLabel.backgroundColor = [UIColor yellowColor];
+
+    }
+    return _psLabel;
+}
 
 - (UIView *)lineView
 {

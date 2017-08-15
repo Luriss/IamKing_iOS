@@ -29,9 +29,9 @@
     [self iniTopView];
     [self initBottomView];
     
-    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [IKNotificationCenter addObserver:self selector:@selector(feedbackVcKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     
-    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [IKNotificationCenter addObserver:self selector:@selector(feedbackVcKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 
@@ -220,7 +220,7 @@
 
 
 #pragma - mark KeyboardNotification
-- (void)mineVcKeyboardWillShow:(NSNotification *)notification
+- (void)feedbackVcKeyboardWillShow:(NSNotification *)notification
 {
     //获取键盘的高度
     NSDictionary *userInfo = [notification userInfo];
@@ -241,7 +241,7 @@
 }
 
 
-- (void)mineVcKeyboardWillHide:(NSNotification *)notification
+- (void)feedbackVcKeyboardWillHide:(NSNotification *)notification
 {
     NSDictionary *userInfo = [notification userInfo];
     NSNumber *duration = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];

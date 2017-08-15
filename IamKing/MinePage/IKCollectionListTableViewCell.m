@@ -1,16 +1,17 @@
 //
-//  IKInfoTableViewCell.m
+//  IKCollectionListTableViewCell.m
 //  IamKing
 //
-//  Created by Luris on 2017/7/10.
+//  Created by Luris on 2017/8/15.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "IKInfoTableViewCell.h"
+#import "IKCollectionListTableViewCell.h"
+#import "IKImageWordView.h"
 
 #define IKSikllLabelWidth (70)
 
-@interface IKInfoTableViewCell ()
+@interface IKCollectionListTableViewCell ()
 
 @property(nonatomic,strong)UIImageView *logoImageView;
 @property(nonatomic,strong)UIImageView *authImageView;
@@ -24,12 +25,13 @@
 @property(nonatomic,strong)UILabel     *skillLabel3;
 @property(nonatomic,strong)UILabel     *introduceLabel;
 @property(nonatomic,strong)UIView      *bottomLine;
-
+@property(nonatomic,strong)UIView      *middleLine;
+@property(nonatomic,strong)UIButton    *cancelCollection;
 
 @end
 
 
-@implementation IKInfoTableViewCell
+@implementation IKCollectionListTableViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -41,7 +43,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self){
-
+        
         [self initSubViews];
     }
     return self;
@@ -62,7 +64,10 @@
     [self.contentView addSubview:self.skillLabel3];
     [self.contentView addSubview:self.introduceLabel];
     [self.contentView addSubview:self.bottomLine];
-
+    [self.contentView addSubview:self.middleLine];
+    [self.contentView addSubview:self.cancelCollection];
+    
+    [self layoutCellSubviews];
 }
 
 
@@ -78,8 +83,8 @@
         _logoImageView.layer.borderWidth = 1.0;
         _logoImageView.layer.borderColor = IKGeneralLightGray.CGColor;
         _logoImageView.layer.cornerRadius = 5;
-//        _logoImageView.clipsToBounds = YES;
-//        _logoImageView.layer.masksToBounds = YES;
+        //        _logoImageView.clipsToBounds = YES;
+        //        _logoImageView.layer.masksToBounds = YES;
     }
     return _logoImageView;
 }
@@ -208,6 +213,43 @@
     return _bottomLine;
 }
 
+
+- (UIButton *)cancelCollection
+{
+    if (_cancelCollection == nil) {
+        _cancelCollection = [UIButton buttonWithType:UIButtonTypeCustom];
+        _cancelCollection.backgroundColor = IKGeneralBlue;
+        [_cancelCollection setTitle:@"取消收藏" forState:UIControlStateNormal];
+        [_cancelCollection setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _cancelCollection.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
+        [_cancelCollection setBackgroundImage:IKButtonBlueBgImgae forState:UIControlStateNormal];
+        [_cancelCollection setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
+        _cancelCollection.layer.cornerRadius = 6;
+        _cancelCollection.layer.masksToBounds = YES;
+        [_cancelCollection addTarget:self action:@selector(cancelCollectionButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _cancelCollection;
+}
+
+
+- (UIView *)middleLine
+{
+    if (_middleLine == nil) {
+        _middleLine = [[UIView alloc] init];
+        _middleLine.backgroundColor = IKLineColor;
+    }
+    return _middleLine;
+}
+
+
+- (void)cancelCollectionButtonClick:(UIButton *)button
+{
+    if ([self.delegate respondsToSelector:@selector(cancelCollectionButtonClickWithCell:)]) {
+        [self.delegate cancelCollectionButtonClickWithCell:self];
+    }
+}
+
+
 - (UILabel *)getSkillLabel
 {
     // 技能1
@@ -226,13 +268,10 @@
 
 - (void)layoutCellSubviews
 {
-    __weak typeof (self) weakSelf = self;
-
     [_logoImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf).offset(5);
-        make.left.equalTo(weakSelf).offset(10);
-//        make.bottom.equalTo(self).offset(-5);
-        make.width.and.height.mas_equalTo(weakSelf.bounds.size.height - 10);
+        make.top.equalTo(self.contentView.mas_top).offset(10);
+        make.left.equalTo(self.contentView.mas_left).offset(15);
+        make.width.and.height.mas_equalTo(90);
     }];
     
     
@@ -242,32 +281,39 @@
     }];
     
     [_salaryLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf).offset(8);
-        make.right.equalTo(weakSelf).offset(10);
+        make.top.equalTo(self.contentView.mas_top).offset(8);
+        make.right.equalTo(self.contentView.mas_right).offset(10);
         make.height.mas_equalTo(20);
         make.width.mas_equalTo(90);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(weakSelf).offset(8);
+        make.top.equalTo(self.contentView.mas_top).offset(8);
         make.left.equalTo(_logoImageView.mas_right).offset(9);
         make.height.mas_equalTo(20);
         make.right.equalTo(_salaryLabel.mas_left);
     }];
     
-    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.and.right.equalTo(weakSelf);
+    [_middleLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_logoImageView.mas_bottom).offset(10);
+        make.left.equalTo(self.contentView.mas_left);
+        make.right.equalTo(self.contentView.mas_right);
         make.height.mas_equalTo(1);
-        make.top.equalTo(weakSelf.mas_bottom).offset(-1);
     }];
-}
-
-
-- (void)layoutSubviews
-{
-    [self layoutCellSubviews];
-
-    [super layoutSubviews];
+    
+    
+    [_cancelCollection mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(_middleLine.mas_bottom).offset(7);
+        make.left.equalTo(self.contentView.mas_left).offset(15);
+        make.right.equalTo(self.contentView.mas_right).offset(-15);
+        make.height.mas_equalTo(35);
+    }];
+    
+    [_bottomLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(self.contentView);
+        make.height.mas_equalTo(1);
+        make.top.equalTo(self.contentView.mas_bottom).offset(-1);
+    }];
 }
 
 
@@ -278,14 +324,14 @@
 //    frame.origin.y += 5;
 //    frame.size.width -= 20;
 //    frame.size.height -= 10;
-//    
+//
 //    [super setFrame:frame];
 //}
 
 
 
 
-- (void)addCellData:(IKJobInfoModel *)model
+- (void)addCollectionListCellData:(IKJobInfoModel *)model
 {
     [self.logoImageView lwb_loadImageWithUrl:model.logoImageUrl placeHolderImageName:nil radius:6.0];
     
@@ -317,7 +363,7 @@
     }];
     
     self.educationView.label.text = model.education;
-
+    
     CGFloat educationWidth = [self getStringWdith:_educationView.label.text fontSize:IKSubTitleFont];
     
     [_educationView mas_remakeConstraints:^(MASConstraintMaker *make) {
@@ -328,7 +374,7 @@
     
     self.introduceLabel.text = model.introduce;
     self.introduceLabel.backgroundColor = [UIColor whiteColor];
-
+    
     
     if (IKStringIsEmpty(model.skill1) && IKStringIsEmpty(model.skill2) && IKStringIsEmpty(model.skill3)) {
         self.skillLabel1.hidden = YES;
@@ -347,7 +393,7 @@
             self.skillLabel1.hidden = NO;
             self.skillLabel1.text = model.skill1;
             self.skillLabel1.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width1 = [self getStringWdith:self.skillLabel1.text fontSize:12.0f];
             [_skillLabel1 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(_addressView.mas_bottom).offset(3);
@@ -363,7 +409,7 @@
             self.skillLabel2.hidden = NO;
             _skillLabel2.text = model.skill2;
             self.skillLabel2.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width2 = [self getStringWdith:self.skillLabel2.text fontSize:12.0f];
             [_skillLabel2 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);
@@ -379,7 +425,7 @@
             self.skillLabel3.hidden = NO;
             self.skillLabel3.text = model.skill3;
             self.skillLabel3.backgroundColor = [UIColor whiteColor];
-
+            
             CGFloat width3 = [self getStringWdith:self.skillLabel3.text fontSize:12.0f];
             [_skillLabel3 mas_remakeConstraints:^(MASConstraintMaker *make) {
                 make.top.and.height.equalTo(_skillLabel1);

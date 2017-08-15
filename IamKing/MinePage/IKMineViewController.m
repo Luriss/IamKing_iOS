@@ -29,6 +29,8 @@ extern NSString * loginUserId;
 
 
 @property(nonatomic, strong)IKLoginView *loginView;
+@property(nonatomic, strong)IKSettingView *settingView;
+
 @property(nonatomic, strong)UIImageView *logoImageView;
 
 @end
@@ -43,25 +45,10 @@ extern NSString * loginUserId;
     self.navigationView.hidden = YES;
     
     _oldLoginViewCenterY = 0;
-
-    NSString *loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
-    NSDictionary *dict = [IKUSERDEFAULT objectForKey:IKLoginSaveDataKey];
-    NSLog(@"dict = %@",dict);
-    loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
-    loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
     
-    if ([loginStatus isEqualToString:@"1"]) {
-        [self addTableViewWithDict:dict];
-    }
-    else{
-        [self initNavLogo];
-        [self initLoginView];
-    }
+    [self loginViewOrSettingView];
     
-    
-    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    
-    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self addNotification];
 
     // Do any additional setup after loading the view.
 }
@@ -82,14 +69,48 @@ extern NSString * loginUserId;
 }
 
 
+- (void)addNotification
+{
+    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    
+    [IKNotificationCenter addObserver:self selector:@selector(mineVcKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [IKNotificationCenter addObserver:self selector:@selector(loginViewOrSettingView) name:IKLoginOutKey object:nil];
+
+}
+
+
+- (void)loginViewOrSettingView
+{
+    NSString *loginStatus = [IKUSERDEFAULT objectForKey:IKLoginSccuessKey];
+    NSDictionary *dict = [IKUSERDEFAULT objectForKey:IKLoginSaveDataKey];
+    NSLog(@"dict = %@",dict);
+    loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
+    loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+    
+    if ([loginStatus isEqualToString:@"1"]) {
+        [self addTableViewWithDict:dict];
+    }
+    else{
+        [self initNavLogo];
+        [self initLoginView];
+    }
+}
 
 - (void)addTableViewWithDict:(NSDictionary *)dict
 {
+    if (_loginView) {
+        [_loginView removeFromSuperview];
+        _loginView = nil;
+    }
+    
     IKSettingView *settingView = [[IKSettingView alloc] initWithFrame:CGRectMake(0, -5, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 50)];
     settingView.delegate = self;
     settingView.dictionary = dict;
-//    settingView.backgroundColor = [UIColor redColor];
+    //    settingView.backgroundColor = [UIColor redColor];
     [self.view addSubview:settingView];
+    
+    self.settingView = settingView;
 }
 
 
@@ -104,6 +125,10 @@ extern NSString * loginUserId;
 
 - (void)initLoginView
 {
+    if (_settingView) {
+        [_settingView removeFromSuperview];
+        _settingView = nil;
+    }
     
     CGFloat w = ceilf(IKSCREEN_WIDTH * 0.893);
     CGFloat h = ceilf(IKSCREENH_HEIGHT * 0.435);

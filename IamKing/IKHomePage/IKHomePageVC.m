@@ -43,6 +43,8 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     
     BOOL _isRefreshEnd;
     
+    BOOL _isScrollToTop;
+    
 }
 
 // system
@@ -99,6 +101,7 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
     _tableType = 0;  // 默认 0
     _dataPage = 1;
     _isRefreshEnd = NO;
+    _isScrollToTop = NO;
     
     self.lpHeight = 0.48*IKSCREEN_WIDTH;
 //    _infoTableViewArray = [[NSMutableArray alloc] init];
@@ -234,7 +237,9 @@ static NSString * const loadingAnimationKey = @"loadingAnimationKey";
 
 - (void)tappp:(UITapGestureRecognizer *)tap
 {
-    [_bottomTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//        _isScrollToTop = YES;
+//    [_bottomTableView setContentOffset:CGPointZero];
+//    [_bottomTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
 }
 
 - (void)createRightBarItem

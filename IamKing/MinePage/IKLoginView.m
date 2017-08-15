@@ -30,12 +30,14 @@ NSString * loginUserId;
 @property (nonatomic, strong) IKButton  *findPerson;
 @property (nonatomic, strong) IKButton  *chooseTypeBtn;
 @property (nonatomic, strong) IKCompanyTypeView *classifyView;
+@property (nonatomic, assign) IKLoginViewPasswordType pwdType;
 
 @property (nonatomic, strong) UIButton  *loginButton;
 @property (nonatomic, strong) UIButton  *wxLoginButton;
 @property (nonatomic, strong) UIButton  *getVerifyCodeBtn;
 @property (nonatomic, strong) UIButton  *findJob;
 @property (nonatomic, strong) UIButton  *registerButton;
+@property (nonatomic, copy) NSString    *verifyCode;
 
 
 @end
@@ -68,6 +70,7 @@ NSString * loginUserId;
     _totalH = 0;
     _registerTotalH = 0;
     self.userInteractionEnabled = YES;
+    self.pwdType = IKLoginViewPasswordTypePassword;
     
     [self addSubview:self.phoneTextfield];
     
@@ -156,7 +159,7 @@ NSString * loginUserId;
         [_wxLoginButton setTitle:@"微信快捷登录" forState:UIControlStateNormal];
         [_wxLoginButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _wxLoginButton.titleLabel.font = [UIFont boldSystemFontOfSize:15.0f];
-        [_wxLoginButton setBackgroundImage:[UIImage GetImageWithColor:ikGeneralGreen size:CGSizeMake(1, 1)] forState:UIControlStateNormal];
+        [_wxLoginButton setBackgroundImage:[UIImage GetImageWithColor:IkGeneralGreen size:CGSizeMake(1, 1)] forState:UIControlStateNormal];
         [_wxLoginButton setBackgroundImage:[UIImage GetImageWithColor:IKColorFromRGB(0x1aab05) size:CGSizeMake(1, 1)] forState:UIControlStateHighlighted];
         _wxLoginButton.layer.cornerRadius = 6;
         _wxLoginButton.layer.masksToBounds = YES;
@@ -296,7 +299,7 @@ NSString * loginUserId;
         [_getVerifyCodeBtn setBackgroundImage:IKButtonCkickBlueImage forState:UIControlStateHighlighted];
         _getVerifyCodeBtn.layer.cornerRadius = 6;
         _getVerifyCodeBtn.layer.masksToBounds = YES;
-        //        [_loginButton addTarget:self action:@selector(paLoginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+        [_getVerifyCodeBtn addTarget:self action:@selector(verifyCodeBtnButtonClick:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _getVerifyCodeBtn;
 }
@@ -354,38 +357,57 @@ NSString * loginUserId;
             [LRToastView showTosatWithText:@"请输入正确的手机号码" inView:self.superview];
         }
         else{
-            BOOL passwordLegal = [IKGeneralTool validatePassWordLegal:_passwordTextfield.text];
-            
-            if (!passwordLegal) {
-                [LRToastView showTosatWithText:@"请输入6~16位长度的密码" inView:self.superview];
-            }
-            else{
-                NSString *newPassword = [IKMD5Tool MD5ForLower32Bate:_passwordTextfield.text];
-                NSLog(@"newPassword = %@",newPassword);
-                
-                [[IKNetworkManager shareInstance] getLoginInfoWithParam:@{@"accessToken":@"",@"account":_phoneTextfield.text,@"openId":@"",@"passwd":newPassword} backData:^(NSDictionary *dict, BOOL success) {
-                    if (success) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [IKUSERDEFAULT setObject:dict forKey:IKLoginSaveDataKey];
+            switch (self.pwdType) {
+                case IKLoginViewPasswordTypePassword:
+                {
+                    IKPasswordValidateResult passwordLegal = [IKGeneralTool validatePassWordLegal:_passwordTextfield.text];
+                    
+                    switch (passwordLegal) {
+                        case IKPasswordValidateResultNumberError:
+                        {
+                            [LRToastView showTosatWithText:@"请输入6~16位长度的密码" inView:self.superview];
+                            break;
+                        }
+                        case IKPasswordValidateResultDigitalAlphabetError:
+                        {
+                            [LRToastView showTosatWithText:@"请输入数字字母的组合密码" inView:self.superview];
+                            break;
+                        }
+                        case IKPasswordValidateResultSuccess:
+                        {
+                            NSString *newPassword = [IKMD5Tool MD5ForLower32Bate:_passwordTextfield.text];
+                            NSLog(@"newPassword = %@",newPassword);
                             
-                            loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
-                            loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+                            [[IKNetworkManager shareInstance] getLoginInfoWithParam:@{@"accessToken":@"",@"account":_phoneTextfield.text,@"openId":@"",@"passwd":newPassword} backData:^(NSDictionary *dict, BOOL success) {
+                                if (success) {
+                                    [self saveLoginData:dict];
+                                }
+                            }];
+                            break;
+                        }
                             
-                            [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
-                            [IKUSERDEFAULT synchronize];
-                            
-                            
-                            if ([loginUserType isEqualToString:@"0"]) {
-                                [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
-                            }
-                            
-                            if ([self.delegate respondsToSelector:@selector(loginViewLoginSuccess:)]) {
-                                [self.delegate loginViewLoginSuccess:dict];
-                            }
-                            
-                        });
+                        default:
+                            break;
                     }
-                }];
+                    break;
+                }
+                
+                case IKLoginViewPasswordTypeVerifyCode:
+                {
+                    if (_verifyTextfield.text.length > 0) {
+                        [[IKNetworkManager shareInstance] getLoginInfoWithVerifyCodeParam:@{@"accessToken":@"",@"account":_phoneTextfield.text,@"openId":@"",@"code":_verifyTextfield.text} backData:^(NSDictionary *dict, BOOL success) {
+                            if (success) {
+                                [self saveLoginData:dict];
+                            }
+                        }];
+                    }
+                    else{
+                        [LRToastView showTosatWithText:@"请输入验证码" inView:self.superview];
+                    }
+                }
+                    
+                default:
+                    break;
             }
         }
     }
@@ -411,6 +433,20 @@ NSString * loginUserId;
     [self textFieldNeedResignFirstResponder];
 }
 
+- (void)verifyCodeBtnButtonClick:(UIButton *)button
+{
+    BOOL isPhoneNumber = [IKGeneralTool validateContactNumber:_phoneTextfield.text];
+    
+    if (!isPhoneNumber) {
+        [LRToastView showTosatWithText:@"请输入正确的手机号码" inView:self.superview];
+    }
+    else{
+        [[IKNetworkManager shareInstance] getChangePhoneNumberVerifyCode:@{@"codeMethod":@"2",@"phoneNumber":_phoneTextfield.text,@"useType":@"7"} backData:^(NSString *verifyCode, BOOL success) {
+            NSLog(@"verifyCode = %@",verifyCode);
+            self.verifyCode = verifyCode;
+        }];
+    }
+}
 
 - (void)paLoginButtonClick:(IKButton *)button
 {
@@ -432,11 +468,14 @@ NSString * loginUserId;
     if (!button.isClick) {
         [button setTitle:@"帐号登录" forState:UIControlStateNormal];
         button.isClick = YES;
-        
+        self.pwdType = IKLoginViewPasswordTypeVerifyCode;
+
         [self phoneLoginAjustFrame];
     }
     else{
         [button setTitle:@"手机登录" forState:UIControlStateNormal];
+        self.pwdType = IKLoginViewPasswordTypePassword;
+
         button.isClick = NO;
         _passwordTextfield.hidden = NO;
         self.verifyTextfield.hidden = YES;
@@ -515,6 +554,31 @@ NSString * loginUserId;
     
     [self findPersonAdjustFrame];
     [self textFieldNeedResignFirstResponder];
+}
+
+
+- (void)saveLoginData:(NSDictionary *)dict
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [IKUSERDEFAULT setObject:dict forKey:IKLoginSaveDataKey];
+        loginUserType = [NSString stringWithFormat:@"%@",[dict objectForKey:@"userType"]];
+        loginUserId = [NSString stringWithFormat:@"%@",[dict objectForKey:@"id"]];
+        [IKUSERDEFAULT setObject:_phoneTextfield.text forKey:IKLoginPhoneNumberKey];
+        [IKUSERDEFAULT setObject:_passwordTextfield.text forKey:IKLoginPasswordKey];
+
+        [IKUSERDEFAULT setObject:@"1" forKey:IKLoginSccuessKey];
+        [IKUSERDEFAULT synchronize];
+        
+        
+        if ([loginUserType isEqualToString:@"0"]) {
+            [IKNotificationCenter postNotificationName:@"IKRefreshTabBarItems" object:nil];
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(loginViewLoginSuccess:)]) {
+            [self.delegate loginViewLoginSuccess:dict];
+        }
+        
+    });
 }
 
 

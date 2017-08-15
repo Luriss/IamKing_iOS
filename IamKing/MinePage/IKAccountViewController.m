@@ -8,10 +8,15 @@
 
 #import "IKAccountViewController.h"
 #import "IKSettingNomalTableViewCell.h"
+#import "IKChangePhoneNumberVC.h"
+#import "IKChangePasswordVC.h"
+#import "IKBindWeiXinVc.h"
 
 
 @interface IKAccountViewController ()<UITableViewDelegate,UITableViewDataSource>
-
+{
+    NSString *_phoneNumber;
+}
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSArray     *titleArray;
 
@@ -28,6 +33,9 @@
     self.view.backgroundColor = IKGeneralLightGray;
     
     self.titleArray = @[@"手机号",@"微信绑定",@"修改密码"];
+    
+    _phoneNumber = [IKUSERDEFAULT objectForKey:IKLoginPhoneNumberKey];
+    
     
     [self.view addSubview:self.tableView];
 }
@@ -121,7 +129,8 @@
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     
     if (section == 0) {
-        cell.label.text = self.titleArray[indexPath.row];
+        cell.label.text = self.titleArray[0];
+        cell.psLabel.text = _phoneNumber;
     }
     else{
         cell.label.text = self.titleArray[indexPath.row+1];
@@ -144,18 +153,21 @@
     
     NSInteger section = indexPath.section;
     if (section == 0) {
-        
-    }
-    else if (section == 1){
-        if (indexPath.row == 0) {
-            
-        }
+        IKChangePhoneNumberVC *changeVc = [[IKChangePhoneNumberVC alloc] init];
+        changeVc.phoneNumber = _phoneNumber;
+        [self.navigationController pushViewController:changeVc animated:YES];
     }
     else{
-        
+        if (indexPath.row == 0) {
+            IKBindWeiXinVc *bindWx = [[IKBindWeiXinVc alloc] init];
+            [self.navigationController pushViewController:bindWx animated:YES];
+        }
+        else{
+            IKChangePasswordVC *changeVc = [[IKChangePasswordVC alloc] init];
+            [self.navigationController pushViewController:changeVc animated:YES];
+        }
     }
-    
-    
+ 
 }
 
 - (void)backButtonClick:(UIButton *)button

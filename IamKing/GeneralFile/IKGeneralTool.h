@@ -8,11 +8,19 @@
 
 #import <Foundation/Foundation.h>
 
+
+typedef NS_ENUM(NSInteger, IKPasswordValidateResult) {
+    IKPasswordValidateResultSuccess = 0,
+    IKPasswordValidateResultNumberError,
+    IKPasswordValidateResultDigitalAlphabetError,
+};
+
+
 @interface IKGeneralTool : NSObject
 
 + (BOOL)validateContactNumber:(NSString *)mobileNum;
 
-+(BOOL)validatePassWordLegal:(NSString *)pass;
++(IKPasswordValidateResult )validatePassWordLegal:(NSString *)pass;
 
 
 @end

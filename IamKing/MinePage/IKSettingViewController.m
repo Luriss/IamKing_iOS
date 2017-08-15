@@ -11,6 +11,8 @@
 #import "IKAccountViewController.h"
 #import "IKContactUsViewController.h"
 #import "IKFeedbackViewController.h"
+#import "IKAlertView.h"
+#import "IKBlackListViewController.h"
 
 
 
@@ -102,7 +104,7 @@
 @end
 
 
-@interface IKSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface IKSettingViewController ()<UITableViewDelegate,UITableViewDataSource,IKAlertViewDelegate>
 
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSArray     *titleArray;
@@ -255,7 +257,8 @@
     NSInteger section = indexPath.section;
     if (section == 0) {
         if (indexPath.row == 0) {
-            
+            IKBlackListViewController *blackList = [[IKBlackListViewController alloc] init];
+            [self.navigationController pushViewController:blackList animated:YES];
         }
         else{
             IKAccountViewController *account = [[IKAccountViewController alloc] init];
@@ -273,8 +276,26 @@
         }
     }
     else{
-        
+        IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"提示" message:@"确定退出该账号?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        [alert show];
     }    
+}
+
+- (void)alertView:(IKAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"buttonIndex = %ld",buttonIndex);
+    
+    if (buttonIndex == 1) {
+        [IKUSERDEFAULT removeObjectForKey:IKLoginSaveDataKey];
+        [IKUSERDEFAULT removeObjectForKey:IKLoginSccuessKey];
+        [IKUSERDEFAULT synchronize];
+
+        [IKNotificationCenter postNotificationName:IKLoginOutKey object:nil];
+
+        [self backButtonClick:nil];
+    }
+    
+    
 }
 
 - (void)backButtonClick:(UIButton *)button

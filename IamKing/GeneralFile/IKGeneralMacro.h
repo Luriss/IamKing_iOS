@@ -33,7 +33,9 @@
 #define IKGeneralLightGray (IKColorFromRGB(0xf2f2f5))
 #define IKGeneralWhite (IKColorFromRGB(0xffffff))
 #define IKGeneralRed (IKColorFromRGB(0xff0000))
-#define ikGeneralGreen (IKColorFromRGB(0x21bd0a))  
+#define IkGeneralGreen (IKColorFromRGB(0x21bd0a))
+#define IkGeneralGreenClick (IKColorFromRGB(0x1aab05))
+
 #define IKMainTitleColor   (IKColorFromRGB(0x707070))
 #define IKSubHeadTitleColor   (IKColorFromRGB(0xaaaaaa))
 #define IKPlaceHolderColor (IKColorFromRGB(0xbabac0))
@@ -130,6 +132,9 @@
 /***********************************Key**********************************/
 #define IKLoginSccuessKey (@"IKLoginSccuessKey")
 #define IKLoginSaveDataKey (@"IKLoginSaveDataKey")
+#define IKLoginPhoneNumberKey (@"IKLoginPhoneNumberKey")
+#define IKLoginPasswordKey (@"IKLoginPasswordKey")
+#define IKLoginOutKey (@"IKLoginOutKey")
 
 #define IKVersionTypeKey (@"IKVersionTypeKey")    // 1 代表公司 ,0 代表个人
 #define IKCityChangeNeedRefrshDataKey (@"IKCityChangeNeedRefrshDataKey")

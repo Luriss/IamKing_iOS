@@ -14,7 +14,9 @@
 #import "IKJobTypeModel.h"
 #import "IKCompanyInfoModel.h"
 #import "IKCompanyRecommendListModel.h"
-
+#import "IKBlackListModel.h"
+#import "IKAttentionCompanyModel.h"
+#import "IKJobProcessModel.h"
 
 // 轮播图请求 url
 #define IKGetLoopPlayUrl (@"http://api.job.king2015.com/Banner/getListByType?type=100")
@@ -89,8 +91,33 @@
 
 #define IKLoginUrl (@"https://www.iamking.com.cn/index.php/User/login?")
 
+// 获取验证码
+// codeMethod=2&tel=18667166652&useType=7+button
+#define IKGetVerifyCodeUrl (@"https://www.iamking.com.cn/index.php/Code/getCode?")
 
+// 获取黑名单
+ // pageSize=16&userId=294
+#define IKGetBlackListUrl (@"https://www.iamking.com.cn/index.php/UserPerisher/getList?")
 
+// 删除黑名单
+
+#define IKPostDeleteBlackListUrl (@"https://www.iamking.com.cn/index.php/UserPerisher/delete")
+
+// 获取关注公司
+// page=1&pageSize=8&userId=294
+#define IKGetAttentionCompanyListUrl (@"https://www.iamking.com.cn/index.php/UserOperate/getCompanyList?")
+
+// 关注
+#define IKPostCancelAttentionUrl (@"https://www.iamking.com.cn/index.php/UserOperate/addUserOperate")
+
+// 获取收藏列表 page=1&pageSize=8&userId=294
+#define IKGetCollectionJobList (@"https://www.iamking.com.cn/index.php/Collect/getInviteList?")
+
+// 收藏
+#define IKPostCancelCollectionUrl (@"https://www.iamking.com.cn/index.php/InviteWork/collect")
+
+// 求职进度 page=1&pageSize=8&userId=294
+#define IKGetJobProcessUrl (@"https://www.iamking.com.cn/index.php/SendResume/getList?")
 
 @interface IKNetworkManager ()
 
@@ -799,7 +826,7 @@ static IKNetworkManager *_shareInstance;
         model.address = [self getString:[dict objectForKey:@"cityName"]];
         model.title = [self getString:[dict objectForKey:@"nickname"]];
         model.evaluate = [self getInteger:[dict objectForKey:@"isRecommend"]];
-        model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];;
+        model.logoImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
         model.introduce = [self getString:[dict objectForKey:@"brandDescribe"]];
         model.isAuthen = [self getBool:[dict objectForKey:@"isApproveOffcial"] ];
         model.setupTime = [NSString stringWithFormat:@"%@年成立",[dict objectForKey:@"createCompanyYear"]];
@@ -1374,7 +1401,7 @@ static IKNetworkManager *_shareInstance;
     url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
-        NSLog(@"responseObject 22 = %@",responseObject);
+//        NSLog(@"responseObject 22 = %@",responseObject);
         BOOL success = [self requestDataSuccess:responseObject];
 
         if (callback) {
@@ -1386,9 +1413,269 @@ static IKNetworkManager *_shareInstance;
     }];
 }
 
+// accessToken=&account=18667166652&code=072835&openId=&userType=0,1
+- (void)getLoginInfoWithVerifyCodeParam:(NSDictionary *)param backData:(void (^)(NSDictionary *dict, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@accessToken=%@&account=%@&openId=%@&code=%@&userType=0,1",IKLoginUrl,[param objectForKey:@"accessToken"],[param objectForKey:@"account"],[param objectForKey:@"openId"],[param objectForKey:@"code"]];
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        //        NSLog(@"responseObject 22 = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback([responseObject objectForKey:@"data"],success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (void)getChangePhoneNumberVerifyCode:(NSDictionary *)param backData:(void (^)(NSString *verifyCode, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@codeMethod=%@&tel=%@&useType=%@",IKGetVerifyCodeUrl,[param objectForKey:@"codeMethod"],[param objectForKey:@"phoneNumber"],[param objectForKey:@"useType"]];
+    
+    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        NSLog(@"responseObject 22 = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        NSString *code = nil;
+        if (success) {
+            code = [self getString:[[responseObject objectForKey:@"data"] objectForKey:@"code"]];
+        }
+        else{
+            code = @"";
+        }
+        
+        if (callback) {
+            callback(code,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (void)getBlackListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@pageSize=%@&userId=%@",IKGetBlackListUrl,[param objectForKey:@"pageSize"],[param objectForKey:@"userId"]];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealBlackListData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        if (callback) {
+            callback(arr,success);
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+- (NSArray *)dealBlackListData:(id)data
+{
+    NSArray *array = [data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    NSLog(@"arrayarray = %@",array);
+    NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        IKBlackListModel *model = [[IKBlackListModel alloc] init];
+        
+        NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
+        
+        model.Id = [self getString:[dict objectForKey:@"id"]];
+        model.headerImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
+        
+        NSDictionary *subDict = (NSDictionary *)[dict objectForKey:@"nickname"];
+        model.headerImageName = [self getString:[subDict objectForKey:@"header_image"]];
+        model.nickName = [self getString:[subDict objectForKey:@"nickname"]];;
+        [backArray addObject:model];
+    }
+    
+    return backArray;
+}
+
+
+- (void)getAttentionCompanyListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@page=%@&pageSize=%@&userId=%@",IKGetAttentionCompanyListUrl,[param objectForKey:@"page"],[param objectForKey:@"pageSize"],[param objectForKey:@"userId"]];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealAttentionCompanyListData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        if (callback) {
+            callback(arr,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealAttentionCompanyListData:(id)data
+{
+    NSArray *array = [data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        IKAttentionCompanyModel *model = [[IKAttentionCompanyModel alloc] init];
+        
+        NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
+        
+        model.Id = [self getString:[dict objectForKey:@"id"]];
+        model.headerImageUrl = [self getString:[dict objectForKey:@"headerImage"]];
+        model.appraiseNum = [self getString:[dict objectForKey:@"appraiseNum"]];
+        model.cityName = [self getString:[dict objectForKey:@"cityName"]];
+        model.setupYear = [NSString stringWithFormat:@"%@年成立",[dict objectForKey:@"createCompanyYear"]];
+        model.nickName = [self getString:[dict objectForKey:@"nickname"]];
+        model.product = [self getString:[dict objectForKey:@"product"]];
+        model.productNum = [self getString:[dict objectForKey:@"productNum"]];
+        model.schoolNum = [self getString:[dict objectForKey:@"schoolNum"]];
+        model.shopType = [self getString:[dict objectForKey:@"shopType"]];
+        model.workNum = [self getString:[dict objectForKey:@"workNum"]];
+        model.isApproveOffcial = [self getBool:[dict objectForKey:@"isApproveOffcial"]];
+        [backArray addObject:model];
+    }
+    
+    return backArray;
+}
+
+- (void)getCollectionJobListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@page=%@&pageSize=%@&userId=%@",IKGetCollectionJobList,[param objectForKey:@"page"],[param objectForKey:@"pageSize"],[param objectForKey:@"userId"]];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealHomePageJobInfoData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        if (callback) {
+            callback(arr,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (void)getJobProcessDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@page=%@&pageSize=%@&userId=%@",IKGetJobProcessUrl,[param objectForKey:@"page"],[param objectForKey:@"pageSize"],[param objectForKey:@"userId"]];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        NSArray *arr = nil;
+        if (success) {
+            arr = [self dealJObProcessData:responseObject];
+        }
+        else{
+            arr = @[[self getString:[responseObject objectForKey:@"errmsg"]]];
+        }
+        
+        if (callback) {
+            callback(arr,success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealJObProcessData:(id)data
+{
+    NSArray *array = [data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+    NSMutableArray *backArray = [NSMutableArray arrayWithCapacity:array.count];
+    for (int i = 0; i < array.count; i ++) {
+        IKJobProcessModel *model = [[IKJobProcessModel alloc] init];
+        
+        NSDictionary *dict = (NSDictionary *)[array objectAtIndex:i];
+        
+        model.companyStatus = [self getString:[dict objectForKey:@"companyStatus"]];
+        model.companyType = [self getString:[dict objectForKey:@"companyType"]];
+        model.endTime = [self getString:[dict objectForKey:@"endTime"]];
+        model.hasFeedback = [self getString:[dict objectForKey:@"hasFeedback"]];
+        model.inviteStatus = [self getString:[dict objectForKey:@"inviteStatus"]];
+        model.product = [self getString:[dict objectForKey:@"product"]];
+        model.productNum = [self getString:[dict objectForKey:@"productNum"]];
+        model.schoolNum = [self getString:[dict objectForKey:@"schoolNum"]];
+        model.inviteWorkId = [self getString:[dict objectForKey:@"inviteWorkId"]];
+        model.sendResumeId = [self getString:[dict objectForKey:@"sendResumeId"]];
+        model.sendTime = [self getString:[dict objectForKey:@"sendTime"]];
+        model.userStatus = [self getString:[dict objectForKey:@"userStatus"]];
+        model.workName = [self getString:[dict objectForKey:@"workName"]];
+        model.companyId = [self getString:[dict objectForKey:@"userCompanyId"]];
+        model.nickName = [self getString:[dict objectForKey:@"nickname"]];
+        
+        NSMutableDictionary *companyInfo = [[NSMutableDictionary alloc] init];
+        
+        [companyInfo setObject:[dict objectForKey:@"avgNum"] forKey:@"appraiseNum"];
+        [companyInfo setObject:[dict objectForKey:@"cityName"] forKey:@"cityName"];
+        [companyInfo setObject:[dict objectForKey:@"companyType"] forKey:@"companyType"];
+        [companyInfo setObject:[dict objectForKey:@"createCompanyYear"] forKey:@"createCompanyYear"];
+        [companyInfo setObject:[dict objectForKey:@"header_image"] forKey:@"headerImage"];
+        [companyInfo setObject:[dict objectForKey:@"isApproveOffcial"] forKey:@"isApproveOffcial"];
+        [companyInfo setObject:model.nickName forKey:@"nickname"];
+        [companyInfo setObject:[dict objectForKey:@"shopType"] forKey:@"shopType"];
+        [companyInfo setObject:[dict objectForKey:@"workNum"] forKey:@"workNum"];
+        [companyInfo setObject:[dict objectForKey:@"userCompanyId"] forKey:@"id"];
+        
+        model.companyInfoDict = companyInfo;
+        
+        [backArray addObject:model];
+    }
+    
+    return backArray;
+}
+
+
 
 /*************** POST ***************************************************************/
-
+#pragma mark - POST
 
 - (void)postUserOprateToServer:(NSDictionary *)param
 {
@@ -1418,9 +1705,67 @@ static IKNetworkManager *_shareInstance;
     }];
 }
 
+
+- (void)postDeleteBlackListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback
+{
+    NSLog(@"postDeleteBlackListDataToServer param = %@",param);
+
+    [IKNetworkHelper POST:IKPostDeleteBlackListUrl parameters:param success:^(id responseObject) {
+        NSLog(@"postDeleteBlackListDataToServer responseObject = %@",responseObject);
+        
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback(success,[responseObject objectForKey:@"errmsg"]);
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+        
+    }];
+}
+
+- (void)postCancelAttentionListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback
+{
+    [IKNetworkHelper POST:IKPostCancelAttentionUrl parameters:param success:^(id responseObject) {
+        NSLog(@"postDeleteBlackListDataToServer responseObject = %@",responseObject);
+        
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback(success,[responseObject objectForKey:@"errmsg"]);
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+        
+    }];
+}
+
+
+- (void)postCancelCollectionListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback
+{
+    NSLog(@"postCancelCollectionListDataToServer = %@",param);
+    [IKNetworkHelper POST:IKPostCancelCollectionUrl parameters:param success:^(id responseObject) {
+        NSLog(@"postCancelCollectionListDataToServer responseObject = %@",responseObject);
+        
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback(success,[responseObject objectForKey:@"errmsg"]);
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"error = %@",error);
+        
+    }];
+}
+
+
 /*************** POST ***************************************************************/
 
 
+#pragma mark - Mothed
 
 - (NSString *)getPositionFromPlist:(NSString *)key
 {

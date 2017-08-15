@@ -76,7 +76,7 @@
     2. 密码中必须同时包含数字和字母
 */
 
-+(BOOL)validatePassWordLegal:(NSString *)pass
++(IKPasswordValidateResult )validatePassWordLegal:(NSString *)pass
 {
     BOOL result = false;
     if ([pass length] >= 6 && [pass length] <=16){
@@ -84,8 +84,11 @@
         NSString * regex = @"^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$";
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
         result = [pred evaluateWithObject:pass];
+        return result?IKPasswordValidateResultSuccess:IKPasswordValidateResultDigitalAlphabetError;
     }
-    return result;
+    else{
+        return IKPasswordValidateResultNumberError;
+    }
 }
 
 

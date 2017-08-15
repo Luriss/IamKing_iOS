@@ -15,6 +15,14 @@ typedef NS_ENUM(NSInteger, IKLoginViewLoginType) {
     IKLoginViewLoginTypeAccount,                // 账号登录
 };
 
+
+typedef NS_ENUM(NSInteger, IKLoginViewPasswordType) {
+    IKLoginViewPasswordTypePassword = 0,    // 注册- 找工作
+    IKLoginViewPasswordTypeVerifyCode,     // 注册- 招人
+//    IKLoginViewLoginTypePhoneNumber,            // 手机号码登录
+//    IKLoginViewLoginTypeAccount,                // 账号登录
+};
+
 @protocol IKLoginViewDelegate <NSObject>
 
 - (void)loginViewRefreshFrameWithType:(IKLoginViewLoginType)loginType;
