@@ -13,11 +13,13 @@
 #import "IKJobProcessButtonTableViewCell.h"
 #import "IKCompanyDetailVC.h"
 #import "IKChatViewController.h"
+#import "IKInterviewInfoView.h"
+#import "IKEditInterviewAppraiseVc.h"
 
 
 extern NSString * loginUserId;
 
-@interface IKJobProcessVc ()<UITableViewDelegate,UITableViewDataSource,IKJobProcessButtonCellDelegate>
+@interface IKJobProcessVc ()<UITableViewDelegate,UITableViewDataSource,IKJobProcessButtonCellDelegate,IKInterviewInfoViewDelegate>
 
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, strong)NSMutableArray     *dataArray;
@@ -206,13 +208,16 @@ extern NSString * loginUserId;
             case IKJobProcessButtonTypeCheckInterview:
             {
                 NSLog(@"查看面试邀请");
-                
+                IKInterviewInfoView *interview = [[IKInterviewInfoView alloc] initWithTime:@"2017.04.22  15:00" address:@"杭州江干区互联网产业大厦B座17层 智新泽地" contact:@"奥巴马" phoneNumber:@"1505849092" delegate:self];
+                [interview show];
                 break;
             }
             case IKJobProcessButtonTypeInterViewEndToAppraise:
             {
                 NSLog(@"面试结束并进行评价");
-                
+                IKEditInterviewAppraiseVc *editAppraise = [[IKEditInterviewAppraiseVc alloc] init];
+                [self.navigationController pushViewController:editAppraise animated:YES];
+
                 break;
             }
             case IKJobProcessButtonTypeGoingAppraise:
@@ -235,7 +240,23 @@ extern NSString * loginUserId;
 
 
 
+- (void)interviewInfoViewClickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    switch (buttonIndex) {
+        case 0:
+        {
+            break;
 
+        }
+        case 1:
+        {
+            break;
+            
+        }
+        default:
+            break;
+    }
+}
 
 
 
