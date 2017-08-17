@@ -13,7 +13,7 @@
 
 //@property(nonatomic,copy)NSString     *describe;    // 描述
 @property(nonatomic,copy)NSString     *childJobName;     //
-
+@property(nonatomic,copy)NSString     *cJobId;     //
 @property(nonatomic,copy)NSArray      *skillList;     //
 @property(nonatomic,copy)NSArray      *workList;     //
 

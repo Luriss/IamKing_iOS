@@ -12,6 +12,7 @@
 #import "IKCompanyAboutUsModel.h"
 #import "IKCompanyManagerTeamModel.h"
 #import "IKCompanyShopNumModel.h"
+#import "IKResumeModel.h"
 
 // 请求数据接口
 typedef void(^IKRequestDictData)(NSDictionary *dict,BOOL success);
@@ -169,6 +170,12 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 - (void)getCollectionJobListDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
 
 - (void)getJobProcessDataWithParam:(NSDictionary *)param backData:(IKRequestArrayData)callback;
+
+- (void)getJobMyAppraiseDataWithSendResumeId:(NSString *)resumeId backData:(void (^)(NSDictionary *dict, BOOL success))callback;
+
+
+- (void)getMyResumeDataWithId:(NSString *)userId backData:(void (^)(IKResumeModel *model, BOOL success))callback;
+
 /*************** POST *************/
 
 - (void)postUserOprateToServer:(NSDictionary *)param;
@@ -180,5 +187,6 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)postCancelCollectionListDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
 
+- (void)postJobAppraiseDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback;
 
 @end

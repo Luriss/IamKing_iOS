@@ -44,6 +44,12 @@ NSString *const kIKGetMinePageVcData = @"kIKGetMinePageVcData";
     [self SetCustomAllControllers];
 }
 
+
+- (void)dealloc
+{
+    [IKNotificationCenter removeObserver:self name:@"IKRefreshTabBarItems" object:nil];
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     

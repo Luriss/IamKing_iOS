@@ -18,6 +18,8 @@
 #import "IKAttentionCompanyModel.h"
 #import "IKJobProcessModel.h"
 
+
+
 // 轮播图请求 url
 #define IKGetLoopPlayUrl (@"http://api.job.king2015.com/Banner/getListByType?type=100")
 
@@ -118,6 +120,14 @@
 
 // 求职进度 page=1&pageSize=8&userId=294
 #define IKGetJobProcessUrl (@"https://www.iamking.com.cn/index.php/SendResume/getList?")
+
+// 获取评价
+#define IKGetMyAppraiseUrl (@"https://www.iamking.com.cn/index.php/InviteWorkFeedback/getInfo?")
+
+
+#define IKGetMyResumeUrl (@"https://www.iamking.com.cn/index.php/Resume/getInfoSelf?")
+
+#define IKGetResumeWorkListUrl (@"https://www.iamking.com.cn/index.php/Work/getWorkList")
 
 @interface IKNetworkManager ()
 
@@ -601,6 +611,7 @@ static IKNetworkManager *_shareInstance;
         NSDictionary *subDict = (NSDictionary *)[array objectAtIndex:i];
         model.describe = [subDict objectForKey:@"describe"];
         model.JobName = [subDict objectForKey:@"name"];
+        model.jobId = [subDict objectForKey:@"id"];
         model.childType = (NSArray *)[subDict objectForKey:@"list"];
         [reArray addObject:model];
     }
@@ -1601,7 +1612,6 @@ static IKNetworkManager *_shareInstance;
     
     [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
         
-        NSLog(@"responseObject = %@",responseObject);
         BOOL success = [self requestDataSuccess:responseObject];
         
         NSArray *arr = nil;
@@ -1672,6 +1682,117 @@ static IKNetworkManager *_shareInstance;
     return backArray;
 }
 
+
+- (void)getJobMyAppraiseDataWithSendResumeId:(NSString *)resumeId backData:(void (^)(NSDictionary *dict, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@id=%@",IKGetMyAppraiseUrl,resumeId];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
+        
+        NSLog(@"responseObject = %@",responseObject);
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        if (callback) {
+            callback((NSDictionary *)[responseObject objectForKey:@"data"],success);
+        }
+        
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+// 删掉缓存
+- (void)getMyResumeDataWithId:(NSString *)userId backData:(void (^)(IKResumeModel *model, BOOL success))callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@userId=%@",IKGetMyResumeUrl,userId];
+    
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        IKResumeModel *model = nil;
+        if (success) {
+            model = [self dealResumeData:responseCache];
+        }
+        
+        if (callback) {
+            callback(model,success);
+        }        
+    } success:^(id responseObject) {
+        BOOL success = [self requestDataSuccess:responseObject];
+        
+        IKResumeModel *model = nil;
+        if (success) {
+            model = [self dealResumeData:responseObject];
+        }
+        
+        if (callback) {
+            callback(model,success);
+        }
+
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (IKResumeModel *)dealResumeData:(id)data
+{
+    NSDictionary *dict = (NSDictionary *)[data objectForKey:@"data"];
+    
+    if (dict.allKeys.count == 0) {
+        return nil;
+    }
+    
+    IKResumeModel *model = [[IKResumeModel alloc] init];
+    
+    model.birthYear = [self getString:[dict objectForKey:@"birthYear"]];
+    model.cityId = [self getString:[dict objectForKey:@"cityId"]];
+    model.cityName = [self getString:[dict objectForKey:@"cityName"]];
+    model.companyType = [self getString:[dict objectForKey:@"companyType"]];
+    model.companyTypeName = [self getString:[dict objectForKey:@"companyTypeName"]];
+    model.educationType = [self getString:[dict objectForKey:@"educationType"]];
+    model.educationTypeName = [self getString:[dict objectForKey:@"educationTypeName"]];
+    model.experienceType = [self getString:[dict objectForKey:@"experienceType"]];
+    model.experienceTypeName = [self getString:[dict objectForKey:@"experienceTypeName"]];
+    model.headerImageName = [self getString:[dict objectForKey:@"headerImage"]];
+    model.headerImageUrl = [self getString:[dict objectForKey:@"headerImageFull"]];
+    model.introduce = [self getString:[dict objectForKey:@"intro"]];
+
+    model.name = [self getString:[dict objectForKey:@"name"]];
+    model.parentWorkClassId = [self getString:[dict objectForKey:@"parentWorkClassId"]];
+    
+    model.resumeId = [self getString:[dict objectForKey:@"resumeId"]];
+    model.salaryType = [self getString:[dict objectForKey:@"salaryType"]];
+    model.salaryTypeName = [self getString:[dict objectForKey:@"salaryTypeName"]];
+    if ([[dict objectForKey:@"sex"] isEqualToString:@"0"]) {
+        model.sex = @"男";
+    }
+    else{
+        model.sex = @"女";
+    }
+
+    model.tel = [self getString:[dict objectForKey:@"tel"]];
+    model.userId = [self getString:[dict objectForKey:@"userId"]];
+    model.workClassId = [self getString:[dict objectForKey:@"workClassId"]];
+    
+    model.workId = [self getString:[dict objectForKey:@"workId"]];
+    model.workName = [self getString:[dict objectForKey:@"workName"]];
+    if ([[dict objectForKey:@"workStatus"] isEqualToString:@"0"]) {
+        model.workStatus = @"离职";
+    }
+    else{
+        model.workStatus = @"在职";
+    }
+
+    model.oldShowUrl = (NSArray *)[dict objectForKey:@"oldShowUrl"];
+    model.schoolList = (NSArray *)[dict objectForKey:@"schoolList"];
+    model.showUrl = (NSArray *)[dict objectForKey:@"showUrl"];
+    model.tagList = (NSArray *)[dict objectForKey:@"tagList"];
+    model.workList = (NSArray *)[dict objectForKey:@"workList"];
+
+    return model;
+}
 
 
 /*************** POST ***************************************************************/
@@ -1761,6 +1882,21 @@ static IKNetworkManager *_shareInstance;
     }];
 }
 
+- (void)postJobAppraiseDataToServer:(NSDictionary *)param callback:(void (^)(BOOL success,NSString *errorMessage))callback
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (callback) {
+            callback(YES,@"");
+        }
+    });
+    
+//    [IKNetworkHelper POST:nil parameters:param success:^(id responseObject) {
+//        
+//    } failure:^(NSError *error) {
+//        NSLog(@"error = %@",error);
+//        
+//    }];
+}
 
 /*************** POST ***************************************************************/
 

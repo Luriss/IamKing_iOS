@@ -118,7 +118,12 @@
     
     
     [_arrowImageview mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.contentView);
+        if (iPhone5SE) {
+            make.centerY.equalTo(self.contentView).offset(7);
+        }
+        else{
+            make.centerY.equalTo(self.contentView);
+        }
         make.right.equalTo(self.contentView.mas_right).offset(-20);
         make.width.and.height.mas_equalTo(22);
     }];

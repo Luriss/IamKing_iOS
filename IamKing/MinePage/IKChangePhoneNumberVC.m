@@ -42,6 +42,11 @@
     [IKNotificationCenter addObserver:self selector:@selector(changePhoneVcKeyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
+- (void)dealloc
+{
+    [IKNotificationCenter removeObserver:self name:UIKeyboardWillShowNotification object:nil];
+    [IKNotificationCenter removeObserver:self name:UIKeyboardWillHideNotification object:nil];
+}
 
 - (void)initNavTitle
 {

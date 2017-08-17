@@ -15,6 +15,7 @@
 #import "IKChatViewController.h"
 #import "IKInterviewInfoView.h"
 #import "IKEditInterviewAppraiseVc.h"
+#import "IKShowAppraiseVc.h"
 
 
 extern NSString * loginUserId;
@@ -213,22 +214,22 @@ extern NSString * loginUserId;
                 break;
             }
             case IKJobProcessButtonTypeInterViewEndToAppraise:
-            {
-                NSLog(@"面试结束并进行评价");
-                IKEditInterviewAppraiseVc *editAppraise = [[IKEditInterviewAppraiseVc alloc] init];
-                [self.navigationController pushViewController:editAppraise animated:YES];
-
-                break;
-            }
             case IKJobProcessButtonTypeGoingAppraise:
             {
                 NSLog(@"进行面试评价");
-                
+                NSLog(@"面试结束并进行评价");
+                IKEditInterviewAppraiseVc *editAppraise = [[IKEditInterviewAppraiseVc alloc] init];
+                [self.navigationController pushViewController:editAppraise animated:YES];
                 break;
             }
             case IKJobProcessButtonTypeCheckAppraise:
             {
                 NSLog(@"查看评价");
+                
+                IKShowAppraiseVc *showAppraise = [[IKShowAppraiseVc alloc] init];
+                showAppraise.sendResumeId = model.sendResumeId;
+                [self.navigationController pushViewController:showAppraise animated:YES];
+
                 break;
             }
                 

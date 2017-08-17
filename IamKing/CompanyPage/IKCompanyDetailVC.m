@@ -105,6 +105,11 @@
     [IKNotificationCenter addObserver:self selector:@selector(loopImageSelected:) name:IKCompanyLoopImageSelectedKey object:nil];
 }
 
+- (void)dealloc
+{
+    [IKNotificationCenter removeObserver:self name:IKCompanyLoopImageSelectedKey object:nil];
+}
+
 
 - (void)loopImageSelected:(NSNotification *)notifiation
 {

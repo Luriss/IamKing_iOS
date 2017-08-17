@@ -31,6 +31,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [IKNotificationCenter removeObserver:self name:@"IKEditingHideDeleteButton" object:nil];
+    [IKNotificationCenter removeObserver:self name:@"IKEditingShowDeleteButton" object:nil];
+}
+
 //- (void)layoutSubviews
 //{
 ////    [self repalceSelectedImage];

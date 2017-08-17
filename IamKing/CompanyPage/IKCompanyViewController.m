@@ -96,6 +96,11 @@ extern NSString * currentSelectedCityId;
     [IKNotificationCenter addObserver:self selector:@selector(cityChangeNeedRefreshData:) name:IKCityChangeNeedRefrshDataKey object:nil];
 }
 
+- (void)dealloc
+{
+    [IKNotificationCenter removeObserver:self name:@"IKAdViewClick" object:nil];
+    [IKNotificationCenter removeObserver:self name:IKCityChangeNeedRefrshDataKey object:nil];
+}
 
 - (void)cityChangeNeedRefreshData:(NSNotification *)notification
 {

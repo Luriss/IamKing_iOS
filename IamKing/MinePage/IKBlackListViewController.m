@@ -279,6 +279,14 @@ extern NSString * loginUserId;
     
 }
 
+
+//- (void)dealloc
+//{
+//    [IKNotificationCenter removeObserver:self name:@"IKEditingHideDeleteButton" object:nil];
+//    [IKNotificationCenter removeObserver:self name:@"IKEditingShowDeleteButton" object:nil];
+//}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

@@ -84,7 +84,7 @@
 - (void)processButtonClick:(UIButton *)button
 {
     if ([self.delegate respondsToSelector:@selector(jobProcessButtonClickWithType: cell:)]) {
-        [self.delegate jobProcessButtonClickWithType:IKJobProcessButtonTypeInterViewEndToAppraise cell:self];
+        [self.delegate jobProcessButtonClickWithType:self.type cell:self];
     }
 }
 
