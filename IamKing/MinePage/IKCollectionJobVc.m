@@ -85,6 +85,7 @@ extern NSString * loginUserId;
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.rowHeight = 160;
+        _tableView.sectionHeaderHeight = 10;
         _tableView.showsVerticalScrollIndicator = YES;
         _tableView.backgroundColor = IKGeneralLightGray;
         _tableView.allowsMultipleSelectionDuringEditing = YES;
@@ -98,14 +99,20 @@ extern NSString * loginUserId;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.dataArray.count;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return 1;
 }
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -119,8 +126,8 @@ extern NSString * loginUserId;
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     
-    if (indexPath.row < self.dataArray.count) {
-        [cell addCollectionListCellData:[self.dataArray objectAtIndex:indexPath.row]];
+    if (indexPath.section < self.dataArray.count) {
+        [cell addCollectionListCellData:[self.dataArray objectAtIndex:indexPath.section]];
     }
     
     cell.delegate = self;
@@ -131,7 +138,7 @@ extern NSString * loginUserId;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    IKJobInfoModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    IKJobInfoModel *model = [self.dataArray objectAtIndex:indexPath.section];
     
     IKJobDetailVC *jobDetailVc = [[IKJobDetailVC alloc] init];
     jobDetailVc.jobModel = model;
@@ -146,10 +153,10 @@ extern NSString * loginUserId;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSLog(@"indexPath = %@",indexPath);
     
-    IKJobInfoModel *model = (IKJobInfoModel *)[self.dataArray objectAtIndex:indexPath.row];
+    IKJobInfoModel *model = (IKJobInfoModel *)[self.dataArray objectAtIndex:indexPath.section];
     
-    [self.dataArray removeObjectAtIndex:indexPath.row];
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.dataArray removeObjectAtIndex:indexPath.section];
+    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [[IKNetworkManager shareInstance] postCancelCollectionListDataToServer:@{@"userId":loginUserId,@"inviteWorkId":model.jobID,@"status":@"0"} callback:^(BOOL success, NSString *errorMessage) {
         

@@ -439,13 +439,13 @@
     
     if (model.isApproveOffcial) {
         _approveView.layer.borderColor = IKGeneralBlue.CGColor;
-        _approveImage.backgroundColor = IKGeneralBlue;
+//        _approveImage.backgroundColor = IKGeneralBlue;
         _approveLabel.text = @"已认证";
         _approveLabel.textColor = IKGeneralBlue;
     }
     else{
         _approveView.layer.borderColor = IKMainTitleColor.CGColor;
-        _approveImage.backgroundColor = IKGeneralBlue;
+//        _approveImage.backgroundColor = IKGeneralBlue;
         _approveLabel.text = @"未认证";
         _approveLabel.textColor = IKMainTitleColor;
     }

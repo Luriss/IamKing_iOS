@@ -96,13 +96,18 @@ extern NSString * loginUserId;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.dataArray.count;
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.dataArray.count;
+    return 1;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 10;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -117,8 +122,8 @@ extern NSString * loginUserId;
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.frame];
     cell.selectedBackgroundView.backgroundColor = IKGeneralLightGray;
     
-    if (indexPath.row < self.dataArray.count) {
-        [cell addAttentionListCellData:[self.dataArray objectAtIndex:indexPath.row]];
+    if (indexPath.section < self.dataArray.count) {
+        [cell addAttentionListCellData:[self.dataArray objectAtIndex:indexPath.section]];
     }
     
     cell.delegate = self;
@@ -129,7 +134,7 @@ extern NSString * loginUserId;
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    IKAttentionCompanyModel *model = (IKAttentionCompanyModel *)[self.dataArray objectAtIndex:indexPath.row];
+    IKAttentionCompanyModel *model = (IKAttentionCompanyModel *)[self.dataArray objectAtIndex:indexPath.section];
     
     IKCompanyDetailVC *companyDetail = [[IKCompanyDetailVC alloc] init];
     
@@ -147,10 +152,10 @@ extern NSString * loginUserId;
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     NSLog(@"indexPath = %@",indexPath);
     
-    IKAttentionCompanyModel *model = (IKAttentionCompanyModel *)[self.dataArray objectAtIndex:indexPath.row];
+    IKAttentionCompanyModel *model = (IKAttentionCompanyModel *)[self.dataArray objectAtIndex:indexPath.section];
     
-    [self.dataArray removeObjectAtIndex:indexPath.row];
-    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.dataArray removeObjectAtIndex:indexPath.section];
+    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
     
     [[IKNetworkManager shareInstance] postCancelAttentionListDataToServer:@{@"userId":loginUserId,@"objectId":model.Id,@"type":@"1",@"status":@"0"} callback:^(BOOL success, NSString *errorMessage) {
         

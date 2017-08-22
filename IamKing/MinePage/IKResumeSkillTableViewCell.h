@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol IKResumeSkillTableViewCellDelegate <NSObject>
+
+- (void)resumeSkillCell;
+
+@end
+
+
 @interface IKResumeSkillTableViewCell : UITableViewCell
 
 @end
