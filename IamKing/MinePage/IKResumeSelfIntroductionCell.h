@@ -21,5 +21,7 @@
 
 @property (nonatomic, weak)id<IKResumeSelfIntroductionCellDelegate> delegate;
 @property (nonatomic, copy)NSString *textViewText;
+@property (nonatomic, copy)NSString *title;
+@property (nonatomic, strong)UIColor *textViewTextColor;
 
 @end

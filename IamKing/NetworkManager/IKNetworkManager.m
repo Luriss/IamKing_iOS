@@ -1707,18 +1707,7 @@ static IKNetworkManager *_shareInstance;
 {
     NSString *url = [NSString stringWithFormat:@"%@userId=%@",IKGetMyResumeUrl,userId];
     
-    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
-        BOOL success = [self requestDataSuccess:responseCache];
-        
-        IKResumeModel *model = nil;
-        if (success) {
-            model = [self dealResumeData:responseCache];
-        }
-        
-        if (callback) {
-            callback(model,success);
-        }        
-    } success:^(id responseObject) {
+    [IKNetworkHelper GET:url parameters:nil responseCache:nil success:^(id responseObject) {
         BOOL success = [self requestDataSuccess:responseObject];
         
         IKResumeModel *model = nil;
@@ -1744,6 +1733,7 @@ static IKNetworkManager *_shareInstance;
         return nil;
     }
     
+    NSLog(@"data  = %@",data);
     IKResumeModel *model = [[IKResumeModel alloc] init];
     
     model.birthYear = [self getString:[dict objectForKey:@"birthYear"]];

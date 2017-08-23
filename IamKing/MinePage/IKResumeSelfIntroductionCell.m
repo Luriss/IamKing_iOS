@@ -193,6 +193,19 @@
     return YES;
 }
 
+- (void)setTitle:(NSString *)title
+{
+    if (IKStringIsNotEmpty(title)) {
+        self.label.text = title;
+    }
+}
+
+
+- (void)setTextViewTextColor:(UIColor *)textViewTextColor
+{
+    self.textView.textColor = textViewTextColor;
+    _textViewTextColor = textViewTextColor;
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

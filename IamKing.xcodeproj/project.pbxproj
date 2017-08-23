@@ -200,6 +200,15 @@
 		21D053881F457BAD00200AFA /* IKMultiPickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053871F457BAD00200AFA /* IKMultiPickerView.m */; };
 		21D0538B1F45ADBF00200AFA /* IKResumeSkillTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0538A1F45ADBF00200AFA /* IKResumeSkillTableViewCell.m */; };
 		21D0538D1F4BCD9B00200AFA /* IK_garbage_red.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D0538C1F4BCD9B00200AFA /* IK_garbage_red.png */; };
+		21D053901F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0538F1F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.m */; };
+		21D053921F4D1C1200200AFA /* IK_Add_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053911F4D1C1200200AFA /* IK_Add_blue.png */; };
+		21D053951F4D21CA00200AFA /* IKAddSkillVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053941F4D21CA00200AFA /* IKAddSkillVc.m */; };
+		21D053981F4D249800200AFA /* IKAddSkilTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053971F4D249800200AFA /* IKAddSkilTypeTableViewCell.m */; };
+		21D0539B1F4D28B000200AFA /* IKSkillTypeVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0539A1F4D28B000200AFA /* IKSkillTypeVc.m */; };
+		21D0539E1F4D486100200AFA /* IKShowSkillTypeTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D0539D1F4D486100200AFA /* IKShowSkillTypeTableViewCell.m */; };
+		21D053A11F4D730000200AFA /* IKWorkListTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053A01F4D730000200AFA /* IKWorkListTableViewCell.m */; };
+		21D053A41F4D823600200AFA /* IKAddRecordListVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053A31F4D823600200AFA /* IKAddRecordListVc.m */; };
+		21D053A71F4D91B600200AFA /* IKChooseCompanyTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053A61F4D91B600200AFA /* IKChooseCompanyTableViewCell.m */; };
 		21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622CD1F0E5C6E0054D980 /* IK_Address.png */; };
 		21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D622E01F0F31E30054D980 /* IKSlideView.m */; };
 		21D622E51F0F6CCE0054D980 /* IK_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622E31F0F6CCE0054D980 /* IK_more.png */; };
@@ -626,6 +635,23 @@
 		21D053891F45ADBF00200AFA /* IKResumeSkillTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKResumeSkillTableViewCell.h; sourceTree = "<group>"; };
 		21D0538A1F45ADBF00200AFA /* IKResumeSkillTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKResumeSkillTableViewCell.m; sourceTree = "<group>"; };
 		21D0538C1F4BCD9B00200AFA /* IK_garbage_red.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_garbage_red.png; sourceTree = "<group>"; };
+		21D0538E1F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKResumeAddSkillTableViewCell.h; sourceTree = "<group>"; };
+		21D0538F1F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKResumeAddSkillTableViewCell.m; sourceTree = "<group>"; };
+		21D053911F4D1C1200200AFA /* IK_Add_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Add_blue.png; sourceTree = "<group>"; };
+		21D053931F4D21CA00200AFA /* IKAddSkillVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAddSkillVc.h; sourceTree = "<group>"; };
+		21D053941F4D21CA00200AFA /* IKAddSkillVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAddSkillVc.m; sourceTree = "<group>"; };
+		21D053961F4D249800200AFA /* IKAddSkilTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAddSkilTypeTableViewCell.h; sourceTree = "<group>"; };
+		21D053971F4D249800200AFA /* IKAddSkilTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAddSkilTypeTableViewCell.m; sourceTree = "<group>"; };
+		21D053991F4D28B000200AFA /* IKSkillTypeVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKSkillTypeVc.h; sourceTree = "<group>"; };
+		21D0539A1F4D28B000200AFA /* IKSkillTypeVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSkillTypeVc.m; sourceTree = "<group>"; };
+		21D0539C1F4D486100200AFA /* IKShowSkillTypeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKShowSkillTypeTableViewCell.h; sourceTree = "<group>"; };
+		21D0539D1F4D486100200AFA /* IKShowSkillTypeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKShowSkillTypeTableViewCell.m; sourceTree = "<group>"; };
+		21D0539F1F4D730000200AFA /* IKWorkListTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKWorkListTableViewCell.h; sourceTree = "<group>"; };
+		21D053A01F4D730000200AFA /* IKWorkListTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKWorkListTableViewCell.m; sourceTree = "<group>"; };
+		21D053A21F4D823600200AFA /* IKAddRecordListVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAddRecordListVc.h; sourceTree = "<group>"; };
+		21D053A31F4D823600200AFA /* IKAddRecordListVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAddRecordListVc.m; sourceTree = "<group>"; };
+		21D053A51F4D91B600200AFA /* IKChooseCompanyTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKChooseCompanyTableViewCell.h; sourceTree = "<group>"; };
+		21D053A61F4D91B600200AFA /* IKChooseCompanyTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKChooseCompanyTableViewCell.m; sourceTree = "<group>"; };
 		21D622CD1F0E5C6E0054D980 /* IK_Address.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Address.png; sourceTree = "<group>"; };
 		21D622D51F0F21320054D980 /* IamKing.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IamKing.pch; path = ../IamKing.pch; sourceTree = "<group>"; };
 		21D622D81F0F246D0054D980 /* IKGeneralMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKGeneralMacro.h; sourceTree = "<group>"; };
@@ -1512,6 +1538,12 @@
 				21D053781F44380600200AFA /* Cell */,
 				21D0530A1F3D7BC700200AFA /* IKJobResumeVc.h */,
 				21D0530B1F3D7BC700200AFA /* IKJobResumeVc.m */,
+				21D053931F4D21CA00200AFA /* IKAddSkillVc.h */,
+				21D053941F4D21CA00200AFA /* IKAddSkillVc.m */,
+				21D053991F4D28B000200AFA /* IKSkillTypeVc.h */,
+				21D0539A1F4D28B000200AFA /* IKSkillTypeVc.m */,
+				21D053A21F4D823600200AFA /* IKAddRecordListVc.h */,
+				21D053A31F4D823600200AFA /* IKAddRecordListVc.m */,
 			);
 			name = JobResume;
 			sourceTree = "<group>";
@@ -1575,6 +1607,16 @@
 				21D053841F4536EB00200AFA /* IKResumeSelfIntroductionCell.m */,
 				21D053891F45ADBF00200AFA /* IKResumeSkillTableViewCell.h */,
 				21D0538A1F45ADBF00200AFA /* IKResumeSkillTableViewCell.m */,
+				21D0538E1F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.h */,
+				21D0538F1F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.m */,
+				21D053961F4D249800200AFA /* IKAddSkilTypeTableViewCell.h */,
+				21D053971F4D249800200AFA /* IKAddSkilTypeTableViewCell.m */,
+				21D0539C1F4D486100200AFA /* IKShowSkillTypeTableViewCell.h */,
+				21D0539D1F4D486100200AFA /* IKShowSkillTypeTableViewCell.m */,
+				21D0539F1F4D730000200AFA /* IKWorkListTableViewCell.h */,
+				21D053A01F4D730000200AFA /* IKWorkListTableViewCell.m */,
+				21D053A51F4D91B600200AFA /* IKChooseCompanyTableViewCell.h */,
+				21D053A61F4D91B600200AFA /* IKChooseCompanyTableViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -1865,6 +1907,7 @@
 		21F8212F1F37536900DA9EFA /* MinePageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21D053911F4D1C1200200AFA /* IK_Add_blue.png */,
 				21D0538C1F4BCD9B00200AFA /* IK_garbage_red.png */,
 				21D053701F43F44600200AFA /* IK_delete_gray.png */,
 				21D0536E1F43074E00200AFA /* IK_star_hollow_yellow.png */,
@@ -2157,6 +2200,7 @@
 				21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */,
 				21D0532A1F3DAB2B00200AFA /* IK_Feedback_blue.png in Resources */,
 				21F821B01F3B25D800DA9EFA /* AppStore-1024px.png in Resources */,
+				21D053921F4D1C1200200AFA /* IK_Add_blue.png in Resources */,
 				210B0DE31F0E0B56003FD950 /* IK_findPeople@3x.png in Resources */,
 				218AD71A1F209BC300138A68 /* IK_loading.png in Resources */,
 				21D0536F1F43074E00200AFA /* IK_star_hollow_yellow.png in Resources */,
@@ -2395,6 +2439,7 @@
 				21D0535B1F42C44700200AFA /* IKJobProcessModel.m in Sources */,
 				21F820E51F306B8900DA9EFA /* IKManagerTeamLeftTableViewCell.m in Sources */,
 				21BC61C41F2CDE6C00CE85D9 /* IKCompanyViewController.m in Sources */,
+				21D053951F4D21CA00200AFA /* IKAddSkillVc.m in Sources */,
 				21BC61D31F2CE6F200CE85D9 /* IKMessageViewController.m in Sources */,
 				21D0532F1F3DBFE200200AFA /* IKGeneralTool.m in Sources */,
 				21F8213E1F38117000DA9EFA /* IKCompanyTypeView.m in Sources */,
@@ -2425,16 +2470,19 @@
 				21BC61831F2733FB00CE85D9 /* IKJobDetailModel.m in Sources */,
 				21C3ADF21F149A1B008FC124 /* IKNetworkManager.m in Sources */,
 				21D052F31F3C6E5100200AFA /* IKSettingViewController.m in Sources */,
+				21D053901F4D1A3000200AFA /* IKResumeAddSkillTableViewCell.m in Sources */,
 				21D622FD1F10FDAD0054D980 /* IKLabel.m in Sources */,
 				21D053551F428C3F00200AFA /* IKAttentionListTableViewCell.m in Sources */,
 				2141222B1F18D08F00062A2F /* IKJobTypeView.m in Sources */,
 				21C3AE591F175615008FC124 /* IKInfoTableViewCell.m in Sources */,
 				21D053741F4415FA00200AFA /* IKShowAppraiseVc.m in Sources */,
 				21F821071F31A41500DA9EFA /* IKAppraiseView.m in Sources */,
+				21D053A71F4D91B600200AFA /* IKChooseCompanyTableViewCell.m in Sources */,
 				21F821771F39C48600DA9EFA /* IKLoopImageViewController.m in Sources */,
 				210B0D941F0DE16D003FD950 /* AppDelegate.m in Sources */,
 				21BC61DB1F2CE9E200CE85D9 /* IKCompanyAdTableViewCell.m in Sources */,
 				21F8217B1F3AB02500DA9EFA /* IKTeamDeatilView.m in Sources */,
+				21D053A41F4D823600200AFA /* IKAddRecordListVc.m in Sources */,
 				21F821521F384CA000DA9EFA /* IKSettingTableViewCell.m in Sources */,
 				21C3AE581F175615008FC124 /* IKInfoTableView.m in Sources */,
 				21D052F61F3C709300200AFA /* IKSettingNomalTableViewCell.m in Sources */,
@@ -2455,7 +2503,9 @@
 				21BC61711F25931E00CE85D9 /* IKProvinceModel.m in Sources */,
 				21BC616E1F25896300CE85D9 /* IKHotCityModel.m in Sources */,
 				21C3AE5A1F175615008FC124 /* IKJobInfoModel.m in Sources */,
+				21D0539B1F4D28B000200AFA /* IKSkillTypeVc.m in Sources */,
 				210B0D911F0DE16D003FD950 /* main.m in Sources */,
+				21D0539E1F4D486100200AFA /* IKShowSkillTypeTableViewCell.m in Sources */,
 				21BC61AA1F2994FA00CE85D9 /* IKSkillTableViewCell.m in Sources */,
 				21E2B59B1F1B21A100F9EC14 /* IKBottomTableViewCell.m in Sources */,
 				21D622F81F10FD6E0054D980 /* IKViewController.m in Sources */,
@@ -2463,6 +2513,7 @@
 				21BC61C01F2B335300CE85D9 /* IKTabBar.m in Sources */,
 				21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */,
 				21F821551F3856A600DA9EFA /* IKWaveView.m in Sources */,
+				21D053A11F4D730000200AFA /* IKWorkListTableViewCell.m in Sources */,
 				21D622F71F10FD6E0054D980 /* IKScrollView.m in Sources */,
 				21BC61BD1F2B091B00CE85D9 /* IKAlertView.m in Sources */,
 				21F820FE1F30B2CD00DA9EFA /* IKCompanyShopNumModel.m in Sources */,
@@ -2481,6 +2532,7 @@
 				21D053371F41620600200AFA /* IKChangePhoneNumberVC.m in Sources */,
 				21F8212E1F374D5600DA9EFA /* IKTextField.m in Sources */,
 				21F820CE1F2F2FCF00DA9EFA /* IKComInformationTableViewCell.m in Sources */,
+				21D053981F4D249800200AFA /* IKAddSkilTypeTableViewCell.m in Sources */,
 				21D053681F42EDBC00200AFA /* IKInterviewInfoView.m in Sources */,
 				21F821851F3AEEDA00DA9EFA /* IKShopListViewController.m in Sources */,
 				21D052FB1F3C799300200AFA /* IKAccountViewController.m in Sources */,

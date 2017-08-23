@@ -19,7 +19,7 @@ extern NSString * currentSelectedCityId;
 }
 @property (nonatomic, strong)UITableView *provinceTableView;
 @property (nonatomic, strong)UITableView *cityTableView;
-@property (nonatomic,copy)NSMutableArray *provinceData;
+@property (nonatomic,strong)NSMutableArray *provinceData;
 @property (nonatomic,copy)NSArray *cityData;
 @property (nonatomic,   copy)NSDictionary *baseDict;
 @property (nonatomic,   copy)NSString    *selectProvince;

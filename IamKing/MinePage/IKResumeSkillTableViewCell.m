@@ -9,7 +9,7 @@
 #import "IKResumeSkillTableViewCell.h"
 
 
-@interface IKResumeSkillTableViewCell ()<UITextFieldDelegate>
+@interface IKResumeSkillTableViewCell ()
 
 @property (nonatomic, strong)UIView *lineView;
 @property (nonatomic, strong)UIView *vLineView;
@@ -17,7 +17,7 @@
 @property (nonatomic, strong)UIButton *garbageBtn;
 @property (nonatomic, strong)UIButton *editBtn;
 @property (nonatomic, strong)UILabel *psLabel;
-
+@property (nonatomic, copy)NSDictionary *dataDict;
 
 @property (nonatomic, strong)UIImageView *logoImageView;
 
@@ -61,7 +61,7 @@
     [_tagLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.contentView.mas_top).offset(15);
         make.left.equalTo(_vLineView.mas_right).offset(20);
-        make.width.mas_equalTo(60);
+//        make.width.mas_equalTo(60);
         make.height.mas_equalTo(25);
     }];
     
@@ -126,7 +126,7 @@
         _psLabel = [[UILabel alloc] init];
         _psLabel.font = [UIFont systemFontOfSize:13.0f];
         _psLabel.textColor = IKSubHeadTitleColor;
-        _psLabel.text = @"已认证   无证书   3~5年   高级";
+//        _psLabel.text = @"已认证    无证书    3~5年    高级";
         _psLabel.textAlignment = NSTextAlignmentLeft;
     }
     return _psLabel;
@@ -177,15 +177,54 @@
 
 - (void)garbageBtnClick:(UIButton *)button
 {
-    
+    if ([self.delegate respondsToSelector:@selector(resumeSkillCellDeleteButtonClick:)]) {
+        [self.delegate resumeSkillCellDeleteButtonClick:self];
+    }
 }
 
 
 - (void)editBtnClick:(UIButton *)button
 {
-    
+    if ([self.delegate respondsToSelector:@selector(resumeSkillCellEditButtonClickWithData: cell:)]) {
+        [self.delegate resumeSkillCellEditButtonClickWithData:self.dataDict cell:self];
+    }
 }
 
+
+
+- (void)addResumeSkillCellData:(NSDictionary *)dict
+{
+    NSLog(@"addResumeSkillCellData = %@",dict);
+    self.dataDict = [NSDictionary dictionaryWithDictionary:dict];
+    
+    NSString *name = [NSString stringWithFormat:@"%@",[dict objectForKey:@"name"]];
+    
+    CGSize size = [NSString getSizeWithString:name size:CGSizeMake(IKSCREEN_WIDTH - 210, 25) attribute:@{NSFontAttributeName:[UIFont systemFontOfSize:14.0f]}];
+    
+    self.tagLabel.text = name;
+
+    [_tagLabel mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.contentView.mas_top).offset(15);
+        make.left.equalTo(_vLineView.mas_right).offset(20);
+        make.width.mas_equalTo(size.width + 10);
+        make.height.mas_equalTo(25);
+    }];
+    
+    NSString *hasCert = @"无证书";
+    if ([[dict objectForKey:@"has_certificate"] isEqualToString:@"1"]) {
+        hasCert = @"有证书";
+    }
+    
+     NSString *hasApprove = @"未认证";
+    if ([[dict objectForKey:@"is_approve"] isEqualToString:@"1"]) {
+        hasApprove = @"已认证";
+    }
+    
+    NSString *experience = [NSString stringWithFormat:@"%@",[dict objectForKey:@"experienceTypeName"]];
+    NSString *level = [NSString stringWithFormat:@"%@",[dict objectForKey:@"levelName"]];
+
+    self.psLabel.text = [NSString stringWithFormat:@"%@    %@    %@    %@",hasApprove,hasCert,experience,level];
+}
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

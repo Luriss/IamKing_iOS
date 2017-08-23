@@ -28,7 +28,7 @@ NSString * currentSelectedCityId;
 @property (nonatomic,strong) IKTagsView *tag;
 
 @property (nonatomic,   copy)NSDictionary *baseDict;
-@property (nonatomic,copy)NSMutableArray *provinceData;
+@property (nonatomic,strong)NSMutableArray *provinceData;
 @property (nonatomic,copy)NSArray *cityData;
 
 @end

@@ -18,14 +18,22 @@
 #import "IKJobTypeModel.h"
 #import "IKChildJobTypeModel.h"
 #import "IKResumeSkillTableViewCell.h"
+#import "IKAlertView.h"
+#import "IKResumeAddSkillTableViewCell.h"
+#import "IKAddSkillVc.h"
+#import "IKWorkListTableViewCell.h"
+#import "IKAddRecordListVc.h"
 
 
 extern NSString * loginUserId;
 
-@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate>
-
+@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate,IKResumeSkillTableViewCellDelegate,IKAddSkillVcDelegate,IKWorkListTableViewCellDelegate,IKAddRecordListVcDelegate>
+{
+    BOOL            _isShowAddTag;
+    NSIndexPath    *_editSelectedSkillIP;
+    
+}
 @property(nonatomic, strong)UITableView *tableView;
-@property(nonatomic, strong)IKResumeModel     *resumeModel;
 @property(nonatomic, copy)NSArray       *headerTitle;
 @property(nonatomic, copy)NSArray       *baseInfoTitle;
 @property(nonatomic, copy)NSArray       *baseInfoData;
@@ -35,8 +43,14 @@ extern NSString * loginUserId;
 @property(nonatomic, copy)NSArray       *provinceCityArray;
 @property(nonatomic, copy)NSArray       *jobTypeArray;
 @property(nonatomic, copy)NSArray       *workList;
+@property(nonatomic, strong)NSMutableArray       *tagList;
+@property(nonatomic, strong)NSMutableArray       *recordList;
 
 @property(nonatomic, assign)BOOL         cellIsEditing;
+
+@property(nonatomic, strong)IKResumeModel     *resumeModel;
+@property(nonatomic, strong)IKJobTypeModel    *selectedJobTypeModel;
+@property(nonatomic, strong)NSDictionary       *selectedchildJobTypeDict;
 
 @end
 
@@ -48,8 +62,8 @@ extern NSString * loginUserId;
     [self initNavTitle];
     [self initLeftBackItem];
     
-   
-    
+    _isShowAddTag = NO;
+
     // Do any additional setup after loading the view.
     self.headerTitle = @[@"基本信息",@"期望工作",@"认证/技能",@"工作履历",@"学习经历",@"职业形象"];
     self.baseInfoTitle = @[@"真实姓名",@"性别",@"出生年份",@"最高学历",@"健身行业从业时间",@"手机号码",@"任职状态"];
@@ -188,15 +202,27 @@ extern NSString * loginUserId;
         return 4;
     }
     else if (section == 2){
-        NSInteger count = _resumeModel.tagList.count;
+        NSInteger count = self.tagList.count;
+        NSLog(@"count = %ld",count);
         if (count == 3) {
-            return 3;
+            _isShowAddTag = NO;
+            return 4;
+        }
+        else{
+            _isShowAddTag = YES;
+            return count + 1;
+        }
+    }
+    else if (section == 3){
+        NSInteger count = self.recordList.count;
+        if (count == 3) {
+            return 4;
         }
         else{
             return count + 1;
         }
     }
-    else if (section == 3 || section == 4){
+    else if (section == 4){
         return 3;
     }
     else{
@@ -223,13 +249,33 @@ extern NSString * loginUserId;
         return 50;
     }
     else if (section == 2){
-        NSInteger count = _resumeModel.tagList.count;
+        NSInteger count = self.tagList.count;
         if (count == 3) {
+            if (indexPath.row == 3) {
+                return 0;
+            }
             return 80;
         }
         else {
             if (row < count) {
                 return 80;
+            }
+            else{
+                return 50;
+            }
+        }
+    }
+    else if (section == 3){
+        NSInteger count = self.recordList.count;
+        if (count == 3) {
+            if (indexPath.row == 3) {
+                return 0;
+            }
+            return 130;
+        }
+        else {
+            if (row < count) {
+                return 130;
             }
             else{
                 return 50;
@@ -313,7 +359,7 @@ extern NSString * loginUserId;
         return cell;
     }
     else if (section == 2){
-        NSInteger count = _resumeModel.tagList.count;
+        NSInteger count = self.tagList.count;
         if (row < count) {
             IKResumeSkillTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:sikllCellId];
             
@@ -322,19 +368,49 @@ extern NSString * loginUserId;
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            //        cell.delegate = self;
+            cell.delegate = self;
+            [cell addResumeSkillCellData:[self.tagList objectAtIndex:row]];
             return cell;
         }
         else{
-            static  NSString *cellId = @"IKJobProcessHeaderTableViewCellId";
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            static  NSString *cellId = @"IKResumeAddSkillTableViewCellId";
+            IKResumeAddSkillTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
             
             if(cell == nil){
-                cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+                cell = [[IKResumeAddSkillTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.psLabel.text = @"添加认证/技能";
+            return cell;
+        }
+    }
+    else if (section == 3){
+        NSInteger count = self.recordList.count;
+        if (row < count) {
+            static  NSString *cellId = @"IKWorkListTableViewCellId";
+            IKWorkListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
             
+            if(cell == nil){
+                cell = [[IKWorkListTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            [cell addResumeWorkListCellData:self.recordList[row]];
+            return cell;
+        }
+        else{
+            static  NSString *cellId = @"IKResumeAddSkillTableViewCellId";
+            IKResumeAddSkillTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKResumeAddSkillTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.psLabel.text = @"添加工作履历";
+
             return cell;
         }
     }
@@ -365,11 +441,11 @@ extern NSString * loginUserId;
     titleLabel.textAlignment = NSTextAlignmentLeft;
     [view addSubview:titleLabel];
     
-    CGFloat psW = 40;
-    NSString *psString = @"必填";
-    if (section == 2 || section == 5) {
-        psW = 50;
-        psString = @"非必填";
+    CGFloat psW = 50;
+    NSString *psString = @"非必填";
+    if (section == 0 || section == 1) {
+        psW = 40;
+        psString = @"必填";
     }
     
     UILabel *psLabel = [[UILabel alloc] initWithFrame:CGRectMake(20 + titleLabel.frame.size.width,17, psW, 16)];
@@ -477,7 +553,11 @@ extern NSString * loginUserId;
                 if (selectedValue.length > 0) {
                     cell.textField.text = selectedValue;
                 }
-                NSLog(@"component1 = %ld,component2 = %ld,component3 = %ld",component1,component2,component3);
+                
+                self.selectedJobTypeModel = (IKJobTypeModel *)self.workList[component1];
+                
+                self.selectedchildJobTypeDict = self.selectedJobTypeModel.childType[component2];
+
             }];
         }
         else if (row == 2){
@@ -507,10 +587,29 @@ extern NSString * loginUserId;
         }
 
     }
+    else if (section == 2){
+        if (row == self.tagList.count) {
+            IKAddSkillVc *addSkill = [[IKAddSkillVc alloc] init];
+            addSkill.isAddSkill = YES;
+            addSkill.childTypeDict = self.selectedchildJobTypeDict;
+            addSkill.delegate = self;
+            [self.navigationController pushViewController:addSkill animated:YES];
+        }
+    }
+    else if (section == 3){
+        if (row == self.recordList.count) {
+            IKAddRecordListVc *addRecord = [[IKAddRecordListVc alloc] init];
+            addRecord.isAddRecord = YES;
+            addRecord.delegate = self;
+            [self.navigationController pushViewController:addRecord animated:YES];
+        }
+    }
+    
     NSLog(@"didSelectRowAtIndexPath");
 }
 
 
+#pragma mark - IKBaseInfoTableViewCellDelegate
 
 - (void)textFieldBeginEditingNeedAjustkeyBorad:(BOOL)isNeed
 {
@@ -520,6 +619,8 @@ extern NSString * loginUserId;
     self.cellIsEditing = YES;
 }
 
+#pragma mark - IKResumeSelfIntroductionCellDelegate
+
 - (void)textViewBeginEditingNeedAjustkeyBorad:(BOOL)isNeed
 {
     if (isNeed) {
@@ -528,18 +629,107 @@ extern NSString * loginUserId;
     self.cellIsEditing = YES;
 }
 
+#pragma mark - IKResumeSkillTableViewCellDelegate
+
+- (void)resumeSkillCellEditButtonClickWithData:(NSDictionary *)dict cell:(IKResumeSkillTableViewCell *)cell
+{
+    NSLog(@"resumeSkillCellEditButtonClick");
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _editSelectedSkillIP = [self.tableView indexPathForCell:cell];
+        IKAddSkillVc *addSkill = [[IKAddSkillVc alloc] init];
+        addSkill.isAddSkill = NO;
+        addSkill.skillDict = [dict mutableCopy];
+        addSkill.childTypeDict = self.selectedchildJobTypeDict;
+        addSkill.delegate = self;
+        [self.navigationController pushViewController:addSkill animated:YES];
+    });
+}
+
+- (void)resumeSkillCellDeleteButtonClick:(IKResumeSkillTableViewCell *)cell
+{
+    NSLog(@"resumeSkillCellDeleteButtonClick");
+    
+    IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"删除技能" message:@"确定删除该技能?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert showWithCallBack:^(NSInteger buttonIndex) {
+        
+        if (buttonIndex == 1) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+                
+                [self.tagList removeObjectAtIndex:indexPath.row];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
+    }];
+    
+
+}
+
+#pragma mark - IKAddSkillVcDelegate
+
+- (void)addSkillChangeNeedRefreshData:(NSDictionary *)dict
+{
+    [self.tagList replaceObjectAtIndex:_editSelectedSkillIP.row withObject:dict];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[_editSelectedSkillIP] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+- (void)addSkillAddNewSkillWithData:(NSDictionary *)dict
+{
+    [self.tagList addObject:dict];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:2] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+#pragma mark - IKWorkListTableViewCellDelegate
+
+- (void)resumeWorkListCellDeleteButtonClick:(IKWorkListTableViewCell *)cell
+{
+    IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"删除履历" message:@"确定删除该履历?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert showWithCallBack:^(NSInteger buttonIndex) {
+        if (buttonIndex == 1) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+                
+                [self.recordList removeObjectAtIndex:indexPath.row];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
+    }];
+}
+
+
+- (void)resumeWorkListCellEditButtonClickWithData:(NSDictionary *)dict cell:(IKWorkListTableViewCell *)cell
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        IKAddRecordListVc *addRecord = [[IKAddRecordListVc alloc] init];
+        addRecord.recordDict = [dict mutableCopy];
+        addRecord.isAddRecord = NO;
+        addRecord.delegate = self;
+        [self.navigationController pushViewController:addRecord animated:YES];
+    });
+}
+
+#pragma mark - Network
 
 - (void)getDataFromServer
 {
     [[IKNetworkManager shareInstance] getMyResumeDataWithId:loginUserId backData:^(IKResumeModel *model, BOOL success) {
-        
         if (success && model) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.resumeModel = model;
                 self.baseInfoData = @[model.name,model.sex,model.birthYear,model.educationTypeName,model.experienceTypeName,model.tel,model.workStatus];
                 self.hopeWorkData = @[model.companyTypeName,model.workName,model.cityName,model.salaryTypeName];
-                [self.view addSubview:self.tableView];
-                [self initBottomButton];
+                self.tagList = [NSMutableArray arrayWithArray:_resumeModel.tagList];
+                self.recordList = [NSMutableArray arrayWithArray:_resumeModel.workList];
+                if (_tableView == nil) {
+                    [self.view addSubview:self.tableView];
+                    [self initBottomButton];
+                    
+                    [self getHomePageWorkListData];
+                }
             });
         }
     }];
@@ -565,8 +755,14 @@ extern NSString * loginUserId;
         self.provinceCityArray = [NSArray arrayWithObjects:pro,city, nil];
     }];
     
-    [[IKNetworkManager shareInstance] getHomePageWorkListDataWithBackData:^(NSArray *dataArray, BOOL success) {
+    
+}
 
+
+- (void)getHomePageWorkListData
+{
+    [[IKNetworkManager shareInstance] getHomePageWorkListDataWithBackData:^(NSArray *dataArray, BOOL success) {
+        
         self.workList = [NSArray arrayWithArray:dataArray];
         
         NSMutableArray *titleArray1 = [NSMutableArray arrayWithCapacity:dataArray.count];
@@ -577,21 +773,28 @@ extern NSString * loginUserId;
             IKJobTypeModel *model = (IKJobTypeModel *)[dataArray objectAtIndex:i];
             // 一级类型
             [titleArray1 addObject:model.JobName];
+            if ([model.jobId isEqualToString:_resumeModel.parentWorkClassId]) {
+                self.selectedJobTypeModel = model;
+            }
             
             NSMutableArray *childArray = [NSMutableArray arrayWithCapacity:model.childType.count];
             NSMutableArray *sildeArray = [[NSMutableArray alloc] init];
             NSMutableArray *workA = [[NSMutableArray alloc] init];
-
+            
             for (int j = 0; j < model.childType.count; j ++) {
                 NSDictionary *dict = (NSDictionary *)[model.childType objectAtIndex:j];
                 
                 IKChildJobTypeModel *childModel = [[IKChildJobTypeModel alloc] init];
                 childModel.childJobName = [dict objectForKey:@"name"];
+                childModel.cJobId = [dict objectForKey:@"id"];
                 // 二级类型
                 [sildeArray addObject:childModel.childJobName];
                 childModel.skillList = (NSArray *)[dict objectForKey:@"skillList"];
                 childModel.workList = (NSArray *)[dict objectForKey:@"workList"];
                 
+                if ([childModel.cJobId isEqualToString:_resumeModel.workClassId]) {
+                    self.selectedchildJobTypeDict = [dict copy];
+                }
                 NSMutableArray *workArray = [NSMutableArray arrayWithCapacity:childModel.workList.count];
                 
                 // 三级类型
@@ -610,6 +813,7 @@ extern NSString * loginUserId;
         self.jobTypeArray = [NSArray arrayWithObjects:titleArray1,titleArray2,titleArray3, nil];
     }];
 }
+
 
 
 - (void)didReceiveMemoryWarning {

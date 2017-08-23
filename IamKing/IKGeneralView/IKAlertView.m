@@ -86,6 +86,7 @@
 @property (nonatomic, strong) NSString *message;
 @property (nonatomic, strong) NSArray *buttons;
 @property (nonatomic, weak) id<IKAlertViewDelegate> delegate;
+@property (nonatomic,copy)CallbackBlock complete;
 
 @end
 
@@ -152,6 +153,13 @@
     [self fetchShowingAlertView];
     
     [self showAlertView];
+}
+
+- (void)showWithCallBack:(CallbackBlock )complete
+{
+    [self show];
+    
+    self.complete = complete;
 }
 
 - (void)setupUI{
@@ -280,6 +288,10 @@
     [self hideShowingAlertView];
     if ([self.delegate respondsToSelector:@selector(alertView:clickedButtonAtIndex:)]) {
         [self.delegate alertView:self clickedButtonAtIndex:button.tag];
+    }
+    
+    if (self.complete) {
+        self.complete(button.tag);
     }
 }
 

@@ -107,6 +107,10 @@
 {
     [self hide];
     
+    if (IKStringIsEmpty(self.selectedStr)) {
+        self.selectedStr = self.dataSource.firstObject;
+    }
+    
     if (_resultBlock) {
         _resultBlock([self.selectedStr copy]);
     }
@@ -133,7 +137,6 @@
 
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view{
-    NSLog(@"view = %@",view);
     UILabel* pickerLabel = (UILabel*)view;
     
     if (!pickerLabel){

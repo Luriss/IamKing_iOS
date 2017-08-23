@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol IKAlertViewDelegate;
+typedef void(^CallbackBlock)(NSInteger buttonIndex);
 
+
+@protocol IKAlertViewDelegate;
 
 @interface IKAlertView : UIView
 
@@ -33,6 +35,7 @@
 
 - (void)show;
 
+- (void)showWithCallBack:(CallbackBlock )complete;
 
 @end
 

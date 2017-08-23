@@ -8,13 +8,21 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol IKResumeSkillTableViewCellDelegate <NSObject>
-
-- (void)resumeSkillCell;
-
-@end
-
+@protocol IKResumeSkillTableViewCellDelegate;
 
 @interface IKResumeSkillTableViewCell : UITableViewCell
 
+@property (nonatomic, weak)id<IKResumeSkillTableViewCellDelegate> delegate;
+
+- (void)addResumeSkillCellData:(NSDictionary *)dict;
+
 @end
+
+
+@protocol IKResumeSkillTableViewCellDelegate <NSObject>
+
+- (void)resumeSkillCellEditButtonClickWithData:(NSDictionary *)dict cell:(IKResumeSkillTableViewCell *)cell;
+- (void)resumeSkillCellDeleteButtonClick:(IKResumeSkillTableViewCell *)cell;
+
+@end
+

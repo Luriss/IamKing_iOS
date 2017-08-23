@@ -46,6 +46,7 @@
 {
     CGRect iconRect = [super textRectForBounds:bounds];
     iconRect.origin.x += 10;// 右偏10
+    iconRect.size.width -= 20;
     return iconRect;
 }
 
@@ -53,6 +54,7 @@
 {
     CGRect iconRect = [super editingRectForBounds:bounds];
     iconRect.origin.x += 10;// 右偏10
+    iconRect.size.width -= 20;
     return iconRect;
 }
 

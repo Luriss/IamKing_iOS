@@ -24,7 +24,7 @@
 @property(nonatomic,assign)CGFloat selfW;
 
 @property(nonatomic,assign)CGFloat selectedNum;
-@property(nonatomic,copy)NSMutableArray *buttonArray;
+@property(nonatomic,strong)NSMutableArray *buttonArray;
 @property(nonatomic,weak)id <IKAppraiseStarViewDelegate> delegate;
 
 - (void)addHollowStarToStarView;

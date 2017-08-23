@@ -20,7 +20,7 @@
 
 @property(nonatomic,assign)CGFloat selfH;
 @property(nonatomic,assign)CGFloat selectedNum;
-@property(nonatomic,copy)NSMutableArray *buttonArray;
+@property(nonatomic,strong)NSMutableArray *buttonArray;
 @property(nonatomic,weak)id <IKStarViewDelegate> delegate;
 
 - (void)addHollowStarToStarView;

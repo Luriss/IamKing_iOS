@@ -16,9 +16,9 @@
         _titleLabel = [[UILabel alloc] initWithFrame:self.bounds];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.layer.cornerRadius = 12;
-        _titleLabel.layer.borderColor = IKSubHeadTitleColor.CGColor;
+        _titleLabel.layer.borderColor = IKLineColor.CGColor;
         _titleLabel.layer.borderWidth = 1;
-        _titleLabel.textColor = IKSubHeadTitleColor;
+        _titleLabel.textColor = IKMainTitleColor;
         _titleLabel.font = [UIFont systemFontOfSize:IKSubTitleFont];
         [self.contentView addSubview:_titleLabel];
         

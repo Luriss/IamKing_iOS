@@ -80,14 +80,11 @@
 {
     if (_textField == nil) {
         _textField = [[IKTextField alloc] init];
-//        _textField.placeholder = @" 请输入标签";
-        //    tagTf.secureTextEntry = YES;
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _textField.returnKeyType = UIReturnKeyDone;
         _textField.delegate = self;
         _textField.textColor = IKGeneralBlue;
         _textField.userInteractionEnabled = NO;
-//        [_textField addTarget:self action:@selector(textFieldTextDidChange:) forControlEvents:UIControlEventEditingChanged];
     }
     return _textField;
 }

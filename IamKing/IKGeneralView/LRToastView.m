@@ -124,7 +124,7 @@
         CGFloat y = [self getLabelY];
         CGFloat x = (ceilf(IKSCREEN_WIDTH)-labelSize.width)*0.5;
         
-        self.frame = CGRectMake(x, y, labelSize.width, labelSize.height);
+        self.frame = CGRectMake(x, y, labelSize.width + 20, labelSize.height);
         self.infoLabel.frame = self.bounds;
 
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:HadAddToastViewKey];

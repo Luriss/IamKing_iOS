@@ -12,6 +12,6 @@
 
 - (NSString *)description
 {
-    return [NSString stringWithFormat:@"_describe = %@;_JobName = %@;_childType = %@",_describe,_JobName,_childType];
+    return [NSString stringWithFormat:@"_describe = %@;_jobId = %@;_JobName = %@;_childType = %@",_describe,_jobId,_JobName,_childType];
 }
 @end
