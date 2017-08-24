@@ -96,6 +96,10 @@
         _value = value;
         self.valueLabel.text = value;
     }
+    else{
+        _value = @"";
+        self.valueLabel.text = @"";
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

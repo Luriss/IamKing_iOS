@@ -12,6 +12,8 @@
 @protocol IKResumeSelfIntroductionCellDelegate <NSObject>
 
 - (void)textViewBeginEditingNeedAjustkeyBorad:(BOOL)isNeed;
+- (void)textViewDidEndEditingWithText:(NSString *)text;
+- (void)textViewShouldReturnButtonClick;
 
 @end
 

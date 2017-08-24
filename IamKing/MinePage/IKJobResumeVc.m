@@ -23,15 +23,20 @@
 #import "IKAddSkillVc.h"
 #import "IKWorkListTableViewCell.h"
 #import "IKAddRecordListVc.h"
+#import "IKSchoolListTableViewCell.h"
+#import "IKAddSchoolListVc.h"
+#import "IKAddPhotoTableViewCell.h"
 
 
 extern NSString * loginUserId;
 
-@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate,IKResumeSkillTableViewCellDelegate,IKAddSkillVcDelegate,IKWorkListTableViewCellDelegate,IKAddRecordListVcDelegate>
+@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate,IKResumeSkillTableViewCellDelegate,IKAddSkillVcDelegate,IKWorkListTableViewCellDelegate,IKAddRecordListVcDelegate,IKSchoolListTableViewCellDelegate,IKAddSchoolListVcDelegate>
 {
     BOOL            _isShowAddTag;
     NSIndexPath    *_editSelectedSkillIP;
-    
+    NSIndexPath    *_editSelectedRecordIP;
+    NSIndexPath    *_editSelectedSchoolIP;
+
 }
 @property(nonatomic, strong)UITableView *tableView;
 @property(nonatomic, copy)NSArray       *headerTitle;
@@ -45,6 +50,7 @@ extern NSString * loginUserId;
 @property(nonatomic, copy)NSArray       *workList;
 @property(nonatomic, strong)NSMutableArray       *tagList;
 @property(nonatomic, strong)NSMutableArray       *recordList;
+@property(nonatomic, strong)NSMutableArray       *schoolList;
 
 @property(nonatomic, assign)BOOL         cellIsEditing;
 
@@ -120,7 +126,7 @@ extern NSString * loginUserId;
         _tableView.scrollEnabled = YES;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-        //        _tableView.rowHeight = 160;
+        _tableView.bounces = NO;
         _tableView.showsVerticalScrollIndicator = YES;
         _tableView.backgroundColor = IKGeneralLightGray;
         _tableView.allowsMultipleSelectionDuringEditing = YES;
@@ -133,6 +139,10 @@ extern NSString * loginUserId;
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, IKSCREENH_HEIGHT - 60, IKSCREEN_WIDTH, 60)];
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
+    
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
+    line.backgroundColor = IKLineColor;
+    [view addSubview:line];
     
     UIButton *cancel = [UIButton buttonWithType:UIButtonTypeCustom];
     cancel.frame = CGRectMake(20, 10, 110, 40);
@@ -223,7 +233,13 @@ extern NSString * loginUserId;
         }
     }
     else if (section == 4){
-        return 3;
+        NSInteger count = self.schoolList.count;
+        if (count == 3) {
+            return 4;
+        }
+        else{
+            return count + 1;
+        }
     }
     else{
         return 1;
@@ -282,8 +298,29 @@ extern NSString * loginUserId;
             }
         }
     }
-    
-    return 50;
+    else if (section == 4){
+        NSInteger count = self.schoolList.count;
+        if (count == 3) {
+            if (indexPath.row == 3) {
+                return 0;
+            }
+            return 110;
+        }
+        else {
+            if (row < count) {
+                return 110;
+            }
+            else{
+                return 50;
+            }
+        }
+    }
+    else if (section == 5){
+        return 180;
+    }
+    else{
+        return 0;
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -310,7 +347,7 @@ extern NSString * loginUserId;
             }
             
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
+            [cell addLogoTableViewCellData:_resumeModel.headerImageUrl];
             return cell;
         }
         else if (row == 8){
@@ -414,14 +451,42 @@ extern NSString * loginUserId;
             return cell;
         }
     }
+    else if (section == 4){
+        NSInteger count = self.schoolList.count;
+        if (row < count) {
+            static  NSString *cellId = @"IKSchoolListTableViewCellId";
+            IKSchoolListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKSchoolListTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.delegate = self;
+            [cell addResumeSchoolListCellData:self.schoolList[row]];
+            return cell;
+        }
+        else{
+            static  NSString *cellId = @"IKResumeAddSkillTableViewCellId";
+            IKResumeAddSkillTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+            
+            if(cell == nil){
+                cell = [[IKResumeAddSkillTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            }
+            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.psLabel.text = @"添加学习经历";
+            
+            return cell;
+        }
+    }
     else{
-        static  NSString *cellId = @"IKJobProcessHeaderTableViewCellId";
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+        static  NSString *cellId = @"IKAddPhotoTableViewCellId";
+        IKAddPhotoTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
         if(cell == nil){
-            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+            cell = [[IKAddPhotoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
-        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         
         return cell;
@@ -604,6 +669,14 @@ extern NSString * loginUserId;
             [self.navigationController pushViewController:addRecord animated:YES];
         }
     }
+    else if (section == 4){
+        if (row == self.schoolList.count) {
+            IKAddSchoolListVc *addSchool = [[IKAddSchoolListVc alloc] init];
+            addSchool.isAddSchool = YES;
+            addSchool.delegate = self;
+            [self.navigationController pushViewController:addSchool animated:YES];
+        }
+    }
     
     NSLog(@"didSelectRowAtIndexPath");
 }
@@ -619,6 +692,11 @@ extern NSString * loginUserId;
     self.cellIsEditing = YES;
 }
 
+- (void)textFieldEndEditingWithText:(NSString *)text
+{
+    
+}
+
 #pragma mark - IKResumeSelfIntroductionCellDelegate
 
 - (void)textViewBeginEditingNeedAjustkeyBorad:(BOOL)isNeed
@@ -627,6 +705,16 @@ extern NSString * loginUserId;
         [self.tableView setContentOffset:CGPointMake(0, 400) animated:YES];
     }
     self.cellIsEditing = YES;
+}
+
+- (void)textViewDidEndEditingWithText:(NSString *)text
+{
+    
+}
+
+- (void)textViewShouldReturnButtonClick
+{
+    
 }
 
 #pragma mark - IKResumeSkillTableViewCellDelegate
@@ -704,6 +792,8 @@ extern NSString * loginUserId;
 - (void)resumeWorkListCellEditButtonClickWithData:(NSDictionary *)dict cell:(IKWorkListTableViewCell *)cell
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _editSelectedRecordIP = [self.tableView indexPathForCell:cell];
+
         IKAddRecordListVc *addRecord = [[IKAddRecordListVc alloc] init];
         addRecord.recordDict = [dict mutableCopy];
         addRecord.isAddRecord = NO;
@@ -711,6 +801,70 @@ extern NSString * loginUserId;
         [self.navigationController pushViewController:addRecord animated:YES];
     });
 }
+
+#pragma mark - IKWorkListTableViewCellDelegate
+- (void)resumeSchoolListCellDeleteButtonClick:(IKSchoolListTableViewCell *)cell
+{
+    IKAlertView *alert = [[IKAlertView alloc] initWithTitle:@"删除学习经历" message:@"确定删除该学习经历?" delegate:nil cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+    [alert showWithCallBack:^(NSInteger buttonIndex) {
+        if (buttonIndex == 1) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+                
+                [self.schoolList removeObjectAtIndex:indexPath.row];
+                [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            });
+        }
+    }];
+
+}
+
+- (void)resumeSchoolListCellEditButtonClickWithData:(NSDictionary *)dict cell:(IKSchoolListTableViewCell *)cell
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _editSelectedSchoolIP = [self.tableView indexPathForCell:cell];
+
+        IKAddSchoolListVc *addSchool = [[IKAddSchoolListVc alloc] init];
+        addSchool.schoolDict = [dict mutableCopy];
+        addSchool.isAddSchool = NO;
+        addSchool.delegate = self;
+        [self.navigationController pushViewController:addSchool animated:YES];
+    });
+}
+
+#pragma mark - IKAddRecordListVcDelegate
+
+- (void)addRecordAddNewRecordWithData:(NSDictionary *)dict
+{
+    [self.recordList addObject:dict];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:3] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+
+- (void)addRecordChangeNeedRefreshData:(NSDictionary *)dict
+{
+    [self.recordList replaceObjectAtIndex:_editSelectedRecordIP.row withObject:dict];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[_editSelectedRecordIP] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+#pragma mark - IKAddSchoolListVcDelegate
+
+- (void)addSchoolAddNewRecordWithData:(NSDictionary *)dict
+{
+    [self.schoolList addObject:dict];
+    
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:4] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
+- (void)addSchoolChangeNeedRefreshData:(NSDictionary *)dict
+{
+    [self.schoolList replaceObjectAtIndex:_editSelectedSchoolIP.row withObject:dict];
+    
+    [self.tableView reloadRowsAtIndexPaths:@[_editSelectedSchoolIP] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 
 #pragma mark - Network
 
@@ -724,6 +878,7 @@ extern NSString * loginUserId;
                 self.hopeWorkData = @[model.companyTypeName,model.workName,model.cityName,model.salaryTypeName];
                 self.tagList = [NSMutableArray arrayWithArray:_resumeModel.tagList];
                 self.recordList = [NSMutableArray arrayWithArray:_resumeModel.workList];
+                self.schoolList = [NSMutableArray arrayWithArray:_resumeModel.schoolList];
                 if (_tableView == nil) {
                     [self.view addSubview:self.tableView];
                     [self initBottomButton];

@@ -1,24 +1,22 @@
 //
-//  IKResumeLogoTableViewCell.m
+//  IKSchoolTableViewCell.m
 //  IamKing
 //
-//  Created by Luris on 2017/8/16.
+//  Created by Luris on 2017/8/24.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "IKResumeLogoTableViewCell.h"
+#import "IKSchoolTableViewCell.h"
 
-
-@interface IKResumeLogoTableViewCell ()
+@interface IKSchoolTableViewCell ()
 
 @property (nonatomic, strong)UILabel *label;
 @property (nonatomic, strong)UIImageView *logoImage;
 @property (nonatomic, strong)UIView *lineView;
-@property (nonatomic, strong)UILabel *psLabel;
 
 
 @end
-@implementation IKResumeLogoTableViewCell
+@implementation IKSchoolTableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -35,7 +33,6 @@
     [self.contentView addSubview:self.label];
     [self.contentView addSubview:self.lineView];
     [self.contentView addSubview:self.logoImage];
-    [self.contentView addSubview:self.psLabel];
     
     
     [_lineView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -47,23 +44,17 @@
     [_logoImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.contentView.mas_left).offset(20);
         make.centerY.equalTo(self.contentView.mas_centerY);
-        make.width.and.height.mas_equalTo(60);
+        make.width.and.height.mas_equalTo(28);
     }];
-
+    
     
     [_label mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.contentView.mas_top).offset(7);
-        make.left.equalTo(_logoImage.mas_right).offset(20);
+        make.top.equalTo(self.contentView.mas_top);
+        make.left.equalTo(_logoImage.mas_right).offset(10);
         make.right.equalTo(self.contentView.mas_right).offset(-20);
-        make.height.mas_equalTo(25);
+        make.bottom.equalTo(self.contentView.mas_bottom);
     }];
     
-    [_psLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(_label.mas_bottom).offset(5);
-        make.left.equalTo(_label.mas_left);
-        make.right.equalTo(_label.mas_right);
-        make.bottom.equalTo(self.contentView.mas_bottom).offset(-10);
-    }];
 }
 
 
@@ -72,27 +63,14 @@
 {
     if (_label == nil) {
         _label = [[UILabel alloc] init];
-        _label.font = [UIFont boldSystemFontOfSize:16.0f];
-        _label.textColor = IKSubHeadTitleColor;
+        _label.font = [UIFont systemFontOfSize:15.0f];
+        _label.textColor = IKMainTitleColor;
         _label.text = @"简历头像";
         _label.textAlignment = NSTextAlignmentLeft;
     }
     return _label;
 }
 
-
-- (UILabel *)psLabel
-{
-    if (_psLabel == nil) {
-        _psLabel = [[UILabel alloc] init];
-        _psLabel.font = [UIFont systemFontOfSize:13.0f];
-        _psLabel.textColor = IKSubHeadTitleColor;
-        _psLabel.textAlignment = NSTextAlignmentLeft;
-        _psLabel.numberOfLines = 2;
-        _psLabel.text = @"请上传求职者本人真实、清晰的照片\n建议尺寸:360*360像素";
-    }
-    return _psLabel;
-}
 
 - (UIView *)lineView
 {
@@ -109,15 +87,22 @@
     if (_logoImage == nil) {
         _logoImage = [[UIImageView alloc] init];
         _logoImage.backgroundColor = IKGeneralLightGray;
-        _logoImage.layer.cornerRadius = 6;
+        _logoImage.layer.cornerRadius = 3;
     }
     return _logoImage;
 }
 
-- (void)addLogoTableViewCellData:(NSString *)logo
+
+- (void)addSchoolTableViewCellData:(IKSchoolListModel *)model
 {
-    [self.logoImage lwb_loadImageWithUrl:[logo stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] placeHolderImageName:nil radius:6];
+    [self.logoImage lwb_loadImageWithUrl:[model.logoImageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] placeHolderImageName:nil radius:5];
+    
+    self.label.text = model.name;
 }
+
+
+
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];

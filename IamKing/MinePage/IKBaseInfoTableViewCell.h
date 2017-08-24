@@ -12,7 +12,7 @@
 @protocol IKBaseInfoTableViewCellDelegate <NSObject>
 
 - (void)textFieldBeginEditingNeedAjustkeyBorad:(BOOL)isNeed;
-
+- (void)textFieldEndEditingWithText:(NSString *)text;
 @end
 
 

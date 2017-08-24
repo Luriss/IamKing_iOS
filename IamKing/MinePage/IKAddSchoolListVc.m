@@ -1,32 +1,35 @@
 //
-//  IKAddRecordListVc.m
+//  IKAddSchoolListVc.m
 //  IamKing
 //
-//  Created by Luris on 2017/8/23.
+//  Created by Luris on 2017/8/24.
 //  Copyright © 2017年 Luris. All rights reserved.
 //
 
-#import "IKAddRecordListVc.h"
+#import "IKAddSchoolListVc.h"
+
 #import "IKBaseInfoTableViewCell.h"
 #import "IKResumeSelfIntroductionCell.h"
 #import "IKChooseCompanyTableViewCell.h"
 #import "LRPickerView.h"
+#import "IKAddCertTableViewCell.h"
 #import "IKCompanyListView.h"
 
 
-@interface IKAddRecordListVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKResumeSelfIntroductionCellDelegate,IKChooseCompanyCellDelegate,IKCompanyListViewDelegate>
+@interface IKAddSchoolListVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKChooseCompanyCellDelegate,IKCompanyListViewDelegate>
 
 @property(nonatomic, strong)UITableView *tableView;
-@property(nonatomic, assign)BOOL         cellIsEditing;
-@property(nonatomic, copy)NSArray       *titleArray;
-@property(nonatomic, strong)NSMutableArray *dataArray;
 @property(nonatomic, strong)IKCompanyListView *companyListView;
+
+@property(nonatomic, assign)BOOL            cellIsEditing;
+@property(nonatomic, copy)NSArray           *titleArray;
+@property(nonatomic, strong)NSMutableArray  *dataArray;
 @property(nonatomic, copy)NSArray  *schoolListData;
 
 
 @end
 
-@implementation IKAddRecordListVc
+@implementation IKAddSchoolListVc
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -35,11 +38,10 @@
     [self initLeftBackItem];
     
     
-    self.titleArray = @[@"担任的职位",@"入职时间",@"离职时间",@"工作内容"];
+    self.titleArray = @[@"认证课程名称",@"开始时间",@"毕业时间",@"是否结业",@"是否获得证书"];
     [self.view addSubview:self.tableView];
     [self initBottomButton];
-    
-    [self getRecordSchoolListFromServer];
+    [self getSchoolListFromServer];
 }
 
 
@@ -83,7 +85,7 @@
         _tableView.scrollEnabled = NO;
         _tableView.delegate = self;
         _tableView.dataSource = self;
-//        _tableView.rowHeight = 50;
+        //        _tableView.rowHeight = 50;
         _tableView.showsVerticalScrollIndicator = YES;
         _tableView.allowsMultipleSelectionDuringEditing = YES;
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
@@ -99,6 +101,7 @@
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, IKSCREENH_HEIGHT - 60, IKSCREEN_WIDTH, 60)];
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
+    
     
     UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
     line.backgroundColor = IKLineColor;
@@ -143,25 +146,25 @@
 
 - (void)commitButtonClick:(UIButton *)button
 {
-    NSLog(@"commitButtonClick  = %@ isAddRecord = %d",_recordDict,self.isAddRecord);
-
-    if ([self.dataArray containsObject:@""]) {
-        [LRToastView showTosatWithText:@"请完成所有选项后,再点击确定" inView:self.view];
-    }
-    else{
-        if (self.isAddRecord) {
-            if ([self.delegate respondsToSelector:@selector(addRecordAddNewRecordWithData:)]) {
-                [self.delegate addRecordAddNewRecordWithData:_recordDict];
-            }
+        NSLog(@"commitButtonClick _schoolDict = %@ self.dataArray = %@ ",_schoolDict,self.dataArray);
+    
+        if ([self.dataArray containsObject:@""]) {
+            [LRToastView showTosatWithText:@"请完成所有选项后,再点击确定" inView:self.view];
         }
         else{
-            if ([self.delegate respondsToSelector:@selector(addRecordChangeNeedRefreshData:)]) {
-                [self.delegate addRecordChangeNeedRefreshData:_recordDict];
+            if (self.isAddSchool) {
+                if ([self.delegate respondsToSelector:@selector(addSchoolAddNewRecordWithData:)]) {
+                    [self.delegate addSchoolAddNewRecordWithData:_schoolDict];
+                }
             }
+            else{
+                if ([self.delegate respondsToSelector:@selector(addSchoolChangeNeedRefreshData:)]) {
+                    [self.delegate addSchoolChangeNeedRefreshData:_schoolDict];
+                }
+            }
+    
+            [self backButtonClick:nil];
         }
-        
-        [self backButtonClick:nil];
-    }
 }
 
 - (NSMutableArray *)dataArray
@@ -172,21 +175,22 @@
     return _dataArray;
 }
 
-- (void)setRecordDict:(NSMutableDictionary *)recordDict
+
+- (void)setSchoolDict:(NSMutableDictionary *)schoolDict
 {
-    if (IKDictIsNotEmpty(recordDict)) {
-        NSLog(@"recordDict = %@",recordDict);
+    if (IKDictIsNotEmpty(schoolDict)) {
+        NSLog(@"recordDict = %@",schoolDict);
         
-        _recordDict = recordDict;
+        _schoolDict = schoolDict;
         
-        [self.dataArray addObject:[self getString:[recordDict objectForKey:@"company_name"]]];
-        [self.dataArray addObject:[self getString:[recordDict objectForKey:@"work_name"]]];
-        NSString *startTime = [self getString:[recordDict objectForKey:@"time_start"]];
+        [self.dataArray addObject:[self getString:[schoolDict objectForKey:@"name"]]];
+        [self.dataArray addObject:[self getString:[schoolDict objectForKey:@"work_name"]]];
+        NSString *startTime = [self getString:[schoolDict objectForKey:@"time_start"]];
         NSMutableString *mutableS = [startTime mutableCopy];
         [mutableS insertString:@"-" atIndex:4];
         [self.dataArray addObject:mutableS];
         
-        NSString *endTime = [self getString:[recordDict objectForKey:@"time_end"]];
+        NSString *endTime = [self getString:[schoolDict objectForKey:@"time_end"]];
         if ([endTime isEqualToString:@"-1"]) {
             [self.dataArray addObject:@"至今"];
         }
@@ -196,26 +200,43 @@
             [self.dataArray addObject:mutableE];
         }
         
+        if ([[schoolDict objectForKey:@"is_graduate"] isEqualToString:@"1"]) {
+            [self.dataArray addObject:@"已结业"];
+        }
+        else{
+            [self.dataArray addObject:@"未结业"];
+        }
         
-        [self.dataArray addObject:[self getString:[recordDict objectForKey:@"content"]]];
+        if ([[schoolDict objectForKey:@"has_certificate"] isEqualToString:@"1"]) {
+            [self.dataArray addObject:@"有证书"];
+            [self.dataArray addObject:@"1"];
+        }
+        else{
+            [self.dataArray addObject:@"无证书"];
+            [self.dataArray addObject:@"0"];
+        }
     }
 }
 
-- (void)setIsAddRecord:(BOOL)isAddRecord
+- (void)setIsAddSchool:(BOOL)isAddSchool
 {
-    _isAddRecord = isAddRecord;
+    _isAddSchool = isAddSchool;
     
-    if (isAddRecord) {
+    if (isAddSchool) {
         [self.dataArray addObject:@""];
         [self.dataArray addObject:@""];
         [self.dataArray addObject:@""];
         [self.dataArray addObject:@""];
         [self.dataArray addObject:@""];
+        [self.dataArray addObject:@""];
+        [self.dataArray addObject:@"0"];
         
-        _recordDict = [[NSMutableDictionary alloc] init];
+        _schoolDict = [[NSMutableDictionary alloc] init];
         
-        [_recordDict setObject:@"" forKey:@"id"];
-        [_recordDict setObject:@"1" forKey:@"status"];
+        [_schoolDict setObject:@"" forKey:@"id"];
+        [_schoolDict setObject:@"1" forKey:@"status"];
+        [_schoolDict setObject:@"" forKey:@"graduateUrlDetail"];
+        [_schoolDict setObject:@"" forKey:@"graduate_url"];
     }
 }
 
@@ -241,13 +262,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 5;
+    return 7;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 4){
-        return 200;
+    if (indexPath.row == 6){
+        return 100;
     }
     else{
         return 50;
@@ -270,17 +291,23 @@
         cell.delegate = self;
         return cell;
     }
-    else if (indexPath.row == 4){
-        IKResumeSelfIntroductionCell *cell = [tableView dequeueReusableCellWithIdentifier:@"IKResumeSelfIntroductionCellId"];
+    else if (indexPath.row == 6){
+        static  NSString *cellId = @"IKAddCertTableViewCellId";
+        IKAddCertTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
         
         if(cell == nil){
-            cell = [[IKResumeSelfIntroductionCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"IKResumeSelfIntroductionCellId"];
+            cell = [[IKAddCertTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
-        cell.textViewText = self.dataArray.lastObject;
-        cell.textViewTextColor = IKMainTitleColor;
+        
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.title = self.titleArray.lastObject;
-        cell.delegate = self;
+        
+        if ([self.dataArray.lastObject isEqualToString:@"1"]) {
+            cell.psLabel.text = @"上传证书";
+            cell.lineView.hidden = NO;
+        }
+        else{
+            cell.lineView.hidden = YES;
+        }
         return cell;
     }
     else{
@@ -295,7 +322,7 @@
         cell.textField.text = self.dataArray[indexPath.row];
         cell.textField.textAlignment = NSTextAlignmentRight;
         cell.textField.textColor = IKMainTitleColor;
-
+        
         if (row == 1) {
             cell.textField.userInteractionEnabled = YES;
         }
@@ -307,6 +334,77 @@
     }
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 4 || indexPath.row == 5) {
+        return YES;
+    }
+    else{
+        return NO;
+    }
+}
+
+-(NSArray *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    /**
+     注意：1、当rowActionWithStyle的值为UITableViewRowActionStyleDestructive时，系统默认背景色为红色；当值为UITableViewRowActionStyleNormal时，背景色默认为淡灰色，可通过UITableViewRowAction的对象的.backgroundColor设置；
+     2、当左滑按钮执行的操作涉及数据源和页面的更新时，要先更新数据源，在更新视图，否则会出现无响应的情况
+     */
+    UITableViewRowAction *action1 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"是" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        if (indexPath.row == 5) {
+            NSString *str = self.dataArray[4];
+            
+            if ([str isEqualToString:@"已结业"]) {
+                [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"有证书"];
+                [_schoolDict setObject:@"1" forKey:@"has_certificate"];
+                [self.dataArray replaceObjectAtIndex:6 withObject:@"1"];
+                [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            }
+            else{
+                [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"无证书"];
+                [LRToastView showTosatWithText:@"未结业时,不可选择是否获取证书" inView:self.view];
+                [_schoolDict setObject:@"2" forKey:@"has_certificate"];
+                
+                if ([self.dataArray.lastObject isEqualToString:@"1"]) {
+                    [self.dataArray replaceObjectAtIndex:6 withObject:@"0"];
+                    [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+                }
+            }
+        }
+        else{
+            [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"已结业"];
+            [_schoolDict setObject:@"1" forKey:@"is_graduate"];
+        }
+        
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        //在block中实现相对应的事件
+    }];
+    action1.backgroundColor = IKGeneralBlue;
+    
+    UITableViewRowAction *action2 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"否" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        
+        if (indexPath.row == 4) {
+            [_schoolDict setObject:@"2" forKey:@"is_graduate"];
+            [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"未结业"];
+        }
+        else{
+            [_schoolDict setObject:@"2" forKey:@"has_certificate"];
+            [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"无证书"];
+            
+            if ([self.dataArray.lastObject isEqualToString:@"1"]) {
+                [self.dataArray replaceObjectAtIndex:6 withObject:@"0"];
+                [tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:6 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            }
+        }
+        
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    //    action2.backgroundColor = IKGeneralLightGray;
+    //此处UITableViewRowAction对象放入的顺序决定了对应按钮在cell中的顺序
+    return@[action2,action1];
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -319,7 +417,7 @@
     }
     
     if (indexPath.row == 0) {
-
+        
     }
     else if (indexPath.row == 1){
         
@@ -334,13 +432,13 @@
         [pickerView showWithSelectedResultBlock:^(NSString *value1, NSString *value2) {
             NSMutableString *text = [NSMutableString stringWithFormat:@"%@%@",value1,value2];
             
-            [_recordDict setObject:text forKey:@"time_start"];
+            [_schoolDict setObject:text forKey:@"time_start"];
             
             IKBaseInfoTableViewCell *cell = (IKBaseInfoTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
             [text insertString:@"-" atIndex:4];
             cell.textField.text = text;
             
-            if (self.isAddRecord) {
+            if (self.isAddSchool) {
                 [self.dataArray replaceObjectAtIndex:indexPath.row withObject:text];
             }
         }];
@@ -348,7 +446,7 @@
     else if (indexPath.row == 3){
         NSArray *data1 = @[@"2000",@"2001",@"2002",@"2003",@"2004",@"2005",@"2006",@"2007",@"2008",@"2009",@"2010",@"2011",@"2012",@"2013",@"2014",@"2015",@"2016",@"2017",@"至今"];
         NSArray *data2 = @[@"01",@"02",@"03",@"04",@"05",@"06",@"07",@"08",@"09",@"10",@"11",@"12"];
-
+        
         LRPickerView *pickerView = [[LRPickerView alloc] initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, IKSCREENH_HEIGHT)];
         pickerView.dataSource = @[data1,data2];
         
@@ -363,13 +461,13 @@
                 setValue = [NSString stringWithFormat:@"%@%@",value1,value2];
                 text = [NSString stringWithFormat:@"%@-%@",value1,value2];
             }
-            [_recordDict setObject:setValue forKey:@"time_end"];
+            [_schoolDict setObject:setValue forKey:@"time_end"];
             
             IKBaseInfoTableViewCell *cell = (IKBaseInfoTableViewCell *)[tableView cellForRowAtIndexPath:indexPath];
             
             cell.textField.text = text;
-
-            if (self.isAddRecord) {
+            
+            if (self.isAddSchool) {
                 [self.dataArray replaceObjectAtIndex:indexPath.row withObject:text];
             }
             
@@ -393,33 +491,11 @@
 {
     if (IKStringIsNotEmpty(text)) {
         [self.dataArray replaceObjectAtIndex:1 withObject:text];
-        [_recordDict setObject:text forKey:@"work_name"];
+        [_schoolDict setObject:text forKey:@"work_name"];
     }
 }
 
-#pragma mark - IKResumeSelfIntroductionCellDelegate
 
-- (void)textViewBeginEditingNeedAjustkeyBorad:(BOOL)isNeed
-{
-    [self.tableView setContentOffset:CGPointMake(0, 100) animated:YES];
-
-    self.cellIsEditing = YES;
-}
-
-- (void)textViewDidEndEditingWithText:(NSString *)text
-{
-    NSLog(@"texttt = %@",text);
-    if (IKStringIsNotEmpty(text)) {
-        [_dataArray replaceObjectAtIndex:4 withObject:text];
-        [_recordDict setObject:text forKey:@"content"];
-    }
-    
-}
-
-- (void)textViewShouldReturnButtonClick
-{
-    [self.tableView setContentOffset:CGPointZero animated:YES];
-}
 
 #pragma mark - IKChooseCompanyCellDelegate
 
@@ -438,11 +514,21 @@
     NSLog(@"texttext = %@",text);
     if (IKStringIsNotEmpty(text)) {
         [_dataArray replaceObjectAtIndex:0 withObject:text];
-        [_recordDict setObject:text forKey:@"company_name"];
+        [_schoolDict setObject:text forKey:@"name"];
     }
     
 }
 
+- (IKCompanyListView *)companyListView
+{
+    if (_companyListView == nil) {
+        _companyListView = [[IKCompanyListView alloc] initWithFrame:CGRectMake(0, 124, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 124)];
+        _companyListView.headerTitle = @[@"教练培训",@"经管培训"];
+        _companyListView.dataSource = self.schoolListData;
+        _companyListView.delegate = self;
+    }
+    return _companyListView;
+}
 
 - (void)showCompanyListView:(BOOL)isShow
 {
@@ -457,37 +543,29 @@
     }
 }
 
-- (IKCompanyListView *)companyListView
-{
-    if (_companyListView == nil) {
-        _companyListView = [[IKCompanyListView alloc] initWithFrame:CGRectMake(0, 124, IKSCREEN_WIDTH, IKSCREENH_HEIGHT - 124)];
-        _companyListView.headerTitle = @[@"大型连锁健身俱乐部",@"小型连锁特色健身房",@"新型健身工作室",@"教练培训",@"经管培训",@"器械设备供应商",@"媒体资讯",@"会展/活动/赛事",@"互联网",@"其他"];
-        _companyListView.dataSource = self.schoolListData;
-        _companyListView.delegate = self;
-    }
-    return _companyListView;
-}
+
+#pragma mark - IKCompanyListViewDelegate
 
 - (void)companyListViewdidSelectData:(IKSchoolListModel *)model
 {
     NSLog(@"model = %@",model);
     
     [self.dataArray replaceObjectAtIndex:0 withObject:model.name];
-
-    [_recordDict setObject:model.Id forKey:@"school_id"];
-    [_recordDict setObject:model.logoImageUrl forKey:@"school_logo"];
-    [_recordDict setObject:model.name forKey:@"school_name"];
-    [_recordDict setObject:model.name forKey:@"company_name"];
     
+    [_schoolDict setObject:model.Id forKey:@"school_id"];
+    [_schoolDict setObject:model.logoImageUrl forKey:@"school_logo"];
+    [_schoolDict setObject:model.name forKey:@"school_name"];
+    [_schoolDict setObject:model.name forKey:@"name"];
+
     IKChooseCompanyTableViewCell *cell = (IKChooseCompanyTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
     cell.textField.text = model.name;
     
 }
 
-- (void)getRecordSchoolListFromServer
+- (void)getSchoolListFromServer
 {
-    [[IKNetworkManager shareInstance] getMyResumeSchoolListDataWithType:@"" backData:^(NSArray *dataArray, BOOL success) {
-        self.schoolListData = [NSArray arrayWithArray:dataArray];
+    [[IKNetworkManager shareInstance] getMyResumeSchoolListDataWithType:@"4,5" backData:^(NSArray *dataArray, BOOL success) {
+        self.schoolListData = [NSArray arrayWithObjects:dataArray[3],dataArray[4], nil];
     }];
 }
 

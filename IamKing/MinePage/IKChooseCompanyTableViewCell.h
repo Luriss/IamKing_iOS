@@ -9,8 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "IKTextField.h"
 
+@protocol IKChooseCompanyCellDelegate <NSObject>
+
+- (void)textFieldBeginEditing;
+- (void)textFieldEditingChangedWithText:(NSString *)text;
+- (void)companyTextFieldEndEditingWithText:(NSString *)text;
+
+- (void)showCompanyListView:(BOOL )isShow;
+
+@end
+
+
 @interface IKChooseCompanyTableViewCell : UITableViewCell
 
 @property (nonatomic, strong)IKTextField *textField;
+@property (nonatomic, weak)id<IKChooseCompanyCellDelegate> delegate;
 
 @end

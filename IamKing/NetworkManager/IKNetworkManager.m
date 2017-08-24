@@ -17,6 +17,7 @@
 #import "IKBlackListModel.h"
 #import "IKAttentionCompanyModel.h"
 #import "IKJobProcessModel.h"
+#import "IKSchoolListModel.h"
 
 
 
@@ -128,6 +129,12 @@
 #define IKGetMyResumeUrl (@"https://www.iamking.com.cn/index.php/Resume/getInfoSelf?")
 
 #define IKGetResumeWorkListUrl (@"https://www.iamking.com.cn/index.php/Work/getWorkList")
+
+// type=4,5
+#define IKGetResumeSchoolListUrl  (@"https://www.iamking.com.cn/index.php/SchoolList/getList?")
+
+
+
 
 @interface IKNetworkManager ()
 
@@ -1783,6 +1790,148 @@ static IKNetworkManager *_shareInstance;
 
     return model;
 }
+
+
+- (void)getMyResumeSchoolListDataWithType:(NSString *)type backData:(IKRequestArrayData)callback
+{
+    NSString *url = [NSString stringWithFormat:@"%@type=%@",IKGetResumeSchoolListUrl,type];
+    __block id dataResult = nil;
+
+    [IKNetworkHelper GET:url parameters:nil responseCache:^(id responseCache) {
+        dataResult = responseCache;
+
+        BOOL success = [self requestDataSuccess:responseCache];
+        
+        NSArray *array = nil;
+        if (success) {
+            array = [self dealSchoolListData:responseCache];
+        }
+        else{
+            array = @[[NSString stringWithFormat:@"%@",[responseCache objectForKey:@"errmsg"]]];
+        }
+        if (callback) {
+            callback(array,success);
+        }
+    } success:^(id responseObject) {
+        
+        if (![dataResult isEqual:responseObject]) {
+            BOOL success = [self requestDataSuccess:responseObject];
+            
+            NSArray *array = nil;
+            if (success) {
+                array = [self dealSchoolListData:responseObject];
+            }
+            else{
+                array = @[[NSString stringWithFormat:@"%@",[responseObject objectForKey:@"errmsg"]]];
+            }
+            if (callback) {
+                callback(array,success);
+            }
+        }
+    } failure:^(NSError *error) {
+        
+    }];
+}
+
+
+- (NSArray *)dealSchoolListData:(id)data
+{
+    NSArray *array = (NSArray *)[data objectForKey:@"data"];
+    
+    if (array.count == 0) {
+        return nil;
+    }
+//    NSLog(@"arrayarray = %@",array);
+    
+    NSMutableArray *typeArray1 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray2 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray3 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray4 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray5 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray6 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray7 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray8 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray9 = [NSMutableArray arrayWithCapacity:5];
+    NSMutableArray *typeArray10 = [NSMutableArray arrayWithCapacity:5];
+
+    for (int i = 0; i < array.count ; i ++) {
+        
+        id object = [array objectAtIndex:i];
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dict = (NSDictionary *)object;
+            
+            IKSchoolListModel *model = [[IKSchoolListModel alloc] init];
+            
+            model.Id = [self getString:[dict objectForKey:@"id"]];
+            model.logoImageUrl = [self getString:[dict objectForKey:@"logo_url"]];
+            model.name = [self getString:[dict objectForKey:@"name"]];
+            model.type = [self getString:[dict objectForKey:@"type"]];
+
+            switch ([model.type integerValue]) {
+                case 0:
+                {
+                    [typeArray1 addObject:model];
+                    break;
+                }
+                case 1:
+                {
+                    [typeArray2 addObject:model];
+                    break;
+                }
+                case 2:
+                {
+                    [typeArray3 addObject:model];
+                    break;
+                }
+                case 3:
+                {
+                    [typeArray4 addObject:model];
+                    break;
+                }
+                case 4:
+                {
+                    [typeArray5 addObject:model];
+                    break;
+                }
+                case 5:
+                {
+                    [typeArray6 addObject:model];
+                    break;
+                }
+                case 6:
+                {
+                    [typeArray7 addObject:model];
+                    break;
+                }
+                case 7:
+                {
+                    [typeArray8 addObject:model];
+                    break;
+                }
+                case 8:
+                {
+                    [typeArray9 addObject:model];
+                    break;
+                }
+                case 9:
+                {
+                    [typeArray10 addObject:model];
+                    break;
+                }
+                    
+                default:
+                    break;
+            }
+        }
+    }
+    
+    
+    
+    return [NSArray arrayWithObjects:typeArray2,typeArray3,typeArray4,typeArray5,typeArray6,typeArray7,typeArray8,typeArray9,typeArray10,typeArray1, nil];
+}
+
+
+
 
 
 /*************** POST ***************************************************************/

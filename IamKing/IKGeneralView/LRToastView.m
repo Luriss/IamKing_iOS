@@ -19,7 +19,7 @@
         _backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
         _textFont = [UIFont systemFontOfSize:14.0f];
         _textColor = [UIColor whiteColor];
-        _maxWidth = IKSCREEN_WIDTH * 0.5;
+        _maxWidth = IKSCREEN_WIDTH * 0.7;
         _duration = 1.0;
         _verticalAlignment = LRToastVerticalAlignmentMiddle;
     }
@@ -124,7 +124,7 @@
         CGFloat y = [self getLabelY];
         CGFloat x = (ceilf(IKSCREEN_WIDTH)-labelSize.width)*0.5;
         
-        self.frame = CGRectMake(x, y, labelSize.width + 20, labelSize.height);
+        self.frame = CGRectMake(x, y, labelSize.width, labelSize.height);
         self.infoLabel.frame = self.bounds;
 
         [[NSUserDefaults standardUserDefaults] setObject:@"1" forKey:HadAddToastViewKey];

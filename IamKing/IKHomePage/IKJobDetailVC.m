@@ -203,6 +203,10 @@
     [self.view addSubview:bottomView];
     [self.view bringSubviewToFront:bottomView];
     
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
+    line.backgroundColor = IKLineColor;
+    [bottomView addSubview:line];
+    
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view.mas_left);
         make.right.equalTo(self.view.mas_right);

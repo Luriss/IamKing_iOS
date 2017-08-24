@@ -98,6 +98,10 @@
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
     
+    UIView *line = [[UIView alloc]initWithFrame:CGRectMake(0, 0, IKSCREEN_WIDTH, 1)];
+    line.backgroundColor = IKLineColor;
+    [view addSubview:line];
+    
     UIButton *cancel = [UIButton buttonWithType:UIButtonTypeCustom];
     cancel.frame = CGRectMake(20, 10, 110, 40);
     [cancel addTarget:self action:@selector(cancelButtonClick:) forControlEvents:UIControlEventTouchUpInside];
@@ -309,8 +313,9 @@
                     [_skillDict setObject:@"1" forKey:@"has_certificate"];
                 }
                 else{
-                    [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@""];
+                    [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"否"];
                     [LRToastView showTosatWithText:@"未经官方权威培训机构认证,则无认证/技能资质证书" inView:self.view];
+                    [_skillDict setObject:@"0" forKey:@"has_certificate"];
                 }
             }
             else{
@@ -334,7 +339,12 @@
         }
         else{
             [self.dataArray replaceObjectAtIndex:indexPath.row withObject:@"否"];
-            [_skillDict setObject:@"0" forKey:@"has_certificate"];
+            if (indexPath.row == 2) {
+                [_skillDict setObject:@"0" forKey:@"has_certificate"];
+            }
+            else{
+                [_skillDict setObject:@"0" forKey:@"is_approve"];
+            }
         }
         
         [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];

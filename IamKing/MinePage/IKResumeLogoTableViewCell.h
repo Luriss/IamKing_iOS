@@ -10,4 +10,7 @@
 
 @interface IKResumeLogoTableViewCell : UITableViewCell
 
+- (void)addLogoTableViewCellData:(NSString *)logo;
+
+
 @end

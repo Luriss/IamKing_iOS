@@ -182,11 +182,24 @@
     textView.attributedText = [[NSAttributedString alloc] initWithString:textView.text attributes:self.attributes];
 }
 
+- (void)textViewDidEndEditing:(UITextView *)textView
+{
+    if ([self.delegate respondsToSelector:@selector(textViewDidEndEditingWithText:)]) {
+        [self.delegate textViewDidEndEditingWithText:textView.text];
+    }
+}
+
+
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text{
     NSLog(@"text = %@",text);
     if ([text isEqualToString:@"\n"]){ //判断输入的字是否是回车，即按下return
         
         [textView resignFirstResponder];
+        
+        if ([self.delegate respondsToSelector:@selector(textViewShouldReturnButtonClick)]) {
+            [self.delegate textViewShouldReturnButtonClick];
+        }
+        
         return NO; //这里返回NO，就代表return键值失效，即页面上按下return，不会出现换行，如果为yes，则输入页面会换行
     }
     

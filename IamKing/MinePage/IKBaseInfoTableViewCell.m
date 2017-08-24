@@ -126,6 +126,14 @@
     
     return YES;
 }
+
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
+    if ([self.delegate respondsToSelector:@selector(textFieldEndEditingWithText:)]) {
+        [self.delegate textFieldEndEditingWithText:textField.text];
+    }  
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];

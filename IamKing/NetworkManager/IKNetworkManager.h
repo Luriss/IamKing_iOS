@@ -176,6 +176,8 @@ typedef void(^IKGetDataFailed)(NSInteger errorCode,NSString *errorMessage);
 
 - (void)getMyResumeDataWithId:(NSString *)userId backData:(void (^)(IKResumeModel *model, BOOL success))callback;
 
+- (void)getMyResumeSchoolListDataWithType:(NSString *)type backData:(IKRequestArrayData)callback;
+
 /*************** POST *************/
 
 - (void)postUserOprateToServer:(NSDictionary *)param;
