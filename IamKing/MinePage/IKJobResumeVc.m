@@ -488,7 +488,7 @@ extern NSString * loginUserId;
             cell = [[IKAddPhotoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        
+        cell.dataArray = _resumeModel.showUrl;
         return cell;
     }
 }

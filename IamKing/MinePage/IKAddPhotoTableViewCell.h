@@ -10,4 +10,8 @@
 
 @interface IKAddPhotoTableViewCell : UITableViewCell
 
+@property (nonatomic, copy)NSArray *dataArray;
+
+
+
 @end

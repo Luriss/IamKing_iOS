@@ -218,6 +218,10 @@
 		21D053BC1F4EC18700200AFA /* IKSchoolListModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053BB1F4EC18700200AFA /* IKSchoolListModel.m */; };
 		21D053BF1F4ECC4C00200AFA /* IKSchoolTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053BE1F4ECC4C00200AFA /* IKSchoolTableViewCell.m */; };
 		21D053C21F4EE86B00200AFA /* IKAddPhotoTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053C11F4EE86B00200AFA /* IKAddPhotoTableViewCell.m */; };
+		21D053C51F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053C41F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.m */; };
+		21D053C81F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053C71F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.m */; };
+		21D053CA1F4FC4F100200AFA /* IK_Add_gray.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D053C91F4FC4F100200AFA /* IK_Add_gray.png */; };
+		21D053CD1F4FC84B00200AFA /* IKShowPhotoVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D053CC1F4FC84B00200AFA /* IKShowPhotoVc.m */; };
 		21D622CE1F0E5C6E0054D980 /* IK_Address.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622CD1F0E5C6E0054D980 /* IK_Address.png */; };
 		21D622E11F0F31E30054D980 /* IKSlideView.m in Sources */ = {isa = PBXBuildFile; fileRef = 21D622E01F0F31E30054D980 /* IKSlideView.m */; };
 		21D622E51F0F6CCE0054D980 /* IK_more.png in Resources */ = {isa = PBXBuildFile; fileRef = 21D622E31F0F6CCE0054D980 /* IK_more.png */; };
@@ -678,6 +682,13 @@
 		21D053BE1F4ECC4C00200AFA /* IKSchoolTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKSchoolTableViewCell.m; sourceTree = "<group>"; };
 		21D053C01F4EE86B00200AFA /* IKAddPhotoTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAddPhotoTableViewCell.h; sourceTree = "<group>"; };
 		21D053C11F4EE86B00200AFA /* IKAddPhotoTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAddPhotoTableViewCell.m; sourceTree = "<group>"; };
+		21D053C31F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKShowPhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		21D053C41F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKShowPhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		21D053C61F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKAddPhotoCollectionViewCell.h; sourceTree = "<group>"; };
+		21D053C71F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKAddPhotoCollectionViewCell.m; sourceTree = "<group>"; };
+		21D053C91F4FC4F100200AFA /* IK_Add_gray.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Add_gray.png; sourceTree = "<group>"; };
+		21D053CB1F4FC84B00200AFA /* IKShowPhotoVc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IKShowPhotoVc.h; sourceTree = "<group>"; };
+		21D053CC1F4FC84B00200AFA /* IKShowPhotoVc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IKShowPhotoVc.m; sourceTree = "<group>"; };
 		21D622CD1F0E5C6E0054D980 /* IK_Address.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = IK_Address.png; sourceTree = "<group>"; };
 		21D622D51F0F21320054D980 /* IamKing.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = IamKing.pch; path = ../IamKing.pch; sourceTree = "<group>"; };
 		21D622D81F0F246D0054D980 /* IKGeneralMacro.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IKGeneralMacro.h; sourceTree = "<group>"; };
@@ -1573,6 +1584,8 @@
 				21D053A31F4D823600200AFA /* IKAddRecordListVc.m */,
 				21D053B01F4E939200200AFA /* IKAddSchoolListVc.h */,
 				21D053B11F4E939200200AFA /* IKAddSchoolListVc.m */,
+				21D053CB1F4FC84B00200AFA /* IKShowPhotoVc.h */,
+				21D053CC1F4FC84B00200AFA /* IKShowPhotoVc.m */,
 			);
 			name = JobResume;
 			sourceTree = "<group>";
@@ -1652,6 +1665,10 @@
 				21D053B41F4E9E3200200AFA /* IKAddCertTableViewCell.m */,
 				21D053C01F4EE86B00200AFA /* IKAddPhotoTableViewCell.h */,
 				21D053C11F4EE86B00200AFA /* IKAddPhotoTableViewCell.m */,
+				21D053C31F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.h */,
+				21D053C41F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.m */,
+				21D053C61F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.h */,
+				21D053C71F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -1957,6 +1974,7 @@
 		21F8212F1F37536900DA9EFA /* MinePageImage */ = {
 			isa = PBXGroup;
 			children = (
+				21D053C91F4FC4F100200AFA /* IK_Add_gray.png */,
 				21D053911F4D1C1200200AFA /* IK_Add_blue.png */,
 				21D053AB1F4E83E900200AFA /* IK_xiala.png */,
 				21D0538C1F4BCD9B00200AFA /* IK_garbage_red.png */,
@@ -2336,6 +2354,7 @@
 				21BC61B41F2AE4F600CE85D9 /* IK_zan_blue.png in Resources */,
 				21D623241F1360F80054D980 /* IK_experience_grey.png in Resources */,
 				21F8215A1F38757700DA9EFA /* IK_wave.gif in Resources */,
+				21D053CA1F4FC4F100200AFA /* IK_Add_gray.png in Resources */,
 				2197CBC51F1EF73B00F61562 /* IK_star_hollow_blue.png in Resources */,
 				21BC638C1F2ECC6300CE85D9 /* IK_classify_blue.png in Resources */,
 				21C3AE3E1F1746AA008FC124 /* IK_arrow.png in Resources */,
@@ -2434,6 +2453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				21BC61871F2755F500CE85D9 /* IKJobDetailTopTableViewCell.m in Sources */,
+				21D053CD1F4FC84B00200AFA /* IKShowPhotoVc.m in Sources */,
 				21F820C51F2F1B3B00DA9EFA /* IKCompanyAboutUsModel.m in Sources */,
 				21D053121F3D7D8600200AFA /* IKIntroduceVc.m in Sources */,
 				210B0DD91F0DFE02003FD950 /* IKTabBarController.m in Sources */,
@@ -2452,6 +2472,7 @@
 				21BC61781F25B79900CE85D9 /* IKChildJobTypeModel.m in Sources */,
 				21D053821F44535200200AFA /* IKPickerView.m in Sources */,
 				21F8219F1F3B038B00DA9EFA /* LRToastView.m in Sources */,
+				21D053C81F4FBE5700200AFA /* IKAddPhotoCollectionViewCell.m in Sources */,
 				21D053771F442E9F00200AFA /* IKResumeModel.m in Sources */,
 				21D0538B1F45ADBF00200AFA /* IKResumeSkillTableViewCell.m in Sources */,
 				218AD7181F208C0F00138A68 /* LRPageControl.m in Sources */,
@@ -2570,6 +2591,7 @@
 				21E2B59B1F1B21A100F9EC14 /* IKBottomTableViewCell.m in Sources */,
 				21D622F81F10FD6E0054D980 /* IKViewController.m in Sources */,
 				21C3AE571F175615008FC124 /* IKImageWordView.m in Sources */,
+				21D053C51F4FBE0E00200AFA /* IKShowPhotoCollectionViewCell.m in Sources */,
 				21BC61C01F2B335300CE85D9 /* IKTabBar.m in Sources */,
 				21C3ADF81F14B019008FC124 /* IKNetworkCache.m in Sources */,
 				21F821551F3856A600DA9EFA /* IKWaveView.m in Sources */,
