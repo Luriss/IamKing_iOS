@@ -65,11 +65,14 @@
 
 - (void)setDataArray:(NSArray *)dataArray
 {
-    if (IKArrayIsNotEmpty(dataArray)) {
-        _dataArray = dataArray;
-        
-        NSLog(@"dataArray = %@",dataArray);
+    _dataArray = dataArray;
+    
+    NSLog(@"dataArray = %@",dataArray);
+    if (_collectionView == nil) {
         [self initSubViews];
+    }
+    else{
+        [_collectionView reloadData];
     }
 }
 
@@ -83,6 +86,7 @@
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     NSInteger count = self.dataArray.count;
+    NSLog(@"countcount = %ld",count);
     if (count < 8) {
         return count + 1;
     }
@@ -106,7 +110,7 @@
     else{
         IKShowPhotoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"IKShowPhotoCollectionViewCell" forIndexPath:indexPath];
         
-        cell.backgroundColor = [UIColor redColor];
+//        cell.backgroundColor = [UIColor redColor];
         if (count < 8) {
             [cell setupImageWithUrlString:self.dataArray[indexPath.row - 1]];
         }
@@ -120,6 +124,18 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     IKLog(@"didSelectItemAtIndexPath = %@",indexPath);
+    
+    NSInteger count = self.dataArray.count;
+
+    BOOL isAdd = NO;
+    if (count < 8 && indexPath.row == 0) {
+        isAdd = YES;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(addPhotoCellDidSelectItemAtIndexPath:isAdd:)]) {
+        [self.delegate addPhotoCellDidSelectItemAtIndexPath:indexPath isAdd:isAdd];
+    }
+    
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

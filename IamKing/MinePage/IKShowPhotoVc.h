@@ -8,9 +8,17 @@
 
 #import "IKViewController.h"
 
+
+@protocol IKShowPhotoVcDelegate <NSObject>
+
+- (void)deletePhotoAtIndex:(NSInteger )index;
+
+@end
+
 @interface IKShowPhotoVc : IKViewController
 
-@property (nonatomic,copy)NSString *selectedIndex;
+@property (nonatomic,assign)NSInteger selectedIndex;
 @property (nonatomic,copy)NSArray  *imageArray;
+@property (nonatomic, weak) id<IKShowPhotoVcDelegate> delegate;
 
 @end

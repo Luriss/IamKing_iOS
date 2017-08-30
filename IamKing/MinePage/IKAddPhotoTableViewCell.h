@@ -8,9 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+
+
+@protocol IKAddPhotoTableViewCellDelegate <NSObject>
+
+- (void)addPhotoCellDidSelectItemAtIndexPath:(NSIndexPath *)indexPath isAdd:(BOOL)isAdd;
+
+@end
+
+
 @interface IKAddPhotoTableViewCell : UITableViewCell
 
 @property (nonatomic, copy)NSArray *dataArray;
+@property (nonatomic, weak)id<IKAddPhotoTableViewCellDelegate> delegate;
 
 
 

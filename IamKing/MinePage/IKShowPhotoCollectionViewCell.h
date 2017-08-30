@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+
+
 @interface IKShowPhotoCollectionViewCell : UICollectionViewCell
 
 - (void)setupImageWithUrlString:(NSString*)url;

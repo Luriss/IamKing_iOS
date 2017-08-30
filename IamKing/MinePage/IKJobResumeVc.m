@@ -26,11 +26,16 @@
 #import "IKSchoolListTableViewCell.h"
 #import "IKAddSchoolListVc.h"
 #import "IKAddPhotoTableViewCell.h"
+#import "IKShowPhotoVc.h"
+
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 
 extern NSString * loginUserId;
 
-@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate,IKResumeSkillTableViewCellDelegate,IKAddSkillVcDelegate,IKWorkListTableViewCellDelegate,IKAddRecordListVcDelegate,IKSchoolListTableViewCellDelegate,IKAddSchoolListVcDelegate>
+@interface IKJobResumeVc ()<UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate,UINavigationControllerDelegate,IKBaseInfoTableViewCellDelegate,IKAlertViewDelegate,IKResumeSelfIntroductionCellDelegate,IKResumeSkillTableViewCellDelegate,IKAddSkillVcDelegate,IKWorkListTableViewCellDelegate,IKAddRecordListVcDelegate,IKSchoolListTableViewCellDelegate,IKAddSchoolListVcDelegate,IKAddPhotoTableViewCellDelegate,IKShowPhotoVcDelegate>
 {
     BOOL            _isShowAddTag;
     NSIndexPath    *_editSelectedSkillIP;
@@ -38,7 +43,11 @@ extern NSString * loginUserId;
     NSIndexPath    *_editSelectedSchoolIP;
 
 }
+
+
 @property(nonatomic, strong)UITableView *tableView;
+@property(nonatomic, strong)UIImagePickerController *imagePickerVc;
+
 @property(nonatomic, copy)NSArray       *headerTitle;
 @property(nonatomic, copy)NSArray       *baseInfoTitle;
 @property(nonatomic, copy)NSArray       *baseInfoData;
@@ -51,6 +60,7 @@ extern NSString * loginUserId;
 @property(nonatomic, strong)NSMutableArray       *tagList;
 @property(nonatomic, strong)NSMutableArray       *recordList;
 @property(nonatomic, strong)NSMutableArray       *schoolList;
+@property(nonatomic, strong)NSMutableArray       *photoList;
 
 @property(nonatomic, assign)BOOL         cellIsEditing;
 
@@ -133,6 +143,18 @@ extern NSString * loginUserId;
     }
     return _tableView;
 }
+
+- (UIImagePickerController *)imagePickerVc
+{
+    if (_imagePickerVc == nil) {
+        _imagePickerVc = [[UIImagePickerController alloc] init];
+        _imagePickerVc.delegate = self;
+        _imagePickerVc.modalTransitionStyle = UIModalTransitionStyleCoverVertical;
+        _imagePickerVc.allowsEditing = YES;
+    }
+    return _imagePickerVc;
+}
+
 
 - (void)initBottomButton
 {
@@ -488,7 +510,8 @@ extern NSString * loginUserId;
             cell = [[IKAddPhotoTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
         }
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.dataArray = _resumeModel.showUrl;
+        cell.dataArray = self.photoList;
+        cell.delegate = self;
         return cell;
     }
 }
@@ -866,6 +889,34 @@ extern NSString * loginUserId;
 }
 
 
+#pragma mark - IKAddPhotoTableViewCellDelegate
+
+- (void)addPhotoCellDidSelectItemAtIndexPath:(NSIndexPath *)indexPath isAdd:(BOOL)isAdd
+{
+    NSLog(@"indexPath = %@ isAdd = %d",indexPath,isAdd);
+    
+    if (!isAdd) {
+        IKShowPhotoVc *show = [[IKShowPhotoVc alloc] init];
+        show.imageArray = self.photoList;
+        show.selectedIndex = indexPath.row-1;
+        show.delegate = self;
+        [self.navigationController pushViewController:show animated:YES];
+    }
+    else{
+        //NSLog(@"相册");
+        self.imagePickerVc.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:_imagePickerVc animated:YES completion:nil];
+    }
+}
+
+- (void)deletePhotoAtIndex:(NSInteger)index
+{
+    NSLog(@"index = %ld",index);
+    
+    [self.photoList removeObjectAtIndex:index];
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:5] withRowAnimation:UITableViewRowAnimationAutomatic];
+}
+
 #pragma mark - Network
 
 - (void)getDataFromServer
@@ -879,6 +930,8 @@ extern NSString * loginUserId;
                 self.tagList = [NSMutableArray arrayWithArray:_resumeModel.tagList];
                 self.recordList = [NSMutableArray arrayWithArray:_resumeModel.workList];
                 self.schoolList = [NSMutableArray arrayWithArray:_resumeModel.schoolList];
+                self.photoList = [NSMutableArray arrayWithArray:_resumeModel.showUrl];
+                
                 if (_tableView == nil) {
                     [self.view addSubview:self.tableView];
                     [self initBottomButton];
